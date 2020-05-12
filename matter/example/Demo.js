@@ -1,5 +1,8 @@
 var Example = Example || {};
 
+/**
+ * @desc demo
+ */
 Example.Demo = function () {
     //创建引擎、渲染器、添加世界、生成身体模型
     var Engine = Matter.Engine,

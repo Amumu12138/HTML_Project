@@ -1,5 +1,8 @@
 var Example = Example || {};
 
+/**
+ * @desc 物理引擎测试
+ */
 Example.Test = function () {
     var Engine = Matter.Engine; //引擎.引擎模块包含创建和操作引擎的方法
     var Render = Matter.Render; //基于HTML5画布的渲染器
