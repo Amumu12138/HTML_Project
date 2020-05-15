@@ -13,16 +13,16 @@ Example.Test = function () {
     var vertexShaderSource = '' +
         'void main(){' +
         //给内置变量gl_PointSize赋值像素大小
-        '   gl_PointSize=20.0;' +
+        '   gl_PointSize = 5.0;' +
         //顶点位置，位于坐标原点
-        '   gl_Position =vec4(0.0,0.0,0.0,1.0);' +
+        '   gl_Position = vec4(0.5,0.5,0.0,1.0);' +
         '}';
 
     //片元着色器源码
     var fragShaderSource = '' +
         'void main(){' +
         //定义片元颜色
-        '   gl_FragColor = vec4(1.0,0.0,0.0,1.0);' +
+        '   gl_FragColor = vec4(1.0,1.0,1.0,1.0);' +
         '}';
 
     //初始化着色器
@@ -42,12 +42,14 @@ Example.Test = function () {
         //编译顶点、片元着色器
         gl.compileShader(vertexShader);
         gl.compileShader(fragmentShader);
+        //
 
         //创建程序对象program
         var program = gl.createProgram();
         //附着顶点着色器和片元着色器到program
         gl.attachShader(program, vertexShader);
         gl.attachShader(program, fragmentShader);
+        //
         //链接program
         gl.linkProgram(program);
         //使用program
