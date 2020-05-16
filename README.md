@@ -10,5 +10,5 @@
 ## 二、详情介绍
 ```
     matter和threeJs目录下入口文件都为index.html,引入第三方库文件为js,案例文件为example 
-    webgl目录下入口文件都为index.html,案例文件为example 
+    webgl目录下入口文件为index.html,案例文件为example，shader.html为标签化添加着色器语言示例
 ```
