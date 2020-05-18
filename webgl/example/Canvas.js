@@ -4,7 +4,7 @@ var Example = Example || {};
  * @desc Canvas画布
  */
 Example.Canvas = function () {
-    //获取Canvas对象
+    // //获取Canvas对象
     var canvas = document.getElementById('webgl');
     //通过方法getContext()获取Canvas 2D绘图上下文
     var canvas2d = canvas.getContext('2d');
@@ -17,11 +17,13 @@ Example.Canvas = function () {
     //把点连成直线绘制出来
     canvas2d.stroke();
 
-    //通过方法getContext() 获取WebGL上下文
-    //var gl = canvas.getContext('3d');
+    // //通过方法getContext() 获取WebGL上下文
+    // //var gl = canvas.getContext('3d');
 
-    //调用WebGL API绘制渲染方法drawArrays
-    //canvas.drawArrays(canvas.POINTS, 0, 1);
+    // //调用WebGL API绘制渲染方法drawArrays
+    // //canvas.drawArrays(canvas.POINTS, 0, 1);
+
+
 };
 
 if (typeof module !== 'undefined') {

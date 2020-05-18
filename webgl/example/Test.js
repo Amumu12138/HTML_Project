@@ -42,7 +42,6 @@ Example.Test = function () {
         //编译顶点、片元着色器
         gl.compileShader(vertexShader);
         gl.compileShader(fragmentShader);
-        //
 
         //创建程序对象program
         var program = gl.createProgram();
