@@ -48,7 +48,7 @@ Example.Test = function () {
         //附着顶点着色器和片元着色器到program
         gl.attachShader(program, vertexShader);
         gl.attachShader(program, fragmentShader);
-        //
+
         //链接program
         gl.linkProgram(program);
         //使用program
