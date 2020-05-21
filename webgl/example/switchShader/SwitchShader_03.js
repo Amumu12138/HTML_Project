@@ -168,6 +168,7 @@ Example.SwitchShader_03 = function () {
      创建缓冲区textureBuffer，传入图片纹理数据，然后执行绘制方法drawArrays()
      **/
     function texture() {
+
         var texture = gl.createTexture(); //创建纹理图像缓冲区
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); //纹理图片上下反转
         gl.activeTexture(gl.TEXTURE0); //激活0号纹理单元TEXTURE0
