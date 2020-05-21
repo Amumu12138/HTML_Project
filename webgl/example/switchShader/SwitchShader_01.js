@@ -1,4 +1,5 @@
 var Example = Example || {};
+
 /**
  * @desc 切换着色器
  */

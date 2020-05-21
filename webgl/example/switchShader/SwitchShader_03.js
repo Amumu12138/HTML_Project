@@ -159,7 +159,7 @@ Example.SwitchShader_03 = function () {
     /**加载纹理图像像素数据**/
     var image = new Image();
     image.onload = texture;
-    image.src = 'res/glb.jpg';
+    image.src = 'res/texture/glb.jpg';
     /**
      * 渲染管线功能配置
      **/

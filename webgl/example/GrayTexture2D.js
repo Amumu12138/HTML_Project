@@ -90,7 +90,7 @@ Example.GrayTexture2D = function () {
      * 加载纹理图像像素数据
      **/
     var image = new Image();
-    image.src = 'res/panda.jpg'; //设置图片路径
+    image.src = 'res/texture/panda.jpg'; //设置图片路径
     image.onload = texture; //图片加载成功后执行texture函数
 
     /**
