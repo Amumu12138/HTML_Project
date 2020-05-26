@@ -44,6 +44,7 @@ Example.Texture2D = function () {
     var a_Position = gl.getAttribLocation(program, 'a_Position');
     var a_TexCoord = gl.getAttribLocation(program, 'a_TexCoord');
     var u_Sampler = gl.getUniformLocation(program, 'u_Sampler');
+
     /**
      * 四个顶点坐标数据data，z轴为零
      * 定义纹理贴图在WebGL坐标系中位置
@@ -63,6 +64,7 @@ Example.Texture2D = function () {
         1, 1, //右上角——uv2
         1, 0 //右下角——uv3
     ]);
+
     /**
      * 加载纹理图像像素数据
      **/
