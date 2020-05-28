@@ -44,3 +44,32 @@ max(a,b)                       比较大小,返回较大的值
 mod(x,y)	                   表示x–y*floor(x/y)
 clamp(x,min,max)	           规整输入值,x与min和max比较大小返回中间大小的值，运算规则：min (max (x, min), max)
 mix(m,n,k)	                   线性插值计算,插值区间[m,n],插值系数k，插值计算公式：m(1-k)+nk
+
+//矩阵函数
+内置矩阵函数matrixCompMult()的运算规则是同行同列的元素相乘，也就是 x[i][j]和y[i][j]相乘
+mat matrixCompMult(mat x, mat y);
+
+//向量关系函数
+内置函数                        判断
+lessThan(x,y)	        x是否小于y ,参数是vec或ivec
+lessThanEqual(x,y)	    x是否小于或等于y,参数是vec或ivec
+greaterThan(x,y)	    x是否大于y ,参数是vec或ivec
+greaterThanEqual(x,y)	x是否大于或等于y,参数是vec或ivec
+equal(x,y)	            x是否等于y，向量每个分量是否都相等,参数是vec或ivec
+any(x)	                x向量是否存在一个分量是true，参数是bvec
+all(x)	                x向量所有分量是否全部为true ，参数是bvec
+not(x)	                x所有分量执行逻辑非运算 ，参数是bvec
+
+//纹理采样函数
+内置函数                        判断
+texture2D()                   2D纹理
+textureCube()                 立方体纹理
+参数1-sampler：第一个参数是sampler2D数据类型
+参数2-uv：第二个参数是vec2类型，表示纹理贴图的UV坐标
+参数3-k：第三个参数是可选参数，类型是浮点数float，在为具有mipmap的纹理计算适当的细节级别之后，在执行实际纹理查找操作之前添加偏差。
+//示例:
+vec4 texture2D(sampler,uv);  
+vec4 texture2D(sampler,uv,k);
+vec4 textureCube(sampler,uv);  
+vec4 textureCube(sampler,uv,k);
+
