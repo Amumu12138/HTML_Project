@@ -17,23 +17,32 @@ Example.Test = function () {
     var material = new THREE.MeshBasicMaterial({
         color: 0x00ff00
     });
+
     var cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
     //将相机拉远
     camera.position.z = 5;
 
     //渲染场景
-    var animate = function () {
-        //渲染循环
-        requestAnimationFrame(animate);
-        //立方体旋转
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
+    // var animate = function () {
+    //     //渲染循环
+    //     requestAnimationFrame(animate);
+    //     //立方体旋转
+    //     cube.rotation.x += 0.01;
+    //     cube.rotation.y += 0.01;
 
+    //     renderer.render(scene, camera);
+    // };
+
+    //animate();
+
+    //执行渲染,r绕y轴旋转
+    function render() {
         renderer.render(scene, camera);
-    };
+        cube.rotateY(0.01);
+    }
 
-    animate();
+    setInterval(render, 20);
 };
 
 if (typeof module !== 'undefined') {

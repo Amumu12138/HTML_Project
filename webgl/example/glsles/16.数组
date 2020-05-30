@@ -21,20 +21,20 @@ void main() {
 }
 
 // 传递数组的某个元素  一次传递一个
-var arr0 = gl.getUniformLocation(program, "arr[0]")
+var arr0 = gl.getUniformLocation(program, "arr[0]");
 // 传递数组第1个元素的值
 gl.uniform1f(arr0, 0.3);
-var arr1 = gl.getUniformLocation(program, "arr[1]")
+var arr1 = gl.getUniformLocation(program, "arr[1]");
 // 传递数组第2个元素的值
 gl.uniform1f(arr1, -0.3);
 
 // 批量传递数组元素值
-var arr =gl.getUniformLocation(program, "arr")
+var arr =gl.getUniformLocation(program, "arr");
 var typeArr = new Float32Array([
   0.6,-0.3,0.6,0.4,
   -0.8,-0.3,0.6,0.4,
   0.7,0.7,0.6,0.99,
-])
+]);
 gl.uniform1fv(arr, typeArr);
 
 //结构体声明数组元素

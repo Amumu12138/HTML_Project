@@ -15,31 +15,27 @@ Example.TestGLSL = function () {
 
     //顶点着色器源码 -->
     var vertexShaderSource = `
-            attribute float a_arr[4];
-            varying float v_arr[4];
+            uniform float arr[4];
             //attribute声明vec4类型变量apos
             attribute vec4 apos;
             void main() {
             //顶点坐标apos赋值给内置变量gl_Position
             //逐顶点处理数据
             gl_Position = apos;
-            v_arr[0] = a_arr[0];
           }`;
 
     //片元着色器源码 -->
     var fragShaderSource = `
-            precision highp float;
-            varying float v_arr[4];
             void main() {
                 // 逐片元处理数据，所有片元(像素)设置为红色
-                gl_FragColor = vec4(v_arr[0], v_arr[1], v_arr[2], v_arr[3]);
+                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
             }`;
 
     //初始化着色器
     var program = initShader(gl, vertexShaderSource, fragShaderSource);
     //获取顶点着色器的位置变量apos，即aposLocation指向apos变量。
     var aposLocation = gl.getAttribLocation(program, 'apos');
-    var arrLocation = gl.getAttribLocation(program, 'a_arr');
+    var arrLocation = gl.getUniformLocation(program, 'arr');
 
     //类型数组构造函数Float32Array创建顶点数组
     var data = new Float32Array([0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5]);
