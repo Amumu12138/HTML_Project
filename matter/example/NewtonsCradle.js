@@ -29,6 +29,7 @@ Example.NewtonsCradle = function () {
     Render.run(render);
 
     //生成牛顿摆
+    //前两个参数为第一个摆的悬挂点的横纵坐标值，5为摆球数量，30为摆球半径，200为悬挂绳的长度。
     var newtonC = Composites.newtonsCradle(280, 100, 5, 30, 200);
     //创建鼠标
     var mouseConstraint = MouseConstraint.create(engine, {});

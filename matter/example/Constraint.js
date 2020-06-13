@@ -9,7 +9,6 @@ Example.Constraint = function () {
     var World = Matter.World;
     var Render = Matter.Render;
     var Bodies = Matter.Bodies;
-    var Vector = Matter.Vector;
     var Constraint = Matter.Constraint;
     var MouseConstraint = Matter.MouseConstraint;
     var Composites = Matter.Composites;
@@ -58,11 +57,11 @@ Example.Constraint = function () {
         bodyA: rectA,
         pointA: {
             x: 0,
-            y: -80
+            y: 0
         },
         bodyB: rectB,
         length: 0,
-        stiffness: 0.9
+        stiffness:1.0
     });
 
     //生成矩形地面
