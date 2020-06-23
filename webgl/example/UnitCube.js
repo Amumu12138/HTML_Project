@@ -65,7 +65,7 @@ Example.UnitCube = function () {
     ]);
 
     var indexes = new Uint8Array([
-        //前四个点宿营索引值
+        //前四个顶点索引值
         0, 1, 2, 3, //gl.LINE_LOOP模式四个点绘制一个矩形框
         //后四个顶点对应索引值
         4, 5, 6, 7,

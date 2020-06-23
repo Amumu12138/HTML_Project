@@ -1,4 +1,10 @@
 var Example = Example || {};
+/**
+ * 渲染管线流程图:顶点缓冲区(uniform数据)->顶点着色器(gl.createShader(gl.VERTEX_SHADER))->图元装配->光栅器
+ * ->片元着色器(1,uniform数据;2,纹理缓冲区 |gl.createShader(gl.FRAGMENT_SHADER)) ->归属测试(引入、编译)
+ * ->模板测试(创建程序对象、链接、使用 |gl.createProgram()) ->深度测试( gl.enable(gl.DEPTH_TEST);) 
+ * -> 融合( gl.enable(gl.BLEND);) -> 抖动 -> 颜色缓冲区
+ */
 
 /**
  * @desc WebGL绘制一个点
