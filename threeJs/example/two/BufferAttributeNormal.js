@@ -53,7 +53,7 @@ Example.BufferAttributeNormal = function () {
 
 
     //面渲染模式
-    var material = new THREE.MeshBasicMaterial({
+    var material = new THREE.MeshLambertMaterial({
         color: 0x0000ff,
         //使用顶点颜色数据渲染模型,不需要再定义color属性
         //vertexColors: THREE.VertexColors,
@@ -76,9 +76,9 @@ Example.BufferAttributeNormal = function () {
      * 光源设置
      */
     //点光源
-    // var point = new THREE.PointLight(0xffffff);
-    // point.position.set(400, 200, 300); //点光源位置
-    // scene.add(point); //点光源添加到场景中
+    var point = new THREE.PointLight(0xffffff);
+    point.position.set(400, 200, 300); //点光源位置
+    scene.add(point); //点光源添加到场景中
 
     /**
      * 相机设置
