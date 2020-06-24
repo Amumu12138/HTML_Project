@@ -12,6 +12,7 @@ Example.Translate = function () {
     var geometry = new THREE.BoxGeometry(100, 100, 100); //创建一个立方体几何对象Geometry
     // 几何体xyz三个方向都缩小0.2倍
     geometry.scale(0.2, 0.2, 0.2);
+    //geometry.scale(0.5, 1.5, 2);
     // 几何体沿着x轴平移50 
     geometry.translate(50, 0, 0);
     // 几何体绕着x轴旋转45度
@@ -27,6 +28,13 @@ Example.Translate = function () {
     });
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+    //网格模型克隆
+    var meshClone = mesh.clone();
+    meshClone.translateX(50);
+    // 网格模型xyz方向分别缩放0.5,1.5,2倍
+    meshClone.scale.set(0.5, 1.5, 2);
+    scene.add(meshClone);
+
     /**
      * 光源设置
      */
@@ -51,7 +59,7 @@ Example.Translate = function () {
     var axisHelper = new THREE.AxisHelper(250);
     scene.add(axisHelper);
 
-    /**
+    /**    
      * 创建渲染器对象
      */
     var renderer = new THREE.WebGLRenderer();
