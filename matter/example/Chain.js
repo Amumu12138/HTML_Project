@@ -3,12 +3,11 @@ var Example = Example || {};
 /**
  * @desc 铁索桥
  */
-Example.Chain = function() {
+Example.Chain = function () {
     var Engine = Matter.Engine;
     var Render = Matter.Render;
     var World = Matter.World;
     var Constraint = Matter.Constraint;
-    var MouseConstraint = Matter.MouseConstraint;
     var Composites = Matter.Composites;
     var Bodies = Matter.Bodies;
 
@@ -19,9 +18,9 @@ Example.Chain = function() {
         engine: engine,
         element: document.body,
         options: {
-          width: window.innerWidth,
-          height: window.innerHeight,
-          wireframes: false  
+            width: window.innerWidth,
+            height: window.innerHeight,
+            wireframes: false
         }
     });
 
@@ -29,11 +28,15 @@ Example.Chain = function() {
     Render.run(render);
 
     //桥墩
-    var wallA = Bodies.rectangle(0, 50, 50, 400, {isStatic: true});
-    var wallB = Bodies.rectangle(500, 50, 50, 400, {isStatic: true});
+    var wallA = Bodies.rectangle(0, 50, 50, 400, {
+        isStatic: true
+    });
+    var wallB = Bodies.rectangle(500, 50, 50, 400, {
+        isStatic: true
+    });
 
     //桥上的木板
-    var chains = Composites.stack(0, 50, 5, 1, 9, 0, function(x, y){
+    var chains = Composites.stack(0, 50, 5, 1, 9, 0, function (x, y) {
         return Bodies.rectangle(x, y, 80, 30, {
             chamfer: 5
         });
@@ -47,17 +50,29 @@ Example.Chain = function() {
     //左侧固定在桥墩上
     var fixLeft = Constraint.create({
         bodyA: wallA,
-        ponitA: {x: 0, y: 0},
+        ponitA: {
+            x: 0,
+            y: 0
+        },
         bodyB: chains.bodies[0],
-        pointB: {x: -25, y: 0}
+        pointB: {
+            x: -25,
+            y: 0
+        }
     });
 
     //右侧固定在桥墩上
     var fixRight = Constraint.create({
         bodyA: chains.bodies[chains.bodies.length - 1],
-        ponitA: {x: 0, y: 0},
+        ponitA: {
+            x: 0,
+            y: 0
+        },
         bodyB: wallB,
-        pointB: {x: 0, y: 0}
+        pointB: {
+            x: 0,
+            y: 0
+        }
     });
 
     //桥墩、铁索固定的木板加入到世界中
