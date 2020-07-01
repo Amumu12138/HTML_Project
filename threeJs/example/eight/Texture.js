@@ -38,6 +38,8 @@ Example.Texture = function () {
     texture.wrapT = THREE.RepeatWrapping;
     // uv两个方向纹理重复数量
     texture.repeat.set(4, 2);
+    // 偏移效果
+    texture.offset = new THREE.Vector2(0.5, 0.5)
 
     //创建平面贴图模型
     var geometry = new THREE.PlaneGeometry(100, 100);
@@ -46,6 +48,50 @@ Example.Texture = function () {
     });
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+
+    /**
+     * 创建一个设置重复纹理的管道
+     */
+    var curve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-80, -40, 0),
+        new THREE.Vector3(-70, 40, 0),
+        new THREE.Vector3(70, 40, 0),
+        new THREE.Vector3(80, -40, 0)
+    ]);
+    var tubeGeometry = new THREE.TubeGeometry(curve, 100, 0.6, 50, false);
+    var textureLoader = new THREE.TextureLoader();
+    var texture = textureLoader.load('resources/o.png');
+    // 设置阵列模式为 RepeatWrapping
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+    // 设置x方向的偏移(沿着管道路径方向)，y方向默认1
+    //等价texture.repeat= new THREE.Vector2(20,1)
+    texture.repeat.x = 20;
+    var tubeMaterial = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+    });
+
+    var tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
+    scene.add(tubeMesh);
+
+    /**
+     * 草地效果
+     */
+    var grassGeometry = new THREE.PlaneGeometry(200, 200); //矩形平面
+    // 加载树纹理贴图
+    var grassTexture = new THREE.TextureLoader().load('resources/g.png');
+    // 设置阵列
+    grassTexture.wrapS = THREE.RepeatWrapping;
+    grassTexture.wrapT = THREE.RepeatWrapping;
+    // uv两个方向纹理重复数量
+    grassTexture.repeat.set(10, 10);
+    var grassMaterial = new THREE.MeshBasicMaterial({
+        map: grassTexture,
+    });
+    var grassMesh = new THREE.Mesh(grassGeometry, grassMaterial); //网格模型对象Mesh
+    scene.add(grassMesh); //网格模型添加到场景中
+    grassMesh.rotateX(-Math.PI / 2);
 
     // 辅助坐标系  参数250表示坐标系大小，可以根据场景大小去设置
     var axisHelper = new THREE.AxisHelper(250);
@@ -57,6 +103,9 @@ Example.Texture = function () {
         renderer.render(scene, camera);
         //请求再次执行渲染函数render
         requestAnimationFrame(render);
+        // 使用加减法可以设置不同的运动方向
+        // 设置纹理偏移
+        texture.offset.x -= 0.06
     };
     //执行循环渲染
     render();
