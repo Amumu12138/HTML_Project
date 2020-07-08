@@ -5,7 +5,6 @@ var Example = Example || {};
  */
 var audioEditor = null;
 var analyser = null; // 声明一个分析器变量
-
 Example.AudioEditor = function () {
     /**
      * 创建场景对象Scene
