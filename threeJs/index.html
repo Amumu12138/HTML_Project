@@ -21,9 +21,19 @@
     <!-- <div>
         <input name="name" type="button" onClick="AudioClick2();" value="播放">
     </div> -->
-
+    <!-- 引入库文件 -->
     <script src="js/three.js"></script>
     <script src="js/OrbitControls.js"></script>
+    <script src="js/libs/inflate.min.js"></script>
+
+    <script src="js/loaders/STLLoader.js"></script>
+    <script src="js/loaders/FBXLoader.js"></script>
+    <script src="js/loaders/MTLLoader.js"></script>
+    <script src="js/loaders/OBJLoader.js"></script>
+    <script src="js/loaders/ColladaLoader.js"></script>
+    <script src="js/loaders/PLYLoader.js"></script>
+    <script src="js/loaders/GLTFLoader.js"></script>
+
     <!-- one -->
     <script src="example/one/Test.js"></script>
     <script src="example/one/DrawLine.js"></script>
@@ -98,10 +108,14 @@
     <script src="example/thirteen/AudioEditor.js"></script>
     <!-- fourteen -->
     <script src="example/fourteen/Loader.js"></script>
+    <script src="example/fourteen/STLLoader.js"></script>
+    <script src="example/fourteen/FBXLoader.js"></script>
+    <script src="example/fourteen/OBJLoader.js"></script>
+    <script src="example/fourteen/ColladaLoader.js"></script>
+    <script src="example/fourteen/PLYLoader.js"></script>
+    <script src="example/fourteen/GLTFLoader.js"></script>
     <script>
-        // Example.Loader();
-        // 首先需要提前定义好事件，并且注册相关的EventListener
-    
+        Example.GLTFLoader();
     </script>
 </body>
 
