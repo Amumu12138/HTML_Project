@@ -12,6 +12,8 @@
 ## 二、详情介绍
 ```
     matter和threeJs目录下入口文件都为index.html,引入第三方库文件为js,案例文件为example 
-    vue目录下入口文件也为index.html
+    vue目录下入口文件为index.html
     webgl目录下入口文件为index.html,res目录为资源目录,案例文件为example,shader.html为标签化添加着色器语言示例
+    javaScript目录文件入口为index.html,JavaScript是Web的编程语言,所有现代的HTML页面都使用JavaScript. 
+    案例文件为example 
 ```
