@@ -56,6 +56,7 @@ Example.JadeBraceletLoader = function () {
         renderer.render(scene, camera);
         // //请求再次执行渲染函数render
         requestAnimationFrame(render);
+
     };
 
     render();
