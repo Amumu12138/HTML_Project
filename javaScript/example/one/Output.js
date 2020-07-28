@@ -45,6 +45,7 @@ Example.Output = function () {
     <p id="demo">修改前的段落</p>
     `)
 
+    //写入方法
     document.write(`
         <script>
             //弹出警告框
