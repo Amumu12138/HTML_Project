@@ -18,9 +18,9 @@
 </head>
 
 <body>
-    <!-- <div>
+    <div>
         <input name="name" type="button" onClick="AudioClick2();" value="播放">
-    </div> -->
+    </div>
     <!-- <div>
         <input name="name" type="button" onClick="yellowClick();" value="黄色">
     </div>
@@ -128,13 +128,28 @@
     <!-- 飞机小游戏文件 -->
     <script src="example/airPlane/AirPlaneGame.js"></script>
     <script>
-        //Example.AirPlane();
-        var a = window.btoa("name=xiaoming&age=10");
-        var b = window.atob(
-            "Z2FtZU5vPXNjd3VwYzZuJnVzZXJuYW1lPTU5MDdjYzQ0MjZjMTgzZmEmdHJhZGVObz1USE9EXzJXdnFjR2RUNkNZNHpIa3UKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgJmFtb3VudD0xMDAwJnN1Y2Nlc3NVcmw9JmZhaWx1cmVVcmw9JmV4dD1USE9EXzJXdnFjR2RUNkNZNHpIa3U="
-            );
-        console.log("a = ", a);
-        console.log("b = ", b);
+        // Example.AirPlane();
+
+
+        //Base64 编码解码
+        // var payJson = {
+        //     "gameNo": "scwupc6n",
+        //     "username": "123",
+        //     "tradeNo": "123",
+        //     "amount": 100,
+        //     "successUrl": "",
+        //     "failureUrl": ""
+        // }
+        // var a = window.btoa(JSON.stringify(payJson));
+        // var b = window.atob(
+        //     "eyJnYW1lTm8iOiJzY3d1cGM2biIsInVzZXJuYW1lIjoiMTIzIiwidHJhZGVObyI6IjEyMyIsImFtb3VudCI6MTAwLCJzdWNjZXNzVXJsIjoiIiwiZmFpbHVyZVVybCI6IiJ9"
+        // );
+        // console.log("a = ", a);
+        // console.log("b = ", b);
+        // function AudioClick2() {
+        //     var url = "https://api.51app.cn/gameapi/trade/pay?data=";
+        //     window.location.href = url;
+        // }
     </script>
 </body>
 
