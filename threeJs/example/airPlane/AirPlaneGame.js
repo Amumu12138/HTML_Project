@@ -4,6 +4,17 @@ var Example = Example || {};
  * @decs 飞机小游戏
  */
 Example.AirPlane = function () {
+
+    //调用dat.GUI库改变环境光
+    var colorControl = new function () {
+        this.ambientLightColor = "#dc8874";
+    }
+
+    var gui = new dat.GUI;
+    gui.addColor(colorControl, "ambientLightColor").onChange(function (e) {
+        ambientLight.color = new THREE.Color(e);
+    });
+
     init();
 
     var mousePos;
@@ -72,7 +83,7 @@ Example.AirPlane = function () {
         scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
         //在场景中添加一个三维坐标系,便于观察图形的位置
         var axes = new THREE.AxisHelper(200);
-        scene.add(axes);
+        //scene.add(axes);
         //宽高比设置为窗口大小,避免图案的变形
         aspectRatio = WIDTH / HEIGHT;
         fieldOfView = 50;
@@ -216,10 +227,11 @@ Example.AirPlane = function () {
         //制作引擎盖
         var geomEngine = new THREE.BoxGeometry(20, 50, 50, 1, 1, 1);
         var matEngine = new THREE.MeshPhongMaterial({
-            color: Color.white,
+            color: Color.red,
             shading: THREE.FlatShading
         });
         var engine = new THREE.Mesh(geomEngine, matEngine);
+        engine.position.x = 40;
         engine.castShadow = true;
         engine.receiveShadow = true;
         this.mesh.add(engine);
@@ -235,6 +247,17 @@ Example.AirPlane = function () {
         tailPlane.castShadow = true;
         tailPlane.receiveShadow = true;
         this.mesh.add(tailPlane);
+
+        //制作机翼
+        var geomSideWing = new THREE.BoxGeometry(40, 8, 150, 1, 1, 1);
+        var matSideWing = new THREE.MeshPhongMaterial({
+            color: Color.red,
+            shading: THREE.FlatShading
+        });
+        var sideWing = new THREE.Mesh(geomSideWing, matSideWing);
+        sideWing.castShadow = true;
+        sideWing.receiveShadow = true;
+        this.mesh.add(sideWing);
 
         // 飞机前端旋转的螺旋桨
         var geomPropeller = new THREE.BoxGeometry(20, 10, 10, 1, 1, 1);
