@@ -36,20 +36,15 @@ Example.AirPlane = function () {
 
         //循环函数,用于最后每一个帧的重绘,实现动画效果
         loop();
-
     }
-
 
     //控制飞机移动
     function handleMouse(event) {
         // 我们要把鼠标的坐标值转换成webgl系统中规格化的数值，从-1到1
         // 这种转换很简单的伙计！tx = (x-width/2)/(width/2)
-
         var tx = -1 + (event.clientX / WIDTH) * 2;
 
         // y轴在窗口坐标系和webg坐标系的方向是相反的，因此我们把他逆一下就可以
-
-
         var ty = 1 - (event.clientY / HEIGHT) * 2;
         mousePos = {
             x: tx,
