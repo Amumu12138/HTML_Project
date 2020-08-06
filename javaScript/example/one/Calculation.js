@@ -40,6 +40,14 @@ var Example = Example || {};
  * |                        非
  * 条件运算符
  * a? b: c                  三目运算符
+ * 
+ * JavaScript 条件语句
+ * 条件语句用于基于不同的条件来执行不同的动作
+ * a,if语句 只有当指定条件为true时,使用该语句来执行代码
+ * b,if...else语句 当条件为true时执行代码,当条件为false时执行else下语句
+ * c,if...else if... else 使用该语句来选择多个代码块之一来执行
+ * d,switch语句 使用该语句来选择多个代码之一来执行
+ * 
  */
 Example.Calculation = function () {
     console.log("\'5\' + 5 = ", "5" + 5, "type = " + typeof ("5" + 5)); //55  string
