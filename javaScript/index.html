@@ -27,28 +27,12 @@
     <script type="text/javascript" src="example/one/Event.js"> </script>
     <script type="text/javascript" src="example/one/Calculation.js"> </script>
     <script type="text/javascript" src="example/one/LoopFunction.js"> </script>
+    <script type="text/javascript" src="example/one/Typeof.js"> </script>
 </head>
 
-<body onload="init()">
+<body>
     <script type="text/javascript">
-        // Example.LoopFunction();
-        (function () {
-
-        });
-
-        app = {
-            appid: '14152DA064822DDAF', // 必传
-            appkey: 'kt57ec402acafb25713c02786b80cc21' // 必传
-        };
-
-        function init() {
-            app.callback = function (data) {
-                console.log("init result:" + data);
-                //回调格式:{"code":"0","msg":"成功","floatFucs":[]}
-            };
-            //H5Sdk.initial(app);
-            console.log("init 123");
-        }
+        Example.Typeof();
     </script>
 </body>
 
