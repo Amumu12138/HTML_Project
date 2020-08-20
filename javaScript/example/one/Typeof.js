@@ -63,6 +63,7 @@ Example.Typeof = function () {
     var myArray = [1, 2, 3, 4];
     var hasArr = myArray.constructor.toString().indexOf("Array") > -1;
 
+    //indeOf()可返回某个指定的字符串值在字符串中首次出现的位置
     console.log("Amumu myArray => ", myArray.constructor.toString()); //Amumu myArray =>  function Array() { [native code] }
     console.log("Amumu myArr => " + myArray.constructor.toString().indexOf("Array")); //9 取"function Array()"中第十个字符位置
     console.log("Amumu indexOf f => " + myArray.constructor.toString().indexOf("f")); //Amumu indexOf f => 0

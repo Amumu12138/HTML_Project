@@ -21,7 +21,30 @@ var Example = Example || {};
  *  var n = str.search(/Runoob/i);  //6
  * replace()方法用于在字符串中使用一些字符替代另一些字符,或替换一个与正则表达式匹配的子串
  * var str = document.getElementById("demo").innerHTML; 
-    var txt = str.replace(/microsoft/i,"Runoob"); //Visit Runoob!
+ * var txt = str.replace(/microsoft/i,"Runoob"); //Visit Runoob!
+ * 正则表达式参数可用在以上方法中(替代字符串参数)
+ * 正则表达式使得搜索功能更加强大(如实例中不区分大小写)
+ * 
+ * 正则表达式修饰符
+ * 修饰符               描述
+ * i                执行对大小写不敏感的匹配
+ * g                执行全局匹配(查找所有匹配而非在找到第一个匹配后停止)
+ * m                执行多行匹配
+ * 
+ * 正则表达式模式 (方括号用于查找某个范围内的字符)
+ * 表达式               描述
+ * [abc]            查找方括号之间的任何字符
+ * [0-9]            查找任何从0-9的数字
+ * (x|y)            查找任何以|分割的选项
+ * 元字符               描述
+ * \d               查找数字
+ * \s               查找空白字符
+ * \b               匹配单词边界
+ * \uxxxx           查找以十六进制数xxxx规定的Unicode字符
+ * 量词                 描述
+ * n+               匹配任何包含至少一个n的字符串
+ * n*               匹配任何包含零个或多个n的字符串
+ * n?               匹配任何包含零个或一个n的字符串
  */
 Example.RegularExpression = function () {
     //search()方法
