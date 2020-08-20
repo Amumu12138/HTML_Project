@@ -45,6 +45,17 @@ var Example = Example || {};
  * n+               匹配任何包含至少一个n的字符串
  * n*               匹配任何包含零个或多个n的字符串
  * n?               匹配任何包含零个或一个n的字符串
+ * 
+ * 四、使用RegExp()对象
+ * 在JavaScript中,RegExp对象是一个预定义了属性和方法的正则表达式对象
+ * 1,使用test()
+ * test()方法是一个正则表达式方法.
+ * test()方法用于检测一个字符串是否匹配某个模式,如果字符串中含有匹配的文本,则返回true,否则返回false
+ * 例如: /e/.test("The best things in life are free!"); //true
+ * 2,使用exec()
+ * exec()方法用于检索字符串中的正则表达式的匹配
+ * 该函数返回一个数组,其中存放匹配的结果,如果未找到匹配,则返回值为null
+ * /e/.exec("The best things in life are free!"); //e
  */
 Example.RegularExpression = function () {
     //search()方法
@@ -65,6 +76,80 @@ Example.RegularExpression = function () {
                 document.getElementById("demo").innerHTML = txt;
             }
         </script>`);
+
+    var hasTest = /e/.test("The best things in life are free!");
+    console.log("RegularExpression hasTest = ", hasTest); //RegularExpression hasTest =  true
+
+    var hasExec = /e/.exec("The best things in life are free!");
+    console.log("RegularExpression hasExec = ", hasExec); //RegularExpression hasExec =  ["e", index: 2, input: "The best things in life are free!", groups: undefined]
+
+    //是否带有小数
+    function isDecimal(strValue) {
+        var objRegExp = /^\d+\.\d+$/;
+        return objRegExp.test(strValue);
+    }
+
+    console.log("RegularExpression isDecimal 3.14 =", isDecimal(3.14)); //true
+    console.log("RegularExpression isDecimal 3 =", isDecimal(3)); //false
+
+    //检验是否带有中文名称组成(只能验证指定数量的中文)
+    function isChina(str) {
+        var reg = /^[\u4E00-\u9FA5]{2, 4}$/; /*定义验证表达式*/
+        return reg.test(str); /*进行验证*/
+    }
+
+    console.log("RegularExpression isChina 中文 =", isChina("这段时间", 4)); //true
+    console.log("RegularExpression isChina 212 =", isChina(212)); //false
+    console.log("RegularExpression isChina 中文212 =", isChina("中文212")); //false
+
+    //检验是否全由8位数字组成
+    function isStudentNo(str) {
+        var reg = /^[0-9]{8}$/; /*定义验证表达式*/
+        return reg.test(str); /*进行验证*/
+    }
+
+    console.log("RegularExpression isStudentNo 12345678 =", isStudentNo(12345678)); //true
+    console.log("RegularExpression isStudentNo 212 =", isStudentNo(212)); //false
+    console.log("RegularExpression isStudentNo abcdefgh =", isStudentNo("abcdefgh")); //false
+
+    //检验电话号码格式
+    function isTelCode(str) {
+        var reg = /^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/;
+        return reg.test(str);
+    }
+
+    console.log("RegularExpression isTelCode 15116184973 =", isTelCode(15116184973)); //true
+    console.log("RegularExpression isTelCode 123654 =", isTelCode(123654)); //false
+    console.log("RegularExpression isTelCode abcdefgh =", isTelCode("abcdefgh")); //false
+
+    //检验邮件地址是否合法
+    function isEmail(str) {
+        var reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
+        return reg.test(str);
+    }
+
+    console.log("RegularExpression isEmail 15116184973@163.com =", isEmail("15116184973@163.com")); //true
+    console.log("RegularExpression isEmail 15116184973 =", isEmail(15116184973)); //false
+    console.log("RegularExpression isEmail abcdefgh =", isEmail("abcdefgh")); //false
+
+    /**
+     * [reg 百度网盘链接匹配]
+     * 说明：匹配支持百度分享的两种链接格式
+     * 格式一：链接: https://pan.baidu.com/s/15gzY8h3SEzVCfGV1xfkJsQ 提取码: vsuw 复制这段内容后打开百度网盘手机App，操作更方便哦
+     * 格式二：http://pan.baidu.com/share/link?shareid=179436&uk=3272055266 提取码: vsuw 复制这段内容后打开百度网盘手机App，操作更方便哦
+     * 匹配出下载地址和提取码，并且还支持如果没有提取码，也能匹配出下载链接。
+     * @type {正则表达式}
+     * @return array 返回匹配成功的链接和地址
+     */
+    function baiduDownLinkArr(string) {
+        var reg = /([http|https]*?:\/\/pan\.baidu\.com\/[(?:s\/){0,1}|(share)]*(?:[0-9a-zA-Z?=&])+)(?:.+:(?:\s)*)?([a-zA-Z]{4})?/;
+        return reg.exec(string);
+    }
+
+    //["https://pan.baidu.com/s/15gzY8h3SEzVCfGV1xfkJsQ", "https://pan.baidu.com/s/15gzY8h3SEzVCfGV1xfkJsQ", undefined, index: 4, input: "链接: https://pan.baidu.com/s/15gzY8h3SEzVCfGV1xfkJs…            
+    //提取码: vsuw 复制这段内容后打开百度网盘手机App， 操作更方便哦 ", groups: undefined]
+    console.log("RegularExpression baiduDownLinkArr =", baiduDownLinkArr(`链接: https://pan.baidu.com/s/15gzY8h3SEzVCfGV1xfkJsQ 
+                    提取码: vsuw 复制这段内容后打开百度网盘手机App， 操作更方便哦 `));
 
 };
 
