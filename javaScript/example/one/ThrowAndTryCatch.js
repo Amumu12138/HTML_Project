@@ -30,7 +30,6 @@ var Example = Example || {};
  * throw语句允许我们创建自定义错误
  * 正确的技术术语是: 创建或抛出异常(异常可以是JavaScript字符串、数字、逻辑值或对象)
  * 如果把throw与try和catch一起使用,那么你能够控制程序流,并生成自定义的错误消息
- * 
  */
 Example.ThrowAndTryCatch = function () {
     //验try catch和finally语句
