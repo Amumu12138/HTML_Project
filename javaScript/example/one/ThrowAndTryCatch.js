@@ -30,6 +30,43 @@ var Example = Example || {};
  * throw语句允许我们创建自定义错误
  * 正确的技术术语是: 创建或抛出异常(异常可以是JavaScript字符串、数字、逻辑值或对象)
  * 如果把throw与try和catch一起使用,那么你能够控制程序流,并生成自定义的错误消息
+ * 
+ * JavaScript 调试
+ * 在编写javaScript时,如果没有调试工具将是一件很痛苦的事情
+ * 没有调试工具是很难去编写JavaScript程序的
+ * 你的代码可能包含语法错误、逻辑错误, 如果没有这些调试工具,这些错误比较难于发现
+ * 通常,如果javaScript出现错误,是不会有提示信息,这样你就无法找到代码错误的位置
+ * 
+ * 六、调试工具
+ * 在程序代码中寻找错误叫做代码调试
+ * 调试很难,但幸运的是,很多浏览器都内置了调试工具
+ * 内置的调试工具可以开始或关闭,严重的错误信息会发送给用户
+ * 有了调试工具,我们就可以设置断点(代码停止执行的位置)，且可以在代码执行时检测变量
+ * 浏览器启用调工具一般是按下F12键,并在调试菜单中选择“console”
+ * 
+ * 七、console.log()方法
+ * 如果浏览器支持调试,你可以用console.log()方法在调试窗口上打印javaScript值
+ * 
+ * 八、设置断点
+ * 在调试窗口中,你可以设置javaScript代码
+ * 在每个断点上,都会停止执行javaScript代码,以便于我们检查javaScript变量的值
+ * 在检查完毕后,可以重新执行代码
+ * 
+ * 九、debugger关键字
+ * debugger关键字用于停止执行javaScript,并调用调试函数
+ * 这个关键字与在调试工具中设置断点的效果是一样的
+ * 
+ * JavaScript 变量提升
+ * 在JavaScript中, 函数及变量的声明都将被提升到函数的最顶部
+ * JavaScript中,变量可以在使用后声明,也就是变量可以先使用再声明
+ * 变量提升(hoisting): 函数声明和变量声明总是会被解释器悄悄地被"提升"到方法的最顶部
+ * 
+ * 十、初始化不会提升
+ * javaScript只有声明的变量会提升,初始化的不会
+ * 对于大多数程序员来说并不知道javaScript变量提升
+ * 如果程序员不能很好的理解变量提升,他们写的程序就容易出现一些问题
+ * 为了避免这些问题,通常我们在每个作用域开始之前声明这些变量,这也是正常的javaScript解析步骤,易于我们理解
+ * 
  */
 Example.ThrowAndTryCatch = function () {
     //验try catch和finally语句
@@ -61,6 +98,22 @@ Example.ThrowAndTryCatch = function () {
              }
         </script>    
     `);
+
+    //开启debugger,代码将在console.log()前停止执行
+    var x = 15 * 5;
+    //debugger;
+    console.log("Amumu ThrowAndTryCatch x = ", x);
+
+    //函数变量提升
+    var getName = function () {
+        console.log(2);
+    }
+
+    function getName() {
+        console.log(1);
+    }
+
+    getName(); //2
 };
 
 
