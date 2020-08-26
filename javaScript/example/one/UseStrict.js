@@ -57,16 +57,134 @@ var Example = Example || {};
  * g,public
  * h,static
  * i,yield
+ * 
+ * JavaScript使用误区
+ * 六、赋值运算符应用错误
+ * 在JavaScript程序中如果你在if条件语句中使用赋值运算符的等号(=)将会产生一个错误,正确的方法是使用
+ * 比较运算符的两个等号(==), if条件语句返回false.因为其中的判断条件为false
+ * JS没有严格的格式检查规范 例如 if(10 = a) 是允许存在的
+ * 
+ * 七、比较运算符常错误
+ * 在常规的比较中,数据类型是被忽略的
+ * 例如：
+ *  var x = 10;
+ *  var y = "10";
+ *  if(x == y) //true
+ * 在严格的比较运算中,=== 为恒等计算符,同时检查表达式的值与类型
+ * 例如：
+ *  var a = 10; 
+ *  var b = "10";
+ *  if(x === y) //false
+ * 这种错误经常会在switch语句中出现,switch语句会使用恒等式计算符(===)进行比较
+ * 
+ * 八、加法与连接注意事项
+ * 加法是两个数字相加
+ * 连接是两个字符串连接
+ * 但是JavaScript的加法和连接都使用+运算符
+ * 例如:
+ *  var x = 10 + 5; //15
+ *  var x = "10" + 5; //"105"
+ * 
+ * 九、浮点型数据使用注意事项
+ * javaScript中的所有数据都是以64位浮点型数据来存储
+ * 所有的编程语言,包括JavaScript,对浮点型数的精确度都很难确定
+ * 例如:
+ * var x = 0.2;
+ * var u = 0.1;
+ * var z = x + y; //0.30000000000000004
+ * 为解决以上问题,可以用整数的乘除法来解决
+ *  var z = (x  * 10 + y * 10) / 10; //0.3
+ *  或保留一定的精度: var x = (x + y).toFixed(1); //0.3
+ * 
+ * 十、其它误区
+ * 1,javaScript 允许我们在字符串中使用断行语句,但是在字符串中直接使用回车换行十会报错的
+ * 字符串断行需要使用饭斜杠(\)
+ * 2,错误的使用分号
+ * a,在if语句失去方法体,原if语句的方法体作为独立的代码块被执行,导致错误的输出结果。
+ * 例如:
+ * var x = 0;
+ * if(x == 10);
+ * {
+ *   console.log("error"); //error 由于分号使用错误,if语句中的代码块就一定会执行
+ * }
+ * b,return语句使用注意事项
+ * JavaScript默认是在代码的最后一行自动结束
+ * 在JavaScript中,分号是可选的
+ * 3,数组中使用名字来索引
+ * 许多程序语言都允许使用名字来作为数组的索引
+ * 使用名字来作为索引的数组称为关联数组(或哈希)
+ * JavaScript不支持使用名字来索引数组,只允许使用数字索引
+ * 
+ * 但是，在JavaScript中,对象使用名字作为索引
+ * 如果你使用名字作为索引,当访问数组时,JavaScript会把数组重新定义为标准对象
+ * 执行这样操作后,数组的方法及属性将不能再使用,否则会产生错误
+ * 例如:
+ *  var person = [];
+ *  person["firstName"] = "Jhon";
+ *  person["lastName"] = "Doe";
+ *  person["age"] = 18;
+ *  var x = person.length; // 0
+ *  var y = person[0]; // undefined
+ * 4,定义数组元素,最后不能添加逗号
+ * 数组最后一个值的后面添加逗号虽然语法没有问题，但是再不同的浏览器可能得到不同的结果
+ * 例如 var colors = [5, 6, 7,]; //这样数组的长度可能为3 也可能为4。
+ * 5,定义对象，最后不能添加逗号
+ * 6.undeifned不是null
+ * 在JavaScript中,null用于对象,undefined用于变量、属性和方法
+ * 对象只有被定义才有可能为null,否则为undefined
+ * 如果我们向测试对象是否存在,在对象还没定义时将会抛出一个错误
+ * 例如 if(typeof myObj !== "undefined" && muObj !== null)
+ * 7,程序块作用域
+ * 在每个代码块中JavaScript不会创建一个新的作用域,一般各个代码块的作用域都是全局的
+ * 例如
+ * for(var i = 0; i < 10; i++) {
+ *      //code
+ * }
+ * return i; // 10
  */
 Example.UseStrict = function () {
     "use strict";
 
+    //返回true
     var a = 10;
     if (10 == a) {
         console.log("true");
     } else {
         console.log("false");
     }
+
+    //返回true
+    var x = 10;
+    var y = "10";
+    if (x == y) {
+        console.log("true");
+    } else {
+        console.log("false");
+    }
+
+    //返回false
+    var c = 10;
+    var d = "10";
+    if (c === d) {
+        console.log("true");
+    } else {
+        console.log("false");
+    }
+
+    console.log("Amumu UseStrict 0.1 + 0.2 = ", 0.1 + 0.2); //Amumu UseStrict 0.1 + 0.2 =  0.30000000000000004
+    console.log("Amumu UseStrict (0.1 + 0.2).toFixed(1) = ", (0.1 + 0.2).toFixed(1)); //Amumu UseStrict (0.1 + 0.2).toFixed(1) =  0.3
+
+    var person = [];
+    person["firstName"] = "Jhon";
+    person["lastName"] = "Doe";
+    person["age"] = 18;
+    var x = person.length; // 0
+    var y = person[0]; // undefineds
+    console.log(`Amumu UseStrict x = ${x}, y = ${y}`);
+    console.log(`Amumu UseStrict firstName = ${person["firstName"]}`); //Jhon
+
+    var colors = [5, 6, 7, ];
+    console.log(`Amumu UseStrict Array length = ${colors.length}`); //3
 };
 
 
