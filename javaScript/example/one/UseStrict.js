@@ -155,7 +155,7 @@ Example.UseStrict = function () {
 
     //返回true
     var x = 10;
-    var y = "10";
+    var y = "10"; 
     if (x == y) {
         console.log("true");
     } else {
