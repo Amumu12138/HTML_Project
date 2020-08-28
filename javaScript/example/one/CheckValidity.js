@@ -30,7 +30,26 @@ var Example = Example || {};
  * valid                        设置为true,如果元素的值是合法的
  */
 Example.CheckValidity = function () {
-    //	您只能在 HTML 输出中使用 document.write。如果您在文档加载后使用该方法，会覆盖整个文档。
+    //输入数字并点击验证API
+    document.write(`
+        <p>输入数字并点击验证按钮</p>
+        <input id="id1" type="number" min="100" max="300" required>
+        <button onclick="myFunction()">验证</button>
+        <p id="id2"> 123</p>
+    `);
+
+    document.write(`
+        <script>
+            function myFunction() {
+                var inpObj = document.getElementById("id1");
+                if(inpObj.checkValidity() == false) {
+                    document.getElementById("id2").innerHTML = inpObj.validationMessage;
+                } else {
+                    document.getElementById("id2").innerHTML = "输入正确";
+                }
+            }
+        </script>
+    `);
 };
 
 
