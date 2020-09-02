@@ -40,13 +40,76 @@ var Example = Example || {};
  * constructor 构造函数 crypto decodeURI decodeURIComponent defaultStatus 默认状态
  * document element 元素 elements embed embeds
  * encodeURI encodeURIComponent excape event fileUpload 
- * focus 聚焦 form forms frame innerHeight
- * innerWidth
+ * focus 聚焦 form forms frame innerHeight 返回窗口的文档显示区的高度
+ * innerWidth 返回窗口的文档显示区的宽度 layer 层级 layers link 链接 location 本地
+ * mimeTypes navigate navigator frames frameRate
+ * hidden history image images offscreenBuffering 
+ * open opener option outerHeight outerWidth
+ * packages pageXOffset pageYOffset parent parseFloat
+ * parseInt 转换为Int类型 password 面膜 pkcs11 plugin 插件 prompt
+ * propertylsEnum radio reset screenX屏幕坐标X screenY屏幕坐标Y
+ * scroll 滑动 secure select 选择 self setInterval 设置定时器
+ * setTimeout 设置计时器 status 状态 submit taint text 文本
+ * textarea top 顶部 unescape untaint window 全局
+ * 
+ * 五、HTML事件句柄
+ * 应该避免使用HTML事件句柄的名称作为JavaScript的变量及函数名
+ * onblur onclick 点击事件 onerror 错误事件 onfocus 聚焦事件
+ * onkeydown 按键按下事件 onkeypress onkeyup 按键抬起事件 onmouseover 鼠标结束事件
+ * onload 加载事件 onmouseup 鼠标抬起事件 onmousedown 鼠标按下事件 onsubmit
+ * 
+ * 六、非标准JavaScript
+ * 除了保留关键字,在javaScript实现中国也有一些非标准的关键字
+ * 一个实例时const关键字,用于定义变量.一些javaScript引擎把const当作var的同义词,另一些引擎则把const当作变量的定义.
+ * const时JavaScript的扩展,javaScript引擎支持它用在firefox和Chrome中,但是它并不是JavaScript便准ES3或ES5的组成部分
+ * 建议:不要使用它
+ * 
+ * this 关键字
+ * 面向对象语言中this表示当前对象的一个引用
+ * 但在js中this不是固定不变的,它会随着执行环境的改变而改变
+ * 1,在方法中,this表示该方法所属的对象
+ * 2,如果单独使用,this表示全局对象
+ * 3,在函数中,this表示全局对象
+ * 4,在函数中,在严格模式下,this是未定义的undefined
+ * 5,在事件中,this表示接收事件的元素
+ * 6,类似call()和apply()方法可以将this引用到任何对象
+ * 
+ * 七、显示函数绑定
+ * 在JavaScript中函数也是对象,对象则有方法,apply和call就是函数对象的方法。
+ * 这两个方法异常强大,他们允许切换函数执行的上下文环境,即this绑定的对象
+ * 例如；
+ * var person1 = {
+ *  fullName: function() {
+ *      return this.firstName + " " + this.lastName;
+ *  }
+ * }
+ * var person2 = {
+ *  firstName: "John",
+ *  lastName: "Doe"
+ * }
+ * person1.fullName.call(person2);  //John Doe
  */
 Example.KeyWord = function () {
+    //const 常量定义
+    const a = 1;
+    console.log("Amumu KeyWord a = ", a);
+    // a = 2; //实现报错
+    // console.log("Amumu keyWord a = ", a);
 
+
+    var person1 = {
+        fullName: function () {
+            return this.firstName + "_" + this.lastName;
+        }
+    }
+
+    var person2 = {
+        firstName: "John",
+        lastName: "Doe"
+    }
+    var b = person1.fullName.call(person2);
+    console.log("Amumu KeyWord b = ", b); //Amumu KeyWord b =  John_Doe
 };
-
 
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];

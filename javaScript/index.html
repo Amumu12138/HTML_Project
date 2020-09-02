@@ -15,6 +15,9 @@
         }
     </style>
 
+    <script type="text/javascript" src="example/libs/jquery-1.9.1.min.js"> </script>
+    <script type="text/javascript" src="example/libs/jquery.md5.js"> </script>
+    <script type="text/javascript" src="example/libs/pjsdk.js"> </script>
 
     <script type="text/javascript" src="example/test.js"> </script>
     <!-- 搜狐 确定ip地址、所在城市 -->
@@ -38,16 +41,60 @@
     <script type="text/javascript" src="example/one/ValidateForm.js"> </script>
     <script type="text/javascript" src="example/one/CheckValidity.js"> </script>
     <script type="text/javascript" src="example/one/KeyWord.js"> </script>
-
+    <script type="text/javascript" src="example/one/LetConst.js"> </script>
+    <script type="text/javascript" src="example/one/Json.js"> </script>
 </head>
 
 <body>
     <script type="text/javascript">
-        Example.KeyWord();
+        //'use strict';
+        Example.Json();
+
+        /**
+         * @param {number[]} nums
+         * @param {number} target
+         * @return {number[]}
+         */
+        // var twoSum = function (nums, target) {
+        //     if (nums.length < 2) return [];
+
+        //     var indexArr = [];
+        //     for (var i = 0; i < nums.length - 1; i++) {
+        //         for (var j = i + 1; j < nums.length; j++) {
+        //             if (target === nums[i] + nums[j]) {
+        //                 indexArr.push(i);
+        //                 indexArr.push(j);
+        //                 return indexArr;
+        //             }
+        //         }
+        //     }
+
+        //     return [];
+        // };
+
+        // var nums = [3, 2, 4];
+        // var target = 6;
+        // var indexNums = twoSum(nums, target);
+        // console.log("Amumu indexNums =", indexNums);
+
+        // function myFunction() {
+        //     return this;
+        // }
+        // console.log("Amumu KeyWord myFunction = ", myFunction());
 
         // document.write("搜狐：" + returnCitySN["cip"] + ',' + returnCitySN["cname"]);
         // console.log("ip = " + returnCitySN["cip"]);
         // console.log("Amumu ScreenWidth ", window.screen.width + " SceeenHeight = " + window.screen.height);
+
+        // const http = new XMLHttpRequest();
+        // const url = "https://h5.paojiao.cn/api/getToken";
+        // http.open("GET", url);
+        // http.send();
+
+        // http.onreadystatechange = (e) => {
+        //     console.log(http.responseText);
+        // }
+        // window.pjsdk.init(11023, "fscop_szxykj_sm_001", "1.0.0");
     </script>
 </body>
 
