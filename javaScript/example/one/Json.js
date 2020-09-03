@@ -38,6 +38,19 @@ var Example = Example || {};
  * 相关函数                         描述
  * JSON parse()                 用于将一个JSON字符串转换为JavaScript对象
  * JSON stringify()             用于将JavaScript值转换为JSON字符串
+ * 
+ * 五、void(0)含义
+ * javascript:void(0)中最关键的是void关键字,void是javascript种非常重要的关键字,
+ * 该操作符指定要计算一个表达式但是不返回值
+ * 例如:
+ * void func()
+ * javascript: void func()
+ * 
+ * 六、href='#'与href='javascript:void(0)'的区别
+ * #包含了一个位置信息,默认的瞄是#top也就是网页的上端
+ * 而javascript:void(0),仅仅表示一个死链接
+ * 在页面很长的时候会使用#来定位页面的具体位置,格式为:#+id
+ * 
  */
 Example.Json = function () {
     //将JOSN字符串转换为JavaScript对象 利用JOSN parse()函数
@@ -56,6 +69,23 @@ Example.Json = function () {
         obj = JSON.parse(text);
         document.getElementById("demo").innerHTML = obj.sites[1].name + " " + obj.sites[1].url;
     </script>
+    `);
+
+    //实现javascript:void(0)
+    document.write(`
+        <a href="javascript:void(0)">点击此处什么也不会发生</a>
+        <br>
+    `);
+
+    window.location.href = "javascript: void(0)";
+
+    document.write(`
+        <a href="#pos">点我定位到指定位置</a>
+        <br>
+    `);
+
+    document.write(`
+        <p id="pos">尾部定位点</p>
     `);
 };
 
