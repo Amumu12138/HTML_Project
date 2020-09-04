@@ -66,7 +66,7 @@ Example.Texture2D = function () {
     ]);
 
     /**
-     * 加载纹理图像像素数据
+     * 加载纹理图像像素数据t
      **/
     var image = new Image();
     image.src = 'res/texture/texture.jpg'; //设置图片路径

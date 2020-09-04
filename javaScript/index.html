@@ -44,13 +44,17 @@
     <script type="text/javascript" src="example/one/LetConst.js"> </script>
     <script type="text/javascript" src="example/one/Json.js"> </script>
     <script type="text/javascript" src="example/one/Asynchronous.js"> </script>
+    <!-- leetCode -->
+    <script type="text/javascript" src="example/leetCode/Client.js"> </script>
 </head>
 
 <body>
     <script type="text/javascript">
         //'use strict';
-        Example.Asynchronous();
-
+        var a = [2, 4, 3];
+        var b = [5, 6, 4];
+        var c = Example.addTwoNumbers(a, b);
+        console.log("c = ", c);
         /**
          * @param {number[]} nums
          * @param {number} target
