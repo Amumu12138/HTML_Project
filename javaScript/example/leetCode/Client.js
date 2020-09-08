@@ -11,39 +11,59 @@ var Example = Example || {};
 输出：7 -> 0 -> 8
 原因：342 + 465 = 807
  */
-function ListNode(val) {
+function ListNode(val, node) {
     this.val = val;
-    this.next = null;
-
+    this.next = node;
 }
 /**
  * @param {ListNode} l1 
  * @param {ListNode} l2 
  * @return {ListNode}
  */
+
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
 Example.addTwoNumbers = function (l1, l2) {
-    var root = new ListNode(0);
-    var cursor = root;
-    var carry = 0;
- 
+    if (l1 == null || l2 == null) {
+        if (l1 != null) {
+            return l1;
+        }
+        if (l2 != null) {
+            return l2;
+        }
+        return null;
+    } else {
+        var sum = l1.val + l2.val;
+        var carryBit = Math.floor(sum / 10);
+        var result = new ListNode(sum % 10);
+        var listNode = result;
+        while (l1.next != null || l2.next != null) {
+            if (l1.next == null) {
+                l1.next = new ListNode(0, null);
+            }
+            if (l2.next == null) {
+                l2.next = new ListNode(0, null);
+            }
 
-    while (l1 != null || l2 != null || carry != 0) {
-        var l1Val = l1 != null ? l1.val : 0;
-        var l2Val = l2 != null ? l2.val : 0;
-        var sumVal = l1Val + l2Val + carry;
-        carry = sumVal / 10;
+            l1 = l1.next;
+            l2 = l2.next;
 
-        sumNode = new ListNode(sumVal % 10);
-        cursor.next = sumNode;
-        cursor = sumNode;
+            sum = l1.val + l2.val + carryBit;
+            listNode.next = new ListNode(sum % 10, null);
+            carryBit = Math.floor(sum / 10);
+            listNode = listNode.next;
+        }
 
-        if (l1 != null) l1 = l1.next;
-        if (l2 != null) l2 = l2.next;
+        if (carryBit == 1) {
+            listNode.next = new ListNode(carryBit, null);
+        }
+
+        return result;
     }
-
-    return root.next;
-}
-
+};
 
 
 if (typeof module !== 'undefined') {

@@ -4,6 +4,11 @@
 <head>
     <meta charset='utf-8'>
     <title>-- JavaScript --</title>
+
+    <span class="t" id="topUserInfo" style="display: block;">欢迎您，<a href="/u/index.do?source=0010001400000"
+            target="_blank" title="amumu12138" class="nick" pbtag="uname">amumu12138</a><a href="#?source=0010001400000"
+            pbtag="logout" class="_logout">退出</a>
+    </span>
     <style>
         body {
             margin: 0;
@@ -51,10 +56,20 @@
 <body>
     <script type="text/javascript">
         //'use strict';
-        var a = [2, 4, 3];
-        var b = [5, 6, 4];
-        var c = Example.addTwoNumbers(a, b);
-        console.log("c = ", c);
+        var a = new ListNode(1, null);
+        var b = new ListNode(2, null);
+        var c = new ListNode(3, null);
+        a.next = b;
+        b.next = c;
+
+        var x = new ListNode(4, null);
+        var y = new ListNode(5, null);
+        var z = new ListNode(6, null);
+        x.next = y;
+        y.next = z;
+
+        var d = Example.addTwoNumbers(a, x);
+        console.log("d= ", d);
         /**
          * @param {number[]} nums
          * @param {number} target
@@ -100,6 +115,14 @@
         //     console.log(http.responseText);
         // }
         // window.pjsdk.init(11023, "fscop_szxykj_sm_001", "1.0.0");
+
+        //DOM获取HTML属性
+        // var a = document.getElementsByClassName("nick")
+        // console.log("a = ", a[0].innerHTML);
+
+        // var x = document.getElementById("topUserInfo");
+        // var y = x.getElementsByTagName("a");
+        // console.log("a = ", y[0].innerHTML);
     </script>
 </body>
 
