@@ -71,6 +71,8 @@
         var d = Example.addTwoNumbers(a, x);
         console.log("d= ", d);
         /**
+         * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+         * 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
          * @param {number[]} nums
          * @param {number} target
          * @return {number[]}
@@ -123,6 +125,25 @@
         // var x = document.getElementById("topUserInfo");
         // var y = x.getElementsByTagName("a");
         // console.log("a = ", y[0].innerHTML);
+
+        function isIE() { //ie?
+            if (!!window.ActiveXObject || "ActiveXObject" in window) {
+                alert('在IE环境中');
+            } else {
+                alert('不在IE环境中');
+            }
+        }
+
+        // function isIE() {
+        //     if (window.navigator.userAgent.indexOf("MSIE") >= 1) {
+        //         alert('在IE环境中');
+        //         //return;
+        //     } else {
+        //         alert('不在IE环境中');
+        //         //return false;
+        //     }
+        // }
+        isIE();
     </script>
 </body>
 
