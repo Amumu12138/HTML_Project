@@ -15,6 +15,7 @@
 
 	<script type="text/javascript" src="js/pj_sdk_client.js"></script>
 	<script type="text/javascript" src="js/pj_sdk_host.js"></script>
+	<script type="text/javascript" src="js/pj_channel_sdk.js"></script>
 
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 	<script src="/js/jquery.md5.js"></script>
@@ -85,6 +86,9 @@
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="is_IOS_safari()" value="是否是safari浏览器">
 		</li> -->
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="httpReq()" value="请求数据">
+		</li>
 
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="logogo()" value="弹出框">
@@ -286,7 +290,7 @@
 		});
 	};
 
-	function roleReported() {
+	function httpReq() {
 		/*	//var url = "http://dd.mgame.360.cn/t/gameinfo/log?interface=login&gname=djxh5&gid=445&sid=S26&oldsid=S26&user=23977703&roleid=141837436191413&dept=38&time=1592293067&level=115&ip=116.24.65.113&map_id=0";
 			var url = "http://localhost:8080/pj_sdk_h5/api/getCpLoginUrl";
 			/!*ssss(url,"",function (aaa) {
@@ -297,13 +301,29 @@
 				console.info(JSON.stringify(callback));
 			})*/
 
-		$.ajax({
-			type: "GET",
-			url: "http://dd.mgame.360.cn/t/gameinfo/log?interface=login&gname=djxh5&gid=445&sid=S26&oldsid=S26&user=23977703&roleid=141837436191413&dept=38&time=1592293067&level=115&ip=116.24.65.113&map_id=0",
-			dataType: "jsonp",
-			success: function (data) {
-				console.info(JSON.stringify(data));
-			}
+		// $.ajax({
+		// 	type: "GET",
+		// 	//url: "http://dd.mgame.360.cn/t/gameinfo/log?interface=login&gname=djxh5&gid=445&sid=S26&oldsid=S26&user=23977703&roleid=141837436191413&dept=38&time=1592293067&level=115&ip=116.24.65.113&map_id=0",
+		// 	url: "http://sdk2.paojiao.cn/sdk/sdkConfig?gameId=11072&channel=yxzbqh_NBBM_xh_001&sdkVersion=1&token=ZyGea7EH7NActyvCzMoZvhOfUP9i1Kjm&appVersion=1",
+		// 	dataType: "jsonp",
+		// 	success: function (data) {
+		// 		console.log(JSON.stringify(data));
+		// 	}
+		// });
+
+		//pjapi.httpGet = function(url,params,callback)
+		var url =
+			"http://sdk2.paojiao.cn/sdk/sdkConfig";
+		var params = {
+			gameId: 11072,
+			channel: "yxzbqh_NBBM_xh_001",
+			sdkVersion: "1.0.0",
+			token: "ZyGea7EH7NActyvCzMoZvhOfUP9i1Kjm",
+			appVersion: "1.0.0"
+		};
+
+		pjapi.httpGetByJsonp(url, params, function (data) {
+			console.log("data = ", data);
 		});
 
 	}
@@ -354,11 +374,8 @@
 	}
 
 	function is_IOS_WEIXIN() {
-
 		console.info(pjapi.is_IOS());
 		console.info(pjapi.is_weixin());
-
-
 	}
 
 	function is_IOS_safari() {
@@ -387,11 +404,8 @@
 	//显示开屏
 	function showOpenScreen() {
 		var type = Math.floor(Math.random() * 3);
-		sdk.showOpenScreen(type);
+		sdk.showOpenScreen(0);
 	}
-
-
-
 
 	var clientWidth = window.screen.width;
 	var clientHeight = window.screen.height;

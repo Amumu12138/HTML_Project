@@ -1466,13 +1466,20 @@ sdk.showOpenScreen = function (type) {
 
 //显示开屏文字框
 sdk.showOpenScreenTextBox = function () {
-    var openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">'
+    var openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
              <div class="openScreenBox">
-                <div class="content-box">11111
-                    <div type="button" onclick="sdk.closeOpenScreenTextBox()">关闭</div>
-                </div>
-            </div>
-     </div>`;
+                <button type="button" onclick="sdk.closeOpenScreenTextBox()">关闭</button>
+                <h5>111</h5>
+                <p>1230</p>
+                <p>1230</p>
+                <p>1230</p>
+                <p>1230</p>
+                <p>1230</p>
+                <p>1230</p>
+                <p>1230</p>
+            </div>    
+     </div>
+     `;
 
     $("body").append(openScreenTextHtml);
 }
@@ -1486,7 +1493,7 @@ sdk.closeOpenScreenTextBox = function () {
 sdk.showOpenScreenImage = function (url) {
     var openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src=${url}>
+            <img src=${url}>开屏图片
                 <div type="button" onclick="sdk.closeOpenScreenImage()">关闭</div>
         </div>
     </div>`;
@@ -1504,7 +1511,7 @@ sdk.closeOpenScreenImage = function () {
 sdk.showOpenScreenCoupon = function (url) {
     var openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src=${url}>111
+            <img src=${url}>代金券
                 <div type="button" onclick="sdk.closeOpenScreenCoupon()">关闭</div>
         </div>
     </div>`;
@@ -1516,6 +1523,5 @@ sdk.showOpenScreenCoupon = function (url) {
 sdk.closeOpenScreenCoupon = function () {
     $("#openScreenCoupon").remove();
 };
-
 
 window.PJ_SDK = sdk;

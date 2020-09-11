@@ -52,11 +52,13 @@
 /*开屏框*/
 .openScreenBox {
     border: 2px solid #ffffff;
-    padding: 100px 100px;
+    padding: 10px 10px;
     background: #ffffff;
-    width: 360;
-    height: 290;
+    width: 360px;
+    height: 290px;
     border-radius: 25px;
+    text-align: left;
+    vertical-align: top;
     -webkit-animation: fadeIn 0.5s;
     animation: fadeIn 0.5s;
 }
@@ -67,8 +69,8 @@
     height: 280px;
     /* border: 1px dashed #000; */
     /* display: table-cell; */
+    text-align: left;
     vertical-align: middle;
-    text-align: center;
 }
 
 .openScreenImage img {
