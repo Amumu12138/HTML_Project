@@ -1469,14 +1469,14 @@ sdk.showOpenScreenTextBox = function () {
     var openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
              <div class="openScreenBox">
                 <button type="button" onclick="sdk.closeOpenScreenTextBox()">关闭</button>
-                <h5>111</h5>
-                <p>1230</p>
-                <p>1230</p>
-                <p>1230</p>
-                <p>1230</p>
-                <p>1230</p>
-                <p>1230</p>
-                <p>1230</p>
+                <h5 style="font-size: 24px">【111】</h5>
+                <p style="font-size: 16px">1230</p>
+                <p style="font-size: 15px">1230</p>
+                <p style="font-size: 14px">1230</p>
+                <p style="font-size: 13px">1230</p>
+                <p style="font-size: 12px">1230</p>
+                <p style="font-size: 11px">1230</p>
+                <p style="font-size: 10px">1230</p>
             </div>    
      </div>
      `;

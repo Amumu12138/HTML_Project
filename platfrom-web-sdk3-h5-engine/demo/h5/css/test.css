@@ -97,3 +97,130 @@
         opacity: 1;
     }
 }
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    font-family: Arial;
+    padding: 10px;
+    background: #f1f1f1;
+}
+
+/* 遮罩 */
+.maskLayout {
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, .8);
+}
+
+/* .maskLayout>div {
+    position: relative;
+    z-index: 10000;
+    background: #fff;
+    width: 15rem;
+    left: 50%;
+    margin-left: -7.5rem;
+    top: 20%;
+} */
+
+
+/*  头部标题*/
+.header {
+    padding: 80px;
+    text-align: center;
+    background: white;
+}
+
+.header h1 {
+    font-size: 30px;
+}
+
+/* 导航条*/
+.topnav {
+    overflow: hidden;
+    background-color: #333333;
+}
+
+/* 导航条链接*/
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* 链接颜色修改 :hover 选择鼠标在链接上面时*/
+.topnav a:hover {
+    background-color: #dddddd;
+    color: black;
+}
+
+/* 创建两列*/
+/* Left column 左侧栏*/
+.leftcolumn {
+    float: left;
+    width: 75%;
+}
+
+/* 右侧栏*/
+.rightcolumn {
+    float: left;
+    width: 25%;
+    background-color: #f1f1f1;
+    padding-left: 20px;
+}
+
+/* 图像部分*/
+.fakeimg {
+    background-color: #aaaaaa;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 文章卡片效果*/
+.card {
+    background-color: white;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* 列后面清除浮动*/
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* 底部*/
+.footer {
+    padding: 20px;
+    text-align: center;
+    background: #dddddd;
+    margin-top: 20px;
+}
+
+/* 响应式布局 屏幕尺寸小于800px时, 两列布局改为上下布局*/
+@media screen and(max-width: 800px) {
+
+    .leftcolumn,
+    .rightcolumn {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+/* 响应式布局 屏幕尺寸小于400px时, 导航布局改为上下布局*/
+@media screen and(max-width: 800px) {
+    .topnav a {
+        float: none;
+        width: 100%;
+    }
+}

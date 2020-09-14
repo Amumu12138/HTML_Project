@@ -87,6 +87,10 @@
 			<input type="button" onclick="is_IOS_safari()" value="是否是safari浏览器">
 		</li> -->
 		<li style="margin-top: 20px;">
+			<input type="button" onclick="htmlLayout()" value="网页布局">
+		</li>
+
+		<li style="margin-top: 20px;">
 			<input type="button" onclick="httpReq()" value="请求数据">
 		</li>
 
@@ -404,7 +408,7 @@
 	//显示开屏
 	function showOpenScreen() {
 		var type = Math.floor(Math.random() * 3);
-		sdk.showOpenScreen(0);
+		sdk.showOpenScreen(2);
 	}
 
 	var clientWidth = window.screen.width;
@@ -467,6 +471,64 @@
 		var popup = document.getElementById("myPopup");
 		popup.classList.toggle("show");
 
+	}
+
+	function htmlLayout() {
+		var layoutHtml = `
+		<div id="layoutHtml" class="maskLayout layoutMask">
+			<div class="header">
+				<h1> 我的网页</h1>
+				<p> 重置浏览器大小产查看效果</p>
+			</div>		
+			
+			<div class="topnav">
+				<a herf="#"> 链接</a>
+				<a herf="#"> 链接</a>
+				<a herf="#"> 链接</a>
+				<a herf="#" style="float:right"> 右侧链接</a>
+			</div>
+
+			<div class="row">
+				<div class="leftcolumn">
+					<div class="card">
+						<h2>文章标题</h2>
+						<h5 style="font-size: 14px">2020/09/14</h5>
+						<div class="fakeimg" style="height:200px;">图片</div>
+						<p style="font-size: 16px">菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！</p>
+					</div>
+					<div class="card">
+						<h2>左边标题2</h2>
+						<h5 style="font-size: 14px">2020/09/14 周一</h5>
+						<div class="fakeimg" style="height: 200px;">左边图片2</div>
+						<p style="font-size: 16px">菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！</p>
+					</div>
+				</div>
+			<div class="rightcolumn">
+				<div class="card">
+					<h2>右侧标题1</h2>
+					<div class="fakeimg" style="height:100px">右侧图片1</div>
+					<p style="font-zise: 14px">关于我们的一些信息</p>
+				</div>
+				<div>
+					<h3>热门文章</h3>
+					<div class="fakeimg" style="padding: 20px; width: 200px; height: 30px;"><p>图片1</p></div>
+					<div class="fakeimg" style="padding: 20px; width: 200px; height: 30px;"><p>图片2</p></div>
+					<div class="fakeimg" style="padding: 20px; width: 200px; height: 30px;"><p>图片3</p></div>
+				</div>
+				<div class="card">
+					<h3>右侧标题3</h3>
+					<h5 style="font-size: 12px">注释:这是h5 font-size: 12px</h5>
+				</div>
+			</div>
+			</div>
+
+			
+			<div class="footer">
+				<h2>底部区域</h2>
+			</div>
+		</div>`;
+
+		$("body").append(layoutHtml);
 	}
 </script>
 
