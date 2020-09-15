@@ -1524,4 +1524,65 @@ sdk.closeOpenScreenCoupon = function () {
     $("#openScreenCoupon").remove();
 };
 
+//退游提示弹框
+sdk.showOutGameHtml = function (type) {
+
+    switch (type) {
+        case 0:
+            sdk.showOutGameImageBox();
+            break;
+        case 1:
+            sdk.showOutGameTextBox();
+            break;
+        default:
+            break;
+    }
+}
+
+//退游图片弹窗
+sdk.showOutGameImageBox = function () {
+    var outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
+        <div class="r5">
+            <img style="width: 300px; height: 200px;" src=''>
+            <div class="flex" style="height: 40px">
+                <a href="javascript:;" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px;" data-type="123" class="flex-list"  onclick="sdk.closeOutGameImageBox();">继续游戏</a>
+                <a href="javascript:;" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px;" data-type="" class="flex-list" onclick="sdk.closeOutGameImageBox();">退出游戏</a>
+             </div>
+        </div>
+    </div>`;
+
+    $("body").append(outGameImageHtml);
+}
+
+//退游图片弹窗
+sdk.closeOutGameImageBox = function () {
+    $("#outGameImage").remove();
+};
+
+//退游文字弹窗
+sdk.showOutGameTextBox = function () {
+    var outGameTextHtml = `<div id="outGameText" class="mask dialog-box">
+    <div class="r5">
+        <div>提示信息</div>
+        <div>是否退出游戏</div>
+            <div class="flex">
+                <a href="javascript:;"  data-type="conLogin" class="flex-list unselect">继续游戏</a>
+                <a href="javascript:;" data-type="outGame" class="flex-list unselect">退出游戏</a>
+            </div>
+            </div>
+        </div>
+    </div>`;
+
+    $("body").append(outGameTextHtml);
+}
+
+//退游文字弹窗
+sdk.closeOutGameImageBox = function () {
+    $("#outGameText").remove();
+};
+
+//
+
 window.PJ_SDK = sdk;

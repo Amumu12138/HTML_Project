@@ -23,6 +23,7 @@
 	<!-- <script type="text/javascript" src="http://image-h5.520youx.com/api/js/GameSdk.js"></script>
 	<script type="text/javascript" src="http://h5.wan.360.cn/h5-cp-sdk-loader.js"></script>
 	<script type="text/javascript" src="http://rh.8688games.com/tdh5sdk.js"></script> -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/common.css">
 	<link rel="stylesheet" href="css/layout.css">
 	<link rel="stylesheet" href="css/style.css">
@@ -44,8 +45,6 @@
 
 <body>
 
-	<!-- <div id="Banner">点击我</div>
-	<button type="button" onclick="loadImage()">加载图片 </button> -->
 	<ul style="list-style: none">
 		<!-- <li style="margin-top: 20px;">
 			<input type="button" onclick="test_pay()" value="支付">
@@ -87,7 +86,7 @@
 			<input type="button" onclick="is_IOS_safari()" value="是否是safari浏览器">
 		</li> -->
 		<li style="margin-top: 20px;">
-			<input type="button" onclick="htmlLayout()" value="网页布局">
+			<input type="button" onclick="showLayoutHtml()" value="网页布局">
 		</li>
 
 		<li style="margin-top: 20px;">
@@ -102,6 +101,9 @@
 		</li>
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="showOpenScreen()" value="开屏">
+		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showOutGameHtml()" value="退游弹窗">
 		</li>
 
 		<!-- <li style="margin-top: 20px;">
@@ -392,23 +394,16 @@
 
 	function enableFloatBox() {
 		sdk.enableFloatBox();
-		// $("#shortcut").remove();
-		// var t = '<div id="shortcut"  style="width: 50px;height:50px;left: -25px;"  class="shortcut">';
-		// t += '<div class="flex" onclick="sdk.showNav()" id="iconDiv" style="width: 50px;height:50px;float:left;">';
-		// t +=
-		// 	'<div id="ic-menu" class="r50" style="width: 50px;height:50px;"><span style="width: 50px;height:50px;" class="r50"></span></div>';
-		// t += "</div>"; 
-		// t +=
-		// 	'<div  id="navDiv" style="display:none;width: auto;height:50px;border: 3px solid #232529;border-radius:25px;background-color:#44474e;float:left;">';
-		// t += "</div>";
-		// t += "</div>";
-		// $("body").append(t);
 	}
 
 	//显示开屏
 	function showOpenScreen() {
 		var type = Math.floor(Math.random() * 3);
 		sdk.showOpenScreen(2);
+	}
+
+	function showOutGameHtml() {
+		sdk.showOutGameHtml(0);
 	}
 
 	var clientWidth = window.screen.width;
@@ -473,12 +468,13 @@
 
 	}
 
-	function htmlLayout() {
+	function showLayoutHtml() {
 		var layoutHtml = `
 		<div id="layoutHtml" class="maskLayout layoutMask">
 			<div class="header">
-				<h1> 我的网页</h1>
-				<p> 重置浏览器大小产查看效果</p>
+				<h1>我的网页</h1>
+				<p>重置浏览器大小产查看效果</p>
+				<button onclick="closeLayoutHtml()">关闭</button>
 			</div>		
 			
 			<div class="topnav">
@@ -503,23 +499,23 @@
 						<p style="font-size: 16px">菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！菜鸟教程 - 学的不仅是技术，更是梦想！</p>
 					</div>
 				</div>
-			<div class="rightcolumn">
-				<div class="card">
-					<h2>右侧标题1</h2>
-					<div class="fakeimg" style="height:100px">右侧图片1</div>
-					<p style="font-zise: 14px">关于我们的一些信息</p>
+				<div class="rightcolumn">
+					<div class="card">
+						<h2>右侧标题1</h2>
+						<div class="fakeimg" style="height:100px">右侧图片1</div>
+						<p style="font-zise: 14px">关于我们的一些信息</p>
+					</div>
+					<div class="card">
+						<h3>热门文章</h3>
+						<div class="fakeimg"><p>图片1</p></div>
+						<div class="fakeimg"><p>图片2</p></div>
+						<div class="fakeimg"><p>图片3</p></div>
+					</div>
+					<div class="card">
+						<h3>右侧标题3</h3>
+						<h5 style="font-size: 12px">注释:这是h5 font-size: 12px</h5>
+					</div>
 				</div>
-				<div>
-					<h3>热门文章</h3>
-					<div class="fakeimg" style="padding: 20px; width: 200px; height: 30px;"><p>图片1</p></div>
-					<div class="fakeimg" style="padding: 20px; width: 200px; height: 30px;"><p>图片2</p></div>
-					<div class="fakeimg" style="padding: 20px; width: 200px; height: 30px;"><p>图片3</p></div>
-				</div>
-				<div class="card">
-					<h3>右侧标题3</h3>
-					<h5 style="font-size: 12px">注释:这是h5 font-size: 12px</h5>
-				</div>
-			</div>
 			</div>
 
 			
@@ -529,6 +525,10 @@
 		</div>`;
 
 		$("body").append(layoutHtml);
+	}
+
+	function closeLayoutHtml() {
+		$("#layoutHtml").remove();
 	}
 </script>
 
