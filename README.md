@@ -2,7 +2,10 @@
 
 ## 一、文件目录
 ``` 
+    javaScript          --- js学习教程
     matter              --- matter.js物理引擎项目
+    platfrom-web-sdk3-h5-engine --- 基于泡椒-h5-sdk2.0的更新版本项目
+    test                --- 练手实操文件
     threeJs             --- three.js 3d引擎项目
     vue                 --- vue 学习项目
     webgl               --- webgl 教程学习
@@ -16,4 +19,6 @@
     webgl目录下入口文件为index.html,res目录为资源目录,案例文件为example,shader.html为标签化添加着色器语言示例
     javaScript目录文件入口为index.html,JavaScript是Web的编程语言,所有现代的HTML页面都使用JavaScript. 
     案例文件为example 
+    platfrom-web-sdk3-h5-engine目录入口文件/demo/h5/index.html,css目录为引入样式库,js为引入js文件库,node_m
+    odules为npm引入的第三方库,整个项目是基于泡椒-h5-sdk2.0的更新版本
 ```
