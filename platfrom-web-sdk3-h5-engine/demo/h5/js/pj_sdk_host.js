@@ -1430,6 +1430,7 @@ sdk.isAmericaIp = function () {
         }
     });
 };
+
 //查询渠道是否是提审状态
 sdk.getIsAudit = function (channelGameId, callback) {
     var params = {};
@@ -1443,7 +1444,6 @@ sdk.getIsAudit = function (channelGameId, callback) {
             callback(data);
         }
     });
-
 };
 
 //开屏
@@ -1466,7 +1466,7 @@ sdk.showOpenScreen = function (type) {
 
 //显示开屏文字框
 sdk.showOpenScreenTextBox = function () {
-    var openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
+    const openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
              <div class="openScreenBox">
                 <button type="button" onclick="sdk.closeOpenScreenTextBox()">关闭</button>
                 <h5 style="font-size: 24px">【111】</h5>
@@ -1491,10 +1491,10 @@ sdk.closeOpenScreenTextBox = function () {
 
 //显示开屏图片
 sdk.showOpenScreenImage = function (url) {
-    var openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
+    const openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
             <img src=${url}>开屏图片
-                <div type="button" onclick="sdk.closeOpenScreenImage()">关闭</div>
+            <button onclick="sdk.closeOpenScreenImage()">关闭</div>
         </div>
     </div>`;
 
@@ -1509,10 +1509,10 @@ sdk.closeOpenScreenImage = function () {
 // $("#flash").append("<img src='/images/pj_background_flash_logo.png'/>");
 //显示开屏代金券
 sdk.showOpenScreenCoupon = function (url) {
-    var openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
+    const openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
             <img src=${url}>代金券
-                <div type="button" onclick="sdk.closeOpenScreenCoupon()">关闭</div>
+            <button onclick="sdk.closeOpenScreenCoupon()">关闭</div>
         </div>
     </div>`;
 
@@ -1541,14 +1541,14 @@ sdk.showOutGameHtml = function (type) {
 
 //退游图片弹窗
 sdk.showOutGameImageBox = function () {
-    var outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
+    const outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
         <div class="r5">
             <img style="width: 300px; height: 200px;" src=''>
             <div class="flex" style="height: 40px">
                 <a href="javascript:;" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px;" data-type="123" class="flex-list"  onclick="sdk.closeOutGameImageBox();">继续游戏</a>
+                padding: 5px 5px;" data-type="123" class="flex-list"  onclick="sdk.closeOutGameImageBox()">继续游戏</a>
                 <a href="javascript:;" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px;" data-type="" class="flex-list" onclick="sdk.closeOutGameImageBox();">退出游戏</a>
+                padding: 5px 5px;" data-type="" class="flex-list" onclick="sdk.showOutGameRelatedBox()">退出游戏</a>
              </div>
         </div>
     </div>`;
@@ -1563,7 +1563,7 @@ sdk.closeOutGameImageBox = function () {
 
 //退游文字弹窗
 sdk.showOutGameTextBox = function () {
-    var outGameTextHtml = `<div id="outGameText" class="mask dialog-box">
+    const outGameTextHtml = `<div id="outGameText" class="mask dialog-box">
     <div class="r5">
         <div>提示信息</div>
         <div>是否退出游戏</div>
@@ -1583,6 +1583,85 @@ sdk.closeOutGameImageBox = function () {
     $("#outGameText").remove();
 };
 
-//
+//显示退游关联游戏弹框
+sdk.showOutGameRelatedBox = function () {
+    $("#outGameImage").remove();
+
+    const outGameRelatedHtml = `<div id="outGameRelated" class="mask dialog-box">
+        <div class="r5">
+            <div style="font-size: 20px;">确定退出游戏吗?</div>
+            <div style="font-size: 16px; colcr: #949494;">玩过此游戏的玩家还玩过</div>
+            <button style="position: absolute; top: 15px; right: 15px;" onclick="sdk.closeOutGameRelatedBox()">关闭</button>
+
+            <div class="flex" style="height: 125px;">
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
+                    <h5 style="position: relative; top: 25px; color: #000000;">1</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;">2</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;">3</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;" >4</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+            </div>
+            <div class="flex">
+                <a class="flex-list" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">退出游戏</a>
+                <a class="flex-list" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">再玩一会</a>
+            </div>
+        </div>
+    </div>`;
+
+    $("body").append(outGameRelatedHtml);
+}
+
+//关闭退游关联游戏弹框
+sdk.closeOutGameRelatedBox = function () {
+    $("#outGameRelated").remove();
+};
+
+//启动悬浮窗
+sdk.enableFloatBox02 = function () {
+    $("#shortcut").remove();
+    const shortcutHtml = `<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">
+        <div class="flex" onclick="sdk.showNav()" id="iconDiv" style="width: 50px; height: 50px;float: left;">
+            <div id="ic-menu" class="r50" style="width: 50px; height: 50px;">
+                <span style="width: 50px; height: 50px;" class="r50"></span>
+            </div>
+        </div>
+        <div id="navDiv" style="display:none; width: auto;height:50px;
+        border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>
+    </div>`;
+    $("body").append(shortcutHtml);
+    //延迟2秒后半隐藏
+    setTimeout(function () {
+        // var shortcut = document.getElementById("shortcut");
+        // shortcut.style.left = -25 + "px";
+        $("#shortcut").css("left", "-25px");
+    }, 2000);
+
+    //绑定touch事件
+    sdk.bindTouchEvent();
+
+    //初始化悬浮球菜单
+    sdk.initFloatBox02();
+};
+
+//初始化悬浮球
+sdk.initFloatBox02 = function () {
+    console.log("Amumu initFloatBox02");
+};
 
 window.PJ_SDK = sdk;
