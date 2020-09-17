@@ -90,6 +90,17 @@ Example.FunctionDesc = function () {
         var x = "hello";
         console.log(x)
     })();
+
+    //箭头函数
+    const y = x => {
+        return x;
+    }
+    console.info("Amumu 箭头函数 y = ", y(0));
+
+    const a = (x, y) => {
+        return x * y;
+    }
+    console.info("Amumu 箭头函数 a = ", a(3, 4));
 };
 
 

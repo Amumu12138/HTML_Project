@@ -1467,7 +1467,7 @@ sdk.showOpenScreen = function (type) {
 //显示开屏文字框
 sdk.showOpenScreenTextBox = function () {
     const openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
-             <div class="openScreenBox">
+             <div class="r5" style="width: 280px; height: 280px;">
                 <button type="button" onclick="sdk.closeOpenScreenTextBox()">关闭</button>
                 <h5 style="font-size: 24px">【111】</h5>
                 <p style="font-size: 16px">1230</p>
@@ -1636,7 +1636,7 @@ sdk.closeOutGameRelatedBox = function () {
 sdk.enableFloatBox02 = function () {
     $("#shortcut").remove();
     const shortcutHtml = `<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">
-        <div class="flex" onclick="sdk.showNav()" id="iconDiv" style="width: 50px; height: 50px;float: left;">
+        <div class="flex" onclick="sdk.initFloatBox02()" id="iconDiv" style="width: 50px; height: 50px;float: left;">
             <div id="ic-menu" class="r50" style="width: 50px; height: 50px;">
                 <span style="width: 50px; height: 50px;" class="r50"></span>
             </div>
@@ -1656,12 +1656,45 @@ sdk.enableFloatBox02 = function () {
     sdk.bindTouchEvent();
 
     //初始化悬浮球菜单
-    sdk.initFloatBox02();
+    // sdk.initFloatBox02();
 };
 
 //初始化悬浮球
 sdk.initFloatBox02 = function () {
     console.log("Amumu initFloatBox02");
-};
 
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+
+    var url = sdk.buildURL("https://h5.paojiao.cn/api/getFloatUrl", param);
+    sdk.httpGet(url, function (retData) {
+        if (retData.code == 1) {
+            sdk.closeFloatBox02();
+            window.location.href = retData.data;
+            // $("body").append(`
+            //     <div id="homeFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;">
+            //         <iframe id="homeFrame" name="homeFrame" src=${retData.data} frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;">
+            //         </iframe>
+            //     </div>
+            // `);
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
+
+//关闭悬浮球
+sdk.closeFloatBox02 = function () {
+    $("#shortcut").remove();
+}
 window.PJ_SDK = sdk;

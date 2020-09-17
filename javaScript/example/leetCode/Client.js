@@ -65,6 +65,20 @@ Example.addTwoNumbers = function (l1, l2) {
     }
 };
 
+/**给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。 
+ * 示例：
+ * 输入 "abcabcbb"
+ * 输出 3
+ */
+/**
+ * @param {string} str
+ * @return {number}
+ */
+Example.lengthOfLongestSubstring = function (str) {
+    if (str.length <= 0 || typeof (str) !== "string") return 0;
+
+    
+};
 
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
