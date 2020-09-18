@@ -1454,7 +1454,7 @@ sdk.showOpenScreen = function (type) {
             sdk.showOpenScreenTextBox();
             break;
         case 1: //图片
-            sdk.showOpenScreenImage("/images/pj_background_flash.png");
+            sdk.showOpenScreenImage("http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
             break;
         case 2: //代金券
             sdk.showOpenScreenCoupon("/images/pj_background_flash.png");
@@ -1462,6 +1462,32 @@ sdk.showOpenScreen = function (type) {
         default:
             break;
     }
+}
+
+//初始化开屏
+sdk.initOpenScreen = function () {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+    param["type"] = "1"; //类型
+
+    var url = sdk.buildURL("https://h5.paojiao.cn/api/getPopUpConfig", param);
+    sdk.httpGet(url, function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
 }
 
 //显示开屏文字框
@@ -1493,7 +1519,7 @@ sdk.closeOpenScreenTextBox = function () {
 sdk.showOpenScreenImage = function (url) {
     const openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src=${url}>开屏图片
+            <img src=${url}>开屏图片</img>
             <button onclick="sdk.closeOpenScreenImage()">关闭</div>
         </div>
     </div>`;
@@ -1511,7 +1537,7 @@ sdk.closeOpenScreenImage = function () {
 sdk.showOpenScreenCoupon = function (url) {
     const openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src=${url}>代金券
+            <img src=${url}>代金券</img>
             <button onclick="sdk.closeOpenScreenCoupon()">关闭</div>
         </div>
     </div>`;
@@ -1539,11 +1565,38 @@ sdk.showOutGameHtml = function (type) {
     }
 }
 
+//初始化退游弹窗
+sdk.initOutGame = function () {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+    param["type"] = "2"; //类型
+
+    var url = sdk.buildURL("https://h5.paojiao.cn/api/getPopUpConfig", param);
+    sdk.httpGet(url, function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
+
+
 //退游图片弹窗
 sdk.showOutGameImageBox = function () {
     const outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
-        <div class="r5">
-            <img style="width: 300px; height: 200px;" src=''>
+        <div class="r5" style="border-radius: 25px;">
+            <img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='/images/pj_background_flash.png'/>
             <div class="flex" style="height: 40px">
                 <a href="javascript:;" style="color:#000000; font-size: 20px; 
                 padding: 5px 5px;" data-type="123" class="flex-list"  onclick="sdk.closeOutGameImageBox()">继续游戏</a>
@@ -1595,7 +1648,7 @@ sdk.showOutGameRelatedBox = function () {
 
             <div class="flex" style="height: 125px;">
                 <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px; border-radius: 5px" src="/images/pj_background_flash.png" onclick="">
                     <h5 style="position: relative; top: 25px; color: #000000;">1</h5>
                     <button class="button button1" onclick="">打开</button>
                 </a>
@@ -1645,6 +1698,7 @@ sdk.enableFloatBox02 = function () {
         border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>
     </div>`;
     $("body").append(shortcutHtml);
+
     //延迟2秒后半隐藏
     setTimeout(function () {
         // var shortcut = document.getElementById("shortcut");
@@ -1657,6 +1711,8 @@ sdk.enableFloatBox02 = function () {
 
     //初始化悬浮球菜单
     // sdk.initFloatBox02();
+    // sdk.showRedDot();
+    sdk.showFloatTip();
 };
 
 //初始化悬浮球
@@ -1697,4 +1753,53 @@ sdk.initFloatBox02 = function () {
 sdk.closeFloatBox02 = function () {
     $("#shortcut").remove();
 }
+
+//初始化红点状态、气泡消息提示
+sdk.initFloatTips = function () {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+
+    var url = sdk.buildURL("https://h5.paojiao.cn/api/getFloatTips", param);
+    sdk.httpGet(url, function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
+
+//显示消息红点
+sdk.showRedDot = function () {
+    const redDotHtml = `<div id="redDot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000;"></div>`;
+    $("#shortcut").append(redDotHtml);
+}
+
+//关闭消息红点
+sdk.closeRedDot = function () {
+    $("#redDot").remove();
+}
+
+//显示消息红点
+sdk.showFloatTip = function () {
+    const floatTipHtml = `<div id="floatTip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; 
+    font-size: 10px; color: #ffffff; text-align:center;">1</div>`;
+    $("#shortcut").append(floatTipHtml);
+}
+
+//关闭消息红点
+sdk.closeFloatTip = function () {
+    $("#floatTip").remove();
+}
+
 window.PJ_SDK = sdk;

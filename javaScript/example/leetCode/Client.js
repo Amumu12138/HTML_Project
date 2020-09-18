@@ -74,12 +74,21 @@ Example.addTwoNumbers = function (l1, l2) {
  * @param {string} str
  * @return {number}
  */
-Example.lengthOfLongestSubstring = function (str) {
-    if (str.length <= 0 || typeof (str) !== "string") return 0;
+Example.lengthOfLongestSubstring = function (s) {
+    if (s.length <= 0 || typeof (s) !== "string") return 0;
 
-    
-};
-
+    let arr = [],
+        max = 0;
+    for (let i = 0; i < s.length; i++) {
+        let index = arr.indexOf(s[i]);
+        if (index !== -1) {
+            arr.splice(0, index + 1);
+        }
+        arr.push(s.charAt(i));
+        max = Math.max(arr.length, max);
+    }
+    return max;
+}
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
 }
