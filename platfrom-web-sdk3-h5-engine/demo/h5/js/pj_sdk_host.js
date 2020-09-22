@@ -8,6 +8,7 @@ sdk.platformType = "h5";
 
 sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8080";
+sdk.host = ""
 
 sdk.apiUrl = sdk.host + "/api/";
 sdk.mainUrl = sdk.host + '/main.html';
@@ -1446,12 +1447,20 @@ sdk.getIsAudit = function (channelGameId, callback) {
     });
 };
 
-//开屏
+/** 泡椒-SDK-H5 2.0需求实现 */
+/**
+ * @desc 显示开屏
+ * @param {number} type 
+ */
 sdk.showOpenScreen = function (type) {
     //判断标签类型
     switch (type) {
         case 0: //文字
-            sdk.showOpenScreenTextBox();
+            sdk.showOpenScreenTextBox(
+                `[活动时间]<br>
+                 2020年9月1日0点-2020年9月31日25点<br>
+                 [活动内容]<br>
+                 活动期间,每位用户限参与一次`);
             break;
         case 1: //图片
             sdk.showOpenScreenImage("http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
@@ -1464,7 +1473,10 @@ sdk.showOpenScreen = function (type) {
     }
 }
 
-//初始化开屏
+
+/**
+ * @desc 初始化开屏
+ */
 sdk.initOpenScreen = function () {
     var param = {};
     param["gameId"] = sdk.gameInfo.gameId; //游戏ID
@@ -1480,8 +1492,7 @@ sdk.initOpenScreen = function () {
     param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
     param["type"] = "1"; //类型
 
-    var url = sdk.buildURL("https://h5.paojiao.cn/api/getPopUpConfig", param);
-    sdk.httpGet(url, function (retData) {
+    sdk.api(params, "getPopUpConfig", function (retData) {
         if (retData.code == 1) {
 
         } else {
@@ -1490,67 +1501,110 @@ sdk.initOpenScreen = function () {
     });
 }
 
-//显示开屏文字框
-sdk.showOpenScreenTextBox = function () {
+//"/images/titleIcon.png" /
+
+/**
+ * @desc 显示开屏文字框
+ * @param {string} content 
+ */
+sdk.showOpenScreenTextBox = function (content) {
     const openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
-             <div class="r5" style="width: 280px; height: 280px;">
-                <button type="button" onclick="sdk.closeOpenScreenTextBox()">关闭</button>
-                <h5 style="font-size: 24px">【111】</h5>
-                <p style="font-size: 16px">1230</p>
-                <p style="font-size: 15px">1230</p>
-                <p style="font-size: 14px">1230</p>
-                <p style="font-size: 13px">1230</p>
-                <p style="font-size: 12px">1230</p>
-                <p style="font-size: 11px">1230</p>
-                <p style="font-size: 10px">1230</p>
-            </div>    
-     </div>
-     `;
+        <div class="r5" style="width: 280px; height: 280px; top: 50px;">
+            <div class="openScreenTextTop">
+                <img src="/images/pj_image_float_logo.png"></img>
+                <p style="position: relative; top: 10px; left: -10px;">消费返优惠券</p>
+                <img style="position: relative; float: left; left: 220px; top: -15px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenTextBox()" src="/images/sdk2.0/pj_dialog_jurisdiction_delete.png"></img>
+            </div>
+            <h5 style="font-size: 20px;font-weight: normal;">${content}</h5>
+            <from>
+                <img id="loginCheck" style="position: relative; top: 125px; left: 80px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>
+                <label style="position: relative; top: 123px; left: 90px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</label>
+            </from>
+        </div> 
+        
+     </div>`;
 
     $("body").append(openScreenTextHtml);
 }
 
-//关闭开屏文字框
+var type = 0;
+/**
+ * @desc 更新勾选框资源
+ * @param {*} type 
+ */
+sdk.updateCheckUrl = function () {
+    if (type == 0) {
+        type = 1;
+        document.getElementById("loginCheck").src = "/images/sdk2.0/2.png";
+    } else {
+        type = 0;
+        document.getElementById("loginCheck").src = "/images/sdk2.0/1.png";
+    }
+}
+
+/**
+ * @desc 关闭开屏文字框
+ */
 sdk.closeOpenScreenTextBox = function () {
     $("#openScreenTextBox").remove();
+    sdk.showOpenScreenCoupon(1, "满六元可用");
 };
 
-//显示开屏图片
-sdk.showOpenScreenImage = function (url) {
+
+/**
+ * @desc 显示开屏图片 
+ */
+sdk.showOpenScreenImage = function (imgUrl) {
     const openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
-        <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src=${url}>开屏图片</img>
-            <button onclick="sdk.closeOpenScreenImage()">关闭</div>
+        <div class="openScreenImage" style="width: 280px; height: 280px; top: 50px;">
+            <img src=${imgUrl}></img>
+            <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenImage()" src="/images/sdk2.0/pj_ad_close.png"></img>
         </div>
     </div>`;
 
     $("body").append(openScreenImageHtml);
 };
 
-//关闭开屏图片
+/**
+ * @desc 关闭开屏图片
+ */
 sdk.closeOpenScreenImage = function () {
     $("#openScreenImage").remove();
+    sdk.showOpenScreenCoupon(1, "满六元可用");
 };
 
-// $("#flash").append("<img src='/images/pj_background_flash_logo.png'/>");
-//显示开屏代金券
-sdk.showOpenScreenCoupon = function (url) {
+
+/**
+ * @desc 显示开屏代金券
+ * @param {string} imgUrl 
+ */
+sdk.showOpenScreenCoupon = function (money, content) {
     const openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
         <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src=${url}>代金券</img>
-            <button onclick="sdk.closeOpenScreenCoupon()">关闭</div>
+            <img src="images/sdk2.0/pj_dialog_voucher.png"></img>
+            <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>
+            <div class="flex">
+                <h5 style="position: relative; top: -180px; left: 50px; font-size: 24px; font-weight: bold; color: #EEC900;">$${money}</h5>
+                <div style="position: relative; top: -200px; left: 60px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>
+                <h5 style="position: relative; top: -180px; left: 80px; font-size: 20px; font-weight: normal;">${content}</h5>
+            </div>
         </div>
     </div>`;
 
     $("body").append(openScreenCouponHtml);
 };
 
-//关闭开屏代金券
+/**
+ * @desc 关闭开屏代金券
+ */
 sdk.closeOpenScreenCoupon = function () {
     $("#openScreenCoupon").remove();
 };
 
-//退游提示弹框
+/**
+ * @desc 显示退游弹弹窗
+ * @param {number} type 类型 
+ */
 sdk.showOutGameHtml = function (type) {
 
     switch (type) {
@@ -1565,7 +1619,9 @@ sdk.showOutGameHtml = function (type) {
     }
 }
 
-//初始化退游弹窗
+/**
+ * @desc 初始化退游弹窗
+ */
 sdk.initOutGame = function () {
     var param = {};
     param["gameId"] = sdk.gameInfo.gameId; //游戏ID
@@ -1581,8 +1637,7 @@ sdk.initOutGame = function () {
     param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
     param["type"] = "2"; //类型
 
-    var url = sdk.buildURL("https://h5.paojiao.cn/api/getPopUpConfig", param);
-    sdk.httpGet(url, function (retData) {
+    sdk.api(params, "getPopUpConfig", function (retData) {
         if (retData.code == 1) {
 
         } else {
@@ -1591,17 +1646,19 @@ sdk.initOutGame = function () {
     });
 }
 
-
-//退游图片弹窗
-sdk.showOutGameImageBox = function () {
+/**
+ * @desc 退游图片弹窗
+ * @param {string} imgUrl  资源路径
+ */
+sdk.showOutGameImageBox = function (imgUrl) {
     const outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
         <div class="r5" style="border-radius: 25px;">
-            <img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='/images/pj_background_flash.png'/>
+            <img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='${imgUrl}'/>
             <div class="flex" style="height: 40px">
                 <a href="javascript:;" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px;" data-type="123" class="flex-list"  onclick="sdk.closeOutGameImageBox()">继续游戏</a>
+                padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.closeOutGameImageBox()">继续游戏</a>
                 <a href="javascript:;" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px;" data-type="" class="flex-list" onclick="sdk.showOutGameRelatedBox()">退出游戏</a>
+                padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.showOutGameRelatedBox()">退出游戏</a>
              </div>
         </div>
     </div>`;
@@ -1609,20 +1666,25 @@ sdk.showOutGameImageBox = function () {
     $("body").append(outGameImageHtml);
 }
 
-//退游图片弹窗
+
+/**
+ * @desc 退游图片弹窗
+ */
 sdk.closeOutGameImageBox = function () {
     $("#outGameImage").remove();
 };
 
-//退游文字弹窗
+/**
+ * @desc 退游文字弹窗
+ */
 sdk.showOutGameTextBox = function () {
     const outGameTextHtml = `<div id="outGameText" class="mask dialog-box">
     <div class="r5">
         <div>提示信息</div>
         <div>是否退出游戏</div>
             <div class="flex">
-                <a href="javascript:;"  data-type="conLogin" class="flex-list unselect">继续游戏</a>
-                <a href="javascript:;" data-type="outGame" class="flex-list unselect">退出游戏</a>
+                <a href="javascript:;" style="text-decoration:none;" data-type="conLogin" class="flex-list unselect">继续游戏</a>
+                <a href="javascript:;" style="text-decoration:none;" data-type="outGame" class="flex-list unselect">退出游戏</a>
             </div>
             </div>
         </div>
@@ -1631,13 +1693,19 @@ sdk.showOutGameTextBox = function () {
     $("body").append(outGameTextHtml);
 }
 
-//退游文字弹窗
+/**
+ * @desc 退游文字弹窗
+ */
 sdk.closeOutGameImageBox = function () {
     $("#outGameText").remove();
 };
 
-//显示退游关联游戏弹框
-sdk.showOutGameRelatedBox = function () {
+
+/**
+ * @desc 显示退游关联游戏弹框
+ * @param {Array} 关联游戏数组
+ */
+sdk.showOutGameRelatedBox = function (relatedArr) {
     $("#outGameImage").remove();
 
     const outGameRelatedHtml = `<div id="outGameRelated" class="mask dialog-box">
@@ -1648,23 +1716,23 @@ sdk.showOutGameRelatedBox = function () {
 
             <div class="flex" style="height: 125px;">
                 <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px; border-radius: 5px" src="/images/pj_background_flash.png" onclick="">
-                    <h5 style="position: relative; top: 25px; color: #000000;">1</h5>
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px; border-radius: 5px" src="${relatedArr[0].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 25px; color: #000000;">${relatedArr[0].name}</h5>
                     <button class="button button1" onclick="">打开</button>
                 </a>
                 <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
-                    <h5 style="position: relative; top: 30px; color: #000000;">2</h5>
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[1].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;">${relatedArr[1].name}</h5>
                     <button class="button button1" onclick="">打开</button>
                 </a>
                 <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
-                    <h5 style="position: relative; top: 30px; color: #000000;">3</h5>
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[2].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;">${relatedArr[2].name}</h5>
                     <button class="button button1" onclick="">打开</button>
                 </a>
                 <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="" onclick="">
-                    <h5 style="position: relative; top: 30px; color: #000000;" >4</h5>
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[3].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;" >${relatedArr[3].name}</h5>
                     <button class="button button1" onclick="">打开</button>
                 </a>
             </div>
@@ -1680,12 +1748,16 @@ sdk.showOutGameRelatedBox = function () {
     $("body").append(outGameRelatedHtml);
 }
 
-//关闭退游关联游戏弹框
+/**
+ * @desc 关闭退游关联游戏弹框
+ */
 sdk.closeOutGameRelatedBox = function () {
     $("#outGameRelated").remove();
 };
 
-//启动悬浮窗
+/**
+ * @desc 启动悬浮窗
+ */
 sdk.enableFloatBox02 = function () {
     $("#shortcut").remove();
     const shortcutHtml = `<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">
@@ -1694,15 +1766,12 @@ sdk.enableFloatBox02 = function () {
                 <span style="width: 50px; height: 50px;" class="r50"></span>
             </div>
         </div>
-        <div id="navDiv" style="display:none; width: auto;height:50px;
-        border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>
+        <div id="navDiv" style="display:none; width: auto; height:50px; border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>
     </div>`;
     $("body").append(shortcutHtml);
 
     //延迟2秒后半隐藏
     setTimeout(function () {
-        // var shortcut = document.getElementById("shortcut");
-        // shortcut.style.left = -25 + "px";
         $("#shortcut").css("left", "-25px");
     }, 2000);
 
@@ -1715,7 +1784,9 @@ sdk.enableFloatBox02 = function () {
     sdk.showFloatTip();
 };
 
-//初始化悬浮球
+/**
+ * @desc 初始化悬浮球
+ */
 sdk.initFloatBox02 = function () {
     console.log("Amumu initFloatBox02");
 
@@ -1732,8 +1803,7 @@ sdk.initFloatBox02 = function () {
     param["tBrand"] = ""; //机型
     param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
 
-    var url = sdk.buildURL("https://h5.paojiao.cn/api/getFloatUrl", param);
-    sdk.httpGet(url, function (retData) {
+    sdk.api(params, "getFloatUrl", function (retData) {
         if (retData.code == 1) {
             sdk.closeFloatBox02();
             window.location.href = retData.data;
@@ -1749,12 +1819,16 @@ sdk.initFloatBox02 = function () {
     });
 }
 
-//关闭悬浮球
+/**
+ * @desc 关闭悬浮球
+ */
 sdk.closeFloatBox02 = function () {
     $("#shortcut").remove();
 }
 
-//初始化红点状态、气泡消息提示
+/**
+ * @desc 初始化红点状态、气泡消息提示
+ */
 sdk.initFloatTips = function () {
     var param = {};
     param["gameId"] = sdk.gameInfo.gameId; //游戏ID
@@ -1769,8 +1843,7 @@ sdk.initFloatTips = function () {
     param["tBrand"] = ""; //机型
     param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
 
-    var url = sdk.buildURL("https://h5.paojiao.cn/api/getFloatTips", param);
-    sdk.httpGet(url, function (retData) {
+    sdk.api(params, "getFloatTips", function (retData) {
         if (retData.code == 1) {
 
         } else {
@@ -1779,27 +1852,77 @@ sdk.initFloatTips = function () {
     });
 }
 
-//显示消息红点
+/**
+ * @desc 显示消息红点
+ */
 sdk.showRedDot = function () {
     const redDotHtml = `<div id="redDot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000;"></div>`;
     $("#shortcut").append(redDotHtml);
 }
 
-//关闭消息红点
+/**
+ * @desc 关闭消息红点
+ */
 sdk.closeRedDot = function () {
     $("#redDot").remove();
 }
 
-//显示消息红点
-sdk.showFloatTip = function () {
+/**
+ * @desc 显示悬浮红点提示消息
+ * @param {number} num 
+ */
+sdk.showFloatTip = function (num) {
     const floatTipHtml = `<div id="floatTip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; 
-    font-size: 10px; color: #ffffff; text-align:center;">1</div>`;
+    font-size: 10px; color: #ffffff; text-align:center;">${num}</div>`;
     $("#shortcut").append(floatTipHtml);
 }
 
-//关闭消息红点
+/**
+ * @desc 关闭消息红点
+ */
 sdk.closeFloatTip = function () {
     $("#floatTip").remove();
+}
+
+
+/**
+ * @desc 打开登录框
+ */
+sdk.loadLoginBox02 = function () {
+    const loginHtml = `<div id="loginBox02" class="mask login-box">
+        <div class="r5">
+            <div class="login-head" style="padding: 0 0;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>
+            <div class="login-body">
+                <div>
+                    <div id="userBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">
+                    </div>
+                    <div id="pwdBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">
+                        <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
+                    </div>
+                </div>
+                <div class="flex">
+                    <img style="width: 15px; height: 15px;" src="/images/sdk2.0/2.png">
+                    <p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受
+                        <p style="margin: 0 0 0 0; font-size: 12px;" onclick=""><<用户服务协议>></p>
+                    </p>
+                </div>
+                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B" class="btn" onclick="">注册并登录</a>
+            </div>
+        </div>
+    </div>`;
+
+    $("body").append(loginHtml);
+};
+
+/**
+ * @desc 关闭登录框
+ */
+sdk.closeLoadLoginBox02 = function () {
+    $("#loginBox02").remove();
 }
 
 window.PJ_SDK = sdk;

@@ -71,12 +71,39 @@
     /* display: table-cell; */
     text-align: left;
     vertical-align: middle;
+    border-radius: 25px;
 }
 
 .openScreenImage img {
-    content: "";
     width: 280px;
     height: 280px;
+}
+
+/* 开屏文字头部*/
+.openScreenTextTop {
+    content: "";
+    background-color: #F5F5F5;
+    width: 280px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 25px;
+}
+
+.openScreenTextTop img {
+    position: relative;
+    float: left;
+    left: 10px;
+    top: 8px;
+    width: 30px;
+    height: 30px;
+}
+
+.openScreenTextTop p {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 @-webkit-keyframes fadeIn {
@@ -151,6 +178,7 @@ body {
     background-color: #FD0238;
     border-radius: 2px;
 }
+
 
 
 /*  头部标题*/

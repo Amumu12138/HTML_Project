@@ -20,16 +20,16 @@
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 	<script src="/js/jquery.md5.js"></script>
 	<script src="/js/pj_api.js"></script>
-	<!-- <script type="text/javascript" src="http://image-h5.520youx.com/api/js/GameSdk.js"></script>
+	<script type="text/javascript" src="http://image-h5.520youx.com/api/js/GameSdk.js"></script>
 	<script type="text/javascript" src="http://h5.wan.360.cn/h5-cp-sdk-loader.js"></script>
-	<script type="text/javascript" src="http://rh.8688games.com/tdh5sdk.js"></script> -->
+	<script type="text/javascript" src="http://rh.8688games.com/tdh5sdk.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/common.css">
 	<link rel="stylesheet" href="css/layout.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/test.css">
 
-	<!-- <style type="text/css">
+	<style type="text/css">
 		html,
 		body {
 			width: 100%;
@@ -37,10 +37,10 @@
 		}
 
 		body {
-			background: url(https://h5.infoxgame.com/images/duojiao_loading.png) no-repeat center top;
+			/* background: url(https://h5.infoxgame.com/images/duojiao_loading.png) no-repeat center top; */
 			background-size: auto 100%;
 		}
-	</style> -->
+	</style>
 </head>
 
 <body>
@@ -58,7 +58,7 @@
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="md5()" value="md5加密">
 		</li>
-	
+
 
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="strSplit()" value="字符截取">
@@ -86,13 +86,14 @@
 			<input type="button" onclick="is_IOS_safari()" value="是否是safari浏览器">
 		</li> -->
 		<li style="margin-top: 20px;">
+			<input type="button" onclick="test()" value="测试">
+		</li>
+		<li style="margin-top: 20px;">
 			<input type="button" onclick="showLayoutHtml()" value="网页布局">
 		</li>
-
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="httpReq()" value="请求数据">
 		</li>
-
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="logogo()" value="弹出框">
 		</li>
@@ -105,17 +106,15 @@
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="showOutGameHtml()" value="退游弹窗">
 		</li>
-
-		<!-- <li style="margin-top: 20px;">
-			<div class="popup" onclick="myFunction()"> 点击弹出弹窗
-				<span class="popuptext" id="myPopup">提示信息 </span>
-			</div>
-		</li> -->
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox()" value="登录弹框">
+		</li>
 	</ul>
 
 </body>
 
 <script type="text/javascript">
+	// test();
 	/*	function sdkReady(callback) {
 			if (typeof H5_GAME_360 != 'undefined') {
 				callback()
@@ -401,11 +400,16 @@
 	//显示开屏
 	function showOpenScreen() {
 		var type = Math.floor(Math.random() * 3);
-		sdk.showOpenScreen(type);
+		sdk.showOpenScreen(1);
 	}
 
 	function showOutGameHtml() {
 		sdk.showOutGameHtml(0);
+	}
+
+	//显示登录弹框
+	function showLoginBox() {
+		sdk.loadLoginBox02();
 	}
 
 	var clientWidth = window.screen.width;
@@ -520,7 +524,6 @@
 				</div>
 			</div>
 
-			
 			<div class="footer">
 				<h2>底部区域</h2>
 			</div>
@@ -531,6 +534,39 @@
 
 	function closeLayoutHtml() {
 		$("#layoutHtml").remove();
+	}
+
+	function test() {
+		//判断设备是android还是ios
+		// var u = navigator.userAgent,
+		// 	app = navigator.appVersion;
+		// var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+		// var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+		// //判断是否是微信打开
+		// function is_weixin() {
+		// 	var ua = navigator.userAgent.toLowerCase();
+		// 	if (ua.match(/MicroMessenger/i) == "micromessenger") {
+		// 		return true;
+		// 	} else {
+		// 		return false;
+		// 	}
+		// }
+
+		// //判断是否是IphoneX异型屏
+		// function is_iphoneX() {
+		// 	return window.innerHeight / window.innerWidth > 2 ? true : false;
+		// }
+
+		// console.log("Amumu isiOS = ", isiOS + " isIphoneX = " + is_iphoneX() + " isWeixin = " + is_weixin());
+
+		const testHtml = `
+			<div id="gameFrameDiv" style="width: ${$(window).width()}px;  height:  ${$(window).height()}px; position: relative; top: 0px; left: 0px;">
+				<iframe id="gameFrame" name="gameFrame" src="https://lngame.ijunhai.com/shj_pj115366/index.html?game_id=208&amp;channel_id=8519&amp;game_channel_id=115366&amp;mirror_js_name=paojiaoh5&amp;uid=24418751&amp;sdkToken=BkqrQh9j0P8dKjmyAKgPOuP2jMPcEjcZ" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ${$(window).width()}px; height:${$(window).height()}px;">
+				</iframe>
+			</div>
+		`;
+		$("body").append(testHtml);
 	}
 </script>
 
