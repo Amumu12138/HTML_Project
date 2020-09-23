@@ -1584,7 +1584,7 @@ sdk.showOpenScreenCoupon = function (money, content) {
             <img src="images/sdk2.0/pj_dialog_voucher.png"></img>
             <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>
             <div class="flex">
-                <h5 style="position: relative; top: -180px; left: 50px; font-size: 24px; font-weight: bold; color: #EEC900;">$${money}</h5>
+                <h5 style="position: relative; top: -180px; left: 50px; font-size: 24px; font-weight: bold; color: #EEC900;">￥${money}</h5>
                 <div style="position: relative; top: -200px; left: 60px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>
                 <h5 style="position: relative; top: -180px; left: 80px; font-size: 20px; font-weight: normal;">${content}</h5>
             </div>
@@ -1884,14 +1884,14 @@ sdk.closeFloatTip = function () {
     $("#floatTip").remove();
 }
 
-
 /**
- * @desc 打开登录框
+ * @desc 打开一键登录弹框
  */
-sdk.loadLoginBox02 = function () {
+sdk.showLoginBox02 = function () {
+
     const loginHtml = `<div id="loginBox02" class="mask login-box">
         <div class="r5">
-            <div class="login-head" style="padding: 0 0;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>
+            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>
             <div class="login-body">
                 <div>
                     <div id="userBox" class="flex">
@@ -1910,8 +1910,19 @@ sdk.loadLoginBox02 = function () {
                         <p style="margin: 0 0 0 0; font-size: 12px;" onclick=""><<用户服务协议>></p>
                     </p>
                 </div>
-                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B" class="btn" onclick="">注册并登录</a>
+                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">注册并登录</a>
             </div>
+            <div class="flex">
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">已有账户</h5>
+                </a>      
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">手机登录</h5>
+                </a>
+            </div>
+        </div>
         </div>
     </div>`;
 
@@ -1919,10 +1930,88 @@ sdk.loadLoginBox02 = function () {
 };
 
 /**
- * @desc 关闭登录框
+ * @desc 关闭一键登录弹框
  */
-sdk.closeLoadLoginBox02 = function () {
+sdk.closeLoginBox02 = function () {
     $("#loginBox02").remove();
+}
+
+/**
+ * @desc 打开账号登录弹框
+ */
+sdk.showLoginBox03 = function () {
+
+    const loginBox03Html = `<div id="loginBox03" class="mask login-box">
+        <div class="r5">
+            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>
+            <div class="login-body">
+                <div>
+                    <div id="userBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">
+                    </div>
+                    <div id="pwdBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">
+                        <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
+                    </div>
+                </div>
+                <>
+                <img style="position: relative; right: -20%%; width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>
+                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>
+            </div>
+            <div class="flex">
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">一键注册</h5>
+                </a>      
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">手机登录</h5>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>`;
+
+    $("body").append(loginBox03Html);
+};
+
+/**
+ * @desc 关闭一键注册弹框
+ */
+sdk.closeLoginBox03 = function () {
+    $("#loginBox03").remove();
+}
+
+/**
+ * @desc 显示加载登录框
+ */
+sdk.showLoadingLoginBox = function (userName) {
+    sdk.closeLoginBox02();
+
+    const loadingLoginBox = `<div id="loadingLoginBox" class="mask">
+        <div class="r5" style="width: 280px; height: 50px; top: 5%">
+            <div class="flex" style="padding: 15px 0 0 15px;">
+                <img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>
+                <h5 style="margin-top: 5px; margin-left: 2%; font-size: 14px; color: #BA4970;">${userName}</h5>
+                <h5 style="margin-top: 5px; margin-left: 2%;">登录中</h5>
+                <div class="ball-clip-rotate">
+			        <div></div>
+                </div> 
+                <button class = "loadingLoginBtn">切换账号</button> 
+            </div> 
+        </div> 
+        </div>`;
+
+    $("body").append(loadingLoginBox);
+}
+
+/**
+ * @desc 关闭加载登录框
+ */
+sdk.closeLoadingLoginBox = function () {
+    $("#loadingLoginBox").remove();
 }
 
 window.PJ_SDK = sdk;

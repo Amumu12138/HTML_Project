@@ -16,18 +16,21 @@
 	<script type="text/javascript" src="js/pj_sdk_client.js"></script>
 	<script type="text/javascript" src="js/pj_sdk_host.js"></script>
 	<script type="text/javascript" src="js/pj_channel_sdk.js"></script>
-
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-	<script src="/js/jquery.md5.js"></script>
-	<script src="/js/pj_api.js"></script>
+	<script type="text/javascript" src="/js/jquery.md5.js"></script>
+	<script type="text/javascript" src="/js/pj_api.js"></script>
+
 	<script type="text/javascript" src="http://image-h5.520youx.com/api/js/GameSdk.js"></script>
 	<script type="text/javascript" src="http://h5.wan.360.cn/h5-cp-sdk-loader.js"></script>
 	<script type="text/javascript" src="http://rh.8688games.com/tdh5sdk.js"></script>
+
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/common.css">
 	<link rel="stylesheet" href="css/layout.css">
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/test.css">
+	<!-- <link rel="stylesheet" type="text/css" href="css/demo.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="css/loaders.css" /> -->
 
 	<style type="text/css">
 		html,
@@ -107,8 +110,12 @@
 			<input type="button" onclick="showOutGameHtml()" value="退游弹窗">
 		</li>
 		<li style="margin-top: 20px;">
-			<input type="button" onclick="showLoginBox()" value="登录弹框">
+			<input type="button" onclick="showLoginBox()" value="一键登录弹框">
 		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox03()" value="账号登录弹框">
+		</li>
+
 	</ul>
 
 </body>
@@ -407,10 +414,17 @@
 		sdk.showOutGameHtml(0);
 	}
 
-	//显示登录弹框
+	//显示一键登录弹框
 	function showLoginBox() {
-		sdk.loadLoginBox02();
+		sdk.showLoginBox02();
 	}
+
+	//显示账号登录弹框
+	function showLoginBox03() {
+		sdk.showLoginBox03();
+	}
+
+
 
 	var clientWidth = window.screen.width;
 	var clientHeight = window.screen.height;
@@ -560,13 +574,19 @@
 
 		// console.log("Amumu isiOS = ", isiOS + " isIphoneX = " + is_iphoneX() + " isWeixin = " + is_weixin());
 
-		const testHtml = `
-			<div id="gameFrameDiv" style="width: ${$(window).width()}px;  height:  ${$(window).height()}px; position: relative; top: 0px; left: 0px;">
-				<iframe id="gameFrame" name="gameFrame" src="https://lngame.ijunhai.com/shj_pj115366/index.html?game_id=208&amp;channel_id=8519&amp;game_channel_id=115366&amp;mirror_js_name=paojiaoh5&amp;uid=24418751&amp;sdkToken=BkqrQh9j0P8dKjmyAKgPOuP2jMPcEjcZ" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ${$(window).width()}px; height:${$(window).height()}px;">
-				</iframe>
-			</div>
-		`;
-		$("body").append(testHtml);
+		// const testHtml = `
+		// 	<div id="gameFrameDiv" style="width: ${$(window).width()}px;  height:  ${$(window).height()}px; position: relative; top: 0px; left: 0px;">
+		// 		<iframe id="gameFrame" name="gameFrame" src="https://lngame.ijunhai.com/shj_pj115366/index.html?game_id=208&amp;channel_id=8519&amp;game_channel_id=115366&amp;mirror_js_name=paojiaoh5&amp;uid=24418751&amp;sdkToken=BkqrQh9j0P8dKjmyAKgPOuP2jMPcEjcZ" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ${$(window).width()}px; height:${$(window).height()}px;">
+		// 		</iframe>
+		// 	</div>
+		// `;
+		// $("body").append(testHtml);
+
+		const loadingHtml = `<div class="ball-clip-rotate">
+			<div></div>
+		</div>`;
+		$("body").append(loadingHtml);
+
 	}
 </script>
 
