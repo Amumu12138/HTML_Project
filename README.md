@@ -2,6 +2,7 @@
 
 ## 一、文件目录
 ``` 
+    infox_h5_sdk        --- 银狐H5项目
     javaScript          --- js学习教程
     matter              --- matter.js物理引擎项目
     platfrom-web-sdk3-h5-engine --- 基于泡椒-h5-sdk2.0的更新版本项目
@@ -21,4 +22,5 @@
     案例文件为example 
     platfrom-web-sdk3-h5-engine目录入口文件/demo/h5/index.html,css目录为引入样式库,js为引入js文件库,node_m
     odules为npm引入的第三方库,整个项目是基于泡椒-h5-sdk2.0的更新版本
+    infox_h5_sdk目录入口文件/WebRoot/demo/h5/game.html, 整个项目是基于银狐H5项目的开发
 ```

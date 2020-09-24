@@ -1956,7 +1956,6 @@ sdk.showLoginBox03 = function () {
                         <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
                     </div>
                 </div>
-                <>
                 <img style="position: relative; right: -20%%; width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>
                 <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>
             </div>

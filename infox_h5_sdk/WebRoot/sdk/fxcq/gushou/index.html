@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+
+
+    <!--  <meta name="full-screen" content="yes">
+	<meta name="x5-fullscreen" content="true"> -->
+    <title>封仙传奇</title>
+
+    <link href="../../../css/common.css?20171011" rel="stylesheet">
+    <link href="../../../css/layout.css?20171011" rel="stylesheet">
+
+    <script type="text/javascript" src="../../../js/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../../../js/jquery/jquery.md5.js"></script>
+    <script type="text/javascript" src="../../../js/channel.js"></script>
+    <!-- 引入sdk -->
+    <script type="text/javascript" src="https://h5.game1y1.com//js/playcry.js"></script>
+    <style type="text/css">
+        body {
+            background: url(https://res.yh.zyqgame.com/loadPage/loginres/Bm_Back2.jpg) no-repeat center top;
+            background-size: auto 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script type="text/javascript">
+        $(function () {
+            var cs = "http://localhost/infox_h5_sdk/api/";
+            var zs = "https://h5.infoxgame.com/api/";
+            channelSDK.init(false, zs, '10877230', '765681089');
+            console.log("Amumu gushou infoxsdk 初始化成功");
+
+            init(function () {
+                login(function (data) {
+
+                    var extension = JSON.stringify({
+                        "account": data.account,
+                        "nickName": data.nickName,
+                        "uid": data.userID,
+                        "token": data.token,
+                        "autopwd": data.autopwd,
+                        "phoneNum": data.phoneNum,
+                        "eMail": data.eMail,
+                        "idNumber": data.idNumber,
+                        "authentication": data.authentication
+                    });
+                    channelSDK["sdkUserId"] = data.account;
+
+                    console.log("Amumu gushou infoxsdk extension = ", extension);
+
+                    channelSDK.getCpToken(extension, function (data) {
+                        var gameUrl = data.gameUrl + '&uid=' + data.userID +
+                            '&sdkToken=' + data
+                            .token;
+                        channelSDK["userID"] = data.userID;
+                        if (data.type == 0) { //横屏游戏    
+                            $("body").append(
+                                '<div id="gameFrameDiv" style=" display:none;  width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
+                                gameUrl +
+                                '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>'
+                            );
+                            window.onorientationchange = function () {
+                                if (window.orientation == 90 || window
+                                    .orientation == -90) {
+                                    $("#gameFrameDiv").css({
+                                        "left": $(window).width() - 20,
+                                        "top": "30%"
+                                    });
+                                }
+                            }
+                        } else { //竖屏游戏 
+                            $("body").append(
+                                '<div id="gameFrameDiv" style="display:none; width: ' +
+                                $(window)
+                                .width() + 'px;  height: ' + $(window).height() +
+                                'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
+                                gameUrl +
+                                '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' +
+                                $(window).width() + 'px; height: ' + $(window)
+                                .height() +
+                                'px;"></iframe></div>');
+                        }
+                        setTimeout(function () {
+                            $("#gameFrameDiv").fadeIn(1000);
+                            $("#gameFrame").attr("src", gameUrl);
+                        }, 500);
+                    });
+                });
+            });
+            channelSDK.startEventListener();
+        });
+
+        //H5SDK初始化
+        function init(initCallback = null) {
+            var initApp = {
+                appid: '953A91C4DBD58171A', // 必传
+                appkey: '83d82b398e0ac73109d6fc3fb8a3aabe', // 必传
+                callback: function (data) {
+                    console.log("Amumu gushou init result:" + data);
+                    //回调格式:{"code":"0","msg":"成功","floatFucs":[]}
+                    if (initCallback) initCallback();
+                }
+            };
+
+            H5Sdk.initial(initApp);
+        }
+
+        //登录
+        function login(loginCallback = null) {
+            var loginApp = {
+                appid: '953A91C4DBD58171A', // 必传
+                appkey: '83d82b398e0ac73109d6fc3fb8a3aabe', // 必传
+                callback: function (data) {
+                    console.log("Amumu gushou login result:" + data);
+                    var jsonObj = new Object();
+                    jsonObj = JSON.parse(data);
+                    if (loginCallback) loginCallback(jsonObj);
+                }
+            };
+            H5Sdk.login(loginApp);
+        }
+
+        //支付
+        function pay(params) {
+            console.log("Amumu gushou pay params:", params);
+            var payApp = {
+                appid: '953A91C4DBD58171A', // 必传
+                appkey: '83d82b398e0ac73109d6fc3fb8a3aabe', // 必传
+                extend: params.extend, //通知游戏方扩展
+                productDesc: params.productDesc, //商品描述
+                productId: params.productId, //商品id
+                productName: params.productName, //道具名称
+                productNum: params.productNum, // 商品数量
+                serverId: params.serverId, //区服id
+                amount: params.amount, // 商品价格（单位分）
+                callback: function (data) {
+                    console.log("Amumu gushou pay result:" + data);
+                }
+            };
+
+            H5Sdk.pay(payApp);
+        }
+
+
+        function receiveMessage(event) {
+            //支付
+            if (event.data.method == 'loadPayBox') {
+                var params = event.data.param;
+                params["userID"] = channelSDK.userID;
+                params["appID"] = channelSDK.gameId;
+                params["isTest"] = channelSDK.isTest;
+                params["token"] = channelSDK.channelToken;
+                params["uid"] = channelSDK.channelUserID;
+                console.log("Amumu gushou infoxsdk loadPayBox params = ", params);
+                httpPost(channelSDK.host + "getOrderID", params, function (data, params) {
+                    console.log("Amumu gushou infoxsdk getOrderID data = ", data + " params = ", params);
+                    if (data.state == channelSDK.SUCCESS) {
+                        var payJson = {
+                            extend: data.data.orderID, //通知游戏方扩展
+                            productDesc: params.productDesc, //商品描述
+                            productId: 1, //商品id
+                            productName: params.productName, //道具名称
+                            productNum: 1, // 商品数量
+                            serverId: params.serverID, //区服id
+                            amount: parseInt(params.money * 100) // 商品价格
+                        };
+
+                        console.log("Amumu gushou pay payJson:", payJson);
+                        pay(payJson);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

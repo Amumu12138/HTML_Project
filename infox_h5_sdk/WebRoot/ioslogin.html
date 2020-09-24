@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="full-screen" content="true" />
+<meta name="screen-orientation" content="portrait" />
+<meta http-equiv="pragma" content="no-cache"/>
+<meta http-equiv="cache-control" content="no-cache"/>
+<meta http-equiv="cache" content="no-cache"/>
+<meta http-equiv="expires" content="0"/>
+
+<title>游戏登录</title> 
+
+<link href="css/common.css?201905081655" rel="stylesheet">
+<link href="css/layout.css?201905081655" rel="stylesheet">
+
+<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery/jquery.md5.js"></script>
+<script type="text/javascript" src="js/api.js?v=201905081655"></script>
+<script type="text/javascript" src="js/rhsdk_ios.js?v=201905081655"></script>
+<style>
+
+	html,body{
+    	width:100%;
+    	height:100%
+	}
+	body {
+		background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+		background-image:url(https://h5.infoxgame.com/images/loading_yh.png);
+	}
+</style>
+
+</head>
+
+<body> 
+
+<div id="flash"></div> 
+
+
+	<script type="text/javascript">
+	
+	    sdk.init();
+	    sdkApi.initLoading(function() {
+	    	sdkApi.getGameInfo("true",function(ret) {
+				if (ret.code == sdk.SUCCESS) {//成功
+		        	 $(document).attr("title",ret.data.gameName);
+		        	 sdk.autoLogin();
+		        	 startEventListener();  
+				} else {
+					sdkApi.confirmDialog("获取游戏信息失败");
+					return;
+				}
+		});
+	});
+	    
+	    function startEventListener(){
+    		
+    		window.addEventListener("message", receiveMessage, false);
+
+    		function receiveMessage(event) {
+    			switch (event.data.method) {
+    			case "fotPwdCallback": {//关闭忘记密码
+    				sdkApi.closeFotPwdBox();
+    				sdkApi.loadLoginBox();
+    				break;
+    			}
+    			}
+    		}	
+    	}
+		
+	</script>
+
+
+</body>
+
+</html>
