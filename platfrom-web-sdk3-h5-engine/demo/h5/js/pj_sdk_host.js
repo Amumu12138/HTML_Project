@@ -1447,7 +1447,7 @@ sdk.getIsAudit = function (channelGameId, callback) {
     });
 };
 
-/** 泡椒-SDK-H5 2.0需求实现 */
+/************************************************** 泡椒-SDK-H5 2.0需求实现 **************************************************/
 /**
  * @desc 显示开屏
  * @param {number} type 
@@ -1472,7 +1472,6 @@ sdk.showOpenScreen = function (type) {
             break;
     }
 }
-
 
 /**
  * @desc 初始化开屏
@@ -1699,7 +1698,6 @@ sdk.showOutGameTextBox = function () {
 sdk.closeOutGameImageBox = function () {
     $("#outGameText").remove();
 };
-
 
 /**
  * @desc 显示退游关联游戏弹框
@@ -1941,7 +1939,10 @@ sdk.closeLoginBox02 = function () {
  */
 sdk.showLoginBox03 = function () {
 
-    const loginBox03Html = `<div id="loginBox03" class="mask login-box">
+    var a = "123";
+    console.log(typeof (`${a}`));
+    console.log(`a = ${a}`);
+    var loginBox03Html = `<div id="loginBox03" class="mask login-box">
         <div class="r5">
             <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>
             <div class="login-body">
@@ -1956,8 +1957,11 @@ sdk.showLoginBox03 = function () {
                         <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
                     </div>
                 </div>
-                <img style="position: relative; right: -20%%; width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>
-                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>
+                <div class="flex" style="margin: 5% 0 0 68%;">
+                    <img style="width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>
+                    <h5 style="padding-left: 5px; color: #BA494B;">忘记密码</h5>
+                </div>
+                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox(${a})">登录</a>
             </div>
             <div class="flex">
                 <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
@@ -1987,9 +1991,10 @@ sdk.closeLoginBox03 = function () {
  * @desc 显示加载登录框
  */
 sdk.showLoadingLoginBox = function (userName) {
-    sdk.closeLoginBox02();
+    // sdk.closeLoginBox02();
 
-    const loadingLoginBox = `<div id="loadingLoginBox" class="mask">
+
+    var loadingLoginBox = `<div id="loadingLoginBox" class="mask">
         <div class="r5" style="width: 280px; height: 50px; top: 5%">
             <div class="flex" style="padding: 15px 0 0 15px;">
                 <img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>
@@ -1998,7 +2003,7 @@ sdk.showLoadingLoginBox = function (userName) {
                 <div class="ball-clip-rotate">
 			        <div></div>
                 </div> 
-                <button class = "loadingLoginBtn">切换账号</button> 
+                <button class="loadingLoginBtn">切换账号</button> 
             </div> 
         </div> 
         </div>`;
@@ -2013,4 +2018,124 @@ sdk.closeLoadingLoginBox = function () {
     $("#loadingLoginBox").remove();
 }
 
+/**
+ * @desc 手机号码登录
+ * @param {string} mobile 手机号码
+ * @param {string} smsCode 手机号登录短信验证码
+ */
+sdk.mobileLogin = function (mobile, smsCode) {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+    param["mobile"] = mobile; //手机号码
+    param["smsCode"] = smsCode; //手机号登录短信验证码
+
+
+    sdk.api(params, "mobileLogin", function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
+
+/**
+ * @desc 选择账户/输入账户登录
+ * @param {string} userName 用户账户
+ */
+sdk.selectedLogin = function (userName) {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+    param["userName"] = userName; //手机号码
+
+    sdk.api(params, "selectLogin", function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
+
+/**
+ * @desc 获取短信验证码
+ * @param {string} mobile 手机号码
+ * @param {number} type 类验证码类型1:手机号登录验证码;2:绑定手机验证码
+ */
+sdk.getMobileCode = function (mobile, type) {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+    param["mobile"] = mobile; //手机号码
+    param["type"] = type; //类型
+
+    sdk.api(params, "getMobileCode", function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
+
+/**
+ * @desc 绑定手机
+ * @param {string} mobile 手机号码
+ * @param {string} smsCode 手机号绑定短信验证码
+ * @param {number} userId 用户ID
+ */
+sdk.bindMobilePhone = function (mobile, smsCode, userId) {
+    var param = {};
+    param["gameId"] = sdk.gameInfo.gameId; //游戏ID
+    param["channel"] = sdk.getItem("channel"); //渠道号
+    param["sdkVersion"] = "2.0.0"; //SDK版本号
+    param["token"] = sdk.getItem("sdkToken"); //用户登录token
+    param["appVersion"] = sdk.appVersion; //app版本号
+    param["idfa"] = ""; //IOS设备idfa
+    param["udid"] = sdk.getUdid(); //设备udid
+    param["imei"] = ""; //安卓设备imei  
+    param["mac"] = ""; //设备mac地址
+    param["tBrand"] = ""; //机型
+    param["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+    param["mobile"] = mobile; //手机号码
+    param["smsCode"] = smsCode; //手机号码绑定短信验证码
+    param["userId"] = userId; //用户ID
+
+    sdk.api(params, "bindMobilePhone", function (retData) {
+        if (retData.code == 1) {
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+}
 window.PJ_SDK = sdk;
