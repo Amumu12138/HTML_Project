@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="full-screen" content="true" />
     <meta name="screen-orientation" content="portrait" />
-    <meta http-equiv="pragma" content="no-cache"/>
-    <meta http-equiv="cache-control" content="no-cache"/>
-    <meta http-equiv="cache" content="no-cache"/>
-    <meta http-equiv="expires" content="0"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="cache" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
 
     <title>游戏登录</title>
 
@@ -21,56 +23,55 @@
 
     <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/pj_sdk_host.js"></script>
-
+    <script tyepe="text/javascript" src="/js/pj_sdk_host_01.js"></script>
 
 </head>
 
 <body style="background:rgba(0, 0, 0, .8)">
 
-<div id="flash"></div>
+    <div id="flash"></div>
+    <script type="text/javascript">
+        sdk.init();
+        sdk.initLoading(function () {
+            sdk.getGameInfo("true", function (ret) {
+                if (ret.code == sdk.SUCCESS) { //成功
+                    sdk.gameInfo = ret.data;
+                    var gameName = sdk.gameInfo.gameName;
+                    $(document).attr("title", gameName);
 
+                    // sdk.autoLogin();
+                    sdk.showQuickLoginBox()
 
-<script type="text/javascript">
-    sdk.init();
-    sdk.initLoading(function() {
-        sdk.getGameInfo("true",function(ret) {
-            if (ret.code == sdk.SUCCESS) {//成功
-                sdk.gameInfo = ret.data;
-                var gameName = sdk.gameInfo.gameName;
-                $(document).attr("title",gameName);
+                    startEventListener();
+                } else {
+                    sdk.confirmDialog(ret.msg);
+                    return;
+                }
+            });
 
-                sdk.autoLogin();
+            function startEventListener() {
 
-                startEventListener();
-            } else {
-                sdk.confirmDialog(ret.msg);
-                return;
-            }
-        });
+                window.addEventListener("message", receiveMessage, false);
 
-        function startEventListener(){
-
-            window.addEventListener("message", receiveMessage, false);
-
-            function receiveMessage(event) {
-                switch (event.data.method) {
-                    case "fotPwdCallback": {//关闭忘记密码
-                        sdk.closeFotPwdBox();
-                        sdk.loadLoginBox();
-                        break;
-                    }
-                    case "realNameAuthCallback":{//实名认证回调
-                        sdk.doRealNameAuthCallBack(event.data.code);
-                        break;
+                function receiveMessage(event) {
+                    switch (event.data.method) {
+                        case "fotPwdCallback": { //关闭忘记密码
+                            sdk.closeFotPwdBox();
+                            sdk.loadLoginBox();
+                            break;
+                        }
+                        case "realNameAuthCallback": { //实名认证回调
+                            sdk.doRealNameAuthCallBack(event.data.code);
+                            break;
+                        }
                     }
                 }
+
+
             }
 
-
-        }
-
-    });
-</script>
+        });
+    </script>
 
 
 </body>

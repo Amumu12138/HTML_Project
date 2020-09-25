@@ -115,7 +115,18 @@
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="showLoginBox03()" value="账号登录弹框">
 		</li>
-
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox04()" value="手机登录弹框">
+		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox05()" value="密码重置01弹框">
+		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox06()" value="修改密码弹框">
+		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox06()" value="123弹框">
+		</li>
 	</ul>
 
 </body>
@@ -326,7 +337,7 @@
 		//pjapi.httpGet = function(url,params,callback)
 		// var url =
 		// 	"https://sdk2.paojiao.cn/sdk/sdkConfig";
-		var url = "https://h5.paojiao.cn/api/getFloatUrl";
+		var url = "http://localhost:8080/api/getFloatUrl";
 		var params = {
 			gameId: 11072,
 			channel: "yxzbqh_NBBM_xh_001",
@@ -416,15 +427,28 @@
 
 	//显示一键登录弹框
 	function showLoginBox() {
-		sdk.showLoginBox02();
+		sdk.showQuickLoginBox();
 	}
 
 	//显示账号登录弹框
 	function showLoginBox03() {
-		sdk.showLoginBox03();
+		sdk.showAccountLoginBox();
 	}
 
+	//显示手机登录弹框
+	function showLoginBox04() {
+		sdk.showMobileLoginBox();
+	}
 
+	//显示根据账号重置密码弹框
+	function showLoginBox05() {
+		sdk.showResetAccPwdBox();
+	}
+
+	//显示修改密码弹框
+	function showLoginBox06() {
+		sdk.showUpdatePwdBox();
+	}
 
 	var clientWidth = window.screen.width;
 	var clientHeight = window.screen.height;

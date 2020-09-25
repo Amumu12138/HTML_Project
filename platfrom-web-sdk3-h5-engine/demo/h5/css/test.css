@@ -181,13 +181,23 @@ body {
 
 .loadingLoginBtn {
     position: absolute;
+    top: 10px;
     right: 10px;
     width: 70px;
+    height: 30px;
     border-radius: 5px;
-    /* color: #727272; */
+    /* color: #ffffff; */
+    background-color: white;
     border-style: solid;
     border-width: 1px;
     border-color: #727272;
+    outline: none;
+}
+
+.loadingLoginBtn:active {
+    /* background-color: #3e8e41;
+    box-shadow: 0 5px #666; */
+    transform: translateY(4px);
 }
 
 /*  头部标题*/
