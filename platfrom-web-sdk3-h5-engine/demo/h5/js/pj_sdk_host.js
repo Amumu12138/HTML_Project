@@ -1446,4 +1446,832 @@ sdk.getIsAudit = function (channelGameId, callback) {
     });
 };
 
+/************************************************** 泡椒-SDK-H5 2.0需求实现 **************************************************/
+/**
+ * @desc 显示开屏
+ * @param {number} type 
+ */
+sdk.showOpenScreen = function (type) {
+	//判断标签类型
+	switch (type) {
+		case 0: //文字
+			sdk.showOpenScreenTextBox(`消费返优惠券`,
+				`[活动时间]<br>
+                 2020年9月1日0点-2020年9月31日25点<br>
+                 [活动内容]<br>
+                 活动期间,每位用户限参与一次`);
+			break;
+		case 1: //图片
+			sdk.showOpenScreenImage("http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
+			break;
+		case 2: //代金券
+			sdk.showOpenScreenCoupon("/images/pj_background_flash.png");
+			break;
+		default:
+			break;
+	}
+}
+
+/**
+ * @desc 初始化开屏
+ * @param {Function} callback 回调函数
+ */
+sdk.initOpenScreen = function () {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["type"] = "1"; //类型
+
+	sdk.api(params, "getPopUpConfig", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+//"/images/titleIcon.png" /
+
+/**
+ * @desc 显示开屏文字框
+ * @param {string} title 弹窗标题
+ * @param {string} content 弹窗内容
+ */
+sdk.showOpenScreenTextBox = function (title, content) {
+	const openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
+        <div class="r5" style="width: 280px; height: 280px; top: 50px;">
+            <div class="openScreenTextTop">
+                <img src="/images/pj_image_float_logo.png"></img>
+                <p style="position: relative; top: 10px; left: -10px;">${title}</p>
+                <img style="position: relative; float: left; left: 220px; top: -15px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenTextBox()" src="/images/sdk2.0/pj_dialog_jurisdiction_delete.png"></img>
+            </div>
+            <h5 style="font-size: 20px;font-weight: normal;">${content}</h5>
+            <from>
+                <img id="loginCheck" style="position: relative; top: 125px; left: 80px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>
+                <label style="position: relative; top: 123px; left: 90px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</label>
+            </from>
+        </div> 
+        
+     </div>`;
+
+	$("body").append(openScreenTextHtml);
+}
+
+var type = 0;
+/**
+ * @desc 更新勾选框资源
+ * @param {*} type 
+ */
+sdk.updateCheckUrl = function () {
+	if (type == 0) {
+		type = 1;
+		document.getElementById("loginCheck").src = "/images/sdk2.0/2.png";
+	} else {
+		type = 0;
+		document.getElementById("loginCheck").src = "/images/sdk2.0/1.png";
+	}
+}
+
+/**
+ * @desc 关闭开屏文字框
+ */
+sdk.closeOpenScreenTextBox = function () {
+	$("#openScreenTextBox").remove();
+	sdk.showOpenScreenCoupon(1, "满六元可用");
+};
+
+
+/**
+ * @desc 显示开屏图片 
+ */
+sdk.showOpenScreenImage = function (imgUrl) {
+	const openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
+        <div class="openScreenImage" style="width: 280px; height: 280px; top: 50px;">
+            <img src=${imgUrl}></img>
+            <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenImage()" src="/images/sdk2.0/pj_ad_close.png"></img>
+        </div>
+    </div>`;
+
+	$("body").append(openScreenImageHtml);
+};
+
+/**
+ * @desc 关闭开屏图片
+ */
+sdk.closeOpenScreenImage = function () {
+	$("#openScreenImage").remove();
+	sdk.showOpenScreenCoupon(1, "满六元可用");
+};
+
+
+/**
+ * @desc 显示开屏代金券
+ * @param {string} imgUrl 
+ */
+sdk.showOpenScreenCoupon = function (money, content) {
+	const openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
+        <div class="openScreenImage" style="width: 280px; height: 280px;">
+            <img src="images/sdk2.0/pj_dialog_voucher.png"></img>
+            <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>
+            <div class="flex">
+                <h5 style="position: relative; top: -180px; left: 50px; font-size: 24px; font-weight: bold; color: #EEC900;">￥${money}</h5>
+                <div style="position: relative; top: -200px; left: 60px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>
+                <h5 style="position: relative; top: -180px; left: 80px; font-size: 20px; font-weight: normal;">${content}</h5>
+            </div>
+        </div>
+    </div>`;
+
+	$("body").append(openScreenCouponHtml);
+};
+
+/**
+ * @desc 关闭开屏代金券
+ */
+sdk.closeOpenScreenCoupon = function () {
+	$("#openScreenCoupon").remove();
+};
+
+/**
+ * @desc 显示退游弹弹窗
+ * @param {number} type 类型 
+ */
+sdk.showOutGameHtml = function (type) {
+
+	switch (type) {
+		case 0:
+			sdk.showOutGameImageBox();
+			break;
+		case 1:
+			sdk.showOutGameTextBox();
+			break;
+		default:
+			break;
+	}
+}
+
+/**
+ * @desc 初始化退游弹窗
+ */
+sdk.initOutGame = function () {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["type"] = "2"; //类型
+
+	sdk.api(params, "getPopUpConfig", function (retData) {
+		if (retData.code == 1) {
+
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 退游图片弹窗
+ * @param {string} imgUrl  资源路径
+ */
+sdk.showOutGameImageBox = function (imgUrl) {
+	const outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
+        <div class="r5" style="border-radius: 25px;">
+            <img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='${imgUrl}'/>
+            <div class="flex" style="height: 40px">
+                <a href="javascript:;" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.closeOutGameImageBox()">继续游戏</a>
+                <a href="javascript:;" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.showOutGameRelatedBox()">退出游戏</a>
+             </div>
+        </div>
+    </div>`;
+
+	$("body").append(outGameImageHtml);
+}
+
+
+/**
+ * @desc 退游图片弹窗
+ */
+sdk.closeOutGameImageBox = function () {
+	$("#outGameImage").remove();
+};
+
+/**
+ * @desc 退游文字弹窗
+ */
+sdk.showOutGameTextBox = function () {
+	const outGameTextHtml = `<div id="outGameText" class="mask dialog-box">
+    <div class="r5">
+        <div>提示信息</div>
+        <div>是否退出游戏</div>
+            <div class="flex">
+                <a href="javascript:;" style="text-decoration:none;" data-type="conLogin" class="flex-list unselect">继续游戏</a>
+                <a href="javascript:;" style="text-decoration:none;" data-type="outGame" class="flex-list unselect">退出游戏</a>
+            </div>
+            </div>
+        </div>
+    </div>`;
+
+	$("body").append(outGameTextHtml);
+}
+
+/**
+ * @desc 退游文字弹窗
+ */
+sdk.closeOutGameImageBox = function () {
+	$("#outGameText").remove();
+};
+
+/**
+ * @desc 显示退游关联游戏弹框
+ * @param {Array} 关联游戏数组
+ */
+sdk.showOutGameRelatedBox = function (relatedArr) {
+	$("#outGameImage").remove();
+
+	const outGameRelatedHtml = `<div id="outGameRelated" class="mask dialog-box">
+        <div class="r5">
+            <div style="font-size: 20px;">确定退出游戏吗?</div>
+            <div style="font-size: 16px; colcr: #949494;">玩过此游戏的玩家还玩过</div>
+            <button style="position: absolute; top: 15px; right: 15px;" onclick="sdk.closeOutGameRelatedBox()">关闭</button>
+
+            <div class="flex" style="height: 125px;">
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px; border-radius: 5px" src="${relatedArr[0].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 25px; color: #000000;">${relatedArr[0].name}</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[1].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;">${relatedArr[1].name}</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[2].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;">${relatedArr[2].name}</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+                <a class="flex-list">
+                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[3].imgUrl}" onclick="">
+                    <h5 style="position: relative; top: 30px; color: #000000;" >${relatedArr[3].name}</h5>
+                    <button class="button button1" onclick="">打开</button>
+                </a>
+            </div>
+            <div class="flex">
+                <a class="flex-list" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">退出游戏</a>
+                <a class="flex-list" style="color:#000000; font-size: 20px; 
+                padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">再玩一会</a>
+            </div>
+        </div>
+    </div>`;
+
+	$("body").append(outGameRelatedHtml);
+}
+
+/**
+ * @desc 关闭退游关联游戏弹框
+ */
+sdk.closeOutGameRelatedBox = function () {
+	$("#outGameRelated").remove();
+};
+
+/**
+ * @desc 启动悬浮窗
+ */
+sdk.enableFloatBox02 = function () {
+	$("#shortcut").remove();
+	const shortcutHtml = `<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">
+        <div class="flex" onclick="sdk.initFloatBox02()" id="iconDiv" style="width: 50px; height: 50px;float: left;">
+            <div id="ic-menu" class="r50" style="width: 50px; height: 50px;">
+                <span style="width: 50px; height: 50px;" class="r50"></span>
+            </div>
+        </div>
+        <div id="navDiv" style="display:none; width: auto; height:50px; border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>
+    </div>`;
+	$("body").append(shortcutHtml);
+
+	//延迟2秒后半隐藏
+	setTimeout(function () {
+		$("#shortcut").css("left", "-25px");
+	}, 2000);
+
+	//绑定touch事件
+	sdk.bindTouchEvent();
+
+	//初始化悬浮球菜单
+	sdk.initFloatBox02();
+	// sdk.showRedDot();
+	sdk.showFloatTip(1);
+};
+
+/**
+ * @desc 初始化悬浮球
+ * @param {Function} callback 回调函数
+ */
+sdk.initFloatBox02 = function () {
+	console.log("Amumu initFloatBox02");
+
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+
+	sdk.api(params, "getFloatUrl", function (retData) {
+		if (retData.code == 1) {
+			sdk.closeFloatBox02();
+			window.location.href = retData.data;
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 关闭悬浮球
+ */
+sdk.closeFloatBox02 = function () {
+	$("#shortcut").remove();
+}
+
+/**
+ * @desc 初始化红点状态、气泡消息提示
+ * @param {Function} callback 回调函数
+ */
+sdk.initFloatTips = function () {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+
+	sdk.api(params, "getFloatTips", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 显示消息红点
+ */
+sdk.showRedDot = function () {
+	const redDotHtml = `<div id="redDot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000;"></div>`;
+	$("#shortcut").append(redDotHtml);
+}
+
+/**
+ * @desc 关闭消息红点
+ */
+sdk.closeRedDot = function () {
+	$("#redDot").remove();
+}
+
+/**
+ * @desc 显示悬浮红点提示消息
+ * @param {number} num 
+ */
+sdk.showFloatTip = function (num) {
+	const floatTipHtml = `<div id="floatTip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; 
+    font-size: 10px; color: #ffffff; text-align:center;">${num}</div>`;
+	$("#shortcut").append(floatTipHtml);
+}
+
+/**
+ * @desc 关闭消息红点
+ */
+sdk.closeFloatTip = function () {
+	$("#floatTip").remove();
+}
+
+/**
+ * @desc 打开一键登录弹框
+ */
+sdk.showQuickLoginBox = function () {
+
+	const quickLoginHtml = `<div id="quickLoginBox" class="mask login-box">
+        <div class="r5">
+            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>
+            <div class="login-body">
+                <div>
+                    <div id="userBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">
+                    </div>
+                    <div id="pwdBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">
+                        <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
+                    </div>
+                </div>
+                <div class="flex">
+                    <img style="width: 15px; height: 15px;" src="/images/sdk2.0/2.png">
+                    <p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受
+                        <p style="margin: 0 0 0 0; font-size: 12px;" onclick="sdk.showXieYi()"><<用户服务协议>></p>
+                    </p>
+                </div>
+                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">注册并登录</a>
+            </div>
+            <div class="flex">
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showAccountLoginBox()">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">已有账户</h5>
+                </a>      
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">手机登录</h5>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>`;
+
+	$("body").append(quickLoginHtml);
+};
+
+/**
+ * @desc 关闭一键登录弹框
+ */
+sdk.closeQuickLoginBox = function () {
+	$("#quickLoginBox").remove();
+}
+
+/**
+ * @desc 打开账号登录弹框
+ */
+sdk.showAccountLoginBox = function () {
+
+	const accountLoginHtml = `<div id="accountLoginBox" class="mask login-box">
+        <div class="r5">
+            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>
+            <div class="login-body">
+                <div>
+                    <div id="userBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">
+                    </div>
+                    <div id="pwdBox" class="flex">
+                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">
+                        <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
+                    </div>
+                </div>
+                <div class="flex" style="margin: 5% 0 0 68%;">
+                    <img style="width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>
+                    <h5 style="padding-left: 5px; color: #BA494B;" onclick="sdk.showResetAccPwdBox()">忘记密码</h5>
+                </div>
+                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>
+            </div>
+            <div class="flex">
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">一键注册</h5>
+                </a>      
+                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showMobileLoginBox()">
+                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>
+                    <h5 style="padding: 5px 0 0 5px;">手机登录</h5>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>`;
+
+	$("body").append(accountLoginHtml);
+};
+
+/**
+ * @desc 关闭账号注册弹框
+ */
+sdk.closeAccountLoginBox = function () {
+	$("#accountLoginBox").remove();
+}
+
+/**
+ * @desc 打开手机登录弹框
+ */
+sdk.showMobileLoginBox = function () {
+
+	const mobileLoginHtml = `<div id="mobileLoginBox" class="mask login-box">
+        <div class="r5">
+            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>
+            <div class="login-body">
+                <div>
+                    <div id="flexMobile" class="flex">
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="mobile" type="text" value="" placeholder="请输入手机号">
+                    </div>
+                    <div id="flexSmsCode" class="flex">
+                        <input style="width: 100px; height: 40px;" class="flex-list" id="smsCode" type="text" value="" placeholder="请输入验证码">
+                        <button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden; 
+                        background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>                    
+                    </div>
+                </div>
+            </div>
+            <div style="height: 30px;"></div>
+            <div class="flex">
+                <button style="width: 100px; height: 40px; border-radius:5px; border-style: solid; background-color: #FFFFFF; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #BA494B;">一键注册</button>    
+                <button style="position: absolute; right: 30px; width: 100px; height: 40px; background-color: #BA494B; border-radius:5px; border-style: solid; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #ffffff;" onclick="sdk.showLoadingLoginBox()">立即登录</button>    
+            </div>
+        </div>
+        </div>
+    </div>`;
+
+	$("body").append(mobileLoginHtml);
+};
+
+/**
+ * @desc 关闭手机登录弹框
+ */
+sdk.closeMobileLoginBox = function () {
+	$("#mobileLoginBox").remove();
+}
+
+/**
+ * @desc 打开账号重置密码弹框
+ */
+sdk.showResetAccPwdBox = function () {
+
+	const resetAccPwdHtml = `<div id="resetAccPwdBox" class="mask login-box">
+        <div class="r5">
+            <div class="flex">
+                <p style="font-size: 30px;" onclick="sdk.closeResetAccPwdBox()"><</p>
+                <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">重置密码</p></div>
+            </div>
+            <div class="login-body">
+                <div>
+                    <div id="" class="flex">
+                        <input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="账号">
+                        <h5 style="margin: 10px 5px 0 0 ; font-size: 16px; font-weight: bold; color: #BA494B;" onclick="">查询</h5>
+                    </div>
+                    <div id="" class="flex">
+                    <input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="手机">
+                </div>
+                <div id="" class="flex" style="width: 150px;">
+                    <input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="验证码">
+                    <img style="width: 90px; height: 42px;"  src=""></img>
+                </div>
+                <div id="" class="flex">
+                    <input style="width: 100px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="请输入短信码">
+                    <button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden; 
+                    background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>                    
+                </div>
+                </div>
+            </div>
+         
+            <a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="">提交</a>
+        </div>
+        </div>
+    </div>`;
+
+	$("body").append(resetAccPwdHtml);
+};
+
+/**
+ * @desc 关闭账号重置密码弹框
+ */
+sdk.closeResetAccPwdBox = function () {
+	$("#resetAccPwdBox").remove();
+}
+
+/**
+ * @desc 打开修改密码弹框
+ */
+sdk.showUpdatePwdBox = function () {
+
+	const updatePwdHtml = `<div id="updatePwdBox" class="mask login-box">
+        <div class="r5">
+            <div class="flex">
+                <p style="font-size: 30px;" onclick="sdk.closeUpdatePwdBox()"><</p>
+                <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">修改密码</p></div>
+            </div>
+            <div class="login-body">
+                <div>
+                    <h5 style="position: relative; left: -50px; color: #BA494B;">8-16位数字与字母组合</h5>
+                    <div id="" class="flex">
+                        <input id="update-pwd-input" style="width: 200px; height: 40px; color:#000000" class="flex-list" id="" type="password" value="" placeholder="新密码">
+                        <img id="update-pwd-box-eye" style="margin: 10px 5px 0 0; width: 30px; height: 30px;" src="/images/sdk2.0/pj_pw_visible.png" onclick="sdk.updatePwdBoxEye()"></img>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 50px;"></div>
+            <a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="sdk.closeUpdatePwdBox()">保存</a>
+        </div>
+        </div>
+    </div>`;
+
+	$("body").append(updatePwdHtml);
+};
+
+/**
+ * @desc 关闭账号重置密码弹框
+ */
+sdk.closeUpdatePwdBox = function () {
+	$("#updatePwdBox").remove();
+}
+
+var isEye = true;
+sdk.updatePwdBoxEye = function () {
+	if (isEye) {
+		document.getElementById("update-pwd-box-eye").src = "/images/sdk2.0/pj_pw_invisible.png";
+        isEye = false;
+        document.getElementById("update-pwd-input").type = "password";
+	} else {
+		document.getElementById("update-pwd-box-eye").src = "/images/sdk2.0/pj_pw_visible.png";
+        isEye = true;
+        document.getElementById("update-pwd-input").type = "text";
+	}
+}
+/**
+ * @desc 显示加载登录框
+ */
+sdk.showLoadingLoginBox = function (userName) {
+	// sdk.closeLoginBox02();
+
+	var loadingLoginBox = `<div id="loadingLoginBox" class="mask">
+        <div class="r5" style="width: 280px; height: 50px; top: 5%">
+            <div class="flex" style="padding: 15px 0 0 15px;">
+                <img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>
+                <h5 style="margin-top: 5px; margin-left: 2%; font-size: 14px; color: #BA4970;">${userName}</h5>
+                <h5 style="margin-top: 5px; margin-left: 2%;">登录中</h5>
+                <div class="ball-clip-rotate">
+			        <div></div>
+                </div> 
+                <button class="loadingLoginBtn">切换账号</button> 
+            </div> 
+        </div> 
+        </div>`;
+
+	$("body").append(loadingLoginBox);
+
+	setTimeout(function () {
+		sdk.closeLoadingLoginBox();
+	}, 2000);
+}
+
+/**
+ * @desc 关闭加载登录框
+ */
+sdk.closeLoadingLoginBox = function () {
+	$("#loadingLoginBox").remove();
+}
+
+/**
+ * @desc 手机号码登录
+ * @param {string} mobile 手机号码
+ * @param {string} smsCode 手机号登录短信验证码
+ * @param {Function} callback 回调函数
+ */
+sdk.mobileLogin = function (mobile, smsCode, callback = null) {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["mobile"] = mobile; //手机号码
+	params["smsCode"] = smsCode; //手机号登录短信验证码
+
+	sdk.api(params, "mobileLogin", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 选择账户/输入账户登录
+ * @param {string} userName 用户账户
+ * @param {Function} callback 回调函数
+ */
+sdk.selectedLogin = function (userName, callback = null) {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["userName"] = userName; //手机号码
+
+	sdk.api(params, "selectLogin", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback();
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 获取短信验证码
+ * @param {string} mobile 手机号码
+ * @param {number} type 类验证码类型1:手机号登录验证码;2:绑定手机验证码
+ * @param {Function} callback 回调函数
+ */
+sdk.getMobileCode = function (mobile, type, callback = null) {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["mobile"] = mobile; //手机号码
+	params["type"] = type; //类型
+
+	sdk.api(params, "getMobileCode", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback();
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 绑定手机
+ * @param {string} mobile 手机号码
+ * @param {string} smsCode 手机号绑定短信验证码
+ * @param {number} userId 用户ID
+ * @param {Function} callback 回调函数
+ */
+sdk.bindMobilePhone = function (mobile, smsCode, userId, callback = null) {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = "2.0.0"; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei  
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["mobile"] = mobile; //手机号码
+	params["smsCode"] = smsCode; //手机号码绑定短信验证码
+	params["userId"] = userId; //用户ID
+
+	sdk.api(params, "bindMobilePhone", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback();
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
 window.PJ_SDK = sdk;
