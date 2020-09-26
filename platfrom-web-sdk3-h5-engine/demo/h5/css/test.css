@@ -56,7 +56,7 @@
     background: #ffffff;
     width: 360px;
     height: 290px;
-    border-radius: 25px;
+    border-radius: 5px;
     text-align: left;
     vertical-align: top;
     -webkit-animation: fadeIn 0.5s;
@@ -71,7 +71,7 @@
     /* display: table-cell; */
     text-align: left;
     vertical-align: middle;
-    border-radius: 25px;
+    border-radius: 5px;
 }
 
 .openScreenImage img {

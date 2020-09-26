@@ -1455,11 +1455,8 @@ sdk.showOpenScreen = function (type) {
 	//判断标签类型
 	switch (type) {
 		case 0: //文字
-			sdk.showOpenScreenTextBox(`消费返优惠券`,
-				`[活动时间]<br>
-                 2020年9月1日0点-2020年9月31日25点<br>
-                 [活动内容]<br>
-                 活动期间,每位用户限参与一次`);
+			sdk.showOpenScreenTextBox("消费返优惠券",
+				`[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次`);
 			break;
 		case 1: //图片
 			sdk.showOpenScreenImage("http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
@@ -1508,21 +1505,20 @@ sdk.initOpenScreen = function () {
  * @param {string} content 弹窗内容
  */
 sdk.showOpenScreenTextBox = function (title, content) {
-	const openScreenTextHtml = `<div id="openScreenTextBox" class="mask openScreen">
-        <div class="r5" style="width: 280px; height: 280px; top: 50px;">
-            <div class="openScreenTextTop">
-                <img src="/images/pj_image_float_logo.png"></img>
-                <p style="position: relative; top: 10px; left: -10px;">${title}</p>
-                <img style="position: relative; float: left; left: 220px; top: -15px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenTextBox()" src="/images/sdk2.0/pj_dialog_jurisdiction_delete.png"></img>
-            </div>
-            <h5 style="font-size: 20px;font-weight: normal;">${content}</h5>
-            <from>
-                <img id="loginCheck" style="position: relative; top: 125px; left: 80px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>
-                <label style="position: relative; top: 123px; left: 90px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</label>
-            </from>
-        </div> 
-        
-     </div>`;
+	const openScreenTextHtml = '<div id="openScreenTextBox" class="mask">'  
+        + '<div class="r5" style="width: 280px; height: 280px; top: 50px;">'
+            + '<div class="openScreenTextTop">'
+                + '<img src="/images/pj_image_float_logo.png"></img>'
+                + '<p style="position: relative; top: 10px; left: -10px;">'+ title + '</p>'
+                + '<img style="position: relative; float: left; left: 220px; top: -15px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenTextBox()" src="/images/sdk2.0/pj_dialog_jurisdiction_delete.png"></img>'
+            + '</div>'
+            + '<h5 style="font-size: 20px;font-weight: normal;">'+ content +'</h5>'
+            + '<from>'
+                +'<img id="loginCheck" style="position: relative; top: 125px; left: 80px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>'
+                + '<label style="position: relative; top: 123px; left: 90px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</label>'
+            + '</from>'
+        + '</div>' 
+    + '</div>';
 
 	$("body").append(openScreenTextHtml);
 }
@@ -1550,17 +1546,17 @@ sdk.closeOpenScreenTextBox = function () {
 	sdk.showOpenScreenCoupon(1, "满六元可用");
 };
 
-
 /**
  * @desc 显示开屏图片 
+ * @param {string} 图片路径
  */
 sdk.showOpenScreenImage = function (imgUrl) {
-	const openScreenImageHtml = `<div id="openScreenImage" class="mask openScreen">
-        <div class="openScreenImage" style="width: 280px; height: 280px; top: 50px;">
-            <img src=${imgUrl}></img>
-            <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenImage()" src="/images/sdk2.0/pj_ad_close.png"></img>
-        </div>
-    </div>`;
+	const openScreenImageHtml = '<div id="openScreenImage" class="mask">'
+        + '<div class="openScreenImage" style="width: 280px; height: 280px; top: 50px;">'
+            + '<img src='+ imgUrl +'></img>'
+            + '<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenImage()" src="/images/sdk2.0/pj_ad_close.png"></img>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(openScreenImageHtml);
 };
@@ -1576,20 +1572,21 @@ sdk.closeOpenScreenImage = function () {
 
 /**
  * @desc 显示开屏代金券
- * @param {string} imgUrl 
+ * @param {number} money 金额
+ * @param {string} content 内容 
  */
 sdk.showOpenScreenCoupon = function (money, content) {
-	const openScreenCouponHtml = `<div id="openScreenCoupon" class="mask openScreen">
-        <div class="openScreenImage" style="width: 280px; height: 280px;">
-            <img src="images/sdk2.0/pj_dialog_voucher.png"></img>
-            <img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>
-            <div class="flex">
-                <h5 style="position: relative; top: -180px; left: 50px; font-size: 24px; font-weight: bold; color: #EEC900;">￥${money}</h5>
-                <div style="position: relative; top: -200px; left: 60px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>
-                <h5 style="position: relative; top: -180px; left: 80px; font-size: 20px; font-weight: normal;">${content}</h5>
-            </div>
-        </div>
-    </div>`;
+	const openScreenCouponHtml = '<div id="openScreenCoupon" class="mask">'
+        + '<div class="openScreenImage" style="width: 280px; height: 280px;">'
+            + '<img src="images/sdk2.0/pj_dialog_voucher.png"></img>'
+            + '<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>'
+            + '<div class="flex">'
+                + '<h5 style="position: relative; top: -180px; left: 50px; font-size: 24px; font-weight: bold; color: #EEC900;">￥' + money + '</h5>'
+                + '<div style="position: relative; top: -200px; left: 60px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>'
+                + '<h5 style="position: relative; top: -180px; left: 80px; font-size: 20px; font-weight: normal;">' + content + '</h5>'
+            + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(openScreenCouponHtml);
 };
@@ -1651,17 +1648,15 @@ sdk.initOutGame = function () {
  * @param {string} imgUrl  资源路径
  */
 sdk.showOutGameImageBox = function (imgUrl) {
-	const outGameImageHtml = `<div id="outGameImage" class="mask dialog-box">
-        <div class="r5" style="border-radius: 25px;">
-            <img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='${imgUrl}'/>
-            <div class="flex" style="height: 40px">
-                <a href="javascript:;" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.closeOutGameImageBox()">继续游戏</a>
-                <a href="javascript:;" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.showOutGameRelatedBox()">退出游戏</a>
-             </div>
-        </div>
-    </div>`;
+	const outGameImageHtml = '<div id="outGameImage" class="mask">'
+        + '<div class="r5" style="border-radius: 25px;">'
+            + '<img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='+ imgUrl + '>'
+            + '<div class="flex" style="height: 40px">'
+                + '<a href="javascript:;" style="color:#000000; font-size: 20px; padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.closeOutGameImageBox()">继续游戏</a>'
+                + '<a href="javascript:;" style="color:#000000; font-size: 20px; padding: 5px 5px; text-decoration:none;" class="flex-list" onclick="sdk.showOutGameRelatedBox()">退出游戏</a>'
+            + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(outGameImageHtml);
 }
@@ -1678,17 +1673,17 @@ sdk.closeOutGameImageBox = function () {
  * @desc 退游文字弹窗
  */
 sdk.showOutGameTextBox = function () {
-	const outGameTextHtml = `<div id="outGameText" class="mask dialog-box">
-    <div class="r5">
-        <div>提示信息</div>
-        <div>是否退出游戏</div>
-            <div class="flex">
-                <a href="javascript:;" style="text-decoration:none;" data-type="conLogin" class="flex-list unselect">继续游戏</a>
-                <a href="javascript:;" style="text-decoration:none;" data-type="outGame" class="flex-list unselect">退出游戏</a>
-            </div>
-            </div>
-        </div>
-    </div>`;
+	const outGameTextHtml = '<div id="outGameText" class="mask">'
+    + '<div class="r5">'
+        + '<div>提示信息</div>'
+        + '<div>是否退出游戏</div>'
+           + '<div class="flex">'
+                + '<a href="javascript:;" style="text-decoration:none;" data-type="conLogin" class="flex-list unselect">继续游戏</a>'
+                + '<a href="javascript:;" style="text-decoration:none;" data-type="outGame" class="flex-list unselect">退出游戏</a>'
+            + '</div>'
+            + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(outGameTextHtml);
 }
@@ -1696,7 +1691,7 @@ sdk.showOutGameTextBox = function () {
 /**
  * @desc 退游文字弹窗
  */
-sdk.closeOutGameImageBox = function () {
+sdk.closeOutGameTextBox = function () {
 	$("#outGameText").remove();
 };
 
@@ -1706,43 +1701,41 @@ sdk.closeOutGameImageBox = function () {
  */
 sdk.showOutGameRelatedBox = function (relatedArr) {
 	$("#outGameImage").remove();
+    if(relatedArr.length <= 0 || !relatedArr) return;
 
-	const outGameRelatedHtml = `<div id="outGameRelated" class="mask dialog-box">
-        <div class="r5">
-            <div style="font-size: 20px;">确定退出游戏吗?</div>
-            <div style="font-size: 16px; colcr: #949494;">玩过此游戏的玩家还玩过</div>
-            <button style="position: absolute; top: 15px; right: 15px;" onclick="sdk.closeOutGameRelatedBox()">关闭</button>
-
-            <div class="flex" style="height: 125px;">
-                <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px; border-radius: 5px" src="${relatedArr[0].imgUrl}" onclick="">
-                    <h5 style="position: relative; top: 25px; color: #000000;">${relatedArr[0].name}</h5>
-                    <button class="button button1" onclick="">打开</button>
-                </a>
-                <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[1].imgUrl}" onclick="">
-                    <h5 style="position: relative; top: 30px; color: #000000;">${relatedArr[1].name}</h5>
-                    <button class="button button1" onclick="">打开</button>
-                </a>
-                <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[2].imgUrl}" onclick="">
-                    <h5 style="position: relative; top: 30px; color: #000000;">${relatedArr[2].name}</h5>
-                    <button class="button button1" onclick="">打开</button>
-                </a>
-                <a class="flex-list">
-                    <img style="position: relative; top: 20px; width: 50px; height: 50px;" src="${relatedArr[3].imgUrl}" onclick="">
-                    <h5 style="position: relative; top: 30px; color: #000000;" >${relatedArr[3].name}</h5>
-                    <button class="button button1" onclick="">打开</button>
-                </a>
-            </div>
-            <div class="flex">
-                <a class="flex-list" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">退出游戏</a>
-                <a class="flex-list" style="color:#000000; font-size: 20px; 
-                padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">再玩一会</a>
-            </div>
-        </div>
-    </div>`;
+	const outGameRelatedHtml = '<div id="outGameRelated" class="mask">'
+        + '<div class="r5">'
+            + '<div style="font-size: 20px;">确定退出游戏吗?</div>'
+            + '<div style="font-size: 16px; colcr: #949494;">玩过此游戏的玩家还玩过</div>'
+            + '<button style="position: absolute; top: 15px; right: 15px;" onclick="sdk.closeOutGameRelatedBox()">关闭</button>'
+            + '<div class="flex" style="height: 125px;">'
+                + '<a class="flex-list">'
+                    + '<img style="position: relative; top: 20px; width: 50px; height: 50px; border-radius: 5px" src='+ relatedArr[0].imgUrl + ' onclick="">'
+                    + '<h5 style="position: relative; top: 25px; color: #000000;">' + relatedArr[0].name + '</h5>'
+                    + '<button class="button button1" onclick="">打开</button>'
+                + '</a>'
+                + '<a class="flex-list">'
+                    + '<img style="position: relative; top: 20px; width: 50px; height: 50px;" src= '+ relatedArr[1].imgUrl +' onclick="">'
+                    + '<h5 style="position: relative; top: 30px; color: #000000;">' + relatedArr[1].name + '</h5>'
+                    + '<button class="button button1" onclick="">打开</button>'
+                + '</a>'
+                + '<a class="flex-list">'
+                    + '<img style="position: relative; top: 20px; width: 50px; height: 50px;" src=' + relatedArr[2].imgUrl + ' onclick="">'
+                    + '<h5 style="position: relative; top: 30px; color: #000000;">' + relatedArr[2].name + '</h5>'
+                    + '<button class="button button1" onclick="">打开</button>'
+                + '</a>'
+                + '<a class="flex-list">'
+                    + '<img style="position: relative; top: 20px; width: 50px; height: 50px;" src=' + relatedArr[3].imgUrl + ' onclick="">'
+                    + '<h5 style="position: relative; top: 30px; color: #000000;" >' + relatedArr[3].name + '</h5>'
+                    + '<button class="button button1" onclick="">打开</button>'
+                + '</a>'
+            + '</div>'
+            + '<div class="flex">'
+                + '<a class="flex-list" style="color:#000000; font-size: 20px; padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">退出游戏</a>'
+                + '<a class="flex-list" style="color:#000000; font-size: 20px; padding: 5px 5px;" onclick="sdk.closeOutGameRelatedBox()">再玩一会</a>'
+            + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(outGameRelatedHtml);
 }
@@ -1759,14 +1752,14 @@ sdk.closeOutGameRelatedBox = function () {
  */
 sdk.enableFloatBox02 = function () {
 	$("#shortcut").remove();
-	const shortcutHtml = `<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">
-        <div class="flex" onclick="sdk.initFloatBox02()" id="iconDiv" style="width: 50px; height: 50px;float: left;">
-            <div id="ic-menu" class="r50" style="width: 50px; height: 50px;">
-                <span style="width: 50px; height: 50px;" class="r50"></span>
-            </div>
-        </div>
-        <div id="navDiv" style="display:none; width: auto; height:50px; border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>
-    </div>`;
+	const shortcutHtml = '<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">'
+        + '<div class="flex" onclick="sdk.initFloatBox02()" id="iconDiv" style="width: 50px; height: 50px;floatc: left;">'
+            + '<div id="ic-menu" class="r50" style="width: 50px; height: 50px;">'
+                + '<span style="width: 50px; height: 50px;" class="r50"></span>'
+            + '</div>'
+        + '</div>'
+        + '<div id="navDiv" style="display:none; width: auto; height:50px; border: 3px; solid: #232529; border-radius: 25px; background-color:#44474e; float: left;"></div>'
+    + '</div>';
 	$("body").append(shortcutHtml);
 
 	//延迟2秒后半隐藏
@@ -1852,7 +1845,7 @@ sdk.initFloatTips = function () {
  * @desc 显示消息红点
  */
 sdk.showRedDot = function () {
-	const redDotHtml = `<div id="redDot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000;"></div>`;
+	const redDotHtml = '<div id="redDot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000;"></div>';
 	$("#shortcut").append(redDotHtml);
 }
 
@@ -1868,8 +1861,7 @@ sdk.closeRedDot = function () {
  * @param {number} num 
  */
 sdk.showFloatTip = function (num) {
-	const floatTipHtml = `<div id="floatTip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; 
-    font-size: 10px; color: #ffffff; text-align:center;">${num}</div>`;
+	const floatTipHtml = '<div id="floatTip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center;"> '+ num +'</div>';
 	$("#shortcut").append(floatTipHtml);
 }
 
@@ -1885,42 +1877,42 @@ sdk.closeFloatTip = function () {
  */
 sdk.showQuickLoginBox = function () {
 
-	const quickLoginHtml = `<div id="quickLoginBox" class="mask login-box">
-        <div class="r5">
-            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>
-            <div class="login-body">
-                <div>
-                    <div id="userBox" class="flex">
-                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>
-                        <input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">
-                    </div>
-                    <div id="pwdBox" class="flex">
-                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>
-                        <input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">
-                        <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
-                    </div>
-                </div>
-                <div class="flex">
-                    <img style="width: 15px; height: 15px;" src="/images/sdk2.0/2.png">
-                    <p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受
-                        <p style="margin: 0 0 0 0; font-size: 12px;" onclick="sdk.showXieYi()"><<用户服务协议>></p>
-                    </p>
-                </div>
-                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">注册并登录</a>
-            </div>
-            <div class="flex">
-                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showAccountLoginBox()">
-                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>
-                    <h5 style="padding: 5px 0 0 5px;">已有账户</h5>
-                </a>      
-                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
-                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>
-                    <h5 style="padding: 5px 0 0 5px;">手机登录</h5>
-                </a>
-            </div>
-        </div>
-        </div>
-    </div>`;
+	const quickLoginHtml = '<div id="quickLoginBox" class="mask login-box">'
+        + '<div class="r5">'
+            + '<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>'
+            + '<div class="login-body">'
+                + '<div>'
+                    + '<div id="userBox" class="flex">'
+                        + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>'
+                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">'
+                    + '</div>'
+                    + '<div id="pwdBox" class="flex">'
+                        + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>'
+                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">'
+                        + '<img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
+                    + '</div>'
+                + '</div>'
+                + '<div class="flex">'
+                    + '<img style="width: 15px; height: 15px;" src="/images/sdk2.0/2.png">'
+                    + '<p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受'
+                        + '<p style="margin: 0 0 0 0; font-size: 12px;" onclick="sdk.showXieYi()"><<用户服务协议>></p>'
+                    + '</p>'
+                + '</div>'
+                + '<a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">注册并登录</a>'
+            + '</div>'
+            + '<div class="flex">'
+                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showAccountLoginBox()">'
+                    + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>'
+                    + '<h5 style="padding: 5px 0 0 5px;">已有账户</h5>'
+                + '</a>'
+                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">'
+                    + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>'
+                    + '<h5 style="padding: 5px 0 0 5px;">手机登录</h5>'
+                + '</a>'
+            + '</div>'
+        + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(quickLoginHtml);
 };
@@ -1937,40 +1929,40 @@ sdk.closeQuickLoginBox = function () {
  */
 sdk.showAccountLoginBox = function () {
 
-	const accountLoginHtml = `<div id="accountLoginBox" class="mask login-box">
-        <div class="r5">
-            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>
-            <div class="login-body">
-                <div>
-                    <div id="userBox" class="flex">
-                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>
-                        <input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">
-                    </div>
-                    <div id="pwdBox" class="flex">
-                        <img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>
-                        <input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">
-                        <img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>
-                    </div>
-                </div>
-                <div class="flex" style="margin: 5% 0 0 68%;">
-                    <img style="width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>
-                    <h5 style="padding-left: 5px; color: #BA494B;" onclick="sdk.showResetAccPwdBox()">忘记密码</h5>
-                </div>
-                <a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>
-            </div>
-            <div class="flex">
-                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">
-                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>
-                    <h5 style="padding: 5px 0 0 5px;">一键注册</h5>
-                </a>      
-                <a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showMobileLoginBox()">
-                    <img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>
-                    <h5 style="padding: 5px 0 0 5px;">手机登录</h5>
-                </a>
-            </div>
-        </div>
-        </div>
-    </div>`;
+	const accountLoginHtml = '<div id="accountLoginBox" class="mask login-box">'
+        + '<div class="r5">'
+            + '<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>'
+            + '<div class="login-body">'
+                + '<div>'
+                    + '<div id="userBox" class="flex">'
+                        + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>'
+                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">'
+                    + '</div>'
+                    + '<div id="pwdBox" class="flex">'
+                        + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>'
+                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">'
+                        + '<img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
+                    + '</div>'
+                + '</div>'
+                + '<div class="flex" style="margin: 5% 0 0 68%;">'
+                    + '<img style="width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>'
+                    + '<h5 style="padding-left: 5px; color: #BA494B;" onclick="sdk.showResetAccPwdBox()">忘记密码</h5>'
+                + '</div>'
+                + '<a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>'
+            + '</div>'
+            + '<div class="flex">'
+                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">'
+                    + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>'
+                    + '<h5 style="padding: 5px 0 0 5px;">一键注册</h5>'
+                + '</a>'    
+                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showMobileLoginBox()">'
+                    + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>'
+                    + '<h5 style="padding: 5px 0 0 5px;">手机登录</h5>'
+                + '</a>'
+            + '</div>'
+        + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(accountLoginHtml);
 };
@@ -1987,29 +1979,29 @@ sdk.closeAccountLoginBox = function () {
  */
 sdk.showMobileLoginBox = function () {
 
-	const mobileLoginHtml = `<div id="mobileLoginBox" class="mask login-box">
-        <div class="r5">
-            <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>
-            <div class="login-body">
-                <div>
-                    <div id="flexMobile" class="flex">
-                        <input style="width: 200px; height: 40px;" class="flex-list" id="mobile" type="text" value="" placeholder="请输入手机号">
-                    </div>
-                    <div id="flexSmsCode" class="flex">
-                        <input style="width: 100px; height: 40px;" class="flex-list" id="smsCode" type="text" value="" placeholder="请输入验证码">
-                        <button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden; 
-                        background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>                    
-                    </div>
-                </div>
-            </div>
-            <div style="height: 30px;"></div>
-            <div class="flex">
-                <button style="width: 100px; height: 40px; border-radius:5px; border-style: solid; background-color: #FFFFFF; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #BA494B;">一键注册</button>    
-                <button style="position: absolute; right: 30px; width: 100px; height: 40px; background-color: #BA494B; border-radius:5px; border-style: solid; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #ffffff;" onclick="sdk.showLoadingLoginBox()">立即登录</button>    
-            </div>
-        </div>
-        </div>
-    </div>`;
+	const mobileLoginHtml = '<div id="mobileLoginBox" class="mask">'
+        + '<div class="r5">'
+            + '<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>'
+            + '<div class="login-body">'
+                + '<div>'
+                    + '<div id="flexMobile" class="flex">'
+                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="mobile" type="text" value="" placeholder="请输入手机号">'
+                    + '</div>'
+                    + '<div id="flexSmsCode" class="flex">'
+                        + '<input style="width: 100px; height: 40px;" class="flex-list" id="smsCode" type="text" value="" placeholder="请输入验证码">'
+                        + '<button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;'
+                        + 'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>'                    
+                    + '</div>'
+                + '</div>'
+            + '</div>'
+            + '<div style="height: 30px;"></div>'
+            + '<div class="flex">'
+                + '<button style="width: 100px; height: 40px; border-radius:5px; border-style: solid; background-color: #FFFFFF; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #BA494B;">一键注册</button>'  
+                + '<button style="position: absolute; right: 30px; width: 100px; height: 40px; background-color: #BA494B; border-radius:5px; border-style: solid; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #ffffff;" onclick="sdk.showLoadingLoginBox()">立即登录</button>'    
+            + '</div>'
+        + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(mobileLoginHtml);
 };
@@ -2026,37 +2018,36 @@ sdk.closeMobileLoginBox = function () {
  */
 sdk.showResetAccPwdBox = function () {
 
-	const resetAccPwdHtml = `<div id="resetAccPwdBox" class="mask login-box">
-        <div class="r5">
-            <div class="flex">
-                <p style="font-size: 30px;" onclick="sdk.closeResetAccPwdBox()"><</p>
-                <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">重置密码</p></div>
-            </div>
-            <div class="login-body">
-                <div>
-                    <div id="" class="flex">
-                        <input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="账号">
-                        <h5 style="margin: 10px 5px 0 0 ; font-size: 16px; font-weight: bold; color: #BA494B;" onclick="">查询</h5>
-                    </div>
-                    <div id="" class="flex">
-                    <input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="手机">
-                </div>
-                <div id="" class="flex" style="width: 150px;">
-                    <input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="验证码">
-                    <img style="width: 90px; height: 42px;"  src=""></img>
-                </div>
-                <div id="" class="flex">
-                    <input style="width: 100px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="请输入短信码">
-                    <button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden; 
-                    background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>                    
-                </div>
-                </div>
-            </div>
-         
-            <a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="">提交</a>
-        </div>
-        </div>
-    </div>`;
+	const resetAccPwdHtml = '<div id="resetAccPwdBox" class="mask login-box">'
+        + '<div class="r5">'
+            + '<div class="flex">'
+                + '<p style="font-size: 30px;" onclick="sdk.closeResetAccPwdBox()"><</p>'
+                + '<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">重置密码</p></div>'
+            + '</div>'
+            + '<div class="login-body">'
+                + '<div>'
+                    + '<div id="" class="flex">'
+                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="账号">'
+                        + '<h5 style="margin: 10px 5px 0 0 ; font-size: 16px; font-weight: bold; color: #BA494B;" onclick="">查询</h5>'
+                    + '</div>'
+                    + '<div id="" class="flex">'
+                    + '<input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="手机">'
+                + '</div>'
+                + '<div id="" class="flex" style="width: 150px;">'
+                    + '<input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="验证码">'
+                    + '<img style="width: 90px; height: 42px;"  src=""></img>'
+                + '</div>'
+                + '<div id="" class="flex">'
+                    + '<input style="width: 100px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="请输入短信码">'
+                    + '<button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;'
+                    + 'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>'                  
+                + '</div>'
+                + '</div>'
+            + '</div>'
+            + '<a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="">提交</a>'
+        + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(resetAccPwdHtml);
 };
@@ -2073,26 +2064,26 @@ sdk.closeResetAccPwdBox = function () {
  */
 sdk.showUpdatePwdBox = function () {
 
-	const updatePwdHtml = `<div id="updatePwdBox" class="mask login-box">
-        <div class="r5">
-            <div class="flex">
-                <p style="font-size: 30px;" onclick="sdk.closeUpdatePwdBox()"><</p>
-                <div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">修改密码</p></div>
-            </div>
-            <div class="login-body">
-                <div>
-                    <h5 style="position: relative; left: -50px; color: #BA494B;">8-16位数字与字母组合</h5>
-                    <div id="" class="flex">
-                        <input id="update-pwd-input" style="width: 200px; height: 40px; color:#000000" class="flex-list" id="" type="password" value="" placeholder="新密码">
-                        <img id="update-pwd-box-eye" style="margin: 10px 5px 0 0; width: 30px; height: 30px;" src="/images/sdk2.0/pj_pw_visible.png" onclick="sdk.updatePwdBoxEye()"></img>
-                    </div>
-                </div>
-            </div>
-            <div style="height: 50px;"></div>
-            <a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="sdk.closeUpdatePwdBox()">保存</a>
-        </div>
-        </div>
-    </div>`;
+	const updatePwdHtml = '<div id="updatePwdBox" class="mask login-box">'
+        + '<div class="r5">'
+            + '<div class="flex">'
+                + '<p style="font-size: 30px;" onclick="sdk.closeUpdatePwdBox()"><</p>'
+                + '<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">修改密码</p></div>'
+            + '</div>'
+            + '<div class="login-body">'
+                + '<div>'
+                    + '<h5 style="position: relative; left: -50px; color: #BA494B;">8-16位数字与字母组合</h5>'
+                    + '<div id="" class="flex">'
+                        + '<input id="update-pwd-input" style="width: 200px; height: 40px; color:#000000" class="flex-list" id="" type="password" value="" placeholder="新密码">'
+                        + '<img id="update-pwd-box-eye" style="margin: 10px 5px 0 0; width: 30px; height: 30px;" src="/images/sdk2.0/pj_pw_visible.png" onclick="sdk.updatePwdBoxEye()"></img>'
+                    + '</div>'
+                + '</div>'
+            + '</div>'
+            + '<div style="height: 50px;"></div>'
+            + '<a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="sdk.closeUpdatePwdBox()">保存</a>'
+        + '</div>'
+        + '</div>'
+    + '</div>';
 
 	$("body").append(updatePwdHtml);
 };
@@ -2122,19 +2113,19 @@ sdk.updatePwdBoxEye = function () {
 sdk.showLoadingLoginBox = function (userName) {
 	// sdk.closeLoginBox02();
 
-	var loadingLoginBox = `<div id="loadingLoginBox" class="mask">
-        <div class="r5" style="width: 280px; height: 50px; top: 5%">
-            <div class="flex" style="padding: 15px 0 0 15px;">
-                <img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>
-                <h5 style="margin-top: 5px; margin-left: 2%; font-size: 14px; color: #BA4970;">${userName}</h5>
-                <h5 style="margin-top: 5px; margin-left: 2%;">登录中</h5>
-                <div class="ball-clip-rotate">
-			        <div></div>
-                </div> 
-                <button class="loadingLoginBtn">切换账号</button> 
-            </div> 
-        </div> 
-        </div>`;
+	var loadingLoginBox = '<div id="loadingLoginBox" class="mask">'
+        + '<div class="r5" style="width: 280px; height: 50px; top: 5%">'
+            + '<div class="flex" style="padding: 15px 0 0 15px;">'
+                + '<img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>'
+                + '<h5 style="margin-top: 5px; margin-left: 2%; font-size: 14px; color: #BA4970;">' + userName+ '</h5>'
+                + '<h5 style="margin-top: 5px; margin-left: 2%;">登录中</h5>'
+                + '<div class="ball-clip-rotate">'
+			        + '<div></div>'
+                + '</div>' 
+                + '<button class="loadingLoginBtn">切换账号</button>' 
+            + '</div>'
+        + '</div>' 
+        + '</div>';
 
 	$("body").append(loadingLoginBox);
 
