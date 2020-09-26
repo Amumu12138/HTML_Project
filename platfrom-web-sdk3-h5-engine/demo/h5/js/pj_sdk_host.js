@@ -1505,6 +1505,10 @@ sdk.initOpenScreen = function () {
  * @param {string} content 弹窗内容
  */
 sdk.showOpenScreenTextBox = function (title, content) {
+    var newDate = (new Date().getMonth() + 1) + "-"+ new Date().getDate();
+    var date = pjapi.getItem("open_text_date");
+    if(newDate == date) return;
+
 	const openScreenTextHtml = '<div id="openScreenTextBox" class="mask">'  
         + '<div class="r5" style="width: 280px; height: 280px; top: 50px;">'
             + '<div class="openScreenTextTop">'
@@ -1523,17 +1527,16 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	$("body").append(openScreenTextHtml);
 }
 
-var type = 0;
+var isOpenScreenFlag = false;
 /**
  * @desc 更新勾选框资源
- * @param {*} type 
  */
 sdk.updateCheckUrl = function () {
-	if (type == 0) {
-		type = 1;
+	if (!isOpenScreenFlag) {
+		isOpenScreenFlag = true;
 		document.getElementById("loginCheck").src = "/images/sdk2.0/2.png";
 	} else {
-		type = 0;
+		isOpenScreenFlag = false;
 		document.getElementById("loginCheck").src = "/images/sdk2.0/1.png";
 	}
 }
@@ -1542,8 +1545,13 @@ sdk.updateCheckUrl = function () {
  * @desc 关闭开屏文字框
  */
 sdk.closeOpenScreenTextBox = function () {
-	$("#openScreenTextBox").remove();
-	sdk.showOpenScreenCoupon(1, "满六元可用");
+    $("#openScreenTextBox").remove();
+    sdk.showOpenScreenCoupon(1, "满六元可用");
+
+    //判断是否勾选今日不再提示,若已勾选,则保存今日日期
+    if(!isOpenScreenFlag){
+        pjapi.setItem("open_text_date", (new Date().getMonth() + 1) + "-" + new Date().getDate());
+    }
 };
 
 /**
@@ -1576,7 +1584,7 @@ sdk.closeOpenScreenImage = function () {
  * @param {string} content 内容 
  */
 sdk.showOpenScreenCoupon = function (money, content) {
-	const openScreenCouponHtml = '<div id="openScreenCoupon" class="mask">'
+	const openScreenCouponHtml = '<div id="openScreenCoupon" class="mask loginx-box">'
         + '<div class="openScreenImage" style="width: 280px; height: 280px;">'
             + '<img src="images/sdk2.0/pj_dialog_voucher.png"></img>'
             + '<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>'
@@ -1648,7 +1656,7 @@ sdk.initOutGame = function () {
  * @param {string} imgUrl  资源路径
  */
 sdk.showOutGameImageBox = function (imgUrl) {
-	const outGameImageHtml = '<div id="outGameImage" class="mask">'
+	const outGameImageHtml = '<div id="outGameImage" class="mask login-box">'
         + '<div class="r5" style="border-radius: 25px;">'
             + '<img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src='+ imgUrl + '>'
             + '<div class="flex" style="height: 40px">'
@@ -1673,7 +1681,7 @@ sdk.closeOutGameImageBox = function () {
  * @desc 退游文字弹窗
  */
 sdk.showOutGameTextBox = function () {
-	const outGameTextHtml = '<div id="outGameText" class="mask">'
+	const outGameTextHtml = '<div id="outGameText" class="mask login-box">'
     + '<div class="r5">'
         + '<div>提示信息</div>'
         + '<div>是否退出游戏</div>'
@@ -1703,7 +1711,7 @@ sdk.showOutGameRelatedBox = function (relatedArr) {
 	$("#outGameImage").remove();
     if(relatedArr.length <= 0 || !relatedArr) return;
 
-	const outGameRelatedHtml = '<div id="outGameRelated" class="mask">'
+	const outGameRelatedHtml = '<div id="outGameRelated" class="mask login-box">'
         + '<div class="r5">'
             + '<div style="font-size: 20px;">确定退出游戏吗?</div>'
             + '<div style="font-size: 16px; colcr: #949494;">玩过此游戏的玩家还玩过</div>'
@@ -1884,16 +1892,16 @@ sdk.showQuickLoginBox = function () {
                 + '<div>'
                     + '<div id="userBox" class="flex">'
                         + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>'
-                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">'
+                        + '<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" value="123456" placeholder="" disabled="disabled">'
                     + '</div>'
                     + '<div id="pwdBox" class="flex">'
                         + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>'
-                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">'
-                        + '<img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
+                        + '<input id="quick-login-pwd-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userPassword" type="text" value="" placeholder="">'
+                        + '<img id="quick-login-pwd-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
                     + '</div>'
                 + '</div>'
                 + '<div class="flex">'
-                    + '<img style="width: 15px; height: 15px;" src="/images/sdk2.0/2.png">'
+                    + '<img id="quick-login-selected" style="width: 15px; height: 15px;" src="/images/sdk2.0/1.png" value="true" onclick="sdk.updateQuickLoginSelected()">'
                     + '<p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受'
                         + '<p style="margin: 0 0 0 0; font-size: 12px;" onclick="sdk.showXieYi()"><<用户服务协议>></p>'
                     + '</p>'
@@ -1901,11 +1909,11 @@ sdk.showQuickLoginBox = function () {
                 + '<a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">注册并登录</a>'
             + '</div>'
             + '<div class="flex">'
-                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showAccountLoginBox()">'
+                + '<a id="quick-login-account-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;">'
                     + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>'
                     + '<h5 style="padding: 5px 0 0 5px;">已有账户</h5>'
                 + '</a>'
-                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">'
+                + '<a id="quick-login-mobile-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">'
                     + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>'
                     + '<h5 style="padding: 5px 0 0 5px;">手机登录</h5>'
                 + '</a>'
@@ -1914,7 +1922,21 @@ sdk.showQuickLoginBox = function () {
         + '</div>'
     + '</div>';
 
-	$("body").append(quickLoginHtml);
+    $("body").append(quickLoginHtml);
+    //注册监听事件
+    document.getElementById("quick-login-account-button").onclick = function() {
+        sdk.closeQuickLoginBox();
+        sdk.showAccountLoginBox();
+    }
+    
+    document.getElementById("quick-login-mobile-button").onclick = function() {
+        sdk.closeQuickLoginBox();
+        sdk.showMobileLoginBox();
+    }
+
+    document.getElementById("quick-login-pwd-eye").onclick = function() {
+        sdk.updatePwdBoxEye("quick-login-pwd-input", "quick-login-pwd-eye");
+    }
 };
 
 /**
@@ -1922,6 +1944,20 @@ sdk.showQuickLoginBox = function () {
  */
 sdk.closeQuickLoginBox = function () {
 	$("#quickLoginBox").remove();
+}
+
+var isFlag = true;
+/**
+ * @desc 更新一键登录勾选
+ */
+sdk.updateQuickLoginSelected = function() {
+    if(isFlag) {
+        isFlag = false;
+        document.getElementById("quick-login-selected").src = "/images/sdk2.0/2.png";
+    }else {
+        isFlag = true;
+        document.getElementById("quick-login-selected").src = "/images/sdk2.0/1.png";
+    }
 }
 
 /**
@@ -1936,12 +1972,12 @@ sdk.showAccountLoginBox = function () {
                 + '<div>'
                     + '<div id="userBox" class="flex">'
                         + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>'
-                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userName" type="text" value="" placeholder="">'
+                        + '<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" value="" placeholder="">'
                     + '</div>'
                     + '<div id="pwdBox" class="flex">'
                         + '<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>'
-                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="userPassword" type="text" value="" placeholder="">'
-                        + '<img style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
+                        + '<input id="account-login-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userPassword" type="text" value="" placeholder="">'
+                        + '<img id="account-login-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
                     + '</div>'
                 + '</div>'
                 + '<div class="flex" style="margin: 5% 0 0 68%;">'
@@ -1951,11 +1987,11 @@ sdk.showAccountLoginBox = function () {
                 + '<a href="javascript:;" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn" onclick="sdk.showLoadingLoginBox()">登录</a>'
             + '</div>'
             + '<div class="flex">'
-                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">'
+                + '<a id="account-login-quick-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" >'
                     + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>'
                     + '<h5 style="padding: 5px 0 0 5px;">一键注册</h5>'
                 + '</a>'    
-                + '<a class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="sdk.showMobileLoginBox()">'
+                + '<a id="account-login-mobile-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;">'
                     + '<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>'
                     + '<h5 style="padding: 5px 0 0 5px;">手机登录</h5>'
                 + '</a>'
@@ -1964,7 +2000,21 @@ sdk.showAccountLoginBox = function () {
         + '</div>'
     + '</div>';
 
-	$("body").append(accountLoginHtml);
+    $("body").append(accountLoginHtml);
+    
+    //注册监听事件
+    document.getElementById("account-login-quick-button").onclick = function() {
+        sdk.closeAccountLoginBox();
+        sdk.showQuickLoginBox();
+    }
+    
+    document.getElementById("account-login-mobile-button").onclick = function() {
+        sdk.closeAccountLoginBox();
+        sdk.showMobileLoginBox();
+    }
+    document.getElementById("account-login-eye").onclick = function() {
+        sdk.updatePwdBoxEye("account-login-input", "account-login-eye");
+    }
 };
 
 /**
@@ -1979,16 +2029,16 @@ sdk.closeAccountLoginBox = function () {
  */
 sdk.showMobileLoginBox = function () {
 
-	const mobileLoginHtml = '<div id="mobileLoginBox" class="mask">'
+	const mobileLoginHtml = '<div id="mobileLoginBox" class="mask login-box">'
         + '<div class="r5">'
             + '<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>'
             + '<div class="login-body">'
                 + '<div>'
                     + '<div id="flexMobile" class="flex">'
-                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="mobile" type="text" value="" placeholder="请输入手机号">'
+                        + '<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="mobile" type="text" value="" placeholder="请输入手机号">'
                     + '</div>'
                     + '<div id="flexSmsCode" class="flex">'
-                        + '<input style="width: 100px; height: 40px;" class="flex-list" id="smsCode" type="text" value="" placeholder="请输入验证码">'
+                        + '<input style="width: 100px; height: 40px; color: #000000;" class="flex-list" id="smsCode" type="text" value="" placeholder="请输入验证码">'
                         + '<button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;'
                         + 'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>'                    
                     + '</div>'
@@ -1996,14 +2046,24 @@ sdk.showMobileLoginBox = function () {
             + '</div>'
             + '<div style="height: 30px;"></div>'
             + '<div class="flex">'
-                + '<button style="width: 100px; height: 40px; border-radius:5px; border-style: solid; background-color: #FFFFFF; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #BA494B;">一键注册</button>'  
-                + '<button style="position: absolute; right: 30px; width: 100px; height: 40px; background-color: #BA494B; border-radius:5px; border-style: solid; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #ffffff;" onclick="sdk.showLoadingLoginBox()">立即登录</button>'    
+                + '<button id="mobile-login-quick-button" style="width: 100px; height: 40px; border-radius:5px; border-style: solid; background-color: #FFFFFF; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #BA494B;">一键注册</button>'  
+                + '<button id="mobile-login-loading-button" style="position: absolute; right: 30px; width: 100px; height: 40px; background-color: #BA494B; border-radius:5px; border-style: solid; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #ffffff;">立即登录</button>'    
             + '</div>'
         + '</div>'
         + '</div>'
     + '</div>';
 
-	$("body").append(mobileLoginHtml);
+    $("body").append(mobileLoginHtml);
+    //注册监听事件
+    document.getElementById("mobile-login-quick-button").onclick = function() {
+        sdk.closeMobileLoginBox();
+        sdk.showQuickLoginBox();
+    }
+
+    document.getElementById("mobile-login-mobile-button").onclick = function() {
+        sdk.closeMobileLoginBox();
+        sdk.showLoadingLoginBox();
+    }
 };
 
 /**
@@ -2027,24 +2087,24 @@ sdk.showResetAccPwdBox = function () {
             + '<div class="login-body">'
                 + '<div>'
                     + '<div id="" class="flex">'
-                        + '<input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="账号">'
+                        + '<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="账号">'
                         + '<h5 style="margin: 10px 5px 0 0 ; font-size: 16px; font-weight: bold; color: #BA494B;" onclick="">查询</h5>'
                     + '</div>'
                     + '<div id="" class="flex">'
-                    + '<input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="手机">'
+                    + '<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="手机">'
                 + '</div>'
                 + '<div id="" class="flex" style="width: 150px;">'
-                    + '<input style="width: 200px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="验证码">'
+                    + '<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="验证码">'
                     + '<img style="width: 90px; height: 42px;"  src=""></img>'
                 + '</div>'
                 + '<div id="" class="flex">'
-                    + '<input style="width: 100px; height: 40px;" class="flex-list" id="" type="text" value="" placeholder="请输入短信码">'
+                    + '<input style="width: 100px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="请输入短信码">'
                     + '<button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;'
                     + 'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>'                  
                 + '</div>'
                 + '</div>'
             + '</div>'
-            + '<a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="">提交</a>'
+            + '<a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="sdk.closeResetAccPwdBox()">提交</a>'
         + '</div>'
         + '</div>'
     + '</div>';
@@ -2075,7 +2135,7 @@ sdk.showUpdatePwdBox = function () {
                     + '<h5 style="position: relative; left: -50px; color: #BA494B;">8-16位数字与字母组合</h5>'
                     + '<div id="" class="flex">'
                         + '<input id="update-pwd-input" style="width: 200px; height: 40px; color:#000000" class="flex-list" id="" type="password" value="" placeholder="新密码">'
-                        + '<img id="update-pwd-box-eye" style="margin: 10px 5px 0 0; width: 30px; height: 30px;" src="/images/sdk2.0/pj_pw_visible.png" onclick="sdk.updatePwdBoxEye()"></img>'
+                        + '<img id="update-pwd-box-eye" style="margin: 10px 5px 0 0; width: 30px; height: 30px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>'
                     + '</div>'
                 + '</div>'
             + '</div>'
@@ -2085,7 +2145,12 @@ sdk.showUpdatePwdBox = function () {
         + '</div>'
     + '</div>';
 
-	$("body").append(updatePwdHtml);
+    $("body").append(updatePwdHtml);
+    
+    //注册监听事件
+    document.getElementById("update-pwd-box-eye").onclick = function() {
+        sdk.updatePwdBoxEye("update-pwd-input", "update-pwd-box-eye");
+    }
 };
 
 /**
@@ -2096,15 +2161,18 @@ sdk.closeUpdatePwdBox = function () {
 }
 
 var isEye = true;
-sdk.updatePwdBoxEye = function () {
+/**
+ * @desc 更改密码显示
+ */
+sdk.updatePwdBoxEye = function (inputId, imgId) {
 	if (isEye) {
-		document.getElementById("update-pwd-box-eye").src = "/images/sdk2.0/pj_pw_invisible.png";
+		document.getElementById(imgId).src = "/images/sdk2.0/pj_pw_invisible.png";
         isEye = false;
-        document.getElementById("update-pwd-input").type = "password";
+        document.getElementById(inputId).type = "password";
 	} else {
-		document.getElementById("update-pwd-box-eye").src = "/images/sdk2.0/pj_pw_visible.png";
+		document.getElementById(imgId).src = "/images/sdk2.0/pj_pw_visible.png";
         isEye = true;
-        document.getElementById("update-pwd-input").type = "text";
+        document.getElementById(inputId).type = "text";
 	}
 }
 /**
