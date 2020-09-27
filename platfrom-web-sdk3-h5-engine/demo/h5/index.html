@@ -124,6 +124,9 @@
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="showLoginBox06()" value="修改密码弹框">
 		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showLoginBox07()" value="注册成功弹框">
+		</li>
 	</ul>
 
 </body>
@@ -445,6 +448,11 @@
 	//显示修改密码弹框
 	function showLoginBox06() {
 		sdk.showUpdatePwdBox();
+	}
+
+	//显示注册成功弹框
+	function showLoginBox07() {
+		sdk.showRegisterSuccBox();
 	}
 
 	var clientWidth = window.screen.width;
