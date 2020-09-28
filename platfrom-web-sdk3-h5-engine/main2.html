@@ -20,9 +20,8 @@
 
 	<script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
-	<script type="text/javascript" src="/js/pj_api.js"></script>
 	<script type="text/javascript" src="/js/pj_sdk_host.js"></script>
-	<script tyepe="text/javascript" src="/js/pj_sdk_host_01.js"></script>
+	<script tyepe="text/javascript" src="/js/pj_sdk_host_v1.js"></script>
 
 	<style type="text/css">
 		.icon-pjpay:before {
@@ -36,7 +35,12 @@
 			position: relative;
 			top: 10px;
 		}
+
+		body {
+			margin: 0px;
+		}
 	</style>
+
 
 </head>
 
@@ -54,8 +58,8 @@
 		}
 		//页面主方法
 		function start() {
-			var type = Math.floor(Math.random() * 3);
-			sdk.showOpenScreen(type);
+			var type = Math.floor(Math.random() * 2);
+
 
 			//获取游戏信息
 			sdk.getGameInfo("false", function (ret) {
@@ -68,6 +72,28 @@
 
 					//开始消息监听
 					startEventListener();
+
+					//验证接口
+					sdk.initOpenScreen(function (data) {
+						if (!data.popupList || data.popupList.length <= 0) return;
+						if (data.popupList[0].type == 1) {
+							sdk.showOpenScreenTextBox(data.popupList[0].title, data.popupList[0].content);
+						} else if (data.popupList[0].type == 2) {
+							sdk.showOpenScreenImage(data.popupList[0].imgUrl);
+						}
+
+						if (data.popupList[1].type == 3) {
+							sdk.showOpenScreenCoupon(data.popupList[1].url, data.popupList[1].voucher.rule,
+								data.popupList[1].voucher.deduct, data.popupList[1].voucher.achieveMoney);
+						}
+
+					});
+					// sdk.showOpenScreen(type);
+
+
+					// sdk.initOutGame();
+
+					// sdk.initFloatBox02();
 
 				} else {
 					sdk.confirmDialog(ret.msg);
@@ -124,7 +150,6 @@
 
 			// sdk.enableFloatBox();
 			sdk.enableFloatBox02();
-
 		}
 
 

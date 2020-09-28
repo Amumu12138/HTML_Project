@@ -22,15 +22,16 @@
     <link href="/css/layout.css?20171011" rel="stylesheet">
 
     <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/js/pj_api.js"></script>
     <script type="text/javascript" src="/js/pj_sdk_host.js"></script>
-    <script tyepe="text/javascript" src="/js/pj_sdk_host_01.js"></script>
+    <script tyepe="text/javascript" src="/js/pj_sdk_host_v1.js"></script>
 
 </head>
 
 <body style="background:rgba(0, 0, 0, .8)">
 
     <div id="flash"></div>
+
+
     <script type="text/javascript">
         sdk.init();
         sdk.initLoading(function () {
@@ -41,8 +42,11 @@
                     $(document).attr("title", gameName);
 
                     // sdk.autoLogin();
-                    sdk.showQuickLoginBox()
+                    // sdk.showQuickLoginBox()
+                    sdk.enableQuickLogin();
 
+                    // sdk.showLoadingLoginBox("123");
+                    // sdk.showRegisterSuccBox();
                     startEventListener();
                 } else {
                     sdk.confirmDialog(ret.msg);
