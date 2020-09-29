@@ -13,6 +13,7 @@ sdk.apiUrl = sdk.host + "/api/";
 sdk.mainUrl = sdk.host + '/main.html';
 sdk.loginUrl = sdk.host + '/login.html';
 sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
+sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
 sdk.xieYiUrl = sdk.host + "/xieyi.html";
 
 sdk.findPwdUrl = 'https://member.paojiao.cn/retrievePassword?os=h5';
@@ -44,6 +45,8 @@ sdk.init = function () {
 
 };
 
+
+
 sdk.init2 = function () {
     var channelGameId = sdk.getURLVar("channelGameId");
     var channel = sdk.getURLVar("channel");
@@ -65,6 +68,20 @@ sdk.init2 = function () {
     if (sdkToken != null && sdkToken != "null" && sdkToken != "") {
         sdk.setItem("sdkToken", sdk.getURLVar("sdkToken"));
     }
+};
+
+
+sdk.init3 = function (channelGameId, channel) {
+    var channelGameId = channelGameId;
+    var channel = channel;
+
+    if (channelGameId != null && channelGameId != "null" && channelGameId != "") {
+        sdk.setItem("channelGameId", channelGameId);
+    }
+    if (channel != null && channel != "null" && channel != "") {
+        sdk.setItem("channel", channel);
+    }
+
 };
 
 sdk.log = function (title, data) {
@@ -107,7 +124,7 @@ sdk.initLoading = function (callback) {
         }, 1000);
         $("#flashToAuditBody").show();
     }
-    if (isAmericaIp == "0") {
+    if (isAmericaIp == "0" || isAmericaIp == "2") {
         $("#flash").show();
         $("#flash").append("<img src='/images/pj_background_flash_logo.png'/>");
         setTimeout(function () {
@@ -143,6 +160,7 @@ sdk.closeLoginBox = function () {
 };
 //打开登录框
 sdk.loadLoginBox = function () {
+
     var loginHtml = '<div id="loginBox" class="mask login-box">';
     loginHtml += '<div class="r5">';
     loginHtml += '<div class="login-head"><img style="width: 220px;height:40px;" src="/images/titleIcon.png" />&nbsp;</div>';
@@ -156,17 +174,22 @@ sdk.loadLoginBox = function () {
     loginHtml += '<div id="loginOption"   class="flex flex-x-between">';
     loginHtml += '<a href="javascript:;" onclick="sdk.showRegBox()" style="color:#999;">账号密码注册<a><a href="javascript:;" onclick="sdk.showFotPwdBox()" style="color:#999;">忘了密码?</a>';
     loginHtml += '</div>';
+    if (sdk.isWeixin()) {
+        loginHtml += '<fieldset class=""><legend>其他登录方式</legend></fieldset>';
+    }
 
-    //loginHtml += '<fieldset class=""><legend>其他登录方式</legend></fieldset>';
+
     loginHtml += '</div>';
     loginHtml += '<div class="login-mode">';
     loginHtml += '<ol class="flex active">';
+    if (sdk.isWeixin()) {
+        loginHtml += '<li class="flex-list list-show" onclick="sdk.thirdLogin(1)" title="微信扫码登录">';
+        loginHtml += '<div class="r50"><i class="icod-wechat"></i></div>';
+        loginHtml += '</li>';
+    }
 
-    /*loginHtml += '<li class="flex-list list-show" onclick="sdk.thirdLogin(1)" title="微信扫码登录">';
-    loginHtml += '<div class="r50"><i class="icod-wechat"></i></div>';
-    loginHtml += '</li>';
 
-    loginHtml += '<li class="flex-list qq list-show" onclick="sdk.thirdLogin(2)" title="QQ登录">';
+    /*loginHtml += '<li class="flex-list qq list-show" onclick="sdk.thirdLogin(2)" title="QQ登录">';
     loginHtml += '<div class="r50"><i class="icod-qq"></i></div>';
     loginHtml += '</li>';
 
@@ -217,7 +240,6 @@ sdk.login = function () {
 
     var userName = $("#userName").val();
     var password = $("#password").val();
-
     if (userName == '') {
         sdk.confirmDialog("请输入用户名");
         return;
@@ -286,12 +308,6 @@ sdk.login = function () {
 //自动登录
 sdk.autoLogin = function () {
 
-    //微信使用微信自动登录
-    // if(sdk.isWeixin()){
-    //
-    // 	sdk.thirdLogin(1);
-
-    //}else{
     var sdkToken = sdk.getItem("sdkToken");
     if (sdkToken != null && sdkToken != "null" && sdkToken != "") {
         var p = {};
@@ -299,18 +315,24 @@ sdk.autoLogin = function () {
         p["token"] = sdkToken;
         sdk.loginByToken(p); //token登录
     } else {
-        //是否是17ip
-        console.info("------------1:" + sdk.getItem("isAmericaIp"));
-        //isIp 等于1时证明是17 开头的Ip
-        var isIp = sdk.getItem("isAmericaIp");
-        if (isIp == "1") {
-            sdk.loadLoginBoxTo2();
+        //微信使用微信自动登录
+        if (sdk.isWeixin()) {
+            sdk.wxLoginByOpenId();
         } else {
-            sdk.loadLoginBox();
+            //是否是17ip
+            console.info("------------1:" + sdk.getItem("isAmericaIp"));
+            //isIp 等于1时证明是17 开头的Ip
+            var isIp = sdk.getItem("isAmericaIp");
+            if (isIp == "1") {
+                sdk.loadLoginBoxTo2();
+            } else {
+                sdk.loadLoginBox();
+            }
         }
 
+
     }
-    //}
+
 };
 
 
@@ -357,6 +379,7 @@ sdk.loginByToken = function (params) {
         } else {
             sdk.closeLoading();
             sdk.confirmDialog(retData.msg);
+            sdk.logout();
         }
 
     });
@@ -368,6 +391,7 @@ sdk.logout = function () {
     var param = {};
     param["channel"] = sdk.getItem("channel");
     param["channelGameId"] = sdk.getItem("channelGameId");
+    param["isAutoLogin"] = "0";
     var url = sdk.buildURL(sdk.loginUrl, param);
 
     sdk.removeItem("channel");
@@ -624,7 +648,7 @@ sdk.reg2 = function () {
     var r_password = $("#r_password").val();
     var r1_password = $("#r1_password").val();
 
-    if (sdk.getItem("isAmericaIp") == "0") {
+    if (sdk.getItem("isAmericaIp") == "0" || sdk.getItem("isAmericaIp") == "2") {
         var isChecked = $('#agreeCk').is(":checked");
         if (!isChecked) {
             sdk.confirmDialog("必须接受用户协议");
@@ -708,6 +732,7 @@ sdk.closePayBox = function () {
 sdk.loadPayBox = function (params) {
     params["channel"] = sdk.getItem("channel");
     params["channelGameId"] = sdk.getItem("channelGameId");
+    params["auditType"] = sdk.getItem("isAmericaIp");
     if (sdk.isWeixin()) { //微信公众号支付需要用户oppenid
         params["openid"] = sdk.getItem("openid");
     }
@@ -747,6 +772,7 @@ sdk.loadPayBox = function (params) {
 
 
 };
+
 
 
 //实名认证
@@ -811,14 +837,13 @@ sdk.getMobileCode = function () {
     params["mobile"] = mobilePhone;
     params["channelId"] = sdk.getItem("channelGameId");
     params["channel"] = sdk.getItem("channel");
-    /*
-        params["password"]=password;
-        params["udid"]=sdk.getUdid();
-        params["channelGameId"]=sdk.getItem("channelGameId");
-        params["gameId"]= sdk.gameInfo.gameId;
-        params["platformId"]=sdk.platformId;
-        params["channel"]=sdk.getItem("channel");
-    */
+    params["channelGameId"]=sdk.getItem("channelGameId");
+    params["udid"]=sdk.getUdid();
+    params["platformId"]=sdk.platformId;
+    params["type"]=2;
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["appVersion"]= sdk.sdkVersion;
+    params["platformType"]= sdk.platformType;
 
     sdk.showLoading();
     sdk.api(params, "getMobileCode", function (retData) {
@@ -1203,6 +1228,15 @@ sdk.wbLogin = function (type) {
     window.location.href = url;
 };
 
+//微信登录查询OpenId
+sdk.wxLoginByOpenId = function (type) {
+    var param = {};
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["channel"] = sdk.getItem("channel");
+    param["udid"] = sdk.getUdid();
+    param["loginType"] = type;
+    window.location.href = sdk.buildURL(sdk.thirdLoginToOpenIdUrl, param);
+};
 
 sdk.confirmDialog = function (txt, oklabel, cancellabel, okcallback, cancelcallback, title, callback) {
     var html = '<div id="confirmDialog" class="mask dialog-box">';
@@ -1445,7 +1479,6 @@ sdk.getIsAudit = function (channelGameId, callback) {
     });
 
 };
-
 
 
 window.PJ_SDK = sdk;

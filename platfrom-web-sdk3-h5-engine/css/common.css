@@ -1,4 +1,3 @@
-
 * {
     padding: 0;
     margin: 0;
@@ -10,7 +9,8 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-html, input {
+html,
+input {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     font: 20px/1.5 Arial, Helvetica, sans-self, "Microsoft YaHei";
@@ -25,7 +25,8 @@ li {
     list-style: none;
 }
 
-i, em {
+i,
+em {
     font-style: normal;
 }
 
@@ -33,7 +34,10 @@ a {
     text-decoration: none;
 }
 
-a, input, select, textarea {
+a,
+input,
+select,
+textarea {
     outline: none;
 }
 
@@ -41,7 +45,8 @@ input {
     font-size: .7rem;
 }
 
-input, select {
+input,
+select {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -63,25 +68,61 @@ select:-webkit-autofill {
     font-family: 'comfont';
     src: url('/font/font_etyzz8r49tg1fw29.eot');
     src: url('/font/font_etyzz8r49tg1fw29.eot?#iefix') format('embedded-opentype'),
-    url('/font/font_etyzz8r49tg1fw29.woff') format('woff'),
-    url('/font/font_etyzz8r49tg1fw29.ttf') format('truetype'),
-    url('/font/font_etyzz8r49tg1fw29.svg#iconfont') format('svg'); 
+        url('/font/font_etyzz8r49tg1fw29.woff') format('woff'),
+        url('/font/font_etyzz8r49tg1fw29.ttf') format('truetype'),
+        url('/font/font_etyzz8r49tg1fw29.svg#iconfont') format('svg');
 }
 
-[class^="icod-"] {font-family: 'comfont';}
-.icod-user:before{content:"\e610";}
-.icod-lock:before{content:"\e60a";}
-.icod-yzm:before{content:"\e611";}
-.icod-subyzm:before{content:"\e60f";}
-.icod-mobile:before{content:"\e658";}
-.icod-wechat:before{content:"\e69e";}
-.icod-sina:before{content:"\e609";}
-.icod-qq:before{content:"\e607";}
-.icod-load:before{content:"\e62d";}
+[class^="icod-"] {
+    font-family: 'comfont';
+}
+
+.icod-user:before {
+    content: "\e610";
+}
+
+.icod-lock:before {
+    content: "\e60a";
+}
+
+.icod-yzm:before {
+    content: "\e611";
+}
+
+.icod-subyzm:before {
+    content: "\e60f";
+}
+
+.icod-mobile:before {
+    content: "\e658";
+}
+
+.icod-wechat:before {
+    content: "\e69e";
+}
+
+.icod-sina:before {
+    content: "\e609";
+}
+
+.icod-qq:before {
+    content: "\e607";
+}
+
+.icod-load:before {
+    content: "\e62d";
+}
 
 /*清除浮动*/
-.cf:before, .cf:after {content: "";display: table;}
-.cf:after {clear: both;}
+.cf:before,
+.cf:after {
+    content: "";
+    display: table;
+}
+
+.cf:after {
+    clear: both;
+}
 
 /*button*/
 .btn {
@@ -96,18 +137,21 @@ select:-webkit-autofill {
     -webkit-border-radius: .25rem;
     border-radius: .25rem;
 }
-.r0{
+
+.r0 {
     -o-border-radius: 0;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
 }
+
 .r3 {
     -o-border-radius: .15rem;
     -moz-border-radius: .15rem;
     -webkit-border-radius: .15rem;
     border-radius: .15rem;
 }
+
 .r5 {
     -o-border-radius: .25rem;
     -moz-border-radius: .25rem;
@@ -216,12 +260,13 @@ select:-webkit-autofill {
 }
 
 /*login*/
-.login-mode ol li div, .login-mode ol li i {
+.login-mode ol li div,
+.login-mode ol li i {
     -webkit-transition: all .2s;
     transition: all .2s;
 }
 
-.login-box > div {
+.login-box>div {
     top: 20% !important;
     margin-top: 0 !important;
     font-size: .7rem;
@@ -232,7 +277,7 @@ select:-webkit-autofill {
     animation: fadeInDown .5s linear;
 }
 
-.login-box > div > div {
+.login-box>div>div {
     width: 84%;
     margin: 0 auto;
 }
@@ -268,19 +313,19 @@ select:-webkit-autofill {
     display: none !important;
 }
 
-.login-body > div > div {
+.login-body>div>div {
     margin-top: .4rem;
     border: .05rem solid #eee;
     position: relative;
 }
 
-.login-body > div > div i {
+.login-body>div>div i {
     color: currentColor;
     padding: .4rem;
     background: #eee;
 }
 
-.login-body > div > div em {
+.login-body>div>div em {
     -webkit-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
     margin: auto 0;
@@ -291,14 +336,14 @@ select:-webkit-autofill {
     line-height: 1;
 }
 
-.login-body > div > div input {
+.login-body>div>div input {
     border: none;
     padding-left: .25rem;
     -webkit-border-radius: 0;
     border-radius: 0;
 }
 
-.login-body > div > div img {
+.login-body>div>div img {
     -webkit-border-radius: 0 .15rem .15rem 0;
     border-radius: 0 .15rem .15rem 0;
     cursor: pointer;
@@ -306,37 +351,38 @@ select:-webkit-autofill {
     z-index: 2;
 }
 
-.login-body > div a {
+.login-body>div a {
     color: currentColor;
 }
 
-.login-body > div > div a {
+.login-body>div>div a {
     width: 3.95rem;
     height: 1.85rem;
     line-height: 1.85rem;
 }
 
-.login-body > div > div a.active {
+.login-body>div>div a.active {
     cursor: not-allowed;
     color: #bbb;
     font-size: .6rem;
 }
 
-.login-body > div > div.code input {
+.login-body>div>div.code input {
     width: 7.05rem;
     border-right: .05rem solid #eee;
 }
 
-.login-body > div > div.active {
+.login-body>div>div.active {
     border: .05rem solid currentColor;
 }
 
-.login-body > div > div, .login-body > .btn {
+.login-body>div>div,
+.login-body>.btn {
     -webkit-border-radius: .15rem;
     border-radius: .15rem;
 }
 
-.login-body > .btn {
+.login-body>.btn {
     width: 100%;
     background: #d70c19;
     color: #fff;
@@ -349,7 +395,7 @@ select:-webkit-autofill {
     cursor: pointer;
 }
 
-.login-body > div.flex {
+.login-body>div.flex {
     margin-top: .8rem;
 }
 
@@ -388,6 +434,7 @@ select:-webkit-autofill {
     color: #47E8C9;
     line-height: 2rem;
 }
+
 .login-mode ol.active li div {
     border: 0;
     line-height: 1;
@@ -398,7 +445,7 @@ select:-webkit-autofill {
     font-size: 1.25rem;
 }
 
-.login-mode > a {
+.login-mode>a {
     display: block;
     color: #9FABB7;
     text-decoration: underline;
@@ -415,7 +462,7 @@ select:-webkit-autofill {
 
 /*login2*/
 
-.login-box2 > div {
+.login-box2>div {
     margin-top: 0 !important;
     font-size: .7rem;
     text-align: center;
@@ -425,8 +472,8 @@ select:-webkit-autofill {
     animation: fadeInDown .5s linear;
 }
 
-.login-box2 > div > div {
-    margin: 0 auto; 
+.login-box2>div>div {
+    margin: 0 auto;
 }
 
 .login-box2 fieldset {
@@ -457,19 +504,19 @@ select:-webkit-autofill {
     display: none !important;
 }
 
-.login-body > div > div {
+.login-body>div>div {
     margin-top: .4rem;
     border: .05rem solid #eee;
     position: relative;
 }
 
-.login-body > div > div i {
+.login-body>div>div i {
     color: currentColor;
     padding: .4rem;
     background: #eee;
 }
 
-.login-body > div > div em {
+.login-body>div>div em {
     -webkit-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
     margin: auto 0;
@@ -480,14 +527,14 @@ select:-webkit-autofill {
     line-height: 1;
 }
 
-.login-body > div > div input {
+.login-body>div>div input {
     border: none;
     padding-left: .25rem;
     -webkit-border-radius: 0;
     border-radius: 0;
 }
 
-.login-body > div > div img {
+.login-body>div>div img {
     -webkit-border-radius: 0 .15rem .15rem 0;
     border-radius: 0 .15rem .15rem 0;
     cursor: pointer;
@@ -495,37 +542,38 @@ select:-webkit-autofill {
     z-index: 2;
 }
 
-.login-body > div a {
+.login-body>div a {
     color: currentColor;
 }
 
-.login-body > div > div a {
+.login-body>div>div a {
     width: 3.95rem;
     height: 1.85rem;
     line-height: 1.85rem;
 }
 
-.login-body > div > div a.active {
+.login-body>div>div a.active {
     cursor: not-allowed;
     color: #bbb;
     font-size: .6rem;
 }
 
-.login-body > div > div.code input {
+.login-body>div>div.code input {
     width: 7.05rem;
     border-right: .05rem solid #eee;
 }
 
-.login-body > div > div.active {
+.login-body>div>div.active {
     border: .05rem solid currentColor;
 }
 
-.login-body > div > div, .login-body > .btn {
+.login-body>div>div,
+.login-body>.btn {
     -webkit-border-radius: .15rem;
     border-radius: .15rem;
 }
 
-.login-body > .btn {
+.login-body>.btn {
     width: 100%;
     background: #d70c19;
     color: #fff;
@@ -538,7 +586,7 @@ select:-webkit-autofill {
     cursor: pointer;
 }
 
-.login-body > div.flex {
+.login-body>div.flex {
     margin-top: .8rem;
 }
 
@@ -577,6 +625,7 @@ select:-webkit-autofill {
     color: #47E8C9;
     line-height: 2rem;
 }
+
 .login-mode ol.active li div {
     border: 0;
     line-height: 1;
@@ -587,7 +636,7 @@ select:-webkit-autofill {
     font-size: 1.25rem;
 }
 
-.login-mode > a {
+.login-mode>a {
     display: block;
     color: #9FABB7;
     text-decoration: underline;
@@ -627,7 +676,7 @@ select:-webkit-autofill {
     background: rgba(0, 0, 0, .8);
 }
 
-.mask > div {
+.mask>div {
     position: relative;
     z-index: 10000;
     background: #fff;
@@ -650,7 +699,7 @@ select:-webkit-autofill {
     background: rgba(0, 0, 0, .8);
 }
 
-.mask2 > div {
+.mask2>div {
     position: relative;
     z-index: 10000;
     background: #fff;
@@ -660,25 +709,25 @@ select:-webkit-autofill {
 
 
 /*focus*/
-.focus > div {
+.focus>div {
     background: transparent;
     text-align: center;
     -webkit-animation: fadeInDown .5s linear;
     animation: fadeInDown .5s linear;
 }
 
-.focus > div > div:nth-child(1) {
+.focus>div>div:nth-child(1) {
     height: 3rem;
     background: #0aa2ff;
     -webkit-border-radius: .25rem .25rem 0 0;
     border-radius: .25rem .25rem 0 0;
 }
 
-.focus > div > div:nth-child(1) img {
+.focus>div>div:nth-child(1) img {
     height: 100%;
 }
 
-.focus > div > div:nth-child(2) {
+.focus>div>div:nth-child(2) {
     background: #f0f0f6;
     overflow: hidden;
     padding: 1.25rem 0;
@@ -686,61 +735,61 @@ select:-webkit-autofill {
     border-radius: 0 0 .25rem .25rem;
 }
 
-.focus > div > div:nth-child(2) h1 {
+.focus>div>div:nth-child(2) h1 {
     font-size: .9rem;
     line-height: 1;
 }
 
-.focus > div > div:nth-child(2) img {
+.focus>div>div:nth-child(2) img {
     width: 8rem;
     padding: 1rem 0;
 }
 
-.focus > div > div:nth-child(2) span {
+.focus>div>div:nth-child(2) span {
     display: block;
     color: #666;
     font-size: .7rem;
 }
 
 /*dialog*/
-.dialog-box > div {
+.dialog-box>div {
     -webkit-animation: fadeInDown .5s linear;
     animation: fadeInDown .5s linear;
 }
 
-.dialog-box > div > div {
+.dialog-box>div>div {
     text-align: center;
     font-size: .8rem;
 }
 
-.dialog-box > div > div:nth-child(1) {
+.dialog-box>div>div:nth-child(1) {
     padding: 1rem 0 .7rem 0;
 }
 
-.dialog-box > div > div:nth-child(2) {
+.dialog-box>div>div:nth-child(2) {
     padding: 0 1rem;
     color: #888;
-    max-height:6rem;
+    max-height: 6rem;
     overflow-y: auto;
 }
 
-.dialog-box > div > div:nth-child(2) span {
+.dialog-box>div>div:nth-child(2) span {
     color: #00A3FF;
     font-weight: bold;
 }
 
-.dialog-box > div > div:nth-child(3) {
+.dialog-box>div>div:nth-child(3) {
     margin-top: 1rem;
     border-top: .05rem solid #d5d5d5;
 }
 
-.dialog-box > div > div:nth-child(3) > a {
+.dialog-box>div>div:nth-child(3)>a {
     color: #00A3FF;
     text-decoration: none;
     padding: .5rem 0;
 }
 
-.dialog-box > div > div:nth-child(3) > a.ok {
+.dialog-box>div>div:nth-child(3)>a.ok {
     border-left: .05rem solid #d5d5d5;
 }
 
@@ -748,7 +797,7 @@ select:-webkit-autofill {
     text-align: center;
 }
 
-.loading > div {
+.loading>div {
     background: transparent;
     margin: 0;
     top: 50%;
@@ -757,7 +806,7 @@ select:-webkit-autofill {
     transform: translate(-50%, -50%);
 }
 
-.loading > div > div {
+.loading>div>div {
     background: #fff;
     width: .2rem;
     height: 1.75rem;
@@ -771,12 +820,14 @@ select:-webkit-autofill {
     animation: loading 0.9s 0s infinite cubic-bezier(.11, .49, .38, .78);
 }
 
-.loading > div > div:nth-child(2), .loading > div > div:nth-child(4) {
+.loading>div>div:nth-child(2),
+.loading>div>div:nth-child(4) {
     -webkit-animation-delay: 0.25s !important;
     animation-delay: 0.25s !important;
 }
 
-.loading > div > div:nth-child(1), .loading > div > div:nth-child(5) {
+.loading>div>div:nth-child(1),
+.loading>div>div:nth-child(5) {
     -webkit-animation-delay: 0.5s !important;
     animation-delay: 0.5s !important;
 }
@@ -817,6 +868,7 @@ select:-webkit-autofill {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(359deg);
         transform: rotate(359deg);
@@ -828,6 +880,7 @@ select:-webkit-autofill {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     100% {
         -webkit-transform: rotate(359deg);
         transform: rotate(359deg);
@@ -840,10 +893,12 @@ select:-webkit-autofill {
         -webkit-transform: scaley(1);
         transform: scaley(1);
     }
+
     80% {
         -webkit-transform: scaley(0.3);
         transform: scaley(0.3);
     }
+
     90% {
         -webkit-transform: scaley(1);
         transform: scaley(1);
@@ -855,12 +910,74 @@ select:-webkit-autofill {
         -webkit-transform: scaley(1);
         transform: scaley(1);
     }
+
     80% {
         -webkit-transform: scaley(0.3);
         transform: scaley(0.3);
     }
+
     90% {
         -webkit-transform: scaley(1);
         transform: scaley(1);
     }
 }
+
+/** 泡椒SDK 2.0新增样式*/
+/* loading加载旋转动画 */
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.ball-clip-rotate>div {
+    position: absolute;
+    right: 85px;
+    background-color: #fff;
+    border-radius: 100%;
+    margin: 2px;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    border: 2px solid #000000;
+    border-bottom-color: transparent;
+    height: 20px;
+    width: 20px;
+    background: transparent !important;
+    display: inline-block;
+    -webkit-animation: rotate 0.75s 0s linear infinite;
+    animation: rotate 0.75s 0s linear infinite;
+}
+/*开屏*/
+.open-screen {
+    -o-border-radius: .25rem;
+    -moz-border-radius: .25rem;
+    -webkit-border-radius: .25rem;
+    border-radius: .25rem;
+}
+
+.bg000{width:100%;height: 100%; background: #000; opacity: 0.5; z-index: 3;left:0px;top:0px; position: absolute;}
+.imgbg{width:100%;height: 100%; overflow: hidden;z-index: 1;left:0px;top:0px; position: absolute;}
+
+/* 竖屏 */
+@media screen and (orientation: portrait) {
+    .iframe_css{width:100%;height:70%; background: #f2f2f2;z-index:4;bottom:0px; position: absolute;}
+    .shortcut{transform: scale(2.0);}
+    .open-screen{transform: scale(2.0); margin-top: 10rem;}
+}
+
+/* 横屏 */
+@media screen and (orientation: landscape) {
+    .iframe_css{width:60%;height: 100%; background: #f2f2f2;z-index:4;left:28px;top:0px; position: absolute;}
+    .shortcut{transform: scale(0.8);}
+    .open-screen{transform: scale(0.6); margin-top: -3rem;}
+}
+
+
