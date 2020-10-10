@@ -677,9 +677,6 @@ sdk.doRealNameAuthCallBack = function (code) {
 	window.location.href = sdk.mainUrl;
 };
 
-
-
-
 //上报玩家信息
 sdk.reportRoleInfo = function (params) {
 	params["channelGameId"] = sdk.getItem("channelGameId");
@@ -692,9 +689,6 @@ sdk.reportRoleInfo = function (params) {
 		window.frames["gameFrame"].postMessage(p, "*");
 	});
 };
-
-
-
 
 function touchstart(e) {
 	var touches = e.touches[0];
@@ -741,14 +735,14 @@ function touchend(e) {
 		sdk.shortcut.style.left = "auto";
 
 		//修改红点/气泡消息位置
-		$("#redDot").css("left", "-5px");
-        $("#floatTip").css("left", "-5px");
+		$("#red-dot").css("left", "-5px");
+		$("#float-tip").css("left", "-5px");
 	} else {
 		sdk.shortcut.style.left = "-25px";
 
-        //修改红点/气泡消息位置
-        $("#redDot").css("left", "40px");
-        $("#floatTip").css("left", "40px");
+		//修改红点/气泡消息位置
+		$("#red-dot").css("left", "40px");
+		$("#float-tip").css("left", "40px");
 	}
 }
 
@@ -1221,12 +1215,11 @@ sdk.showOpenScreen = function (type) {
 sdk.showOpenScreenTextBox = function (title, content) {
 	var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
 	var date = sdk.getItem("open_text_date");
-	if (newDate == date) {
-		return 0;
-	}
+	if (newDate == date) return;
+
 
 	const openScreenTextHtml = '<div id="opne-screen-text-box" class="mask">' +
-		'<div class="r5" style="width: 280px; height: 280px; top: 50px;">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px;">' +
 		'<div style="height: 50px;">' +
 		'<img style="position: relative; float: left; left: 10px; top: 10px; width: 35px; height: 35px;" src="/images/pj_image_float_logo.png"></img>' +
 		'<p style="position: relative; top: 10px; left: 20px;">' + title + '</p>' +
@@ -1244,12 +1237,12 @@ sdk.showOpenScreenTextBox = function (title, content) {
 
 	//注册监听事件
 	document.getElementById("open-screen-text-close-img").onclick = function () {
-        sdk.closeOpenScreenTextBox();
+		sdk.closeOpenScreenTextBox();
 
-        if(!sdk.getItem("coupon_flag")) {
-            $("#open-screen-coupon-box").css("visibility", "visible");
-        }
-    }
+		if (!sdk.getItem("coupon_flag")) {
+			$("#open-screen-coupon-box").css("visibility", "visible");
+		}
+	}
 }
 
 var isOpenScreenFlag = false;
@@ -1259,10 +1252,10 @@ var isOpenScreenFlag = false;
 sdk.updateCheckUrl = function () {
 	if (!isOpenScreenFlag) {
 		isOpenScreenFlag = true;
-		document.getElementById("loginCheck").src = "/images/sdk2.0/2.png";
+		document.getElementById("loginCheck").src = "/images/sdk2.0/1.png";
 	} else {
 		isOpenScreenFlag = false;
-		document.getElementById("loginCheck").src = "/images/sdk2.0/1.png";
+		document.getElementById("loginCheck").src = "/images/sdk2.0/2.png";
 	}
 }
 
@@ -1283,27 +1276,31 @@ sdk.closeOpenScreenTextBox = function () {
  * @param {string} 图片路径
  */
 sdk.showOpenScreenImage = function (imgUrl) {
+	var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
+	var date = sdk.getItem("open_image_date");
+	if (newDate == date) return;
+
 	const openScreenImageHtml = '<div id="open-screen-image-box" class="mask">' +
-		'<div style="width: 280px; height: 280px; top: 50px;">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; border-radius: 5px; background: rgba(0,0,0,0);">' +
 		'<img style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
 		'<img id="open-screen-image-close-img" style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" src="/images/sdk2.0/pj_ad_close.png"></img>' +
-        '<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
-        '<img id="loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
-        '<h5 style="margin: -3px 0 0 5px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</h5>' +
-        '</div>' +
-        '</div>' +
+		'<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
+		'<img id="loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
+		'<h5 style="margin: -3px 0 0 5px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</h5>' +
+		'</div>' +
+		'</div>' +
 		'</div>';
 
 	$("body").append(openScreenImageHtml);
 
-    //注册监听事件
-    document.getElementById("open-screen-image-close-img").onclick = function () {
-        sdk.closeOpenScreenImage();
+	//注册监听事件
+	document.getElementById("open-screen-image-close-img").onclick = function () {
+		sdk.closeOpenScreenImage();
 
-        if(!sdk.getItem("coupon_flag")) {
-            $("#open-screen-coupon-box").css("visibility", "visible");
-        }
-    }
+		if (!sdk.getItem("coupon_flag")) {
+			$("#open-screen-coupon-box").css("visibility", "visible");
+		}
+	}
 };
 
 /**
@@ -1311,7 +1308,11 @@ sdk.showOpenScreenImage = function (imgUrl) {
  */
 sdk.closeOpenScreenImage = function () {
 	$("#open-screen-image-box").remove();
-	// sdk.showOpenScreenCoupon(1, "满六元可用");
+
+	//判断是否勾选今日不再提示,若已勾选,则保存今日日期
+	if (isOpenScreenFlag) {
+		sdk.setItem("open_image_date", (new Date().getMonth() + 1) + "-" + new Date().getDate());
+	}
 };
 
 
@@ -1323,18 +1324,18 @@ sdk.closeOpenScreenImage = function () {
  * @param {string} achieveMoney 门槛最低金额
  */
 sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
-    if(!deduct) return;
+	if (!deduct) return;
 
-    var text = "";
-    //满减规则；1有门槛，2无门槛
-    if(rule == 2) {
-        text = "无门槛代金券"
-    } else{
-        text = "满" + achieveMoney + "元可用";
-    }
+	var text = "";
+	//满减规则；1有门槛，2无门槛
+	if (rule == 2) {
+		text = "无门槛代金券"
+	} else {
+		text = "满" + achieveMoney + "元可用";
+	}
 
-	const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="mask loginx-box" style="visibility: hidden">' +
-		'<div style="width: 280px; height: 280px; border-radius: 10px;">' +
+	const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="mask" style="visibility: hidden">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; border-radius: 10px;">' +
 		'<img style="width: 280p; height: 280px;" src="images/sdk2.0/pj_dialog_voucher.png"></img>' +
 		'<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>' +
 		'<div class="flex" style="position:  absolute; top: 70px; height: 80px; width: 100%; height: 80px;">' +
@@ -1342,18 +1343,18 @@ sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 		'<div style="margin: 10px 0 0 10px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>' +
 		'<h5 style="margin: 30px 0 0 20px; font-size: 20px; font-weight: normal;">' + text + '</h5>' +
 		'</div>' +
-        '<div id="coupon-receive-button" style="position: absolute; top: 220px; left: 30px; width: 80%; height: 40px;">' +
-        '</div>'+
+		'<div id="coupon-receive-button" style="position: absolute; top: 220px; left: 30px; width: 80%; height: 40px;">' +
+		'</div>' +
 		'</div>' +
 		'</div>';
 
 	$("body").append(openScreenCouponHtml);
 
 	//注册监听事件
-    document.getElementById("coupon-receive-button").onclick = function () {
-        sdk.closeOpenScreenCoupon();
-        window.location.href = receiveUrl;
-    }
+	document.getElementById("coupon-receive-button").onclick = function () {
+		sdk.closeOpenScreenCoupon();
+		window.location.href = receiveUrl;
+	}
 };
 
 /**
@@ -1362,9 +1363,9 @@ sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 sdk.closeOpenScreenCoupon = function () {
 	$("#open-screen-coupon-box").remove();
 
-	if(!sdk.getItem("coupon_flag")) {
-	    sdk.setItem("coupon_flag", true);
-    }
+	if (!sdk.getItem("coupon_flag")) {
+		sdk.setItem("coupon_flag", true);
+	}
 };
 
 /**
@@ -1391,7 +1392,7 @@ sdk.showOutGameHtml = function (type) {
  * @param {string} imgUrl  资源路径
  */
 sdk.showOutGameImageBox = function (imgUrl) {
-	const outGameImageHtml = '<div id="outGameImage" class="mask login-box">' +
+	const outGameImageHtml = '<div id="outGame-image-box" class="mask login-box">' +
 		'<div class="r5" style="border-radius: 25px;">' +
 		'<img style="width: 300px; height: 200px; border-top-left-radius:20px;border-top-right-radius:20px;" src=' + imgUrl + '>' +
 		'<div class="flex" style="height: 40px">' +
@@ -1409,14 +1410,14 @@ sdk.showOutGameImageBox = function (imgUrl) {
  * @desc 退游图片弹窗
  */
 sdk.closeOutGameImageBox = function () {
-	$("#outGameImage").remove();
+	$("#outGame-image-box").remove();
 };
 
 /**
  * @desc 退游文字弹窗
  */
 sdk.showOutGameTextBox = function () {
-	const outGameTextHtml = '<div id="outGameText" class="mask login-box">' +
+	const outGameTextHtml = '<div id="outGame-text-box" class="mask login-box">' +
 		'<div class="r5">' +
 		'<div>提示信息</div>' +
 		'<div>是否退出游戏</div>' +
@@ -1435,7 +1436,7 @@ sdk.showOutGameTextBox = function () {
  * @desc 退游文字弹窗
  */
 sdk.closeOutGameTextBox = function () {
-	$("#outGameText").remove();
+	$("#outGame-text-box").remove();
 };
 
 /**
@@ -1496,7 +1497,7 @@ sdk.closeOutGameRelatedBox = function () {
 sdk.enableFloatBox02 = function () {
 	// $("#shortcut").remove();
 	const shortcutHtml = '<div id="shortcut" style="width: 50px; height: 50px; left: 0px;" class="shortcut">' +
-		'<div class="flex" id="iconDiv" style="width: 50px; height: 50px;floatc: left;">' +
+		'<div class="flex" id="icondDiv" style="width: 50px; height: 50px;floatc: left;">' +
 		'<div id="ic-menu" class="r50" style="width: 50px; height: 50px;">' +
 		'<span style="width: 50px; height: 50px;" class="r50"></span>' +
 		'</div>' +
@@ -1513,76 +1514,57 @@ sdk.enableFloatBox02 = function () {
 	//绑定touch事件
 	sdk.bindTouchEvent();
 
-	var reqSecond = 0;
+	sdk.showFloatTip(1);
+	$("#float-tip").css("visibility", "visible");
+
 	//初始化悬浮球菜单
-    sdk.initFloatTips(function (data) {
-        reqSecond = data.reqSecond;
+	// sdk.initFloatTips(function (data) {
+	//
+	// 	sdk.showRedDot();
+	// 	sdk.showFloatTip(1);
+	// 	if (data.redDotStatus == 1) {
+	// 		$("#red-dot").css("visibility", "visible");
+	// 	} else if (data.floatTipList) {
+	// 		$("#float-tip").css("visibility", "visible");
+	// 	}
+	// 	//定时请求气泡消息
+	// 	setInterval(function () {
+	// 		sdk.initFloatTips(function (data) {
+	// 			if (data.redDotStatus == 1) {
+	// 				$("#red-dot").css("visibility", "visible");
+	// 			} else if (data.floatTipList) {
+	// 				$("#float-tip").css("visibility", "visible");
+	// 			}
+	// 		});
+	// 	}, data.reqSecond * 1000);
+	// });
 
-        sdk.showRedDot();
-        sdk.showFloatTip();
-        if(data.redDotStatus == 1) {
-            $("#redDot").css("visibility", "visible");
-        } else if(data.floatTipList) {
-            $("#floatTip").css("visibility", "visible");
-        }
-    });
 
-    //定时请求气泡消息
-    setTimeout(function (){
-        sdk.initFloatTips(function (data) {
-            if(data.redDotStatus == 1) {
-                $("#redDot").css("visibility", "visible");
-            } else if(data.floatTipList) {
-                $("#floatTip").css("visibility", "visible");
-            }
-        });
-    }, reqSecond * 1000);
 
-    //注册监听事件
-    document.getElementById("iconDiv").onclick = function() {
-        sdk.initFloatBox02(function () {
-            $("#shortcut").css("visibility", "hidden");
-            //判断是否是横竖屏
-            if(orientation == 0) {
-                //竖屏样式
-                $("body").append(
-                    '<div id="home-mask-div" style="position: fixed; z-index: 9999; width: 100%; height: 100%; left: 0;top: 0; background: rgba(0,0,0,0.8);">' +
-                    '<div id="home-div" style="width: 100%; height: 100%; position: absolute; top: 200px; left: 0px;">' +
-                    '<iframe id="float-home-iframe" name="" src="' + url + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" ' +
-                    'scrolling="auto" style="width: 100%; height: 100%;"></iframe>' +
-                    '</div></div>');
-            } else {
-                //横屏样式
-                $("body").append(
-                    '<div id="home-mask-div" style="position: fixed; z-index: 9999; width: 100%; height: 100%; left: 0;top: 0; background: rgba(0,0,0,0.8); ">' +
-                    '<div id="home-div" style="width: 100%; height: 100%;' +
-                    ' position: absolute; top: 0px; left: 0px;"><iframe id="float-home-iframe" name="" src="' + url +
-                    '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' +
-                    '400px; height: 100%;"></iframe>' +
-                    '</div></div>');
-            }
-            //判断是否切换横竖屏
-            window.onorientationchange = function () {
-                if (window.orientation == 90 || window.orientation == -90) {
-                    $("#float-home-iframe").css("width", "400px");
-                    $("#home-div").css("top", "0px");
-                } else {
-                    $("#float-home-iframe").css("width", "100%");
-                    $("#home-div").css("top", "200px");
-                }
-            }
+	//注册监听事件
+	document.getElementById("icondDiv").onclick = function () {
+		sdk.initFloatBox02(function (data) {
+			$("#shortcut").css("visibility", "hidden");
+			$("#red-dot").css("visibility", "hidden");
+			$("#float-tip").css("visibility", "hidden");
 
-            document.getElementById("home-mask-div").onclick = function () {
-                $("#home-mask-div").remove();
-                $("#shortcut").css("visibility", "visible");
-            }
-        });
-    }
+			$("body").append(
+				'<div id="home-mask-div" class="bg000"></div>' +
+				'<div id="home-div" class="iframe_css">' +
+				'<iframe src="' + data + '" bordr="0" style="width: 100%; height: 100%; background: #f2f2f2;"></iframe>' +
+				'</div>'
+			);
+
+			document.getElementById("home-mask-div").onclick = function () {
+				$("#home-mask-div").remove();
+				$("#home-div").remove();
+				$("#shortcut").css("visibility", "visible");
+			}
+		});
+	}
 
 
 };
-
-
 
 /**
  * @desc 关闭悬浮球
@@ -1597,7 +1579,7 @@ sdk.closeFloatBox02 = function () {
  * @desc 显示消息红点
  */
 sdk.showRedDot = function () {
-	const redDotHtml = '<div id="redDot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; visibility: hidden"></div>';
+	const redDotHtml = '<div id="red-dot" class="r50" style="width:10px; height: 10px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; visibility: hidden"></div>';
 	$("#shortcut").append(redDotHtml);
 }
 
@@ -1605,7 +1587,7 @@ sdk.showRedDot = function () {
  * @desc 关闭消息红点
  */
 sdk.closeRedDot = function () {
-	$("#redDot").remove();
+	$("#red-dot").remove();
 }
 
 /**
@@ -1613,15 +1595,20 @@ sdk.closeRedDot = function () {
  * @param {number} num
  */
 sdk.showFloatTip = function (num) {
-	const floatTipHtml = '<div id="floatTip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
+	const floatTipHtml = '<div id="float-tip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
+	const tooltipHtml = '<div class="tooltip">鼠标点这' +
+		'<span class="tooltiptext">提示文本</span>' +
+		'</div>';
+
 	$("#shortcut").append(floatTipHtml);
+	$("#shortcut").append(tooltipHtml);
 }
 
 /**
  * @desc 关闭消息红点
  */
 sdk.closeFloatTip = function () {
-	$("#floatTip").remove();
+	$("#float-tip").remove();
 }
 
 /**
@@ -1630,30 +1617,21 @@ sdk.closeFloatTip = function () {
 sdk.enableQuickLogin = function () {
 	var userName = sdk.getItem("quick_userName");
 	var password = sdk.getItem("quick_password");
+
+	//启用一键登录取消切换账号登录
+	hasUpdateAccount = false;
 	//检查本地是否有保存账号,走自动登录
 	if (userName && password) {
 		sdk.showLoadingLoginBox(userName, password);
 		return;
 	}
 
-	var params = {};
-	params["channelGameId"] = sdk.getItem("channelGameId");
-	params["udid"] = sdk.getUdid();
-	params["a"] = "y";
-	params["sdkVersion"] = sdk.sdkVersion;
-	params["channel"] = sdk.getItem("channel");
-	params["platformId"] = sdk.platformId;
-
-	sdk.api(params, "reg", function (retData) {
-		if (retData.code == sdk.SUCCESS) {
-			sdk.setItem("quick_userName", retData.data.userName);
-			sdk.setItem("quick_password", retData.data.password);
-			sdk.showQuickLoginBox(retData.data.userName, retData.data.password);
-
-		} else {
-			sdk.confirmDialog(retData.msg);
-		}
+	sdk.quickReg02(function (data) {
+		sdk.setItem("quick_userName", data.userName);
+		sdk.setItem("quick_password", data.password);
+		sdk.showQuickLoginBox(data.userName, data.password);
 	});
+
 }
 
 /**
@@ -1662,9 +1640,9 @@ sdk.enableQuickLogin = function () {
  * @param {string} 密码
  */
 sdk.showQuickLoginBox = function (userName, password) {
-	const quickLoginHtml = '<div id="quickLoginBox" class="mask login-box">' +
+	const quickLoginHtml = '<div id="quick-login-box" class="mask login-box">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-size: 14px; font-weight: bold;">一键登录</p></div>' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
 		'<div id="userBox" class="flex">' +
@@ -1683,7 +1661,7 @@ sdk.showQuickLoginBox = function (userName, password) {
 		'<p style="margin: 0 0 0 0; font-size: 12px;" onclick="sdk.showXieYi()"><<用户服务协议>></p>' +
 		'</p>' +
 		'</div>' +
-		'<a href="javascript:;" id="quick-login-loading-button" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn">注册并登录</a>' +
+		'<a href="javascript:;" id="quick-login-loading-button" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px; font-weight: bold;" class="btn">注册并登录</a>' +
 		'</div>' +
 		'<div class="flex">' +
 		'<a id="quick-login-account-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;">' +
@@ -1700,6 +1678,7 @@ sdk.showQuickLoginBox = function (userName, password) {
 		'</div>';
 
 	$("body").append(quickLoginHtml);
+
 	//注册监听事件
 	document.getElementById("quick-login-account-button").onclick = function () {
 		sdk.closeQuickLoginBox();
@@ -1712,6 +1691,11 @@ sdk.showQuickLoginBox = function (userName, password) {
 	}
 
 	document.getElementById("quick-login-loading-button").onclick = function () {
+		if (!isFlag) {
+			sdk.confirmDialog("必须接受用户服务协议");
+			return;
+		}
+
 		sdk.closeQuickLoginBox();
 		sdk.showRegisterSuccBox(userName, password);
 	}
@@ -1725,7 +1709,7 @@ sdk.showQuickLoginBox = function (userName, password) {
  * @desc 关闭一键登录弹框
  */
 sdk.closeQuickLoginBox = function () {
-	$("#quickLoginBox").remove();
+	$("#quick-login-box").remove();
 }
 
 var isFlag = true;
@@ -1747,7 +1731,7 @@ sdk.updateQuickLoginSelected = function () {
  */
 sdk.showAccountLoginBox = function () {
 
-	const accountLoginHtml = '<div id="accountLoginBox" class="mask login-box">' +
+	const accountLoginHtml = '<div id="account-login-box" class="mask login-box">' +
 		'<div class="r5">' +
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>' +
 		'<div class="login-body">' +
@@ -1814,7 +1798,7 @@ sdk.showAccountLoginBox = function () {
  * @desc 关闭账号注册弹框
  */
 sdk.closeAccountLoginBox = function () {
-	$("#accountLoginBox").remove();
+	$("#account-login-box").remove();
 }
 
 /**
@@ -1822,15 +1806,15 @@ sdk.closeAccountLoginBox = function () {
  */
 sdk.showMobileLoginBox = function () {
 
-	const mobileLoginHtml = '<div id="mobileLoginBox" class="mask login-box">' +
+	const mobileLoginHtml = '<div id="mobile-login-box" class="mask login-box">' +
 		'<div class="r5">' +
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<div id="flexMobile" class="flex">' +
+		'<div id="flex-mobile" class="flex">' +
 		'<input id="mobile" style="width: 200px; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入手机号">' +
 		'</div>' +
-		'<div id="flexSmsCode" class="flex">' +
+		'<div id="flex-smsCode" class="flex">' +
 		'<input id="smsCode" style="width: 100px; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入验证码">' +
 		'<button id="mobile-login-getSmsCode-button" style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;' +
 		'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>' +
@@ -1854,24 +1838,33 @@ sdk.showMobileLoginBox = function () {
 	}
 
 	document.getElementById("mobile-login-loading-button").onclick = function () {
-        var mobile = $("#mobile").val();
-        var smsCode = $("#smsCode").val();
-        sdk.mobileLogin(mobile, smsCode, function(){
-            sdk.closeMobileLoginBox();
-        });
+		var mobile = $("#mobile").val();
+		var smsCode = $("#smsCode").val();
+		sdk.mobileLogin(mobile, smsCode, function () {
+			sdk.closeMobileLoginBox();
+		}, function (data) {
+			sdk.closeMobileLoginBox();
+			sdk.showMobileLoginVeriPwdBox(data.user.userName);
+		}, function () {
+			sdk.closeMobileLoginBox();
+			sdk.showMobileLoginVeriUserNameBox(mobile);
+		}, function (data) {
+			sdk.closeMobileLoginBox();
+			sdk.showMobileLoginSelectedUserNameBox(mobile, data);
+		});
 	}
 
 	document.getElementById("mobile-login-getSmsCode-button").onclick = function () {
 		var mobile = $("#mobile").val();
 		//点击后禁用60s
-        $("#mobile-login-getSmsCode-button").attr('disabled',true);
-        $("#mobile-login-getSmsCode-button").css("background-color", "#BABABA");
-        setTimeout(function () {
-            $("#mobile-login-getSmsCode-button").attr('disabled',false);
-            $("#mobile-login-getSmsCode-button").css("background-color", "#BA494B");
-        }, 60 * 1000);
+		$("#mobile-login-getSmsCode-button").attr('disabled', true);
+		$("#mobile-login-getSmsCode-button").css("background-color", "#BABABA");
+		setTimeout(function () {
+			$("#mobile-login-getSmsCode-button").attr('disabled', false);
+			$("#mobile-login-getSmsCode-button").css("background-color", "#BA494B");
+		}, 60 * 1000);
 
-        sdk.getMobileCode(mobile, 1, null);
+		sdk.getMobileCode(mobile, 1, null);
 	}
 };
 
@@ -1879,94 +1872,144 @@ sdk.showMobileLoginBox = function () {
  * @desc 关闭手机登录弹框
  */
 sdk.closeMobileLoginBox = function () {
-	$("#mobileLoginBox").remove();
+	$("#mobile-login-box").remove();
 }
 
-/**
- * @desc 打开账号重置密码弹框
- */
-sdk.showResetAccPwdBox = function () {
 
-	const resetAccPwdHtml = '<div id="resetAccPwdBox" class="mask login-box">' +
+/**
+ * @desc 打开手机登录-验证登录密码弹框
+ * @param {string} userName 账号
+ */
+sdk.showMobileLoginVeriPwdBox = function (userName) {
+	const mobileLoginVeriPwdHtml = '<div id="mobile-login-veri-pwd-box" class="mask login-box">' +
 		'<div class="r5">' +
-		'<div class="flex">' +
-		'<p style="font-size: 30px;" onclick="sdk.closeResetAccPwdBox()"><</p>' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">重置密码</p></div>' +
-		'</div>' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<div id="" class="flex">' +
-		'<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="账号">' +
-		'<h5 style="margin: 10px 5px 0 0 ; font-size: 16px; font-weight: bold; color: #BA494B;" onclick="">查询</h5>' +
-		'</div>' +
-		'<div id="" class="flex">' +
-		'<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="手机">' +
-		'</div>' +
-		'<div id="" class="flex" style="width: 150px;">' +
-		'<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="验证码">' +
-		'<img style="width: 90px; height: 42px;"  src=""></img>' +
-		'</div>' +
-		'<div id="" class="flex">' +
-		'<input style="width: 100px; height: 40px; color: #000000;" class="flex-list" id="" type="text" value="" placeholder="请输入短信码">' +
-		'<button style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;' +
-		'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>' +
+		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>' +
+		'<div id="mobile-login-veri-pwd-flex" class="flex">' +
+		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
+		'<input id="mobile-login-veri-pwd-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="password" value="" placeholder="请输入登录密码">' +
+		'<img id="mobile-login-veri-pwd-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
 		'</div>' +
 		'</div>' +
+		'<div class="flex">' +
+		'<button id="mobile-login-veri-pwd-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
 		'</div>' +
-		'<a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="sdk.closeResetAccPwdBox()">提交</a>' +
+		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>' +
 		'</div>' +
 		'</div>' +
 		'</div>';
 
-	$("body").append(resetAccPwdHtml);
-};
-
-/**
- * @desc 关闭账号重置密码弹框
- */
-sdk.closeResetAccPwdBox = function () {
-	$("#resetAccPwdBox").remove();
-}
-
-/**
- * @desc 打开修改密码弹框
- */
-sdk.showUpdatePwdBox = function () {
-
-	const updatePwdHtml = '<div id="updatePwdBox" class="mask login-box">' +
-		'<div class="r5">' +
-		'<div class="flex">' +
-		'<p style="font-size: 30px;" onclick="sdk.closeUpdatePwdBox()"><</p>' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">修改密码</p></div>' +
-		'</div>' +
-		'<div class="login-body">' +
-		'<div>' +
-		'<h5 style="position: relative; left: -50px; color: #BA494B;">8-16位数字与字母组合</h5>' +
-		'<div id="" class="flex">' +
-		'<input id="update-pwd-input" style="width: 200px; height: 40px; color:#000000" class="flex-list" id="" type="password" value="" placeholder="新密码">' +
-		'<img id="update-pwd-box-eye" style="margin: 10px 5px 0 0; width: 30px; height: 30px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
-		'</div>' +
-		'</div>' +
-		'</div>' +
-		'<div style="height: 50px;"></div>' +
-		'<a href="javascript:;" style="margin: 0 0 0 0; width: 84%; background: #BA494B; border-radius: 5px; color: #FFFFFF; font-weight: bold;" class="btn" onclick="sdk.closeUpdatePwdBox()">保存</a>' +
-		'</div>' +
-		'</div>' +
-		'</div>';
-
-	$("body").append(updatePwdHtml);
-
+	$("body").append(mobileLoginVeriPwdHtml);
 	//注册监听事件
-	document.getElementById("update-pwd-box-eye").onclick = function () {
-		sdk.updatePwdBoxEye("update-pwd-input", "update-pwd-box-eye");
+	document.getElementById("mobile-login-veri-pwd-button").onclick = function () {
+		var password = $("#mobile-login-veri-pwd-input").val();
+
+		sdk.login02(userName, password, function () {
+			sdk.closeMobileLoginVeriPwdBox();
+		});
+	}
+
+	document.getElementById("mobile-login-veri-pwd-eye").onclick = function () {
+		sdk.updatePwdBoxEye("mobile-login-veri-pwd-input", "mobile-login-veri-pwd-eye");
 	}
 };
 
 /**
- * @desc 关闭账号重置密码弹框
+ * @desc 关闭手机登录-验证登录密码弹框
  */
-sdk.closeUpdatePwdBox = function () {
-	$("#updatePwdBox").remove();
+sdk.closeMobileLoginVeriPwdBox = function () {
+	$("#mobile-login-veri-pwd-box").remove();
+}
+
+/**
+ * @desc 打开手机登录-验证账号弹框
+ * @param {Number} mobile 手机号码
+ */
+sdk.showMobileLoginVeriUserNameBox = function (mobile) {
+	const mobileLoginVeriUserNameHtml = '<div id="mobile-login-veri-username-box" class="mask login-box">' +
+		'<div class="r5">' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
+		'<div class="login-body">' +
+		'<div>' +
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
+		'<div id="mobile-login-veri-username-flex" class="flex">' +
+		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="mobile-login-veri-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入游戏账号">' +
+		'</div>' +
+		'</div>' +
+		'<div class="flex">' +
+		'<button id="mobile-login-veri-username-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+
+	$("body").append(mobileLoginVeriUserNameHtml);
+	//注册监听事件
+	document.getElementById("mobile-login-veri-username-button").onclick = function () {
+		var userName = $("#mobile-login-veri-username-input").val();
+		sdk.selectedLogin(mobile, userName, function () {
+			sdk.closeMobileLoginVeriUserNameBox();
+		});
+	}
+};
+
+/**
+ * @desc 关闭手机登录-验证账号弹框
+ */
+sdk.closeMobileLoginVeriUserNameBox = function () {
+	$("#mobile-login-veri-username-box").remove();
+}
+
+/**
+ * @desc 打开手机登录-选择账号弹框
+ * @param {Number} mobile 手机号码
+ * @param {Object} data 用户数据
+ */
+sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
+	const mobileLogSelectedUserNameHtml = '<div id="mobile-login-selected-username-box" class="mask login-box">' +
+		'<div class="r5">' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
+		'<div class="login-body">' +
+		'<div>' +
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
+		'<div id="mobile-login-selected-username-flex" class="flex">' +
+		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="mobile-login-selected-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" list="fruit" placeholder="请选择游戏账号">' +
+		'<datalist id="fruit">' +
+		'</datalist>' +
+		'</div>' +
+		'</div>' +
+		'<div class="flex">' +
+		'<button id="mobile-login-selected-username-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+
+	$("body").append(mobileLogSelectedUserNameHtml);
+
+	if (data.userList && data.userList.length > 0) {
+		for (var i = 0; i < data.userList.length; i++) {
+			$("#fruit").append('<option>' + data.userList[i].userName + '</option>');
+		}
+	}
+	//注册监听事件
+	document.getElementById("mobile-login-selected-username-button").onclick = function () {
+		var userName = $("#mobile-login-selected-username-input").val();
+		sdk.selectedLogin(mobile, userName, function () {
+			sdk.closeMobileLoginVeriUserNameBox();
+		});
+	}
+};
+
+/**
+ * @desc 关闭手机登录-选择账号弹框
+ */
+sdk.closeMobileLoginSelectedUserNameBox = function () {
+	$("#mobile-login-selected-username-box").remove();
 }
 
 var isEye = true;
@@ -1984,6 +2027,8 @@ sdk.updatePwdBoxEye = function (inputId, imgId) {
 		document.getElementById(inputId).type = "text";
 	}
 }
+
+var hasUpdateAccount = false;
 /**
  * @desc 显示加载登录框
  * @param {string} userName 账号
@@ -1992,7 +2037,7 @@ sdk.updatePwdBoxEye = function (inputId, imgId) {
 sdk.showLoadingLoginBox = function (userName, password) {
 	// sdk.closeLoginBox02();
 
-	var loadingLoginBox = '<div id="loadingLoginBox" class="mask">' +
+	var loadingLoginBox = '<div id="loading-login-box" class="mask">' +
 		'<div class="r5" style="width: 280px; height: 50px; top: 5%">' +
 		'<div class="flex" style="padding: 15px 0 0 15px;">' +
 		'<img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>' +
@@ -2009,21 +2054,26 @@ sdk.showLoadingLoginBox = function (userName, password) {
 	$("body").append(loadingLoginBox);
 
 	setTimeout(function () {
-		sdk.login02(userName, password, function () {
-            sdk.closeLoadingLoginBox();
-        });
+		$("loading-login-update-button").css("visibility", "hidden");
+		if (!hasUpdateAccount) {
+			sdk.login02(userName, password, function () {
+				sdk.closeLoadingLoginBox();
+			});
+		}
 	}, 2000);
 	//注册监听事件
-    document.getElementById("loading-login-update-button").onclick = function () {
-        sdk.closeLoadingLoginBox();
-    }
+	document.getElementById("loading-login-update-button").onclick = function () {
+		hasUpdateAccount = true;
+		sdk.closeLoadingLoginBox();
+		sdk.showAccountLoginBox();
+	}
 }
 
 /**
  * @desc 关闭加载登录框
  */
 sdk.closeLoadingLoginBox = function () {
-	$("#loadingLoginBox").remove();
+	$("#loading-login-box").remove();
 }
 
 /**
@@ -2032,7 +2082,7 @@ sdk.closeLoadingLoginBox = function () {
  * @param {string} password 密码
  */
 sdk.showRegisterSuccBox = function (userName, password) {
-	var registerSuccHtml = '<div id="registerSuccBox" class="mask login-box">' +
+	var registerSuccHtml = '<div id="register-succ-box" class="mask login-box">' +
 		'<div class="r5" style="padding-bottom: 0px;">' +
 		'<div class="login-head" style="border-bottom: none; padding: 0 0 0 0; "><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">注册成功</p></div>' +
 		'<div class="login-body">' +
@@ -2060,7 +2110,7 @@ sdk.showRegisterSuccBox = function (userName, password) {
  * @desc 关闭注册成功弹框
  */
 sdk.closeRegisterSuccBox = function () {
-	$("#registerSuccBox").remove();
+	$("#register-succ-box").remove();
 }
 
 /**
@@ -2068,63 +2118,68 @@ sdk.closeRegisterSuccBox = function () {
  * @param {string} mobile 手机号码
  * @param {string} smsCode 手机号登录短信验证码
  * @param {Function} callback 回调函数
+ * @param {Function} veriPwdCallback 验证密码回调函数
+ * @param {Function} veriUserNameCallback 验证账号回调函数
+ * @param {Function} selectedUserNameCallback 选择账号回调函数
  */
-sdk.mobileLogin = function (mobile, smsCode, callback) {
-    if (mobile == '') {
-        sdk.confirmDialog("手机号码为空");
-        return;
-    }
+sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUserNameCallback, selectedUserNameCallback) {
+	if (mobile == '') {
+		sdk.confirmDialog("手机号码为空");
+		return;
+	}
 
-    if (smsCode == '') {
-        sdk.confirmDialog("短信验证码为空");
-        return;
-    }
+	if (smsCode == '') {
+		sdk.confirmDialog("短信验证码为空");
+		return;
+	}
 
 	var params = {};
 	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
 	params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
 	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
 	params["token"] = sdk.getItem("sdkToken"); //用户登录token
 	params["mobile"] = mobile; //手机号码
 	params["smsCode"] = smsCode; //手机号登录短信验证码
 
 	sdk.api(params, "mobileLogin", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
-            if (callback) callback(retData.data);
+			if (callback) callback(retData.data);
 
-            var uid = retData.data.uid;
-            var token = retData.data.token;
+			var uid = retData.data.uid;
+			var token = retData.data.token;
 
-            var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-            var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
-            if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-                sdk.showRealNameAuth(openRealNameAuth, uid, token);
-            } else {
-                sdk.setItem("uid", uid);
-                sdk.setItem("sdkToken", token);
-                sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-                window.location.href = sdk.mainUrl;
-            }
-		} else if(retData.code == 301) {
-		    //已绑定账号需要输入账号密码
+			var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
+		} else if (retData.code == 301) {
+			//已绑定账号需要输入账号密码
+			if (veriPwdCallback) veriPwdCallback(retData.data);
+		} else if (retData.code == 302) {
+			//已绑定账号需要输入账号
+			if (veriUserNameCallback) veriUserNameCallback(mobile);
+		} else if (retData.code == 303) {
+			//绑定多个账号需要选择账号登录
+			if (selectedUserNameCallback) selectedUserNameCallback(mobile, retData.data);
 
-        }  else if(retData.code == 302) {
-            //已绑定账号需要输入账号
-        } else if(retData.code == 303){
-            //绑定多个账号需要选择账号登录
-            sdk.selectedLogin(mobile, retData.data.userList[0].userName, null);
-        } else {
+		} else {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
@@ -2137,46 +2192,46 @@ sdk.mobileLogin = function (mobile, smsCode, callback) {
  * @param {Function} callback 回调函数
  */
 sdk.selectedLogin = function (mobile, userName, callback) {
-    if (userName == '') {
-        sdk.confirmDialog("用户账户为空");
-        return;
-    }
+	if (userName == '') {
+		sdk.confirmDialog("用户账户为空");
+		return;
+	}
 
 	var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
-    params["mobile"] = mobile; //手机号码
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["mobile"] = mobile; //手机号码
 	params["userName"] = userName; //用户名
 
 	sdk.api(params, "selectLogin", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
-            if (callback) callback(retData.data);
-            var uid = retData.data.uid;
-            var token = retData.data.token;
+			if (callback) callback(retData.data);
+			var uid = retData.data.uid;
+			var token = retData.data.token;
 
-            var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-            var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
-            if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-                sdk.showRealNameAuth(openRealNameAuth, uid, token);
-            } else {
-                sdk.setItem("uid", uid);
-                sdk.setItem("sdkToken", token);
-                sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-                window.location.href = sdk.mainUrl;
-            }
+			var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
@@ -2190,32 +2245,32 @@ sdk.selectedLogin = function (mobile, userName, callback) {
  * @param {Function} callback 回调函数
  */
 sdk.getMobileCode = function (mobile, type, callback) {
-    if (mobile == '') {
-        sdk.confirmDialog("手机号码为空");
-        return;
-    }
+	if (mobile == '') {
+		sdk.confirmDialog("手机号码为空");
+		return;
+	}
 
-    if (type == '') {
-        sdk.confirmDialog("验证码类型为空");
-        return;
-    }
+	if (type == '') {
+		sdk.confirmDialog("验证码类型为空");
+		return;
+	}
 
 	var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
 	params["mobile"] = mobile; //手机号码
 	params["type"] = type; //类型
 
@@ -2236,35 +2291,35 @@ sdk.getMobileCode = function (mobile, type, callback) {
  * @param {Function} callback 回调函数
  */
 sdk.bindMobilePhone = function (mobile, smsCode, userId, callback) {
-    if (mobile == '') {
-        sdk.confirmDialog("手机号码为空");
-        return;
-    }
-    if (smsCode == '') {
-        sdk.confirmDialog("短信验证码为空");
-        return;
-    }
-    if (userId == '') {
-        sdk.confirmDialog("userId为空");
-        return;
-    }
+	if (mobile == '') {
+		sdk.confirmDialog("手机号码为空");
+		return;
+	}
+	if (smsCode == '') {
+		sdk.confirmDialog("短信验证码为空");
+		return;
+	}
+	if (userId == '') {
+		sdk.confirmDialog("userId为空");
+		return;
+	}
 
 	var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
 	params["mobile"] = mobile; //手机号码
 	params["smsCode"] = smsCode; //手机号码绑定短信验证码
 	params["userId"] = userId; //用户ID
@@ -2332,66 +2387,88 @@ sdk.login02 = function (userName, password, callback) {
 };
 
 /**
+ * @desc 一键登录注册账号
+ * @param {Function} callback 回调函数
+ */
+sdk.quickReg02 = function (callback) {
+	var params = {};
+	params["channelGameId"] = sdk.getItem("channelGameId");
+	params["udid"] = sdk.getUdid();
+	params["a"] = "y";
+	params["sdkVersion"] = sdk.sdkVersion;
+	params["channel"] = sdk.getItem("channel");
+	params["platformId"] = sdk.platformId;
+
+	sdk.api(params, "reg", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
  * @desc 初始化开屏
  * @param {Function} callback 回调函数
  */
 sdk.initOpenScreen = function (callback) {
-    var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
-    params["type"] = "1"; //类型
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["type"] = "1"; //类型
 
-    sdk.api(params, "getPopUpConfig", function (retData) {
-        if (retData.code == sdk.SUCCESS) {
-            if (callback) callback(retData.data);
-        } else {
-            sdk.confirmDialog(retData.msg);
-        }
-    });
+	sdk.api(params, "getPopUpConfig", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
 }
 
 /**
  * @desc 初始化退游弹窗
  */
 sdk.initOutGame = function () {
-    var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
-    params["type"] = "2"; //类型
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["type"] = "2"; //类型
 
-    sdk.api(params, "getPopUpConfig", function (retData) {
-        if (retData.code == sdk.SUCCESS) {
+	sdk.api(params, "getPopUpConfig", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
 
-        } else {
-            sdk.confirmDialog(retData.msg);
-        }
-    });
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
 }
 
 /**
@@ -2399,30 +2476,30 @@ sdk.initOutGame = function () {
  * @param {Function} callback 回调函数
  */
 sdk.initFloatTips = function (callback) {
-    var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
-    params["os"] = ""; //系统版本
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["platformType"] = sdk.platformType; //系统类型
-    params["mac"] = ""; //设备mac地址
-    params["imei"] = ""; //安卓设备imei
-    params["idfa"] = ""; //IOS设备idfa
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["tBrand"] = ""; //机型
-    params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["platformId"] = sdk.platformId ; //平台ID
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
 
-    sdk.api(params, "getFloatTips", function (retData) {
-        if (retData.code == sdk.SUCCESS) {
-            if (callback) callback(retData.data);
-        } else {
-            sdk.confirmDialog(retData.msg);
-        }
-    });
+	sdk.api(params, "getFloatTips", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
 }
 
 /**
@@ -2430,28 +2507,26 @@ sdk.initFloatTips = function (callback) {
  * @param {Function} callback 回调函数
  */
 sdk.initFloatBox02 = function (callback) {
-    var params = {};
-    params["gameId"] = sdk.gameInfo.gameId; //游戏ID
-    params["channel"] = sdk.getItem("channel"); //渠道号
-    params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
-    params["token"] = sdk.getItem("sdkToken"); //用户登录token
-    params["appVersion"] = sdk.appVersion; //app版本号
-    params["idfa"] = ""; //IOS设备idfa
-    params["udid"] = sdk.getUdid(); //设备udid
-    params["imei"] = ""; //安卓设备imei
-    params["mac"] = ""; //设备mac地址
-    params["tBrand"] = ""; //机型
-    params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["idfa"] = ""; //IOS设备idfa
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["imei"] = ""; //安卓设备imei
+	params["mac"] = ""; //设备mac地址
+	params["tBrand"] = ""; //机型
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
 
-    var url = "https://sdk2.paojiao.cn/sdk/toUc?gameId=3058&channel=11&sdkVersion=2.0.0&token=6ODIVB5sKdsBKEHjZO48yuHowz7HFP1c&appVersion=2.0.0";
-    sdk.api(params, "getFloatUrl", function (retData) {
-        if (retData.code == sdk.SUCCESS) {
-
-            if (callback) callback(retData.data);
-        } else {
-            sdk.confirmDialog(retData.msg);
-        }
-    });
+	sdk.api(params, "getFloatUrl", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
 }
 
 

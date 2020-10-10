@@ -6,8 +6,8 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-sdk.host = "https://h5.paojiao.cn";
-// sdk.host = "http://localhost:8080";
+// sdk.host = "https://h5.paojiao.cn";
+sdk.host = "http://localhost:8080";
 
 sdk.apiUrl = sdk.host + "/api/";
 // sdk.mainUrl = sdk.host + '/main.html';
@@ -1514,28 +1514,30 @@ sdk.enableFloatBox02 = function () {
 	//绑定touch事件
 	sdk.bindTouchEvent();
 
-	var reqSecond = 0;
-	//初始化悬浮球菜单
-	sdk.initFloatTips(function (data) {
+	sdk.showFloatTip(1);
+	$("#float-tip").css("visibility", "visible");
 
-		sdk.showRedDot();
-		sdk.showFloatTip(1);
-		if (data.redDotStatus == 1) {
-			$("#red-dot").css("visibility", "visible");
-		} else if (data.floatTipList) {
-			$("#float-tip").css("visibility", "visible");
-		}
-		//定时请求气泡消息
-		setInterval(function () {
-			sdk.initFloatTips(function (data) {
-				if (data.redDotStatus == 1) {
-					$("#red-dot").css("visibility", "visible");
-				} else if (data.floatTipList) {
-					$("#float-tip").css("visibility", "visible");
-				}
-			});
-		}, data.reqSecond * 1000);
-	});
+	//初始化悬浮球菜单
+	// sdk.initFloatTips(function (data) {
+	//
+	// 	sdk.showRedDot();
+	// 	sdk.showFloatTip(1);
+	// 	if (data.redDotStatus == 1) {
+	// 		$("#red-dot").css("visibility", "visible");
+	// 	} else if (data.floatTipList) {
+	// 		$("#float-tip").css("visibility", "visible");
+	// 	}
+	// 	//定时请求气泡消息
+	// 	setInterval(function () {
+	// 		sdk.initFloatTips(function (data) {
+	// 			if (data.redDotStatus == 1) {
+	// 				$("#red-dot").css("visibility", "visible");
+	// 			} else if (data.floatTipList) {
+	// 				$("#float-tip").css("visibility", "visible");
+	// 			}
+	// 		});
+	// 	}, data.reqSecond * 1000);
+	// });
 
 
 
@@ -1546,18 +1548,18 @@ sdk.enableFloatBox02 = function () {
 			$("#red-dot").css("visibility", "hidden");
 			$("#float-tip").css("visibility", "hidden");
 
-            $("body").append(
-                '<div id="home-mask-div" class="bg000"></div>'+
-                '<div id="home-div" class="iframe_css">' +
-                '<iframe src="'+ data +'" bordr="0" style="width: 100%; height: 100%; background: #f2f2f2;"></iframe>' +
-                '</div>'
-            );
+			$("body").append(
+				'<div id="home-mask-div" class="bg000"></div>' +
+				'<div id="home-div" class="iframe_css">' +
+				'<iframe src="' + data + '" bordr="0" style="width: 100%; height: 100%; background: #f2f2f2;"></iframe>' +
+				'</div>'
+			);
 
-            document.getElementById("home-mask-div").onclick = function () {
-                $("#home-mask-div").remove();
-                $("#home-div").remove();
-                $("#shortcut").css("visibility", "visible");
-            }
+			document.getElementById("home-mask-div").onclick = function () {
+				$("#home-mask-div").remove();
+				$("#home-div").remove();
+				$("#shortcut").css("visibility", "visible");
+			}
 		});
 	}
 
@@ -1594,7 +1596,12 @@ sdk.closeRedDot = function () {
  */
 sdk.showFloatTip = function (num) {
 	const floatTipHtml = '<div id="float-tip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
+	const tooltipHtml = '<div class="tooltip">鼠标点这' +
+		'<span class="tooltiptext">提示文本</span>' +
+		'</div>';
+
 	$("#shortcut").append(floatTipHtml);
+	$("#shortcut").append(tooltipHtml);
 }
 
 /**
@@ -1610,6 +1617,9 @@ sdk.closeFloatTip = function () {
 sdk.enableQuickLogin = function () {
 	var userName = sdk.getItem("quick_userName");
 	var password = sdk.getItem("quick_password");
+
+	//启用一键登录取消切换账号登录
+	hasUpdateAccount = false;
 	//检查本地是否有保存账号,走自动登录
 	if (userName && password) {
 		sdk.showLoadingLoginBox(userName, password);
@@ -1668,6 +1678,7 @@ sdk.showQuickLoginBox = function (userName, password) {
 		'</div>';
 
 	$("body").append(quickLoginHtml);
+
 	//注册监听事件
 	document.getElementById("quick-login-account-button").onclick = function () {
 		sdk.closeQuickLoginBox();
@@ -1831,6 +1842,15 @@ sdk.showMobileLoginBox = function () {
 		var smsCode = $("#smsCode").val();
 		sdk.mobileLogin(mobile, smsCode, function () {
 			sdk.closeMobileLoginBox();
+		}, function (data) {
+			sdk.closeMobileLoginBox();
+			sdk.showMobileLoginVeriPwdBox(data.user.userName);
+		}, function () {
+			sdk.closeMobileLoginBox();
+			sdk.showMobileLoginVeriUserNameBox(mobile);
+		}, function (data) {
+			sdk.closeMobileLoginBox();
+			sdk.showMobileLoginSelectedUserNameBox(mobile, data);
 		});
 	}
 
@@ -1855,6 +1875,142 @@ sdk.closeMobileLoginBox = function () {
 	$("#mobile-login-box").remove();
 }
 
+
+/**
+ * @desc 打开手机登录-验证登录密码弹框
+ * @param {string} userName 账号
+ */
+sdk.showMobileLoginVeriPwdBox = function (userName) {
+	const mobileLoginVeriPwdHtml = '<div id="mobile-login-veri-pwd-box" class="mask login-box">' +
+		'<div class="r5">' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
+		'<div class="login-body">' +
+		'<div>' +
+		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>' +
+		'<div id="mobile-login-veri-pwd-flex" class="flex">' +
+		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
+		'<input id="mobile-login-veri-pwd-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="password" value="" placeholder="请输入登录密码">' +
+		'<img id="mobile-login-veri-pwd-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
+		'</div>' +
+		'</div>' +
+		'<div class="flex">' +
+		'<button id="mobile-login-veri-pwd-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
+		'</div>' +
+		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+
+	$("body").append(mobileLoginVeriPwdHtml);
+	//注册监听事件
+	document.getElementById("mobile-login-veri-pwd-button").onclick = function () {
+		var password = $("#mobile-login-veri-pwd-input").val();
+
+		sdk.login02(userName, password, function () {
+			sdk.closeMobileLoginVeriPwdBox();
+		});
+	}
+
+	document.getElementById("mobile-login-veri-pwd-eye").onclick = function () {
+		sdk.updatePwdBoxEye("mobile-login-veri-pwd-input", "mobile-login-veri-pwd-eye");
+	}
+};
+
+/**
+ * @desc 关闭手机登录-验证登录密码弹框
+ */
+sdk.closeMobileLoginVeriPwdBox = function () {
+	$("#mobile-login-veri-pwd-box").remove();
+}
+
+/**
+ * @desc 打开手机登录-验证账号弹框
+ * @param {Number} mobile 手机号码
+ */
+sdk.showMobileLoginVeriUserNameBox = function (mobile) {
+	const mobileLoginVeriUserNameHtml = '<div id="mobile-login-veri-username-box" class="mask login-box">' +
+		'<div class="r5">' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
+		'<div class="login-body">' +
+		'<div>' +
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
+		'<div id="mobile-login-veri-username-flex" class="flex">' +
+		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="mobile-login-veri-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入游戏账号">' +
+		'</div>' +
+		'</div>' +
+		'<div class="flex">' +
+		'<button id="mobile-login-veri-username-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+
+	$("body").append(mobileLoginVeriUserNameHtml);
+	//注册监听事件
+	document.getElementById("mobile-login-veri-username-button").onclick = function () {
+		var userName = $("#mobile-login-veri-username-input").val();
+		sdk.selectedLogin(mobile, userName, function () {
+			sdk.closeMobileLoginVeriUserNameBox();
+		});
+	}
+};
+
+/**
+ * @desc 关闭手机登录-验证账号弹框
+ */
+sdk.closeMobileLoginVeriUserNameBox = function () {
+	$("#mobile-login-veri-username-box").remove();
+}
+
+/**
+ * @desc 打开手机登录-选择账号弹框
+ * @param {Number} mobile 手机号码
+ * @param {Object} data 用户数据
+ */
+sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
+	const mobileLogSelectedUserNameHtml = '<div id="mobile-login-selected-username-box" class="mask login-box">' +
+		'<div class="r5">' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
+		'<div class="login-body">' +
+		'<div>' +
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
+		'<div id="mobile-login-selected-username-flex" class="flex">' +
+		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="mobile-login-selected-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" list="fruit" placeholder="请选择游戏账号">' +
+		'<datalist id="fruit">' +
+		'</datalist>' +
+		'</div>' +
+		'</div>' +
+		'<div class="flex">' +
+		'<button id="mobile-login-selected-username-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
+		'</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>';
+
+	$("body").append(mobileLogSelectedUserNameHtml);
+
+	if (data.userList && data.userList.length > 0) {
+		for (var i = 0; i < data.userList.length; i++) {
+			$("#fruit").append('<option>' + data.userList[i].userName + '</option>');
+		}
+	}
+	//注册监听事件
+	document.getElementById("mobile-login-selected-username-button").onclick = function () {
+		var userName = $("#mobile-login-selected-username-input").val();
+		sdk.selectedLogin(mobile, userName, function () {
+			sdk.closeMobileLoginVeriUserNameBox();
+		});
+	}
+};
+
+/**
+ * @desc 关闭手机登录-选择账号弹框
+ */
+sdk.closeMobileLoginSelectedUserNameBox = function () {
+	$("#mobile-login-selected-username-box").remove();
+}
 
 var isEye = true;
 /**
@@ -1962,8 +2118,11 @@ sdk.closeRegisterSuccBox = function () {
  * @param {string} mobile 手机号码
  * @param {string} smsCode 手机号登录短信验证码
  * @param {Function} callback 回调函数
+ * @param {Function} veriPwdCallback 验证密码回调函数
+ * @param {Function} veriUserNameCallback 验证账号回调函数
+ * @param {Function} selectedUserNameCallback 选择账号回调函数
  */
-sdk.mobileLogin = function (mobile, smsCode, callback) {
+sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUserNameCallback, selectedUserNameCallback) {
 	if (mobile == '') {
 		sdk.confirmDialog("手机号码为空");
 		return;
@@ -2012,12 +2171,14 @@ sdk.mobileLogin = function (mobile, smsCode, callback) {
 			}
 		} else if (retData.code == 301) {
 			//已绑定账号需要输入账号密码
-
+			if (veriPwdCallback) veriPwdCallback(retData.data);
 		} else if (retData.code == 302) {
 			//已绑定账号需要输入账号
+			if (veriUserNameCallback) veriUserNameCallback(mobile);
 		} else if (retData.code == 303) {
 			//绑定多个账号需要选择账号登录
-			sdk.selectedLogin(mobile, retData.data.userList[0].userName, null);
+			if (selectedUserNameCallback) selectedUserNameCallback(mobile, retData.data);
+
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
@@ -2367,5 +2528,6 @@ sdk.initFloatBox02 = function (callback) {
 		}
 	});
 }
+
 
 window.PJ_SDK = sdk;

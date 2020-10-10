@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="http://h5.wan.360.cn/h5-cp-sdk-loader.js"></script>
 	<script type="text/javascript" src="http://rh.8688games.com/tdh5sdk.js"></script>
 
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
 	<link rel="stylesheet" href="css/common.css">
 	<link rel="stylesheet" href="css/layout.css">
 	<link rel="stylesheet" href="css/style.css">
@@ -126,6 +126,19 @@
 		</li>
 		<li style="margin-top: 20px;">
 			<input type="button" onclick="showLoginBox07()" value="注册成功弹框">
+		</li>
+		<li style="margin-top: 20px;">
+			<!-- <input type="text" list="fruit">
+			<datalist id="fruit">
+				<option>Apple</option>
+				<option>Pear</option>
+				<option id="fruit3">Orange</option>
+			</datalist> -->
+		</li>
+		<li style="margin-top: 20px;">
+			<div class="tooltip">鼠标移动到这里
+				<span class="tooltiptext">提示文本</span>
+			</div>
 		</li>
 	</ul>
 
@@ -453,6 +466,14 @@
 	//显示注册成功弹框
 	function showLoginBox07() {
 		sdk.showRegisterSuccBox();
+	}
+
+	//下拉菜单
+	function dropDown() {
+		// sdk.dropDown();
+		for (var i = 0; i <= 3; i++) {
+			$("#dropdown-content-div").append('<p>' + i + '</p>');
+		}
 	}
 
 	var clientWidth = window.screen.width;

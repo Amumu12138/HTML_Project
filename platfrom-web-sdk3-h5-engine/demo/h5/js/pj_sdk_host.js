@@ -2240,6 +2240,22 @@ sdk.closeRegisterSuccBox = function () {
     $("#registerSuccBox").remove();
 }
 
+/**
+ * @desc 下拉菜单
+ */
+sdk.dropDown = function () {
+    const dropDownHtml = `
+        <div class="dropdown">
+            <p>qwer</p>
+            <div class="dropdown-content">
+                <p>123</p>
+                <p>456</p>
+            </div>
+        </div>
+    `;
+
+    $("body").append(dropDownHtml);
+}
 
 /**
  * @desc 手机号码登录
