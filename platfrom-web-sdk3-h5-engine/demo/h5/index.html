@@ -136,9 +136,10 @@
 			</datalist> -->
 		</li>
 		<li style="margin-top: 20px;">
-			<div class="tooltip">鼠标移动到这里
-				<span class="tooltiptext">提示文本</span>
-			</div>
+			<input type="button" onclick="dropDown()" value="显示提示框">
+		</li>
+		<li style="margin-top: 20px;">
+			<input type="button" onclick="showArrowTipBox()" value="显示带箭头提示框">
 		</li>
 	</ul>
 
@@ -471,10 +472,26 @@
 	//下拉菜单
 	function dropDown() {
 		// sdk.dropDown();
-		for (var i = 0; i <= 3; i++) {
-			$("#dropdown-content-div").append('<p>' + i + '</p>');
-		}
+		// for (var i = 0; i <= 3; i++) {
+		// 	$("#dropdown-content-div").append('<p>' + i + '</p>');
+		// }
+		const dropDownHtml = `<div id="dropdown" class="tooltip">鼠标点这
+				<span class="tooltiptext">提示文本</span>
+			</div>`;
+		$("body").append(dropDownHtml);
 	}
+
+	//显示带箭头提示框
+	function showArrowTipBox() {
+		const arrowTipBoxHtml = `<div class="demo">
+				<div class="shixin"></div>
+				<div class="kongxin"></div>
+				<p style="color: #ffffff; position: absolute;">123</p>
+			</div>`;
+
+		$("body").append(arrowTipBoxHtml);
+	}
+
 
 	var clientWidth = window.screen.width;
 	var clientHeight = window.screen.height;

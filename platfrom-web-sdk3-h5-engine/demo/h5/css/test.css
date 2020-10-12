@@ -393,3 +393,36 @@ body {
     border-style: solid;
     border-color: transparent black transparent transparent;
 }
+
+/* css实现带箭头的提示框*/
+.demo {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 0%;
+    left: 20%;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    background-color: #000000;
+    opacity: 0.8;
+}
+
+.shixin {
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: #000000;
+    position: relative;
+    top: 35%;
+    left: -21%;
+}
+
+.kongxin {
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-right-color: #000000;
+    position: relative;
+    top: 17%;
+    left: -17%;
+}

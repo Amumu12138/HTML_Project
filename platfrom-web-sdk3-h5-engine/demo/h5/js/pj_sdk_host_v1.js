@@ -737,12 +737,22 @@ function touchend(e) {
 		//修改红点/气泡消息位置
 		$("#red-dot").css("left", "-5px");
 		$("#float-tip").css("left", "-5px");
+		if ($("#left-tooltip")) {
+			var text = $("#left-tooltip-text")[0].innerText;
+			sdk.closeLeftTooltip();
+			sdk.showRightTooltip(text);
+		}
 	} else {
 		sdk.shortcut.style.left = "-25px";
 
 		//修改红点/气泡消息位置
 		$("#red-dot").css("left", "40px");
 		$("#float-tip").css("left", "40px");
+		if ($("#right-tooltip")) {
+			var text = $("#right-tooltip-text")[0].innerText;
+			sdk.closeRightTooltip();
+			sdk.showLeftTooltip(text);
+		}
 	}
 }
 
@@ -1514,32 +1524,28 @@ sdk.enableFloatBox02 = function () {
 	//绑定touch事件
 	sdk.bindTouchEvent();
 
-	sdk.showFloatTip(1);
-	$("#float-tip").css("visibility", "visible");
-
 	//初始化悬浮球菜单
-	// sdk.initFloatTips(function (data) {
-	//
-	// 	sdk.showRedDot();
-	// 	sdk.showFloatTip(1);
-	// 	if (data.redDotStatus == 1) {
-	// 		$("#red-dot").css("visibility", "visible");
-	// 	} else if (data.floatTipList) {
-	// 		$("#float-tip").css("visibility", "visible");
-	// 	}
-	// 	//定时请求气泡消息
-	// 	setInterval(function () {
-	// 		sdk.initFloatTips(function (data) {
-	// 			if (data.redDotStatus == 1) {
-	// 				$("#red-dot").css("visibility", "visible");
-	// 			} else if (data.floatTipList) {
-	// 				$("#float-tip").css("visibility", "visible");
-	// 			}
-	// 		});
-	// 	}, data.reqSecond * 1000);
-	// });
+	sdk.initFloatTips(function (data) {
 
-
+		sdk.showRedDot();
+		sdk.showFloatTip(1);
+		if (data.redDotStatus == 1) {
+			$("#red-dot").css("visibility", "visible");
+		} else if (data.floatTipList) {
+			$("#float-tip").css("visibility", "visible");
+		}
+		//定时请求气泡消息
+		setInterval(function () {
+			sdk.initFloatTips(function (data) {
+				if (data.redDotStatus == 1) {
+					$("#red-dot").css("visibility", "visible");
+				} else if (data.floatTipList) {
+					$("#float-tip").css("visibility", "visible");
+					if (data.floatTipList[0]) sdk.showLeftTooltip(data.floatTipList[0].content);
+				}
+			});
+		}, data.reqSecond * 1000);
+	});
 
 	//注册监听事件
 	document.getElementById("icondDiv").onclick = function () {
@@ -1562,8 +1568,6 @@ sdk.enableFloatBox02 = function () {
 			}
 		});
 	}
-
-
 };
 
 /**
@@ -1572,7 +1576,6 @@ sdk.enableFloatBox02 = function () {
 sdk.closeFloatBox02 = function () {
 	$("#shortcut").remove();
 }
-
 
 
 /**
@@ -1595,13 +1598,9 @@ sdk.closeRedDot = function () {
  * @param {number} num
  */
 sdk.showFloatTip = function (num) {
-	const floatTipHtml = '<div id="float-tip" class="r50" style="width:15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
-	const tooltipHtml = '<div class="tooltip">鼠标点这' +
-		'<span class="tooltiptext">提示文本</span>' +
-		'</div>';
+	const floatTipHtml = '<div id="float-tip" class="r50" style="width: 15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
 
 	$("#shortcut").append(floatTipHtml);
-	$("#shortcut").append(tooltipHtml);
 }
 
 /**
@@ -1609,6 +1608,54 @@ sdk.showFloatTip = function (num) {
  */
 sdk.closeFloatTip = function () {
 	$("#float-tip").remove();
+}
+
+/**
+ * @desc 显示左侧提示框
+ * @param content
+ */
+sdk.showLeftTooltip = function (content) {
+	const leftTooltipHtml = '<div id="left-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: 60px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
+		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-right-color: #000000; position: relative; top: 5px; left: -15px;"></div>' +
+		'<h5 id="left-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
+		'</div>';
+	$("#shortcut").append(leftTooltipHtml);
+
+	//延迟2秒后半隐藏
+	setTimeout(function () {
+		$("#left-tooltip").css("visibility", "hidden");
+	}, 2000);
+}
+
+/**
+ * @desc 关闭左侧提示框
+ */
+sdk.closeLeftTooltip = function () {
+	$("#left-tooltip").remove();
+}
+
+/**
+ * @desc 显示右侧提示框
+ * @param content
+ */
+sdk.showRightTooltip = function (content) {
+	const rightTooltipHtml = '<div id="right-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: -110px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
+		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-left-color: #000000; position: relative; top: 5px; left: 95px;"></div>' +
+		'<h5 id="right-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
+		'</div>';
+	$("#shortcut").append(rightTooltipHtml);
+
+	//延迟2秒后半隐藏
+	setTimeout(function () {
+		$("#right-tooltip").css("visibility", "hidden");
+	}, 2000);
+}
+
+/**
+ * @desc 关闭右侧提示框
+ */
+sdk.closeRightTooltip = function () {
+	$("#right-tooltip").remove();
 }
 
 /**
