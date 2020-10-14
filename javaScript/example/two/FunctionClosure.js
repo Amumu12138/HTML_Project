@@ -67,3 +67,14 @@ Example.FunctionClosure = function () {
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
 }
+
+/**
+ * 茫茫乾坤,方圆几何
+ * 长传我 千百年 民族魂魄
+ * 往日宫墙 寻常巷陌
+ * 是谁把英雄的故事一说再说
+ * 走马扬鞭 翻山过河
+ * 轻生死 重大义 男儿本色
+ * 几番起落 风雨振作
+ * 赶它个天时地利与人和
+ */
