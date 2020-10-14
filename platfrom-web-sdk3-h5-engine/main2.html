@@ -62,7 +62,6 @@
 		function start() {
 			var type = Math.floor(Math.random() * 2);
 
-
 			//获取游戏信息
 			sdk.getGameInfo("false", function (ret) {
 				if (ret.code == sdk.SUCCESS) { //成功
@@ -88,21 +87,13 @@
 							sdk.showOpenScreenCoupon(data.popupList[1].url, data.popupList[1].voucher.rule,
 								data.popupList[1].voucher.deduct, data.popupList[1].voucher.achieveMoney);
 						}
-
 					});
-
-
 				} else {
 					sdk.confirmDialog(ret.msg);
 					return;
 				}
-
 			});
-
-
-
 		}
-
 
 		//加载游戏
 		function loadGame(gameInfo) {
@@ -117,8 +108,6 @@
 			}
 
 			gameUrl = sdk.setURLVar(gameUrl, "realNameAuthStatus", realNameAuthStatus);
-
-
 			if (orientation == 0) { //横屏游戏
 
 				$("body").append(
@@ -126,7 +115,6 @@
 					gameUrl +
 					'" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>'
 				);
-
 				window.onorientationchange = function () {
 					if (window.orientation == 90 || window.orientation == -90) {
 						$("#gameFrameDiv").css({
@@ -144,11 +132,9 @@
 					'" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' +
 					$(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
 			}
-
 			// sdk.enableFloatBox();
 			sdk.enableFloatBox02();
 		}
-
 
 		//开始消息监听
 		function startEventListener() {
@@ -189,22 +175,13 @@
 					}
 
 				}
-
 			}
 		}
 
-
-
-
 		$(function () {
-
 			start();
-
-
 		});
 	</script>
-
-
 </body>
 
 </html>
