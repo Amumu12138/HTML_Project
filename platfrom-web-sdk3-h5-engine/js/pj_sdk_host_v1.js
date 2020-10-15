@@ -124,10 +124,10 @@ sdk.getGameInfo = function (isLogin, callback) {
 	});
 };
 
-
 sdk.closeLoginBox = function () {
 	$("#loginBox").remove();
 };
+
 //打开登录框
 sdk.loadLoginBox = function () {
 	var loginHtml = '<div id="loginBox" class="mask login-box">';
@@ -199,7 +199,6 @@ sdk.loadLoginBoxTo2 = function () {
 
 //登录
 sdk.login = function () {
-
 	var userName = $("#userName").val();
 	var password = $("#password").val();
 
@@ -211,8 +210,6 @@ sdk.login = function () {
 		sdk.confirmDialog("请输入密码");
 		return;
 	}
-
-
 
 	var params = {};
 	params["userName"] = userName;
@@ -1191,6 +1188,20 @@ sdk.isAmericaIp = function () {
 	});
 };
 
+//查询渠道是否是提审状态
+sdk.getIsAudit = function (channelGameId, callback) {
+	var params = {};
+	params["channelGameId"] = channelGameId;
+	pjapi.httpPost(sdk.apiUrl + "getIsAudit", params, function (data) {
+		if (data.code == 1) {
+			sdk.setItem("isAmericaIp", data.code);
+			callback(data);
+		} else {
+			sdk.setItem("isAmericaIp", data.code);
+			callback(data);
+		}
+	});
+};
 
 
 /************************************************** 泡椒-SDK-H5 2.0需求实现 **************************************************/
@@ -1227,12 +1238,11 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	var date = sdk.getItem("open_text_date");
 	if (newDate == date) return;
 
-
 	const openScreenTextHtml = '<div id="opne-screen-text-box" class="mask">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px;">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; margin-left: -6.5rem;">' +
 		'<div style="height: 50px;">' +
 		'<img style="position: relative; float: left; left: 10px; top: 10px; width: 35px; height: 35px;" src="/images/pj_image_float_logo.png"></img>' +
-		'<p style="position: relative; top: 10px; left: 20px;">' + title + '</p>' +
+		'<p style="position: relative; top: 10px; text-align: center;">' + title + '</p>' +
 		'<img id="open-screen-text-close-img" style="position: relative; float: right; right: 10px; top: -15px; width: 20px; height: 20px;" src="/images/sdk2.0/pj_dialog_jurisdiction_delete.png"></img>' +
 		'</div>' +
 		'<h5 style="font-size: 20px;font-weight: normal; margin: 10px 0 0 10px;">' + content + '</h5>' +
@@ -1659,9 +1669,9 @@ sdk.closeRightTooltip = function () {
 }
 
 /**
- * @desc 启用一键登录
+ * @desc 自动登录
  */
-sdk.enableQuickLogin = function () {
+sdk.autoLogin02 = function () {
 	var userName = sdk.getItem("quick_userName");
 	var password = sdk.getItem("quick_password");
 
@@ -1673,23 +1683,18 @@ sdk.enableQuickLogin = function () {
 		return;
 	}
 
-	sdk.quickReg02(function (data) {
-		sdk.setItem("quick_userName", data.userName);
-		sdk.setItem("quick_password", data.password);
-		sdk.showQuickLoginBox(data.userName, data.password);
-	});
-
+	sdk.showAccountLoginBox();
 }
 
 /**
  * @desc 打开一键登录弹框
- * @param {string} 账户
- * @param {string} 密码
+ * @param {string} userName 账户
+ * @param {string} password 密码
  */
 sdk.showQuickLoginBox = function (userName, password) {
 	const quickLoginHtml = '<div id="quick-login-box" class="mask login-box">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键登录</p></div>' +
+		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键注册</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
 		'<div id="userBox" class="flex">' +
@@ -1777,6 +1782,8 @@ sdk.updateQuickLoginSelected = function () {
  * @desc 打开账号登录弹框
  */
 sdk.showAccountLoginBox = function () {
+	var userName = sdk.getItem("quick_userName") || "";
+	var password = sdk.getItem("quick_password") || "";
 
 	const accountLoginHtml = '<div id="account-login-box" class="mask login-box">' +
 		'<div class="r5">' +
@@ -1785,11 +1792,11 @@ sdk.showAccountLoginBox = function () {
 		'<div>' +
 		'<div id="userBox" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" value="" placeholder="">' +
+		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text"  placeholder="" value=' + userName + '>' +
 		'</div>' +
 		'<div id="pwdBox" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
-		'<input id="account-login-password-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list"  type="password" value="" placeholder="">' +
+		'<input id="account-login-password-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list"  type="password"   placeholder="" value= ' + password + '>' +
 		'<img id="account-login-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
 		'</div>' +
 		'</div>' +
@@ -1818,7 +1825,15 @@ sdk.showAccountLoginBox = function () {
 	//注册监听事件
 	document.getElementById("account-login-quick-button").onclick = function () {
 		sdk.closeAccountLoginBox();
-		sdk.enableQuickLogin();
+
+		var userName = "P" + Math.floor(Math.random() * 1000000000);
+		var password = "r" + Math.floor(Math.random() * 1000000);
+
+		sdk.userNameReg02(userName, password, function (data) {
+			sdk.setItem("quick_userName", userName);
+			sdk.setItem("quick_password", password);
+			sdk.showQuickLoginBox(userName, password);
+		});
 	}
 
 	document.getElementById("account-login-mobile-button").onclick = function () {
@@ -1837,7 +1852,7 @@ sdk.showAccountLoginBox = function () {
 	}
 
 	document.getElementById("account-login-eye").onclick = function () {
-		sdk.updatePwdBoxEye("account-login-input", "account-login-eye");
+		sdk.updatePwdBoxEye("account-login-password-input", "account-login-eye");
 	}
 };
 
@@ -1881,7 +1896,14 @@ sdk.showMobileLoginBox = function () {
 	//注册监听事件
 	document.getElementById("mobile-login-quick-button").onclick = function () {
 		sdk.closeMobileLoginBox();
-		sdk.enableQuickLogin();
+		var userName = "P" + Math.floor(Math.random() * 1000000000);
+		var password = "r" + Math.floor(Math.random() * 1000000);
+
+		sdk.userNameReg02(userName, password, function (data) {
+			sdk.setItem("quick_userName", userName);
+			sdk.setItem("quick_password", password);
+			sdk.showQuickLoginBox(userName, password);
+		});
 	}
 
 	document.getElementById("mobile-login-loading-button").onclick = function () {
@@ -2221,10 +2243,10 @@ sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUser
 			if (veriPwdCallback) veriPwdCallback(retData.data);
 		} else if (retData.code == 302) {
 			//已绑定账号需要输入账号
-			if (veriUserNameCallback) veriUserNameCallback(mobile);
+			if (veriUserNameCallback) veriUserNameCallback();
 		} else if (retData.code == 303) {
 			//绑定多个账号需要选择账号登录
-			if (selectedUserNameCallback) selectedUserNameCallback(mobile, retData.data);
+			if (selectedUserNameCallback) selectedUserNameCallback(retData.data);
 
 		} else {
 			sdk.confirmDialog(retData.msg);
@@ -2446,6 +2468,32 @@ sdk.quickReg02 = function (callback) {
 	params["channel"] = sdk.getItem("channel");
 	params["platformId"] = sdk.platformId;
 
+	sdk.api(params, "reg", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+		}
+	});
+}
+
+/**
+ * @desc 账号密码注册
+ * @param {String} userName 账号
+ * @param {String} password 密码
+ * @param {Function} callback 回调函数
+ */
+sdk.userNameReg02 = function (userName, password, callback) {
+	var params = {};
+	params["channelGameId"] = sdk.getItem("channelGameId");
+	params["udid"] = sdk.getUdid();
+	params["a"] = "n";
+	params["sdkVersion"] = sdk.sdkVersion;
+	params["channel"] = sdk.getItem("channel");
+	params["platformId"] = sdk.platformId;
+	params["userName"] = userName;
+	params["password"] = password;
+	sdk.showLoading();
 	sdk.api(params, "reg", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
 			if (callback) callback(retData.data);
