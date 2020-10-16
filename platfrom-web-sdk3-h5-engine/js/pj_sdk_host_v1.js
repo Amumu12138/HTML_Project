@@ -517,7 +517,6 @@ sdk.reg2 = function () {
 	});
 };
 
-
 //关闭忘记密码页面
 sdk.closeFotPwdBox = function () {
 	$("#showFotPwdBox").remove();
@@ -690,8 +689,8 @@ function touchend(e) {
 		//修改红点/气泡消息位置
 		$("#red-dot").css("left", "-5px");
 		$("#float-tip").css("left", "-5px");
-		var hasLeftTooltip = document.getElementById("left-tooltip");
-		if (hasLeftTooltip) {
+		var hasLeftTooltip =  document.getElementById("left-tooltip");
+		if(hasLeftTooltip) {
 			var leftText = $("#left-tooltip-text")[0].innerText;
 			sdk.closeLeftTooltip();
 			sdk.showRightTooltip(leftText);
@@ -703,7 +702,7 @@ function touchend(e) {
 		$("#red-dot").css("left", "40px");
 		$("#float-tip").css("left", "40px");
 		var hasRightTooltip = document.getElementById("right-tooltip");
-		if (hasRightTooltip) {
+		if(hasRightTooltip) {
 			var rightText = $("#right-tooltip-text")[0].innerText;
 			sdk.closeRightTooltip();
 			sdk.showLeftTooltip(rightText);
@@ -914,9 +913,6 @@ sdk.wbLogin = function (type) {
 	var url = sdk.buildURL(sdk.thirdLoginUrl, param);
 	window.location.href = url;
 };
-
-
-
 
 sdk.confirmDialog = function (txt, oklabel, cancellabel, okcallback, cancelcallback, title, callback) {
 	var html = '<div id="confirmDialog" class="mask dialog-box">';
@@ -1203,7 +1199,7 @@ sdk.showOpenScreenTextBox = function (title, content) {
 		'</div>' +
 		'<h5 style="font-size: 20px;font-weight: normal; margin: 10px 0 0 10px;">' + content + '</h5>' +
 		'<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
-		'<img id="loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
+		'<img id="open-screen-text-loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
 		'<h5 style="margin: -3px 0 0 5px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</h5>' +
 		'</div>' +
 		'</div>' +
@@ -1219,19 +1215,23 @@ sdk.showOpenScreenTextBox = function (title, content) {
 			$("#open-screen-coupon-box").css("visibility", "visible");
 		}
 	}
+
+	document.getElementById("open-screen-text-loginCheck").onclick = function () {
+		sdk.updateCheckUrl("open-screen-text-loginCheck");
+	}
 }
 
 var isOpenScreenFlag = false;
 /**
  * @desc 更新勾选框资源
  */
-sdk.updateCheckUrl = function () {
+sdk.updateCheckUrl = function (id) {
 	if (!isOpenScreenFlag) {
 		isOpenScreenFlag = true;
-		document.getElementById("loginCheck").src = "/images/sdk2.0/1.png";
+		document.getElementById(id).src = "/images/sdk2.0/1.png";
 	} else {
 		isOpenScreenFlag = false;
-		document.getElementById("loginCheck").src = "/images/sdk2.0/2.png";
+		document.getElementById(id).src = "/images/sdk2.0/2.png";
 	}
 }
 
@@ -1249,19 +1249,20 @@ sdk.closeOpenScreenTextBox = function () {
 
 /**
  * @desc 显示开屏图片
- * @param {string} 图片路径
+ * @param {string} url 跳转路径
+ * @param {string} imgUrl 图片路径
  */
-sdk.showOpenScreenImage = function (imgUrl) {
+sdk.showOpenScreenImage = function (url, imgUrl) {
 	var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
 	var date = sdk.getItem("open_image_date");
 	if (newDate == date) return;
 
 	const openScreenImageHtml = '<div id="open-screen-image-box" class="mask">' +
 		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; border-radius: 5px; background: rgba(0,0,0,0);">' +
-		'<img style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
+		'<img id="open-screen-image-img" style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
 		'<img id="open-screen-image-close-img" style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" src="/images/sdk2.0/pj_ad_close.png"></img>' +
 		'<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
-		'<img id="loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
+		'<img id="open-screen-image-loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
 		'<h5 style="margin: -3px 0 0 5px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</h5>' +
 		'</div>' +
 		'</div>' +
@@ -1277,7 +1278,15 @@ sdk.showOpenScreenImage = function (imgUrl) {
 			$("#open-screen-coupon-box").css("visibility", "visible");
 		}
 	}
-};
+
+	document.getElementById("open-screen-image-img").onclick = function () {
+		window.location.herf = url;
+	};
+
+	document.getElementById("open-screen-image-loginCheck").onclick = function () {
+		sdk.updateCheckUrl("open-screen-image-loginCheck");
+	}
+}
 
 /**
  * @desc 关闭开屏图片
@@ -1504,7 +1513,7 @@ sdk.enableFloatBox02 = function () {
 					$("#red-dot").css("visibility", "visible");
 				} else if (data.floatTipList) {
 					$("#float-tip").css("visibility", "visible");
-					if (data.floatTipList[0]) sdk.showLeftTooltip(data.floatTipList[0].content);
+					if(data.floatTipList[0]) sdk.showLeftTooltip(data.floatTipList[0].content);
 				}
 			});
 		}, data.reqSecond * 1000);
@@ -1517,18 +1526,18 @@ sdk.enableFloatBox02 = function () {
 			$("#red-dot").css("visibility", "hidden");
 			$("#float-tip").css("visibility", "hidden");
 
-			$("body").append(
-				'<div id="home-mask-div" class="bg000"></div>' +
-				'<div id="home-div" class="iframe_css">' +
-				'<iframe src="' + data + '" bordr="0" style="width: 100%; height: 100%; background: #f2f2f2;"></iframe>' +
-				'</div>'
-			);
+            $("body").append(
+                '<div id="home-mask-div" class="bg000"></div>'+
+                '<div id="home-div" class="iframe_css">' +
+                '<iframe src="'+ data +'" bordr="0" style="width: 100%; height: 100%; background: #f2f2f2;"></iframe>' +
+                '</div>'
+            );
 
-			document.getElementById("home-mask-div").onclick = function () {
-				$("#home-mask-div").remove();
-				$("#home-div").remove();
-				$("#shortcut").css("visibility", "visible");
-			}
+            document.getElementById("home-mask-div").onclick = function () {
+                $("#home-mask-div").remove();
+                $("#home-div").remove();
+                $("#shortcut").css("visibility", "visible");
+            }
 		});
 	}
 };
@@ -1576,10 +1585,10 @@ sdk.closeFloatTip = function () {
  * @desc 显示左侧提示框
  * @param content
  */
-sdk.showLeftTooltip = function (content) {
+sdk.showLeftTooltip = function(content) {
 	const leftTooltipHtml = '<div id="left-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: 60px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
 		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-right-color: #000000; position: relative; top: 5px; left: -15px;"></div>' +
-		'<h5 id="left-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
+		'<h5 id="left-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> '+ content + '</h5>' +
 		'</div>';
 	$("#shortcut").append(leftTooltipHtml);
 
@@ -1592,7 +1601,7 @@ sdk.showLeftTooltip = function (content) {
 /**
  * @desc 关闭左侧提示框
  */
-sdk.closeLeftTooltip = function () {
+sdk.closeLeftTooltip = function() {
 	$("#left-tooltip").remove();
 }
 
@@ -1600,10 +1609,10 @@ sdk.closeLeftTooltip = function () {
  * @desc 显示右侧提示框
  * @param content
  */
-sdk.showRightTooltip = function (content) {
+sdk.showRightTooltip = function(content) {
 	const rightTooltipHtml = '<div id="right-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: -110px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
 		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-left-color: #000000; position: relative; top: 5px; left: 95px;"></div>' +
-		'<h5 id="right-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
+		'<h5 id="right-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> '+ content + '</h5>' +
 		'</div>';
 	$("#shortcut").append(rightTooltipHtml);
 
@@ -1616,7 +1625,7 @@ sdk.showRightTooltip = function (content) {
 /**
  * @desc 关闭右侧提示框
  */
-sdk.closeRightTooltip = function () {
+sdk.closeRightTooltip = function() {
 	$("#right-tooltip").remove();
 }
 
@@ -1744,7 +1753,7 @@ sdk.showAccountLoginBox = function () {
 		'<div>' +
 		'<div id="userBox" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" placeholder="请输入账号" list="fruit" value=' + userName + '>' +
+		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" placeholder="请输入账号" list="fruit" value='+ userName + '>' +
 		'<datalist id="fruit">' +
 		'</datalist>' +
 		'</div>' +
@@ -1777,9 +1786,9 @@ sdk.showAccountLoginBox = function () {
 	$("body").append(accountLoginHtml);
 
 	var userNameArray = JSON.parse(sdk.getItem("username_array"));
-	if (userNameArray && userNameArray.length > 0) {
+	if(userNameArray && userNameArray.length > 0) {
 		for (var i = 0; i < userNameArray.length; i++) {
-			$("#fruit").append('<option>' + userNameArray[i] + '</option>');
+			$("#fruit").append('<option>' + userNameArray[i]+ '</option>');
 		}
 	}
 
@@ -1918,7 +1927,7 @@ sdk.showMobileLoginVeriPwdBox = function (userName) {
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>' +
+		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>'+
 		'<div id="mobile-login-veri-pwd-flex" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
 		'<input id="mobile-login-veri-pwd-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="password" value="" placeholder="请输入登录密码">' +
@@ -1928,7 +1937,7 @@ sdk.showMobileLoginVeriPwdBox = function (userName) {
 		'<div class="flex">' +
 		'<button id="mobile-login-veri-pwd-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
 		'</div>' +
-		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>' +
+		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>'+
 		'</div>' +
 		'</div>' +
 		'</div>';
@@ -1965,7 +1974,7 @@ sdk.showMobileLoginVeriUserNameBox = function (mobile) {
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>'+
 		'<div id="mobile-login-veri-username-flex" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
 		'<input id="mobile-login-veri-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入游戏账号">' +
@@ -2010,7 +2019,7 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>'+
 		'<div id="mobile-login-selected-username-flex" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
 		'<input id="mobile-login-selected-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" list="fruit" placeholder="请选择游戏账号">' +
@@ -2027,7 +2036,7 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
 
 	$("body").append(mobileLogSelectedUserNameHtml);
 
-	if (data.userList && data.userList.length > 0) {
+	if(data.userList && data.userList.length > 0) {
 		for (var i = 0; i < data.userList.length; i++) {
 			$("#fruit").append('<option>' + data.userList[i].userName + '</option>');
 		}
@@ -2115,12 +2124,11 @@ sdk.showLoadingLoginBox = function (userName, password) {
  * @desc 数组去重
  * @param {Array} array 数组
  */
-sdk.distinct = function (array) {
-	var result = [],
-		i, j, len = array.length;
-	for (i = 0; i < len; i++) {
-		for (j = i + 1; j < len; j++) {
-			if (array[i] === array[j]) {
+sdk.distinct = function(array) {
+	var result = [], i, j, len = array.length;
+	for(i = 0; i < len; i++) {
+		for(j = i + 1; j < len; j++) {
+			if(array[i] === array[j]) {
 				j = ++i;
 			}
 		}
@@ -2236,13 +2244,13 @@ sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUser
 			}
 		} else if (retData.code == 301) {
 			//已绑定账号需要输入账号密码
-			if (veriPwdCallback) veriPwdCallback(retData.data);
+			if(veriPwdCallback) veriPwdCallback(retData.data);
 		} else if (retData.code == 302) {
 			//已绑定账号需要输入账号
-			if (veriUserNameCallback) veriUserNameCallback();
+			if(veriUserNameCallback)veriUserNameCallback();
 		} else if (retData.code == 303) {
 			//绑定多个账号需要选择账号登录
-			if (selectedUserNameCallback) selectedUserNameCallback(retData.data);
+			if(selectedUserNameCallback) selectedUserNameCallback(retData.data);
 
 		} else {
 			sdk.confirmDialog(retData.msg);
@@ -2458,7 +2466,7 @@ sdk.quickReg02 = function (callback) {
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	params["udid"] = sdk.getUdid();
 	params["a"] = "y";
-	params["sdkVersion"] = sdk.sdkVersion;
+	params["sdkVersion"] = sdk.sdkVersion_v2;
 	params["channel"] = sdk.getItem("channel");
 	params["platformId"] = sdk.platformId;
 
@@ -2477,12 +2485,12 @@ sdk.quickReg02 = function (callback) {
  * @param {String} password 密码
  * @param {Function} callback 回调函数
  */
-sdk.userNameReg02 = function (userName, password, callback) {
+sdk.userNameReg02 = function(userName, password, callback) {
 	var params = {};
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	params["udid"] = sdk.getUdid();
 	params["a"] = "n";
-	params["sdkVersion"] = sdk.sdkVersion;
+	params["sdkVersion"] = sdk.sdkVersion_v2;
 	params["channel"] = sdk.getItem("channel");
 	params["platformId"] = sdk.platformId;
 	params["userName"] = userName;
@@ -2490,7 +2498,7 @@ sdk.userNameReg02 = function (userName, password, callback) {
 	sdk.showLoading();
 	sdk.api(params, "reg", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
-			if (callback) callback(retData.data);
+			if(callback) callback(retData.data);
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
