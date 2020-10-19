@@ -542,6 +542,7 @@ sdk.closePayBox = function () {
 sdk.loadPayBox = function (params) {
 	params["channel"] = sdk.getItem("channel");
 	params["channelGameId"] = sdk.getItem("channelGameId");
+	params["sdkVersion"] = sdk.sdkVersion_v2;
 	if (sdk.isWeixin()) { //微信公众号支付需要用户oppenid
 		params["openid"] = sdk.getItem("openid");
 	}
@@ -689,8 +690,8 @@ function touchend(e) {
 		//修改红点/气泡消息位置
 		$("#red-dot").css("left", "-5px");
 		$("#float-tip").css("left", "-5px");
-		var hasLeftTooltip =  document.getElementById("left-tooltip");
-		if(hasLeftTooltip) {
+		var hasLeftTooltip = document.getElementById("left-tooltip");
+		if (hasLeftTooltip) {
 			var leftText = $("#left-tooltip-text")[0].innerText;
 			sdk.closeLeftTooltip();
 			sdk.showRightTooltip(leftText);
@@ -702,7 +703,7 @@ function touchend(e) {
 		$("#red-dot").css("left", "40px");
 		$("#float-tip").css("left", "40px");
 		var hasRightTooltip = document.getElementById("right-tooltip");
-		if(hasRightTooltip) {
+		if (hasRightTooltip) {
 			var rightText = $("#right-tooltip-text")[0].innerText;
 			sdk.closeRightTooltip();
 			sdk.showLeftTooltip(rightText);
@@ -1180,6 +1181,8 @@ sdk.showOpenScreen = function (type) {
 	}
 }
 
+sdk.hasOpenScreenText = false;
+
 /**
  * @desc 显示开屏文字框
  * @param {string} title 弹窗标题
@@ -1191,7 +1194,7 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	if (newDate == date) return;
 
 	const openScreenTextHtml = '<div id="opne-screen-text-box" class="mask">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; margin-left: -6.5rem;">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; margin-left: -19%;">' +
 		'<div style="height: 50px;">' +
 		'<img style="position: relative; float: left; left: 10px; top: 10px; width: 35px; height: 35px;" src="/images/pj_image_float_logo.png"></img>' +
 		'<p style="position: relative; top: 10px; left: -10px; text-align: center;">' + title + '</p>' +
@@ -1206,14 +1209,12 @@ sdk.showOpenScreenTextBox = function (title, content) {
 		'</div>';
 
 	$("body").append(openScreenTextHtml);
+	sdk.hasOpenScreenText = true;
 
 	//注册监听事件
 	document.getElementById("open-screen-text-close-img").onclick = function () {
 		sdk.closeOpenScreenTextBox();
-
-		if (!sdk.getItem("coupon_flag")) {
-			$("#open-screen-coupon-box").css("visibility", "visible");
-		}
+		$("#open-screen-coupon-box").css("visibility", "visible");
 	}
 
 	document.getElementById("open-screen-text-loginCheck").onclick = function () {
@@ -1240,6 +1241,7 @@ sdk.updateCheckUrl = function (id) {
  */
 sdk.closeOpenScreenTextBox = function () {
 	$("#opne-screen-text-box").remove();
+	sdk.hasOpenScreenText = false;
 
 	//判断是否勾选今日不再提示,若已勾选,则保存今日日期
 	if (isOpenScreenFlag) {
@@ -1256,9 +1258,11 @@ sdk.showOpenScreenImage = function (url, imgUrl) {
 	var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
 	var date = sdk.getItem("open_image_date");
 	if (newDate == date) return;
+	//开屏文字框和图片不能同时展示,按后台配置的按顺序展示
+	if (sdk.hasOpenScreenText) return;
 
 	const openScreenImageHtml = '<div id="open-screen-image-box" class="mask">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; border-radius: 5px; background: rgba(0,0,0,0);">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; margin-left: -19%; border-radius: 5px; background: rgba(0,0,0,0);">' +
 		'<img id="open-screen-image-img" style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
 		'<img id="open-screen-image-close-img" style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" src="/images/sdk2.0/pj_ad_close.png"></img>' +
 		'<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
@@ -1273,14 +1277,14 @@ sdk.showOpenScreenImage = function (url, imgUrl) {
 	//注册监听事件
 	document.getElementById("open-screen-image-close-img").onclick = function () {
 		sdk.closeOpenScreenImage();
+		$("#open-screen-coupon-box").css("visibility", "visible");
 
-		if (!sdk.getItem("coupon_flag")) {
-			$("#open-screen-coupon-box").css("visibility", "visible");
-		}
 	}
 
 	document.getElementById("open-screen-image-img").onclick = function () {
-		window.location.herf = url;
+		sdk.closeOpenScreenImage();
+		var jumpUrl = sdk.concatJumpUrl(url);
+		sdk.showHomeViewHtml(jumpUrl);
 	};
 
 	document.getElementById("open-screen-image-loginCheck").onclick = function () {
@@ -1309,6 +1313,9 @@ sdk.closeOpenScreenImage = function () {
  */
 sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 	if (!deduct) return;
+	var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
+	var date = sdk.getItem("open_coupon_date");
+	if (newDate == date) return;
 
 	var text = "";
 	//满减规则；1有门槛，2无门槛
@@ -1319,7 +1326,7 @@ sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 	}
 
 	const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="mask" style="visibility: hidden">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; border-radius: 10px;">' +
+		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; border-radius: 10px; margin-left: -19%;">' +
 		'<img style="width: 280p; height: 280px;" src="images/sdk2.0/pj_dialog_voucher.png"></img>' +
 		'<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>' +
 		'<div class="flex" style="position:  absolute; top: 70px; height: 80px; width: 100%; height: 80px;">' +
@@ -1337,7 +1344,8 @@ sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 	//注册监听事件
 	document.getElementById("coupon-receive-button").onclick = function () {
 		sdk.closeOpenScreenCoupon();
-		window.location.href = receiveUrl;
+		var jumpUrl = sdk.concatJumpUrl(receiveUrl);
+		sdk.showHomeViewHtml(jumpUrl);
 	}
 };
 
@@ -1347,9 +1355,7 @@ sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 sdk.closeOpenScreenCoupon = function () {
 	$("#open-screen-coupon-box").remove();
 
-	if (!sdk.getItem("coupon_flag")) {
-		sdk.setItem("coupon_flag", true);
-	}
+	sdk.setItem("open_coupon_date", (new Date().getMonth() + 1) + "-" + new Date().getDate());
 };
 
 /**
@@ -1513,7 +1519,7 @@ sdk.enableFloatBox02 = function () {
 					$("#red-dot").css("visibility", "visible");
 				} else if (data.floatTipList) {
 					$("#float-tip").css("visibility", "visible");
-					if(data.floatTipList[0]) sdk.showLeftTooltip(data.floatTipList[0].content);
+					if (data.floatTipList[0]) sdk.showLeftTooltip(data.floatTipList[0].content);
 				}
 			});
 		}, data.reqSecond * 1000);
@@ -1526,21 +1532,33 @@ sdk.enableFloatBox02 = function () {
 			$("#red-dot").css("visibility", "hidden");
 			$("#float-tip").css("visibility", "hidden");
 
-            $("body").append(
-                '<div id="home-mask-div" class="bg000"></div>'+
-                '<div id="home-div" class="iframe_css">' +
-                '<iframe src="'+ data +'" bordr="0" style="width: 100%; height: 100%; background: #f2f2f2;"></iframe>' +
-                '</div>'
-            );
-
-            document.getElementById("home-mask-div").onclick = function () {
-                $("#home-mask-div").remove();
-                $("#home-div").remove();
-                $("#shortcut").css("visibility", "visible");
-            }
+			sdk.showHomeViewHtml(data);
 		});
 	}
 };
+
+/**
+ * @desc 显示主页面
+ * @param {String} url 路径
+ */
+sdk.showHomeViewHtml = function (url) {
+	const homeViewHtml = '<div id="home-mask-div" class="bg000"></div>' +
+		'<div id="home-div" class="iframe_css">' +
+		'<iframe src=' + url + ' bordr="0px" style="width: 100%; height: 100%; background: #f2f2f2; border: 0px;"></iframe>' +
+		'</div>';
+
+	$("body").append(homeViewHtml);
+
+	document.getElementById("home-mask-div").onclick = function () {
+		sdk.closeHomeViewHtml();
+		$("#home-div").remove();
+		$("#shortcut").css("visibility", "visible");
+	}
+}
+
+sdk.closeHomeViewHtml = function () {
+	$("#home-mask-div").remove();
+}
 
 /**
  * @desc 关闭悬浮球
@@ -1585,10 +1603,10 @@ sdk.closeFloatTip = function () {
  * @desc 显示左侧提示框
  * @param content
  */
-sdk.showLeftTooltip = function(content) {
+sdk.showLeftTooltip = function (content) {
 	const leftTooltipHtml = '<div id="left-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: 60px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
 		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-right-color: #000000; position: relative; top: 5px; left: -15px;"></div>' +
-		'<h5 id="left-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> '+ content + '</h5>' +
+		'<h5 id="left-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
 		'</div>';
 	$("#shortcut").append(leftTooltipHtml);
 
@@ -1601,7 +1619,7 @@ sdk.showLeftTooltip = function(content) {
 /**
  * @desc 关闭左侧提示框
  */
-sdk.closeLeftTooltip = function() {
+sdk.closeLeftTooltip = function () {
 	$("#left-tooltip").remove();
 }
 
@@ -1609,10 +1627,10 @@ sdk.closeLeftTooltip = function() {
  * @desc 显示右侧提示框
  * @param content
  */
-sdk.showRightTooltip = function(content) {
+sdk.showRightTooltip = function (content) {
 	const rightTooltipHtml = '<div id="right-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: -110px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
 		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-left-color: #000000; position: relative; top: 5px; left: 95px;"></div>' +
-		'<h5 id="right-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> '+ content + '</h5>' +
+		'<h5 id="right-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
 		'</div>';
 	$("#shortcut").append(rightTooltipHtml);
 
@@ -1625,9 +1643,53 @@ sdk.showRightTooltip = function(content) {
 /**
  * @desc 关闭右侧提示框
  */
-sdk.closeRightTooltip = function() {
+sdk.closeRightTooltip = function () {
 	$("#right-tooltip").remove();
 }
+
+/**
+ * @desc 关闭支付框
+ */
+sdk.closePayBox02 = function () {
+	$("#payBox-02").remove();
+};
+
+/**
+ * @desc 打开支付框
+ * @param params
+ */
+sdk.loadPayBox02 = function (params) {
+	params["channel"] = sdk.getItem("channel");
+	params["channelGameId"] = sdk.getItem("channelGameId");
+	params["sdkVersion"] = sdk.sdkVersion_v2;
+	if (sdk.isWeixin()) { //微信公众号支付需要用户oppenid
+		params["openid"] = sdk.getItem("openid");
+	}
+
+	sdk.closePayBox();
+	sdk.showLoading();
+
+	//获取支付Url
+	sdk.api(params, "getPayUrl", function (retData) {
+		if (retData.code == 1) {
+			var data = retData.data;
+			sdk.closeLoading();
+
+			var payBox = '<div id="payBox-02" style="top:0px;" class="mask2 login-box2">';
+			payBox += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+			payBox += '<div class="login-head2"  style="text-align: right; z-index: 9999;"><span><i class="icon-cancel" style="position:absolute; left: -18px; top: 22px; transform: scale(2.0); z-index: 9999;" onclick="sdk.closePayBox02()"></i></span></div>';
+			payBox += '<div class="login-body" style="height:' + $(window).height() + 'px !important;-webkit-overflow-scrolling: touch; overflow-y: scroll;">';
+			payBox += '<iframe  width="' + $(window).width() + 'px !important" frameborder="no" scrolling="yes" border="0px" height="' + $(window).height() + 'px;" src="' + data.payUrl + '"></iframe>';
+			payBox += '</div>';
+			payBox += '</div>';
+			payBox += '</div>';
+			$("body").append(payBox);
+		} else {
+			sdk.confirmDialog(retData.msg);
+			sdk.closeLoading();
+		}
+	});
+};
 
 /**
  * @desc 自动登录
@@ -1753,7 +1815,7 @@ sdk.showAccountLoginBox = function () {
 		'<div>' +
 		'<div id="userBox" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" placeholder="请输入账号" list="fruit" value='+ userName + '>' +
+		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" placeholder="请输入账号" list="fruit" value=' + userName + '>' +
 		'<datalist id="fruit">' +
 		'</datalist>' +
 		'</div>' +
@@ -1786,9 +1848,9 @@ sdk.showAccountLoginBox = function () {
 	$("body").append(accountLoginHtml);
 
 	var userNameArray = JSON.parse(sdk.getItem("username_array"));
-	if(userNameArray && userNameArray.length > 0) {
+	if (userNameArray && userNameArray.length > 0) {
 		for (var i = 0; i < userNameArray.length; i++) {
-			$("#fruit").append('<option>' + userNameArray[i]+ '</option>');
+			$("#fruit").append('<option>' + userNameArray[i] + '</option>');
 		}
 	}
 
@@ -1927,7 +1989,7 @@ sdk.showMobileLoginVeriPwdBox = function (userName) {
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>'+
+		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>' +
 		'<div id="mobile-login-veri-pwd-flex" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
 		'<input id="mobile-login-veri-pwd-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="password" value="" placeholder="请输入登录密码">' +
@@ -1937,7 +1999,7 @@ sdk.showMobileLoginVeriPwdBox = function (userName) {
 		'<div class="flex">' +
 		'<button id="mobile-login-veri-pwd-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
 		'</div>' +
-		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>'+
+		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>' +
 		'</div>' +
 		'</div>' +
 		'</div>';
@@ -1974,7 +2036,7 @@ sdk.showMobileLoginVeriUserNameBox = function (mobile) {
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>'+
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
 		'<div id="mobile-login-veri-username-flex" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
 		'<input id="mobile-login-veri-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入游戏账号">' +
@@ -2019,7 +2081,7 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
 		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
 		'<div class="login-body">' +
 		'<div>' +
-		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>'+
+		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
 		'<div id="mobile-login-selected-username-flex" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
 		'<input id="mobile-login-selected-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" list="fruit" placeholder="请选择游戏账号">' +
@@ -2036,7 +2098,7 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
 
 	$("body").append(mobileLogSelectedUserNameHtml);
 
-	if(data.userList && data.userList.length > 0) {
+	if (data.userList && data.userList.length > 0) {
 		for (var i = 0; i < data.userList.length; i++) {
 			$("#fruit").append('<option>' + data.userList[i].userName + '</option>');
 		}
@@ -2124,11 +2186,12 @@ sdk.showLoadingLoginBox = function (userName, password) {
  * @desc 数组去重
  * @param {Array} array 数组
  */
-sdk.distinct = function(array) {
-	var result = [], i, j, len = array.length;
-	for(i = 0; i < len; i++) {
-		for(j = i + 1; j < len; j++) {
-			if(array[i] === array[j]) {
+sdk.distinct = function (array) {
+	var result = [],
+		i, j, len = array.length;
+	for (i = 0; i < len; i++) {
+		for (j = i + 1; j < len; j++) {
+			if (array[i] === array[j]) {
 				j = ++i;
 			}
 		}
@@ -2184,6 +2247,32 @@ sdk.showRegisterSuccBox = function (userName, password) {
  */
 sdk.closeRegisterSuccBox = function () {
 	$("#register-succ-box").remove();
+}
+
+/**
+ * @desc 连接跳转链接
+ * @param {string} sourceUrl 源链接
+ * @returns {*|string}
+ */
+sdk.concatJumpUrl = function (sourceUrl) {
+	var params = {};
+	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
+	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
+	params["os"] = ""; //系统版本
+	params["channel"] = sdk.getItem("channel"); //渠道号
+	params["appVersion"] = sdk.appVersion; //app版本号
+	params["platformType"] = sdk.platformType; //系统类型
+	params["mac"] = ""; //设备mac地址
+	params["imei"] = ""; //安卓设备imei
+	params["idfa"] = ""; //IOS设备idfa
+	params["sdkVersion"] = sdk.sdkVersion_v2; //SDK版本号
+	params["tBrand"] = ""; //机型
+	params["channelId"] = sdk.getItem("channelGameId"); //渠道商ID
+	params["udid"] = sdk.getUdid(); //设备udid
+	params["platformId"] = sdk.platformId; //平台ID
+	params["token"] = sdk.getItem("sdkToken"); //用户登录token
+
+	return sdk.buildURL(sourceUrl, params);
 }
 
 /**
@@ -2244,13 +2333,13 @@ sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUser
 			}
 		} else if (retData.code == 301) {
 			//已绑定账号需要输入账号密码
-			if(veriPwdCallback) veriPwdCallback(retData.data);
+			if (veriPwdCallback) veriPwdCallback(retData.data);
 		} else if (retData.code == 302) {
 			//已绑定账号需要输入账号
-			if(veriUserNameCallback)veriUserNameCallback();
+			if (veriUserNameCallback) veriUserNameCallback();
 		} else if (retData.code == 303) {
 			//绑定多个账号需要选择账号登录
-			if(selectedUserNameCallback) selectedUserNameCallback(retData.data);
+			if (selectedUserNameCallback) selectedUserNameCallback(retData.data);
 
 		} else {
 			sdk.confirmDialog(retData.msg);
@@ -2485,7 +2574,7 @@ sdk.quickReg02 = function (callback) {
  * @param {String} password 密码
  * @param {Function} callback 回调函数
  */
-sdk.userNameReg02 = function(userName, password, callback) {
+sdk.userNameReg02 = function (userName, password, callback) {
 	var params = {};
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	params["udid"] = sdk.getUdid();
@@ -2498,7 +2587,7 @@ sdk.userNameReg02 = function(userName, password, callback) {
 	sdk.showLoading();
 	sdk.api(params, "reg", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
-			if(callback) callback(retData.data);
+			if (callback) callback(retData.data);
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
