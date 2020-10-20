@@ -6,8 +6,8 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-sdk.host = "https://h5.paojiao.cn";
-// sdk.host = "http://localhost:8080";
+// sdk.host = "https://h5.paojiao.cn";
+sdk.host = "http://localhost:8080";
 
 sdk.apiUrl = sdk.host + "/api/";
 // sdk.mainUrl = sdk.host + '/main.html';
@@ -688,7 +688,7 @@ function touchend(e) {
 		sdk.shortcut.style.left = "auto";
 
 		//修改红点/气泡消息位置
-		$("#red-dot").css("left", "-5px");
+		$("#red-dot").css("left", "0px");
 		$("#float-tip").css("left", "-5px");
 		var hasLeftTooltip = document.getElementById("left-tooltip");
 		if (hasLeftTooltip) {
@@ -1502,23 +1502,24 @@ sdk.enableFloatBox02 = function () {
 	//绑定touch事件
 	sdk.bindTouchEvent();
 
+
 	//初始化悬浮球菜单
 	sdk.initFloatTips(function (data) {
 
 		sdk.showRedDot();
 		sdk.showFloatTip(1);
 		if (data.redDotStatus == 1) {
-			$("#red-dot").css("visibility", "visible");
+			sdk.enableRedDot(true);
 		} else if (data.floatTipList) {
-			$("#float-tip").css("visibility", "visible");
+			sdk.enableFloatTip(true);
 		}
 		//定时请求气泡消息
 		setInterval(function () {
 			sdk.initFloatTips(function (data) {
 				if (data.redDotStatus == 1) {
-					$("#red-dot").css("visibility", "visible");
+					sdk.enableRedDot(true);
 				} else if (data.floatTipList) {
-					$("#float-tip").css("visibility", "visible");
+					sdk.enableRedDot(true);
 					if (data.floatTipList[0]) sdk.showLeftTooltip(data.floatTipList[0].content);
 				}
 			});
@@ -1529,8 +1530,8 @@ sdk.enableFloatBox02 = function () {
 	document.getElementById("icondDiv").onclick = function () {
 		sdk.initFloatBox02(function (data) {
 			$("#shortcut").css("visibility", "hidden");
-			$("#red-dot").css("visibility", "hidden");
-			$("#float-tip").css("visibility", "hidden");
+			sdk.enableRedDot(false);
+			sdk.enableFloatTip(false);
 
 			sdk.showHomeViewHtml(data);
 		});
@@ -1567,6 +1568,7 @@ sdk.closeFloatBox02 = function () {
 	$("#shortcut").remove();
 }
 
+
 /**
  * @desc 显示消息红点
  */
@@ -1582,12 +1584,28 @@ sdk.closeRedDot = function () {
 	$("#red-dot").remove();
 }
 
+sdk.hasRedDot = false;
+/**
+ * @desc 启用红点
+ * @param {Boolean} hasFlag 是否标记
+ */
+sdk.enableRedDot = function (hasFlag) {
+	if (hasFlag) {
+		$("#red-dot").css("visibility", "visible");
+		sdk.hasRedDot = true;
+	} else {
+		$("#red-dot").css("visibility", "hidden");
+		sdk.hasRedDot = false;
+	}
+}
+
 /**
  * @desc 显示悬浮红点提示消息
  * @param {number} num
  */
 sdk.showFloatTip = function (num) {
-	const floatTipHtml = '<div id="float-tip" class="r50" style="width: 15px; height: 15px;  position: relative; top: -40px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
+	if (sdk.hasRedDot) return;
+	const floatTipHtml = '<div id="float-tip" class="r50" style="width: 15px; height: 15px;  position: relative; top: -50px; left: 40px; background-color:#ff0000; font-size: 10px; color: #ffffff; text-align:center; visibility: hidden"> ' + num + '</div>';
 
 	$("#shortcut").append(floatTipHtml);
 }
@@ -1597,6 +1615,18 @@ sdk.showFloatTip = function (num) {
  */
 sdk.closeFloatTip = function () {
 	$("#float-tip").remove();
+}
+
+/**
+ * @desc 启用消息红点
+ * @param {Boolean} hasFlag 是否标记
+ */
+sdk.enableFloatTip = function (hasFlag) {
+	if (hasFlag && !sdk.hasRedDot) {
+		$("#float-tip").css("visibility", "visible");
+	} else {
+		$("#float-tip").css("visibility", "hidden");
+	}
 }
 
 /**
@@ -1648,13 +1678,6 @@ sdk.closeRightTooltip = function () {
 }
 
 /**
- * @desc 关闭支付框
- */
-sdk.closePayBox02 = function () {
-	$("#payBox-02").remove();
-};
-
-/**
  * @desc 打开支付框
  * @param params
  */
@@ -1675,20 +1698,34 @@ sdk.loadPayBox02 = function (params) {
 			var data = retData.data;
 			sdk.closeLoading();
 
-			var payBox = '<div id="payBox-02" style="top:0px;" class="mask2 login-box2">';
-			payBox += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
-			payBox += '<div class="login-head2"  style="text-align: right; z-index: 9999;"><span><i class="icon-cancel" style="position:absolute; left: -18px; top: 22px; transform: scale(2.0); z-index: 9999;" onclick="sdk.closePayBox02()"></i></span></div>';
-			payBox += '<div class="login-body" style="height:' + $(window).height() + 'px !important;-webkit-overflow-scrolling: touch; overflow-y: scroll;">';
-			payBox += '<iframe  width="' + $(window).width() + 'px !important" frameborder="no" scrolling="yes" border="0px" height="' + $(window).height() + 'px;" src="' + data.payUrl + '"></iframe>';
-			payBox += '</div>';
-			payBox += '</div>';
-			payBox += '</div>';
-			$("body").append(payBox);
+			if (sdk.isWeixin()) {
+				//微信浏览器内使用iframe加载，拉不起公众号支付。
+				window.location.href = data.payUrl;
+			} else if (sdk.is_safari()) {
+				window.location.href = data.payUrl;
+			} else {
+				var payBox = '<div id="payBox-02" style="top:0px;" class="mask2 login-box2">';
+				payBox += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+				payBox += '<div class="login-head2"  style="text-align: right; z-index: 9999;"><span><i class="icon-cancel" style="position:absolute; left: -18px; top: 22px; transform: scale(2.0); z-index: 9999;" onclick="sdk.closePayBox02()"></i></span></div>';
+				payBox += '<div class="login-body" style="height:' + $(window).height() + 'px !important;-webkit-overflow-scrolling: touch; overflow-y: scroll;">';
+				payBox += '<iframe  width="' + $(window).width() + 'px !important" frameborder="no" scrolling="yes" border="0px" height="' + $(window).height() + 'px;" src="' + data.payUrl + '"></iframe>';
+				payBox += '</div>';
+				payBox += '</div>';
+				payBox += '</div>';
+				$("body").append(payBox);
+			}
 		} else {
 			sdk.confirmDialog(retData.msg);
 			sdk.closeLoading();
 		}
 	});
+};
+
+/**
+ * @desc 关闭支付框
+ */
+sdk.closePayBox02 = function () {
+	$("#payBox-02").remove();
 };
 
 /**
@@ -1806,7 +1843,6 @@ sdk.updateQuickLoginSelected = function () {
  */
 sdk.showAccountLoginBox = function () {
 	var userName = sdk.getItem("quick_userName") || "";
-	// var password = sdk.getItem("quick_password") || "";
 
 	const accountLoginHtml = '<div id="account-login-box" class="mask login-box">' +
 		'<div class="r5">' +
@@ -1877,8 +1913,25 @@ sdk.showAccountLoginBox = function () {
 		var userName = $("#account-login-account-input").val();
 		var password = $("#account-login-password-input").val();
 
-		sdk.login02(userName, password, function () {
+		sdk.login02(userName, password, function (data) {
 			sdk.closeAccountLoginBox();
+
+			var uid = data.uid;
+			var token = data.token;
+
+			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
+			//保存最新的登录账号,密码
+			sdk.setItem("quick_userName", userName);
+			sdk.setItem("quick_password", password)
 
 			var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
 			userNameArray.push(userName);
@@ -1944,8 +1997,21 @@ sdk.showMobileLoginBox = function () {
 	document.getElementById("mobile-login-loading-button").onclick = function () {
 		var mobile = $("#mobile").val();
 		var smsCode = $("#smsCode").val();
-		sdk.mobileLogin(mobile, smsCode, function () {
+		sdk.mobileLogin(mobile, smsCode, function (data) {
 			sdk.closeMobileLoginBox();
+			var uid = data.uid;
+			var token = data.token;
+
+			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
 		}, function (data) {
 			sdk.closeMobileLoginBox();
 			sdk.showMobileLoginVeriPwdBox(data.user.userName);
@@ -2009,8 +2075,22 @@ sdk.showMobileLoginVeriPwdBox = function (userName) {
 	document.getElementById("mobile-login-veri-pwd-button").onclick = function () {
 		var password = $("#mobile-login-veri-pwd-input").val();
 
-		sdk.login02(userName, password, function () {
+		sdk.login02(userName, password, function (data) {
 			sdk.closeMobileLoginVeriPwdBox();
+
+			var uid = data.uid;
+			var token = data.token;
+
+			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
 		});
 	}
 
@@ -2053,8 +2133,22 @@ sdk.showMobileLoginVeriUserNameBox = function (mobile) {
 	//注册监听事件
 	document.getElementById("mobile-login-veri-username-button").onclick = function () {
 		var userName = $("#mobile-login-veri-username-input").val();
-		sdk.selectedLogin(mobile, userName, function () {
+		sdk.selectedLogin(mobile, userName, function (data) {
 			sdk.closeMobileLoginVeriUserNameBox();
+
+			var uid = data.uid;
+			var token = data.token;
+
+			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
 
 			var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
 			userNameArray.push(userName);
@@ -2106,8 +2200,22 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
 	//注册监听事件
 	document.getElementById("mobile-login-selected-username-button").onclick = function () {
 		var userName = $("#mobile-login-selected-username-input").val();
-		sdk.selectedLogin(mobile, userName, function () {
+		sdk.selectedLogin(mobile, userName, function (data) {
 			sdk.closeMobileLoginVeriUserNameBox();
+
+			var uid = data.uid;
+			var token = data.token;
+
+			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
 
 			var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
 			userNameArray.push(userName);
@@ -2165,8 +2273,22 @@ sdk.showLoadingLoginBox = function (userName, password) {
 	setTimeout(function () {
 		$("loading-login-update-button").css("visibility", "hidden");
 		if (!hasUpdateAccount) {
-			sdk.login02(userName, password, function () {
+			sdk.login02(userName, password, function (data) {
 				sdk.closeLoadingLoginBox();
+
+				var uid = data.uid;
+				var token = data.token;
+
+				var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+				var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+				if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+					sdk.showRealNameAuth(openRealNameAuth, uid, token);
+				} else {
+					sdk.setItem("uid", uid);
+					sdk.setItem("sdkToken", token);
+					sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+					window.location.href = sdk.mainUrl;
+				}
 
 				var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
 				userNameArray.push(userName);
@@ -2232,8 +2354,22 @@ sdk.showRegisterSuccBox = function (userName, password) {
 
 	//注册监听事件
 	document.getElementById("register-succ-button").onclick = function () {
-		sdk.login02(userName, password, function () {
+		sdk.login02(userName, password, function (data) {
 			sdk.closeRegisterSuccBox();
+
+			var uid = data.uid;
+			var token = data.token;
+
+			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+				sdk.showRealNameAuth(openRealNameAuth, uid, token);
+			} else {
+				sdk.setItem("uid", uid);
+				sdk.setItem("sdkToken", token);
+				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+				window.location.href = sdk.mainUrl;
+			}
 
 			var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
 			userNameArray.push(userName);
@@ -2317,20 +2453,6 @@ sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUser
 	sdk.api(params, "mobileLogin", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
 			if (callback) callback(retData.data);
-
-			var uid = retData.data.uid;
-			var token = retData.data.token;
-
-			var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-			var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
-			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-				sdk.showRealNameAuth(openRealNameAuth, uid, token);
-			} else {
-				sdk.setItem("uid", uid);
-				sdk.setItem("sdkToken", token);
-				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-				window.location.href = sdk.mainUrl;
-			}
 		} else if (retData.code == 301) {
 			//已绑定账号需要输入账号密码
 			if (veriPwdCallback) veriPwdCallback(retData.data);
@@ -2340,7 +2462,6 @@ sdk.mobileLogin = function (mobile, smsCode, callback, veriPwdCallback, veriUser
 		} else if (retData.code == 303) {
 			//绑定多个账号需要选择账号登录
 			if (selectedUserNameCallback) selectedUserNameCallback(retData.data);
-
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
@@ -2381,19 +2502,6 @@ sdk.selectedLogin = function (mobile, userName, callback) {
 	sdk.api(params, "selectLogin", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
 			if (callback) callback(retData.data);
-			var uid = retData.data.uid;
-			var token = retData.data.token;
-
-			var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-			var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
-			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-				sdk.showRealNameAuth(openRealNameAuth, uid, token);
-			} else {
-				sdk.setItem("uid", uid);
-				sdk.setItem("sdkToken", token);
-				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-				window.location.href = sdk.mainUrl;
-			}
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
@@ -2523,22 +2631,8 @@ sdk.login02 = function (userName, password, callback) {
 	sdk.showLoading();
 	sdk.api(params, "login", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
-			if (callback) callback(retData.data);
 			sdk.closeLoading();
-
-			var uid = retData.data.uid;
-			var token = retData.data.token;
-
-			var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-			var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
-			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-				sdk.showRealNameAuth(openRealNameAuth, uid, token);
-			} else {
-				sdk.setItem("uid", uid);
-				sdk.setItem("sdkToken", token);
-				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-				window.location.href = sdk.mainUrl;
-			}
+			if (callback) callback(retData.data);
 		} else {
 			sdk.closeLoading();
 			sdk.confirmDialog(retData.msg);
@@ -2628,8 +2722,9 @@ sdk.initOpenScreen = function (callback) {
 
 /**
  * @desc 初始化退游弹窗
+ * @param {Function} callback 回调函数
  */
-sdk.initOutGame = function () {
+sdk.initOutGame = function (callback) {
 	var params = {};
 	params["gameId"] = sdk.gameInfo.gameId; //游戏ID
 	params["channelGameId"] = sdk.getItem("channelGameId"); //渠道游戏ID
@@ -2650,7 +2745,7 @@ sdk.initOutGame = function () {
 
 	sdk.api(params, "getPopUpConfig", function (retData) {
 		if (retData.code == sdk.SUCCESS) {
-
+			if (callback) callback(retData.data);
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
