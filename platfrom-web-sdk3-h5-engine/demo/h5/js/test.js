@@ -34,4 +34,4 @@ test.delCookoe = function (name) {
     setCookie(name, null, -1);
 }
 
-// window.TEST = test;
+window.TEST = test;
