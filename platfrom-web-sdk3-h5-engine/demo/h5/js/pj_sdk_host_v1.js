@@ -1,6 +1,7 @@
 //泡椒h5sdk-服务器端
 var sdk = window.PJ_SDK || {};
 
+
 sdk.debug = false;
 sdk.platformId = 4;
 sdk.channelId = -1;
@@ -1882,6 +1883,11 @@ sdk.showAccountLoginBox = function () {
 		'</div>';
 
 	$("body").append(accountLoginHtml);
+	//页面初始化,如果账号密码cookie存在则填充
+	// if (test.getCookie('user') && test.getCookie('pswd')) {
+	// 	document.getElementById("account-login-account-input") = test.getCookie("user");
+	// 	document.getElementById("account-login-password-input") = test.getCookie("pwsd");
+	// }
 
 	var userNameArray = JSON.parse(sdk.getItem("username_array"));
 	if (userNameArray && userNameArray.length > 0) {
@@ -1913,30 +1919,34 @@ sdk.showAccountLoginBox = function () {
 		var userName = $("#account-login-account-input").val();
 		var password = $("#account-login-password-input").val();
 
-		sdk.login02(userName, password, function (data) {
-			sdk.closeAccountLoginBox();
+		//保存cookie
+		// test.setCookie("user", userName, 7);
+		// test.setCookie("pswd", password, 7);
 
-			var uid = data.uid;
-			var token = data.token;
+		// sdk.login02(userName, password, function (data) {
+		// 	sdk.closeAccountLoginBox();
 
-			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
-			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-				sdk.showRealNameAuth(openRealNameAuth, uid, token);
-			} else {
-				sdk.setItem("uid", uid);
-				sdk.setItem("sdkToken", token);
-				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-				window.location.href = sdk.mainUrl;
-			}
-			//保存最新的登录账号,密码
-			sdk.setItem("quick_userName", userName);
-			sdk.setItem("quick_password", password)
+		// 	var uid = data.uid;
+		// 	var token = data.token;
 
-			var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
-			userNameArray.push(userName);
-			sdk.distinct(userNameArray);
-		});
+		// 	var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+		// 	var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+		// 	if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+		// 		sdk.showRealNameAuth(openRealNameAuth, uid, token);
+		// 	} else {
+		// 		sdk.setItem("uid", uid);
+		// 		sdk.setItem("sdkToken", token);
+		// 		sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+		// 		window.location.href = sdk.mainUrl;
+		// 	}
+		// 	//保存最新的登录账号,密码
+		// 	sdk.setItem("quick_userName", userName);
+		// 	sdk.setItem("quick_password", password)
+
+		// 	var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
+		// 	userNameArray.push(userName);
+		// 	sdk.distinct(userNameArray);
+		// });
 		// sdk.showLoadingLoginBox(userName, password);
 	}
 

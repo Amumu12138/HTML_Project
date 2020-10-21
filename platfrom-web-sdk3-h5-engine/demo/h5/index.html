@@ -13,8 +13,9 @@
 	<meta name="screen-orientation" content="portrait" />
 	<title>SDK DEMO</title>
 
+	<script type="text/javascript" src="js/test.js"></script>
 	<script type="text/javascript" src="js/pj_sdk_client.js"></script>
-	<script type="text/javascript" src="js/pj_sdk_host.js"></script>
+	<script type="text/javascript" src="js/pj_sdk_host_v1.js"></script>
 	<script type="text/javascript" src="js/pj_channel_sdk.js"></script>
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="/js/jquery.md5.js"></script>
@@ -447,6 +448,10 @@
 	//显示账号登录弹框
 	function showLoginBox03() {
 		sdk.showAccountLoginBox();
+
+		window.test.setCookie("user", "ASDFGH", 7);
+		window.test.setCookie("pswd", "123456", 7);
+		console.log("Amumu user = " + window.test.getCookie("user") + " pswd = " + window.test.getCookie("pswd"));
 	}
 
 	//显示手机登录弹框
@@ -617,44 +622,44 @@
 		$("#layoutHtml").remove();
 	}
 
-	function test() {
-		//判断设备是android还是ios
-		// var u = navigator.userAgent,
-		// 	app = navigator.appVersion;
-		// var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
-		// var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+	// function test() {
+	//判断设备是android还是ios
+	// var u = navigator.userAgent,
+	// 	app = navigator.appVersion;
+	// var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+	// var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 
-		// //判断是否是微信打开
-		// function is_weixin() {
-		// 	var ua = navigator.userAgent.toLowerCase();
-		// 	if (ua.match(/MicroMessenger/i) == "micromessenger") {
-		// 		return true;
-		// 	} else {
-		// 		return false;
-		// 	}
-		// }
+	// //判断是否是微信打开
+	// function is_weixin() {
+	// 	var ua = navigator.userAgent.toLowerCase();
+	// 	if (ua.match(/MicroMessenger/i) == "micromessenger") {
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
 
-		// //判断是否是IphoneX异型屏
-		// function is_iphoneX() {
-		// 	return window.innerHeight / window.innerWidth > 2 ? true : false;
-		// }
+	// //判断是否是IphoneX异型屏
+	// function is_iphoneX() {
+	// 	return window.innerHeight / window.innerWidth > 2 ? true : false;
+	// }
 
-		// console.log("Amumu isiOS = ", isiOS + " isIphoneX = " + is_iphoneX() + " isWeixin = " + is_weixin());
+	// console.log("Amumu isiOS = ", isiOS + " isIphoneX = " + is_iphoneX() + " isWeixin = " + is_weixin());
 
-		// const testHtml = `
-		// 	<div id="gameFrameDiv" style="width: ${$(window).width()}px;  height:  ${$(window).height()}px; position: relative; top: 0px; left: 0px;">
-		// 		<iframe id="gameFrame" name="gameFrame" src="https://lngame.ijunhai.com/shj_pj115366/index.html?game_id=208&amp;channel_id=8519&amp;game_channel_id=115366&amp;mirror_js_name=paojiaoh5&amp;uid=24418751&amp;sdkToken=BkqrQh9j0P8dKjmyAKgPOuP2jMPcEjcZ" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ${$(window).width()}px; height:${$(window).height()}px;">
-		// 		</iframe>
-		// 	</div>
-		// `;
-		// $("body").append(testHtml);
+	// const testHtml = `
+	// 	<div id="gameFrameDiv" style="width: ${$(window).width()}px;  height:  ${$(window).height()}px; position: relative; top: 0px; left: 0px;">
+	// 		<iframe id="gameFrame" name="gameFrame" src="https://lngame.ijunhai.com/shj_pj115366/index.html?game_id=208&amp;channel_id=8519&amp;game_channel_id=115366&amp;mirror_js_name=paojiaoh5&amp;uid=24418751&amp;sdkToken=BkqrQh9j0P8dKjmyAKgPOuP2jMPcEjcZ" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ${$(window).width()}px; height:${$(window).height()}px;">
+	// 		</iframe>
+	// 	</div>
+	// `;
+	// $("body").append(testHtml);
 
-		const loadingHtml = `<div class="ball-clip-rotate">
-			<div></div>
-		</div>`;
-		$("body").append(loadingHtml);
+	// 	const loadingHtml = `<div class="ball-clip-rotate">
+	// 		<div></div>
+	// 	</div>`;
+	// 	$("body").append(loadingHtml);
 
-	}
+	// }
 </script>
 
 </html>
