@@ -1,0 +1,249 @@
+/** 泡椒SDK 2.0新增样式*/
+/* loading加载旋转动画 */
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.ball-clip-rotate>div {
+    position: absolute;
+    right: 85px;
+    background-color: #fff;
+    border-radius: 100%;
+    margin: 2px;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    border: 2px solid #000000;
+    border-bottom-color: transparent;
+    height: 20px;
+    width: 20px;
+    background: transparent !important;
+    display: inline-block;
+    -webkit-animation: rotate 0.75s 0s linear infinite;
+    animation: rotate 0.75s 0s linear infinite;
+}
+
+/*开屏*/
+.open-screen {
+    width: 280px;
+    height: 280px;
+    top: 50px;
+    -o-border-radius: .25rem;
+    -moz-border-radius: .25rem;
+    -webkit-border-radius: .25rem;
+    border-radius: .25rem;
+}
+
+.bg000 {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+    z-index: 3;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+}
+
+.imgbg {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    left: 0px;
+    top: 0px;
+    position: absolute;
+}
+
+/* 竖屏 */
+@media screen and (orientation: portrait) {
+    .iframe-css {
+        width: 100%;
+        height: 74%;
+        background: #f2f2f2;
+        z-index: 4;
+        bottom: 0px;
+        position: absolute;
+        border-radius: 15px 15px 0 0px;
+    }
+
+    /* .shortcut {
+        transform: scale(2.0);
+    } */
+
+    /* .open-screen {
+        transform: scale(2.0);
+        margin-top: 10rem;
+    } */
+
+    .img-float {
+        position: absolute;
+        top: 22%;
+        left: 35%;
+        width: 194px;
+        height: 34px;
+        z-index: 9999;
+        background: url(/images/sdk2.0/pj_float_close_port.png) no-repeat;
+    }
+}
+
+/* 横屏 */
+@media screen and (orientation: landscape) {
+    .iframe-css {
+        width: 60%;
+        height: 100%;
+        background: #f2f2f2;
+        z-index: 4;
+        left: 28px;
+        top: 0px;
+        position: absolute;
+        border-radius: 0px 15px 15px 0px;
+    }
+
+    /* .shortcut {
+        transform: scale(0.8);
+    } */
+
+    /* .open-screen {
+        transform: scale(0.6);
+        margin-top: -3rem;
+    } */
+
+    .img-float {
+        position: absolute;
+        top: 8%;
+        left: 65%;
+        width: 34px;
+        height: 194px;
+        z-index: 9999;
+        background: url(/images/sdk2.0/pj_float_close_landspace.png) no-repeat;
+        transform: scale(0.5);
+    }
+}
+
+/* 开屏样式*/
+.open-screen-mask {
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, .8);
+}
+
+.open-screen-mask>div {
+    position: relative;
+    z-index: 10000;
+    background: #fff;
+    width: 15rem;
+    left: 50%;
+    margin-left: -7.5rem;
+    top: 20%;
+}
+
+.open-screen-head {
+    height: 50px;
+}
+
+.open-screen-head>div>p {
+    position: absolute;
+    left: 30%;
+    top: 10px;
+    text-align: center;
+}
+
+.icon-float-logo {
+    position: absolute;
+    float: left;
+    left: -10px;
+    top: -15px;
+    width: 90px;
+    height: 90px;
+    background: url(/images/pj_image_float_logo.png) no-repeat;
+    transform: scale(0.5);
+}
+
+.icon-jurisdiction-delete {
+    position: absolute;
+    float: right;
+    right: -10px;
+    top: -10px;
+    width: 72px;
+    height: 72px;
+    background: url(/images/sdk2.0/pj_dialog_jurisdiction_delete.png) no-repeat;
+    transform: scale(0.3);
+}
+
+.icon-check-box {
+    width: 15px;
+    height: 15px;
+    background: url(/images/sdk2.0/2.png) no-repeat;
+}
+
+.open-screen-text {
+    font-size: 20px;
+    font-weight: normal;
+    margin: 10px 0 0 10px;
+}
+
+.open-sreen-bottom-flex {
+    position: absolute;
+    bottom: -40px;
+    left: 90px;
+    display: -webkit-box !important;
+    display: -moz-box !important;
+    display: -ms-flexbox !important;
+    display: -webkit-flex !important;
+    display: flex !important;
+}
+
+.open-screen-bottom-text {
+    margin: -3px 0 0 5px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+/*提示框*/
+.shortcut-tooltip {
+    width: 100px;
+    height: 30px;
+    position: absolute;
+    top: 10px;
+    left: 60px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    background-color: #000000;
+    opacity: 0.8;
+    overflow: visible;
+    visibility: visible;
+}
+
+.shortcut-tooltip-arrow-external {
+    width: 0;
+    height: 0px;
+    border: 8px solid transparent;
+    border-right-color: #000000;
+    position: relative;
+    top: 5px;
+    left: -15px;
+}
+
+.shortcut-tooltip-arrow-border {
+    color: #FFFFFF;
+    position: absolute;
+    top: 5px;
+    margin: 0 0 0 0;
+}
+
+/* 登录框样式 */

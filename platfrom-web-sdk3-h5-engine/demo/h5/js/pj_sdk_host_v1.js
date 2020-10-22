@@ -1512,8 +1512,7 @@ sdk.showOpenScreen = function (type) {
 	//判断标签类型
 	switch (type) {
 		case 0: //文字
-			sdk.showOpenScreenTextBox("消费返优惠券01",
-				"[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次");
+			sdk.showOpenScreenTextBox("消费返优惠券","[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次");
 			break;
 		case 1: //图片
 			sdk.showOpenScreenImage("http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
@@ -1538,17 +1537,19 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	var date = sdk.getItem("open_text_date");
 	if (newDate == date) return;
 
-	const openScreenTextHtml = '<div id="opne-screen-text-box" class="mask">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px;">' +
-		'<div style="height: 50px;">' +
-		'<img style="position: relative; float: left; left: 10px; top: 10px; width: 35px; height: 35px;" src="/images/pj_image_float_logo.png"></img>' +
-		'<p style="position: relative; top: 10px; left: -10px; text-align: center;">' + title + '</p>' +
-		'<img id="open-screen-text-close-img" style="position: relative; float: right; right: 10px; top: -15px; width: 20px; height: 20px;" src="/images/sdk2.0/pj_dialog_jurisdiction_delete.png"></img>' +
+	const openScreenTextHtml = '<div id="opne-screen-text-box" class="open-screen-mask">' +
+		'<div class="open-screen">' +
+		'<div class="open-screen-head">' +
+		'<div class="flex">' + 
+		'<div class="icon-float-logo"></div>' +
+		'<p>' + title + '</p>' +
+		'<div id="open-screen-text-close-img" class="icon-jurisdiction-delete"></div>' +
+		'</div>'+
 		'</div>' +
-		'<h5 style="font-size: 20px;font-weight: normal; margin: 10px 0 0 10px;">' + content + '</h5>' +
-		'<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
-		'<img id="open-screen-text-loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
-		'<h5 style="margin: -3px 0 0 5px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</h5>' +
+		'<h5 class="open-screen-text">' + content + '</h5>' +
+		'<div class="open-sreen-bottom-flex">' +
+		'<div id="open-screen-text-loginCheck" class="icon-check-box"></div>' +
+		'<div class="open-screen-bottom-text">今日不再提示</div>' +
 		'</div>' +
 		'</div>' +
 		'</div>';
@@ -1574,10 +1575,12 @@ var isOpenScreenFlag = false;
 sdk.updateCheckUrl = function (id) {
 	if (!isOpenScreenFlag) {
 		isOpenScreenFlag = true;
-		document.getElementById(id).src = "/images/sdk2.0/1.png";
+		// document.getElementById(id).src = "/images/sdk2.0/1.png";
+		$("#" + id + "").css("background", "url(/images/sdk2.0/1.png) no-repeat");
 	} else {
 		isOpenScreenFlag = false;
-		document.getElementById(id).src = "/images/sdk2.0/2.png";
+		// document.getElementById(id).src = "/images/sdk2.0/2.png";
+		$("#" + id + "").css("background", "url(/images/sdk2.0/2.png) no-repeat");
 	}
 }
 
@@ -1847,10 +1850,11 @@ sdk.enableFloatBox02 = function () {
 	//绑定touch事件
 	sdk.bindTouchEvent();
 
-
+	// sdk.showFloatTip(1);
+	// sdk.enableFloatTip(true);
+	// sdk.showLeftTooltip("123");
 	//初始化悬浮球菜单
 	sdk.initFloatTips(function (data) {
-
 		sdk.showRedDot();
 		sdk.showFloatTip(1);
 		if (data.redDotStatus == 1) {
@@ -1983,10 +1987,10 @@ sdk.enableFloatTip = function (hasFlag) {
  * @param content
  */
 sdk.showLeftTooltip = function (content) {
-	const leftTooltipHtml = '<div id="left-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: 60px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
-		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-right-color: #000000; position: relative; top: 5px; left: -15px;"></div>' +
-		'<h5 id="left-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
-		'</div>';
+	const leftTooltipHtml = '<b id="left-tooltip" class="shortcut-tooltip">' +
+		'<a class="shortcut-tooltip-arrow-external"></a>' +
+		'<a id="left-tooltip-text" class="shortcut-tooltip-arrow-border"> ' + content + '</a>' +
+		'</b>';
 	$("#shortcut").append(leftTooltipHtml);
 
 	//延迟2秒后半隐藏
@@ -2007,10 +2011,10 @@ sdk.closeLeftTooltip = function () {
  * @param content
  */
 sdk.showRightTooltip = function (content) {
-	const rightTooltipHtml = '<div id="right-tooltip" style="width: 100px;height: 30px;position: absolute;top: 10px;  left: -110px; border: 2px solid #000000; border-radius: 5px;background-color: #000000; opacity: 0.8; overflow: visible; visibility: visible;">' +
-		'<div style="width: 0; height: 0px; border: 8px solid transparent; border-left-color: #000000; position: relative; top: 5px; left: 95px;"></div>' +
-		'<h5 id="right-tooltip-text" style="color: #FFFFFF; position: absolute; top: 5px; margin: 0 0 0 35%;"> ' + content + '</h5>' +
-		'</div>';
+	const rightTooltipHtml = '<b id="right-tooltip" class="shortcut-tooltip" style="left: -110px;">' +
+		'<a class="shortcut-tooltip-arrow-external" style="left: 95px; border-left-color: #000000; border-right-color: transparent;"></a>' +
+		'<a id="right-tooltip-text" class="shortcut-tooltip-arrow-border"> ' + content + '</a>' +
+		'</b>';
 	$("#shortcut").append(rightTooltipHtml);
 
 	//延迟2秒后半隐藏
