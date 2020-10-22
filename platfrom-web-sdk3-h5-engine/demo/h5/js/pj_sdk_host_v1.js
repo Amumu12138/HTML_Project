@@ -2049,7 +2049,7 @@ sdk.loadPayBox02 = function (params) {
 			window.location.href = data.payUrl;
 		} else {
 			sdk.showPayBox02(data.payUrl)
-		}
+		} 
 	});
 };
 
@@ -2116,10 +2116,12 @@ sdk.autoLogin02 = function () {
  * @param {string} password 密码
  */
 sdk.showQuickLoginBox = function (userName, password) {
-	const quickLoginHtml = '<div id="quick-login-box" class="mask login-box">' +
+	const quickLoginHtml = '<div id="quick-login-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键注册</p></div>' +
-		'<div class="login-body">' +
+		'<div class="login-head-02">' +
+		'<p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键注册</p>' + 
+		'</div>' +
+		'<div class="login-body-02">' +
 		'<div>' +
 		'<div id="userBox" class="flex">' +
 		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
