@@ -1515,10 +1515,11 @@ sdk.showOpenScreen = function (type) {
 			sdk.showOpenScreenTextBox("消费返优惠券","[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次");
 			break;
 		case 1: //图片
-			sdk.showOpenScreenImage("http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
+			sdk.showOpenScreenImage(null, "http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
 			break;
 		case 2: //代金券
-			sdk.showOpenScreenCoupon("/images/pj_background_flash.png");
+			sdk.showOpenScreenCoupon(null, 1, 1, 1);
+			$("#open-screen-coupon-box").css("visibility", "visible");
 			break;
 		default:
 			break;
@@ -1609,16 +1610,16 @@ sdk.showOpenScreenImage = function (url, imgUrl) {
 	//开屏文字框和图片不能同时展示,按后台配置的按顺序展示
 	if (sdk.hasOpenScreenText) return;
 
-	const openScreenImageHtml = '<div id="open-screen-image-box" class="mask">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; border-radius: 5px; background: rgba(0,0,0,0);">' +
-		'<img id="open-screen-image-img" style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
-		'<img id="open-screen-image-close-img" style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" src="/images/sdk2.0/pj_ad_close.png"></img>' +
-		'<div class="flex" style="position: absolute; bottom: -40px; left: 90px;">' +
-		'<img id="open-screen-image-loginCheck" style="width:  15px; height:  15px;" src="/images/sdk2.0/2.png" onclick="sdk.updateCheckUrl()"></img>' +
-		'<h5 style="margin: -3px 0 0 5px; color: #ffffff; font-size: 14px; font-weight: normal;">今日不再提示</h5>' +
-		'</div>' +
-		'</div>' +
-		'</div>';
+	const openScreenImageHtml = '<div id="open-screen-image-box" class="open-screen-mask">' +
+	'<div class="open-screen" style="background: rgba(0,0,0,0);">' +
+	'<img id="open-screen-image-img" style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
+	'<div id="open-screen-image-close-img" class="icon-ad-close"></div>' +
+	'<div class="open-sreen-bottom-flex">' +
+	'<div id="open-screen-image-loginCheck" class="icon-check-box"></div>' +
+	'<div class="open-screen-bottom-text">今日不再提示</div>' +
+	'</div>' +
+	'</div>' +
+	'</div>';
 
 	$("body").append(openScreenImageHtml);
 
@@ -1673,8 +1674,8 @@ sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
 		text = "满" + achieveMoney + "元可用";
 	}
 
-	const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="mask" style="visibility: hidden">' +
-		'<div class="open-screen" style="width: 280px; height: 280px; top: 50px; border-radius: 10px;">' +
+	const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="open-screen-mask" style="visibility: hidden">' +
+		'<div class="open-screen">' +
 		'<img style="width: 280p; height: 280px;" src="images/sdk2.0/pj_dialog_voucher.png"></img>' +
 		'<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>' +
 		'<div class="flex" style="position:  absolute; top: 70px; height: 80px; width: 100%; height: 80px;">' +
@@ -2116,39 +2117,40 @@ sdk.autoLogin02 = function () {
  * @param {string} password 密码
  */
 sdk.showQuickLoginBox = function (userName, password) {
+	//style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px; font-weight: bold;"
 	const quickLoginHtml = '<div id="quick-login-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
 		'<div class="login-head-02">' +
-		'<p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">一键注册</p>' + 
+		'<p>一键注册</p>' + 
 		'</div>' +
 		'<div class="login-body-02">' +
 		'<div>' +
-		'<div id="userBox" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" value=' + userName + ' placeholder="" disabled="disabled">' +
+		'<div id="quick-login-userBox" class="flex">' +
+		'<img src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="quick-login-userName-input" class="flex-list"  type="text" value=' + userName + ' disabled="disabled">' +
 		'</div>' +
-		'<div id="pwdBox" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
-		'<input id="quick-login-pwd-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="password" type="text" value=' + password + ' placeholder="">' +
-		'<img id="quick-login-pwd-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_visible.png"></img>' +
+		'<div id="quick-login-pwdBox" class="flex">' +
+		'<img src="/images/sdk2.0/password2.png"></img>' +
+		'<input id="quick-login-pwd-input" class="flex-list" type="text" value=' + password + ' placeholder="请输入密码">' +
+		'<img id="quick-login-pwd-eye" style="left: 0px; right: 5px;" src="/images/sdk2.0/pj_pw_visible.png"></img>' +
 		'</div>' +
 		'</div>' +
 		'<div class="flex">' +
 		'<img id="quick-login-selected" style="width: 15px; height: 15px;" src="/images/sdk2.0/1.png" value="true" onclick="sdk.updateQuickLoginSelected()">' +
 		'<p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受' +
-		'<p style="margin: 0 0 0 0; font-size: 12px;" onclick="sdk.showXieYi()"><<用户服务协议>></p>' +
+		'<p style="margin: 0 0 0 0; font-size: 12px; color: #BA494B;" onclick="sdk.showXieYi()"><<用户服务协议>></p>' +
 		'</p>' +
 		'</div>' +
-		'<a href="javascript:;" id="quick-login-loading-button" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px; font-weight: bold;" class="btn">注册并登录</a>' +
+		'<a href="javascript:;" id="quick-login-loading-button" class="btn">注册并登录</a>' +
 		'</div>' +
 		'<div class="flex">' +
-		'<a id="quick-login-account-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;">' +
-		'<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
-		'<h5 style="padding: 5px 0 0 5px;">已有账户</h5>' +
+		'<a id="quick-login-account-button" class="flex-02" >' +
+		'<img src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
+		'<p>已有账户</p>' +
 		'</a>' +
-		'<a id="quick-login-mobile-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" onclick="">' +
-		'<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
-		'<h5 style="padding: 5px 0 0 5px;">手机登录</h5>' +
+		'<a id="quick-login-mobile-button" class="flex-02">' +
+		'<img src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
+		'<p>手机登录</p>' +
 		'</a>' +
 		'</div>' +
 		'</div>' +
@@ -2159,23 +2161,23 @@ sdk.showQuickLoginBox = function (userName, password) {
 
 	//注册监听事件
 	document.getElementById("quick-login-account-button").onclick = function () {
-		sdk.closeQuickLoginBox();
-		sdk.showAccountLoginBox();
+		// sdk.closeQuickLoginBox();
+		// sdk.showAccountLoginBox();
 	}
 
 	document.getElementById("quick-login-mobile-button").onclick = function () {
-		sdk.closeQuickLoginBox();
-		sdk.showMobileLoginBox();
+		// sdk.closeQuickLoginBox();
+		// sdk.showMobileLoginBox();
 	}
 
 	document.getElementById("quick-login-loading-button").onclick = function () {
-		if (!isFlag) {
-			sdk.confirmDialog("必须接受用户服务协议");
-			return;
-		}
+		// if (!isFlag) {
+		// 	sdk.confirmDialog("必须接受用户服务协议");
+		// 	return;
+		// }
 
-		sdk.closeQuickLoginBox();
-		sdk.showRegisterSuccBox(userName, password);
+		// sdk.closeQuickLoginBox();
+		// sdk.showRegisterSuccBox(userName, password);
 	}
 
 	document.getElementById("quick-login-pwd-eye").onclick = function () {
@@ -2210,37 +2212,39 @@ sdk.updateQuickLoginSelected = function () {
 sdk.showAccountLoginBox = function () {
 	var userName = sdk.getItem("userName") || "";
 
-	const accountLoginHtml = '<div id="account-login-box" class="mask login-box">' +
+	const accountLoginHtml = '<div id="account-login-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">账号登录</p></div>' +
-		'<div class="login-body">' +
+		'<div class="login-head-02">'+
+		'<p ">账号登录</p>' + 
+		'</div>' +
+		'<div class="login-body-02">' +
 		'<div>' +
-		'<div id="userBox" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input id="account-login-account-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list" id="userName" type="text" placeholder="请输入账号" list="fruit" value=' + userName + '>' +
+		'<div id="account-login-userBox-flex" class="flex">' +
+		'<img src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="account-login-account-input"  class="flex-list" type="text" placeholder="请输入账号" list="fruit" value=' + userName + '>' +
 		'<datalist id="fruit">' +
 		'</datalist>' +
 		'</div>' +
-		'<div id="pwdBox" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
-		'<input id="account-login-password-input" style="width: 200px; height: 40px; color: #000000;" class="flex-list"  type="password" placeholder="请输入密码" value="">' +
-		'<img id="account-login-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
+		'<div id="accoutn-login-pwdBox-flex" class="flex">' +
+		'<img  src="/images/sdk2.0/password2.png"></img>' +
+		'<input id="account-login-password-input"  class="flex-list"  type="password" placeholder="请输入密码" value="">' +
+		'<img id="account-login-eye" style="left: 0px; right: 5px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
 		'</div>' +
 		'</div>' +
 		'<div class="flex" style="margin: 5% 0 0 68%;">' +
 		'<img style="width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>' +
 		'<h5 style="padding-left: 5px; color: #BA494B;" onclick="sdk.showFotPwdBox()">忘记密码</h5>' +
 		'</div>' +
-		'<a href="javascript:;" id="account-login-button" style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px;" class="btn">登录</a> ' +
+		'<a href="javascript:;" id="account-login-button" class="btn">登录</a> ' +
 		'</div>' +
 		'<div class="flex">' +
-		'<a id="account-login-quick-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;" >' +
-		'<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
-		'<h5 style="padding: 5px 0 0 5px;">一键注册</h5>' +
+		'<a id="account-login-quick-button" class="flex-02" >' +
+		'<img  src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
+		'<p >一键注册</p>' +
 		'</a>' +
-		'<a id="account-login-mobile-button" class="flex" style="color:#BA494B; padding: 10px 0 0 10px; width: 50%; text-decoration:none;">' +
-		'<img style="width: 25px; height: 25px;" src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
-		'<h5 style="padding: 5px 0 0 5px;">手机登录</h5>' +
+		'<a id="account-login-mobile-button" class="flex-02" >' +
+		'<img src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
+		'<p>手机登录</p>' +
 		'</a>' +
 		'</div>' +
 		'</div>' +
@@ -2271,38 +2275,38 @@ sdk.showAccountLoginBox = function () {
 	}
 
 	document.getElementById("account-login-mobile-button").onclick = function () {
-		sdk.closeAccountLoginBox();
-		sdk.showMobileLoginBox();
+		// sdk.closeAccountLoginBox();
+		// sdk.showMobileLoginBox();
 	}
 
 	document.getElementById("account-login-button").onclick = function () {
-		var userName = $("#account-login-account-input").val();
-		var password = $("#account-login-password-input").val();
+		// var userName = $("#account-login-account-input").val();
+		// var password = $("#account-login-password-input").val();
 
-		sdk.login02(userName, password, function (data) {
-			sdk.closeAccountLoginBox();
+		// sdk.login02(userName, password, function (data) {
+		// 	sdk.closeAccountLoginBox();
 
-			var uid = data.uid;
-			var token = data.token;
+		// 	var uid = data.uid;
+		// 	var token = data.token;
 
-			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
-			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-				sdk.showRealNameAuth(openRealNameAuth, uid, token);
-			} else {
-				sdk.setItem("uid", uid);
-				sdk.setItem("sdkToken", token);
-				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-				window.location.href = sdk.mainUrl;
-			}
-			//保存最新的登录账号,密码
-			sdk.setItem("userName", userName);
-			sdk.setItem("password", password)
+		// 	var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+		// 	var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+		// 	if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+		// 		sdk.showRealNameAuth(openRealNameAuth, uid, token);
+		// 	} else {
+		// 		sdk.setItem("uid", uid);
+		// 		sdk.setItem("sdkToken", token);
+		// 		sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+		// 		window.location.href = sdk.mainUrl;
+		// 	}
+		// 	//保存最新的登录账号,密码
+		// 	sdk.setItem("userName", userName);
+		// 	sdk.setItem("password", password)
 
-			var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
-			userNameArray.push(userName);
-			sdk.distinct(userNameArray);
-		});
+		// 	var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
+		// 	userNameArray.push(userName);
+		// 	sdk.distinct(userNameArray);
+		// });
 		// sdk.showLoadingLoginBox(userName, password);
 	}
 
@@ -2322,25 +2326,24 @@ sdk.closeAccountLoginBox = function () {
  * @desc 打开手机登录弹框
  */
 sdk.showMobileLoginBox = function () {
-	const mobileLoginHtml = '<div id="mobile-login-box" class="mask login-box">' +
+	const mobileLoginHtml = '<div id="mobile-login-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
-		'<div class="login-body">' +
+		'<div class="login-head-02"><p>手机登录</p></div>' +
+		'<div class="login-body-02">' +
 		'<div>' +
-		'<div id="flex-mobile" class="flex">' +
-		'<input id="mobile" style="width: 200px; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入手机号">' +
+		'<div id="mobile-login-flex-mobile" class="flex">' +
+		'<input id="mobile-login-mobile-input" class="flex-list" type="text" value="" placeholder="请输入手机号">' +
 		'</div>' +
-		'<div id="flex-smsCode" class="flex">' +
-		'<input id="smsCode" style="width: 100px; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入验证码">' +
-		'<button id="mobile-login-getSmsCode-button" style="width: 100px; height: 40px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-style: hidden;' +
-		'background-color: #BA494B; font-weight: bold; color: #ffffff; outline:none;">获取验证码</button>' +
+		'<div id="mobile-login-flex-smsCode" class="flex">' +
+		'<input id="mobile-login-smsCode-input" class="flex-list"  type="text" value="" placeholder="请输入验证码">' +
+		'<button id="mobile-login-getSmsCode-button" class="smsCode-button">获取验证码</button>' +
 		'</div>' +
 		'</div>' +
 		'</div>' +
 		'<div style="height: 30px;"></div>' +
-		'<div class="flex">' +
-		'<button id="mobile-login-quick-button" style="width: 100px; height: 40px; border-radius:5px; border-style: solid; background-color: #FFFFFF; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #BA494B;">一键注册</button>' +
-		'<button id="mobile-login-loading-button" style="position: absolute; right: 30px; width: 100px; height: 40px; background-color: #BA494B; border-radius:5px; border-style: solid; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #ffffff;">立即登录</button>' +
+		'<div class="flex-02">' +
+		'<div id="mobile-login-quick-button" class="btn">一键注册</div>' +
+		'<div id="mobile-login-loading-button" style="position: absolute; right: 30px;" class="btn">立即登录</button>' +
 		'</div>' +
 		'</div>' +
 		'</div>' +
@@ -2349,45 +2352,45 @@ sdk.showMobileLoginBox = function () {
 	$("body").append(mobileLoginHtml);
 	//注册监听事件
 	document.getElementById("mobile-login-quick-button").onclick = function () {
-		sdk.closeMobileLoginBox();
-		var userName = "P" + Math.floor(Math.random() * 1000000000);
-		var password = "r" + Math.floor(Math.random() * 1000000);
+		// sdk.closeMobileLoginBox();
+		// var userName = "P" + Math.floor(Math.random() * 1000000000);
+		// var password = "r" + Math.floor(Math.random() * 1000000);
 
-		sdk.userNameReg02(userName, password, function (data) {
-			sdk.setItem("userName", userName);
-			sdk.setItem("password", password);
-			sdk.showQuickLoginBox(userName, password);
-		});
+		// sdk.userNameReg02(userName, password, function (data) {
+		// 	sdk.setItem("userName", userName);
+		// 	sdk.setItem("password", password);
+		// 	sdk.showQuickLoginBox(userName, password);
+		// });
 	}
 
 	document.getElementById("mobile-login-loading-button").onclick = function () {
-		var mobile = $("#mobile").val();
-		var smsCode = $("#smsCode").val();
-		sdk.mobileLogin(mobile, smsCode, function (data) {
-			sdk.closeMobileLoginBox();
-			var uid = data.uid;
-			var token = data.token;
+		// var mobile = $("#mobile").val();
+		// var smsCode = $("#smsCode").val();
+		// sdk.mobileLogin(mobile, smsCode, function (data) {
+		// 	sdk.closeMobileLoginBox();
+		// 	var uid = data.uid;
+		// 	var token = data.token;
 
-			var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-			var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
-			if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-				sdk.showRealNameAuth(openRealNameAuth, uid, token);
-			} else {
-				sdk.setItem("uid", uid);
-				sdk.setItem("sdkToken", token);
-				sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-				window.location.href = sdk.mainUrl;
-			}
-		}, function (data) {
-			sdk.closeMobileLoginBox();
-			sdk.showMobileLoginVeriPwdBox(data.user.userName);
-		}, function () {
-			sdk.closeMobileLoginBox();
-			sdk.showMobileLoginVeriUserNameBox(mobile);
-		}, function (data) {
-			sdk.closeMobileLoginBox();
-			sdk.showMobileLoginSelectedUserNameBox(mobile, data);
-		});
+		// 	var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+		// 	var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+		// 	if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+		// 		sdk.showRealNameAuth(openRealNameAuth, uid, token);
+		// 	} else {
+		// 		sdk.setItem("uid", uid);
+		// 		sdk.setItem("sdkToken", token);
+		// 		sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+		// 		window.location.href = sdk.mainUrl;
+		// 	}
+		// }, function (data) {
+		// 	sdk.closeMobileLoginBox();
+		// 	sdk.showMobileLoginVeriPwdBox(data.user.userName);
+		// }, function () {
+		// 	sdk.closeMobileLoginBox();
+		// 	sdk.showMobileLoginVeriUserNameBox(mobile);
+		// }, function (data) {
+		// 	sdk.closeMobileLoginBox();
+		// 	sdk.showMobileLoginSelectedUserNameBox(mobile, data);
+		// });
 	}
 
 	document.getElementById("mobile-login-getSmsCode-button").onclick = function () {
