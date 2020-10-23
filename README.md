@@ -6,6 +6,7 @@
     javaScript          --- js学习教程
     matter              --- matter.js物理引擎项目
     platfrom-web-sdk3-h5-engine --- 基于泡椒-h5-sdk2.0的更新版本项目
+    platfrom-web-sdk3-h5-engine-copy --- 基于泡椒-h5-sdk2.0的IDEA项目
     test                --- 练手实操文件
     threeJs             --- three.js 3d引擎项目
     vue                 --- vue 学习项目
@@ -23,4 +24,5 @@
     platfrom-web-sdk3-h5-engine目录入口文件/demo/h5/index.html,css目录为引入样式库,js为引入js文件库,node_m
     odules为npm引入的第三方库,整个项目是基于泡椒-h5-sdk2.0的更新版本
     infox_h5_sdk目录入口文件/WebRoot/demo/h5/game.html, 整个项目是基于银狐H5项目的开发
+    platfrom-web-sdk3-h5-engine-copy在IDEA编辑器上运行本地服务项目
 ```
