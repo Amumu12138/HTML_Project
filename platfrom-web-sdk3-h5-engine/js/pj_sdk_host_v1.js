@@ -2297,7 +2297,6 @@ sdk.showAccountLoginBox = function () {
 			userNameArray.push(userName);
 			sdk.distinct(userNameArray);
 		});
-		// sdk.showLoadingLoginBox(userName, password);
 	}
 
 	document.getElementById("account-login-eye").onclick = function () {

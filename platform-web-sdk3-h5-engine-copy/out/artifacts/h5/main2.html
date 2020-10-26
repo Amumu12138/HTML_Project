@@ -69,24 +69,8 @@
 
 					//开始消息监听
 					startEventListener();
-					console.log("Amumu copy success");
-
-					//验证接口
-					sdk.initOpenScreen(function (data) {
-						if (!data.popupList || data.popupList.length <= 0) return;
-
-						for(var i = 0; i < data.popupList.length; i++) {
-							if(data.popupList[i].type == 1) {
-								sdk.showOpenScreenTextBox(data.popupList[i].title, data.popupList[i].content);
-							} else if(data.popupList[i].type == 2) {
-								sdk.showOpenScreenImage(data.popupList[i].url, data.popupList[i].imgUrl);
-							}
-							else if(data.popupList[i].type == 3) {
-								sdk.showOpenScreenCoupon(data.popupList[i].url, data.popupList[i].voucher.rule,
-										data.popupList[i].voucher.deduct, data.popupList[i].voucher.achieveMoney);
-							}
-						}
-					});
+					//显示开屏
+					sdk.showOpenScreen(2);
 				} else {
 					sdk.confirmDialog(ret.msg);
 					return;
