@@ -73,23 +73,17 @@
         border-radius: 15px 15px 0 0px;
     }
 
-    .shortcut {
-        transform: scale(2.0);
-    }
-
-    .open-screen {
-        transform: scale(2.0);
-        margin-top: 10rem;
-    }
-
+    /*.shortcut{transform: scale(2.0);}*/
+    /*.open-screen{ top: 20%}*/
     .imgfloat {
         position: absolute;
-        top: 23%;
-        left: 35%;
+        top: 22%;
+        left: 22%;
         width: 194px;
         height: 34px;
         z-index: 9999;
         background: url(/images/sdk2.0/pj_float_close_port.png) no-repeat;
+        transform: scale(0.35);
     }
 }
 
@@ -106,23 +100,19 @@
         border-radius: 0px 15px 15px 0px;
     }
 
-    .shortcut {
-        transform: scale(0.8);
-    }
-
+    /*.shortcut{transform: scale(0.8);}*/
     .open-screen {
-        transform: scale(0.6);
-        margin-top: -3rem;
+        margin-top: -30px;
     }
 
     .imgfloat {
         position: absolute;
-        top: 8%;
+        top: 20%;
         left: 65%;
         width: 34px;
         height: 194px;
         z-index: 9999;
         background: url(/images/sdk2.0/pj_float_close_landspace.png) no-repeat;
-        transform: scale(0.5);
+        transform: scale(0.35);
     }
 }
