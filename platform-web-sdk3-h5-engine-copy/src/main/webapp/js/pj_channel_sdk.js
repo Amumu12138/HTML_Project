@@ -26,7 +26,6 @@ pjChannelSdk.getToken = function(sdkToken,callback){
     pjapi.httpPost(pjChannelSdk.host+"/api/getToken",params,function(data){
         callback(data);
     });
-
 };
 
 //加载闪屏
@@ -53,7 +52,6 @@ pjChannelSdk.getGameInfo = function(callback){
     pjapi.httpPost(pjChannelSdk.host+"/api/getGameInfo",params,function(data){
         callback(data);
     });
-
 };
 
 //生成融合sdk订单
@@ -63,17 +61,13 @@ pjChannelSdk.getOrderNo = function(params,callback){
     });
 };
 
-
 pjChannelSdk.closePayBox =function(){
     $("#payBox").remove();
 };
-
 
 //开始消息监听
 pjChannelSdk.startEventListener = function(){
     window.addEventListener("message", receiveMessage, false);
 };
-
-
 
 window.PJ_CHANNEL_SDK = pjChannelSdk;

@@ -39,8 +39,6 @@ pjsdk.reportRoleInfo = function(p,callback){
 	}
 
 	window.addEventListener("message", _reportCallback, false);
-
-
 };
 
 
@@ -56,7 +54,7 @@ pjsdk.sendMsg = function(_param,_method){
 pjsdk.getURLVar = function(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
 	var r = window.location.search.substr(1).match(reg);
-	return r != null ? unescape(r[2]) : null
+	return r != null ? unescape(r[2]) : null;
 };
 
 window.YH_PJ_SDK_CLIENT = pjsdk;

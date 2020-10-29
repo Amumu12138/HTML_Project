@@ -138,7 +138,6 @@ sdk.initLoading = function (callback) {
 
 //获取游戏详细
 sdk.getGameInfo = function (isLogin, callback) {
-
 	var params = {};
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	params["channel"] = sdk.getItem("channel");
@@ -473,7 +472,6 @@ sdk.showRegInfo = function (retData) {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
 
 //显示注册账号信息-苹果审核页
@@ -825,7 +823,6 @@ sdk.closeBindToRealNameAuth = function () {
 	}
 };
 
-
 //绑定手机号码-提审
 sdk.bindMobilePhone = function () {
 	var mobilePhone = $("#mobilePhone").val();
@@ -860,7 +857,6 @@ sdk.bindMobilePhone = function () {
 	});
 	sdk.closeBindToRealNameAuth();
 };
-
 
 //关闭绑定手机界面-提审
 sdk.closeBindPhone = function () {
@@ -1025,14 +1021,12 @@ sdk.enableFloatBox = function () {
 
 	//绑定touch事件
 	sdk.bindTouchEvent();
-
 	//初始化悬浮球菜单
 	sdk.initFloatBox();
 };
 
 //初始化悬浮球
 sdk.initFloatBox = function () {
-
 	var params = {};
 	params["appVersion"] = sdk.appVersion;
 	params["channel"] = sdk.getItem("channel");
@@ -1211,21 +1205,22 @@ sdk.confirmDialog = function (txt, oklabel, cancellabel, okcallback, cancelcallb
 	}
 	html += "</div></div></div>";
 	$("body").append(html);
+
 	if (callback) {
-		callback()
+		callback();
 	}
 	$("#confirmDialog .flex a").click(function () {
 		var type = $(this).attr("data-type");
 		if (type == "cancel") {
 			if (cancelcallback) {
-				cancelcallback()
+				cancelcallback();
 			}
 		} else if (type == "ok") {
 			if (okcallback) {
-				okcallback()
+				okcallback();
 			}
 		}
-		$(this).parents("#confirmDialog").remove()
+		$(this).parents("#confirmDialog").remove();
 	});
 };
 
@@ -1264,11 +1259,10 @@ sdk.httpGet = function (url, callback, type) {
 	});
 };
 
-
 sdk.getURLVar = function (name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
 	var r = window.location.search.substr(1).match(reg);
-	return r != null ? unescape(r[2]) : null
+	return r != null ? unescape(r[2]) : null;
 };
 
 sdk.setURLVar = function (url, key, value) {
@@ -1281,11 +1275,11 @@ sdk.setURLVar = function (url, key, value) {
 			query = query.split("&");
 			for (var i in query) {
 				var vars = query[i].split("=");
-				params[vars[0]] = vars[1]
+				params[vars[0]] = vars[1];
 			}
 		}
 		if (value) {
-			params[key] = value
+			params[key] = value;
 		} else {
 			params[key] = null;
 			delete params[key]
@@ -1346,6 +1340,7 @@ sdk.isWeixin = function () {
 sdk.isiOS = function () {
 	return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
 };
+
 sdk.isApp = function () {
 	var ua = navigator.userAgent.toLowerCase();
 	return ua.indexOf('isApp') > -1;
@@ -1362,6 +1357,7 @@ sdk.setItem = function (key, value) {
 		document.cookie = "pj_" + key + "=" + escape(value) + ";expires=" + exp.toGMTString();
 	}
 };
+
 sdk.getItem = function (key) {
 	if (window.localStorage) {
 		return window.localStorage.getItem("pj_" + key)
@@ -1373,6 +1369,7 @@ sdk.getItem = function (key) {
 	}
 	return null;
 };
+
 sdk.removeItem = function (key) {
 	if (window.localStorage) {
 		window.localStorage.removeItem("pj_" + key);
@@ -1385,22 +1382,26 @@ sdk.removeItem = function (key) {
 		}
 	}
 };
+
 sdk.setSession = function (key, value) {
 	if (window.sessionStorage) {
 		window.sessionStorage.setItem("pj_" + key, value);
 	}
 };
+
 sdk.getSession = function (key) {
 	if (window.sessionStorage) {
 		return window.sessionStorage.getItem("pj_" + key);
 	}
 	return null
 };
+
 sdk.removeSession = function (key) {
 	if (window.sessionStorage) {
 		window.sessionStorage.removeItem("pj_" + key);
 	}
 };
+
 //判断是不是在iPhone的Safair浏览器打开的本页面
 sdk.is_safari = function () {
 	var ua = navigator.userAgent.toLowerCase();
@@ -1414,6 +1415,7 @@ sdk.is_safari = function () {
 		return false;
 	}
 };
+
 //是否是苹果审核时的IP,17.开头的IP
 sdk.isAmericaIp = function () {
 	sdk.httpGet(sdk.apiUrl + "getIsAmericaIp", function (data) {
@@ -1425,6 +1427,7 @@ sdk.isAmericaIp = function () {
 		}
 	});
 };
+
 //查询渠道是否是提审状态
 sdk.getIsAudit = function (channelGameId, callback) {
 	var params = {};
@@ -1438,7 +1441,6 @@ sdk.getIsAudit = function (channelGameId, callback) {
 			callback(data);
 		}
 	});
-
 };
 
 /************************************************** 泡椒-SDK-H5 2.0需求实现 **************************************************/
@@ -1446,22 +1448,6 @@ sdk.getIsAudit = function (channelGameId, callback) {
  * @desc 显示开屏
  */
 sdk.showOpenScreen = function () {
-	//判断标签类型
-	// switch (type) {
-	// 	case 0: //文字
-	// 		sdk.showOpenScreenTextBox("消费返优惠券","[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次");
-	// 		break;
-	// 	case 1: //图片
-	// 		sdk.showOpenScreenImage(null, "http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
-	// 		break;
-	// 	case 2: //代金券
-	// 		sdk.showOpenScreenCoupon(null, 1, 1, 1);
-	// 		$("#open-screen-coupon-box").css("visibility", "visible");
-	// 		break;
-	// 	default:
-	// 		break;
-	// }
-
 	sdk.initOpenScreen(function (data) {
 		if (!data.popupList || data.popupList.length <= 0) return;
 
@@ -1480,7 +1466,6 @@ sdk.showOpenScreen = function () {
 }
 
 sdk.hasOpenScreenText = false;
-
 /**
  * @desc 显示开屏文字框
  * @param {string} title 弹窗标题
@@ -1874,7 +1859,6 @@ sdk.closeHomeViewHtml = function () {
 sdk.closeFloatBox02 = function () {
 	$("#shortcut").remove();
 }
-
 
 /**
  * @desc 显示消息红点
@@ -3176,7 +3160,6 @@ sdk.getPayUrl = function (params, callback) {
 		}
 	});
 }
-
 
 /**
  * @desc token登录

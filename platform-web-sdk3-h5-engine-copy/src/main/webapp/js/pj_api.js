@@ -7,8 +7,6 @@ pjapi.getURLVar = function(name) {
     return r != null ? unescape(r[2]) : null
 };
 
-
-
 pjapi.buildURL = function(url, args) {
     if (url) {
         var urlList = url.split("#");
@@ -19,11 +17,11 @@ pjapi.buildURL = function(url, args) {
             query = query.split("&");
             for (var i in query) {
                 var vars = query[i].split("=");
-                params[vars[0]] = vars[1]
+                params[vars[0]] = vars[1];
             }
         }
         for (var i in args) {
-            params[i] = args[i]
+            params[i] = args[i];
         }
         var first = true;
         for (var i in params) {
@@ -66,7 +64,7 @@ pjapi.httpGetByJsonp = function(url,params,callback) {
 
 pjapi.getItem = function(key) {
     if (window.localStorage) {
-        return window.localStorage.getItem("pj_" + key)
+        return window.localStorage.getItem("pj_" + key);
     } else {
         var arr = document.cookie.match(new RegExp("(^| )pj_" + key + "=([^;]*)(;|$)"));
         if (arr != null) {
@@ -104,6 +102,7 @@ pjapi.getUdid = function(){
 pjapi.s4 = function(){
     return(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 };
+
 pjapi.genUdid = function(){
     return(pjapi.s4() + pjapi.s4()+ pjapi.s4() + pjapi.s4() + pjapi.s4()+ pjapi.s4() + pjapi.s4() + pjapi.s4());
 };
@@ -123,24 +122,22 @@ pjapi.confirmDialog = function(txt, oklabel, cancellabel, okcallback, cancelcall
     html += "</div></div></div>";
     $("body").append(html);
     if (callback) {
-        callback()
+        callback();
     }
     $("#confirmDialog .flex a").click(function() {
         var type = $(this).attr("data-type");
         if (type == "cancel") {
             if (cancelcallback) {
-                cancelcallback()
+                cancelcallback();
             }
         } else if (type == "ok") {
             if (okcallback) {
-                okcallback()
+                okcallback();
             }
         }
-        $(this).parents("#confirmDialog").remove()
-    })
+        $(this).parents("#confirmDialog").remove();
+    });
 };
-
-
 
 pjapi.httpGet = function(hosturl,params,callback) {
     $.ajax({
@@ -166,9 +163,8 @@ pjapi.httpPost = function(hosturl,params,callback) {
     });
 };
 
-
 pjapi.isWeixin = function() {
-    return navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger"
+    return navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger";
 };
 
 pjapi.getURLParams = function(){
@@ -205,6 +201,7 @@ pjapi.is_IOS = function() {
     var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     return isiOS;
 };
+
 //判断是否是微信打开
 pjapi.is_weixin = function() {
         var ua = navigator.userAgent.toLowerCase();
@@ -214,9 +211,6 @@ pjapi.is_weixin = function() {
             return false;
    }
 };
-
-
-
 
 /*pjapi.md5 = function(data,key){
     var sort ="";
@@ -232,8 +226,6 @@ pjapi.is_weixin = function() {
     var md5 = $.md5(bstr);
     return md5;
 };*/
-
-
 
 window.PJ_API = pjapi;
 
