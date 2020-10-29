@@ -30,7 +30,6 @@
 </head>
 
 <body style="background:rgba(0, 0, 0, .8)">
-
     <div id="flash"></div>
     <script type="text/javascript">
         sdk.init();
@@ -47,8 +46,11 @@
                             sdk.gameInfo = ret.data;
                             var gameName = sdk.gameInfo.gameName;
                             $(document).attr("title", gameName);
-                            sdk.autoLogin02();
+                            // sdk.autoLogin02();
+
+                            // sdk.showMobileLoginVeriPwdBox();
                             startEventListener();
+                            // sdk.showMobileLoginVeriUserNameBox();
                         } else {
                             sdk.confirmDialog(ret.msg);
                             return;
@@ -56,7 +58,6 @@
                     });
                 });
             } else {
-
                 sdk.initLoading(function () {
                     sdk.getGameInfo("true", function (ret) {
                         if (ret.code == sdk.SUCCESS) {//成功
@@ -64,7 +65,7 @@
                             var gameName = sdk.gameInfo.gameName;
                             $(document).attr("title", gameName);
                             if (isAutoLogin == "" || isAutoLogin == null){
-                                sdk.autoLogin02();
+                                 sdk.autoLogin02();
                             }else{
                                 sdk.showAccountLoginBox();
                             }
@@ -74,13 +75,11 @@
                             return;
                         }
                     });
-
                 });
             }
         });
 
         function startEventListener() {
-
             window.addEventListener("message", receiveMessage, false);
 
             function receiveMessage(event) {

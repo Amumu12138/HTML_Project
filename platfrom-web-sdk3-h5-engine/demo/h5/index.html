@@ -353,7 +353,7 @@
 		//pjapi.httpGet = function(url,params,callback)
 		// var url =
 		// 	"https://sdk2.paojiao.cn/sdk/sdkConfig";
-		var url = "http://localhost:8080/api/getFloatUrl";
+		//var url = "http://localhost:8080/api/getFloatUrl";
 		var params = {
 			gameId: 11072,
 			channel: "yxzbqh_NBBM_xh_001",
@@ -363,10 +363,18 @@
 			type: 1
 		};
 
-		pjapi.httpGetByJsonp(url, params, function (data) {
-			console.log("data = ", data);
-		});
+		// pjapi.httpGetByJsonp(url, params, function (data) {
+		// 	console.log("data = ", data);
+		// });
 
+		sdk.api(params, "getFloatUrl", function (retData) {
+		if (retData.code == 1) {
+			if (callback) callback(retData.data);
+		} else {
+			sdk.confirmDialog(retData.msg);
+			sdk.closeLoading();
+		}
+	});
 	}
 
 	function loadingTD() {

@@ -14,6 +14,7 @@ sdk.apiUrl = sdk.host + "/api/";
 sdk.mainUrl = sdk.host + '/main2.html';
 sdk.loginUrl = sdk.host + '/login2.html';
 sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
+sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
 sdk.xieYiUrl = sdk.host + "/xieyi.html";
 
 sdk.findPwdUrl = 'https://member.paojiao.cn/retrievePassword?os=h5';
@@ -24,7 +25,6 @@ sdk.gameInfo = {};
 sdk.SUCCESS = 1;
 sdk.ERROR = 0;
 
-
 sdk.appVersion = "1.0";
 sdk.sdkVersion = "1.0.0";
 sdk.sdkVersion_v2 = "SDK2_2.0.0";
@@ -32,7 +32,6 @@ sdk.sdkVersion_v2 = "SDK2_2.0.0";
 sdk.shortcut = {};
 sdk.oW = 0;
 sdk.oH = 0;
-
 
 sdk.init = function () {
 	var channelGameId = sdk.getURLVar("channelGameId");
@@ -69,7 +68,6 @@ sdk.init2 = function () {
 	}
 };
 
-
 sdk.init3 = function (channelGameId, channel) {
 	var channelGameId = channelGameId;
 	var channel = channel;
@@ -100,13 +98,14 @@ sdk.getUdid = function () {
 		return u;
 	}
 };
+
 sdk.s4 = function () {
 	return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 };
+
 sdk.genUdid = function () {
 	return (sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4());
 };
-
 
 //加载loading页
 sdk.initLoading = function (callback) {
@@ -135,10 +134,7 @@ sdk.initLoading = function (callback) {
 			});
 		}, 1000);
 	}
-
-
 };
-
 
 //获取游戏详细
 sdk.getGameInfo = function (isLogin, callback) {
@@ -153,10 +149,10 @@ sdk.getGameInfo = function (isLogin, callback) {
 	});
 };
 
-
 sdk.closeLoginBox = function () {
 	$("#loginBox").remove();
 };
+
 //打开登录框
 sdk.loadLoginBox = function () {
 
@@ -177,7 +173,6 @@ sdk.loadLoginBox = function () {
 		loginHtml += '<fieldset class=""><legend>其他登录方式</legend></fieldset>';
 	}
 
-
 	loginHtml += '</div>';
 	loginHtml += '<div class="login-mode">';
 	loginHtml += '<ol class="flex active">';
@@ -186,7 +181,6 @@ sdk.loadLoginBox = function () {
 		loginHtml += '<div class="r50"><i class="icod-wechat"></i></div>';
 		loginHtml += '</li>';
 	}
-
 
 	/*loginHtml += '<li class="flex-list qq list-show" onclick="sdk.thirdLogin(2)" title="QQ登录">';
     loginHtml += '<div class="r50"><i class="icod-qq"></i></div>';
@@ -233,7 +227,6 @@ sdk.loadLoginBoxTo2 = function () {
 	$("body").append(loginHtml);
 };
 
-
 //登录
 sdk.login = function () {
 
@@ -247,7 +240,6 @@ sdk.login = function () {
 		sdk.confirmDialog("请输入密码");
 		return;
 	}
-
 
 	var params = {};
 	params["userName"] = userName;
@@ -301,7 +293,6 @@ sdk.login = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
 
 //自动登录
@@ -328,12 +319,8 @@ sdk.autoLogin = function () {
 				sdk.loadLoginBox();
 			}
 		}
-
-
 	}
-
 };
-
 
 //泡椒sdk token 登录
 sdk.loginByToken = function (params) {
@@ -374,16 +361,13 @@ sdk.loginByToken = function (params) {
 					window.location.href = sdk.mainUrl;
 				}
 			}
-
 		} else {
 			sdk.closeLoading();
 			sdk.confirmDialog(retData.msg);
 			sdk.logout();
 		}
-
 	});
 };
-
 
 //退出登录
 sdk.logout = function () {
@@ -400,7 +384,6 @@ sdk.logout = function () {
 	window.location.href = url;
 };
 
-
 //验证token
 sdk.getToken = function (params) {
 	params["sdkVersion"] = sdk.sdkVersion;
@@ -408,7 +391,6 @@ sdk.getToken = function (params) {
 	params["channel"] = sdk.getItem("channel");
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	sdk.api(params, "getToken", function (retData) {
-
 		if (retData.code == sdk.SUCCESS) {
 			sdk.closeLoginBox();
 			var suid = retData.data.userInfo.suid;
@@ -418,15 +400,12 @@ sdk.getToken = function (params) {
 			sdk.setItem("uid", uid);
 			sdk.setItem("sdkToken", token);
 			window.location.href = sdk.mainUrl;
-
 		} else {
 			sdk.closeLoading();
 			sdk.confirmDialog(retData.msg);
 		}
-
 	});
 };
-
 
 //一键注册
 sdk.reg1 = function () {
@@ -457,9 +436,7 @@ sdk.reg1 = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
-
 
 sdk.closeRegInfo = function () {
 	var isIp = sdk.getItem("isAmericaIp");
@@ -469,8 +446,8 @@ sdk.closeRegInfo = function () {
 	} else {
 		$("#showRegInfo").remove();
 	}
-
 };
+
 //显示注册账号信息
 sdk.showRegInfo = function (retData) {
 	var loginHtml = '<div id="showRegInfo" class="mask login-box">';
@@ -524,29 +501,24 @@ sdk.showRegInfoToIp = function (retData) {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
 
-
 sdk.checkMobile = function (phone) {
-
 	if (!/^1[3|4|5|7|8]\d{9}$/.test(phone) && phone !== undefined) {
 		sdk.confirmDialog("请填入有效的手机号码！");
 		return false;
 	}
 	return true;
-
 };
 
 //发送短信验证码
 sdk.sendUserInfo = function () {
 	var phone = $("#phone").val();
-
 	var ret = sdk.checkMobile(phone);
+
 	if (!ret) {
 		return false;
 	}
-
 	var params = {};
 	params["userName"] = $("#h_userName").val();
 	params["password"] = $("#h_password").val();
@@ -566,9 +538,7 @@ sdk.sendUserInfo = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
-
 
 //打开账号注册页面
 sdk.closeRegBox = function () {
@@ -579,8 +549,8 @@ sdk.closeRegBox = function () {
 	} else {
 		$("#showRegBox").remove();
 	}
-
 };
+
 sdk.showRegBox = function () {
 	var loginHtml = '<div id="showRegBox" class="mask login-box">';
 	loginHtml += '<div class="r5">';
@@ -599,8 +569,8 @@ sdk.showRegBox = function () {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
+
 //账号密码注册-苹果提审
 sdk.showRegBoxToIp = function () {
 	var loginHtml = '<div id="showRegBoxToIp" class="mask login-box">';
@@ -621,13 +591,12 @@ sdk.showRegBoxToIp = function () {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
-
 
 sdk.closeXieYi = function () {
 	$("#showXieYi").remove();
 };
+
 sdk.showXieYi = function () {
 	var loginHtml = '<div id="showXieYi" style="top:0px;" class="mask2 login-box2">';
 	loginHtml += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
@@ -639,7 +608,6 @@ sdk.showXieYi = function () {
 	loginHtml += '</div>';
 	$("body").append(loginHtml);
 };
-
 
 //账号密码注册
 sdk.reg2 = function () {
@@ -655,15 +623,16 @@ sdk.reg2 = function () {
 		}
 	}
 
-
 	if (r_userName == '') {
 		sdk.confirmDialog("请输入用户名");
 		return false;
 	}
+
 	if (r_password == '' || r1_password == '') {
 		sdk.confirmDialog("请输入密码");
 		return false;
 	}
+
 	if (r_password != r1_password) {
 		sdk.confirmDialog("两次输入的密码不一致");
 		return false;
@@ -691,14 +660,13 @@ sdk.reg2 = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
-
 
 //关闭忘记密码页面
 sdk.closeFotPwdBox = function () {
 	$("#showFotPwdBox").remove();
 };
+
 sdk.showFotPwdBox = function () {
 	/*var loginHtml = '<div id="showFotPwdBox" class="mask2 login-box2">';
     loginHtml += '<div class="r5" style="width: 16rem;margin:0 auto;">';
@@ -719,8 +687,6 @@ sdk.showFotPwdBox = function () {
 	loginHtml += '</div>';
 	loginHtml += '</div>';
 	$("body").append(loginHtml);
-
-
 };
 
 sdk.closePayBox = function () {
@@ -738,7 +704,6 @@ sdk.loadPayBox = function (params) {
 
 	sdk.closePayBox();
 	sdk.showLoading();
-
 
 	//获取支付Url
 	sdk.api(params, "getPayUrl", function (retData) {
@@ -761,31 +726,23 @@ sdk.loadPayBox = function (params) {
 				payBox += '</div>';
 				$("body").append(payBox);
 			}
-
 		} else {
 			sdk.confirmDialog(retData.msg);
 			sdk.closeLoading();
 		}
-
 	});
-
-
 };
-
-
 
 //实名认证
 sdk.closeRealNameBox = function (bool, uid, token) {
 	$("#showRealNameBox").remove();
-
 	if (bool) {
 		window.location.href = sdk.mainUrl;
 	}
-
 };
+
 //打开实名认证页面
 sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
-
 	sdk.setItem("uid", uid);
 	sdk.setItem("sdkToken", token);
 
@@ -795,12 +752,9 @@ sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
 	params["gameId"] = sdk.gameInfo.gameId;
 
 	sdk.api(params, "getRealNameAuthUrl", function (retData) {
-
 		sdk.closeRealNameBox(false);
-
 		if (retData.code == 1) {
 			var url = retData.data;
-
 			var realNameAuth = '<div id="showRealNameBox" style="top:0px;" class="mask2 login-box2">';
 			realNameAuth += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
 			if (openRealNameAuth == 1) {
@@ -819,13 +773,11 @@ sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
 			sdk.confirmDialog(retData.msg);
 			sdk.closeLoading();
 		}
-
 	});
 };
 
 //获取验证码
 sdk.getMobileCode = function () {
-
 	var mobilePhone = $("#mobilePhone").val();
 
 	if (mobilePhone == '') {
@@ -856,7 +808,6 @@ sdk.getMobileCode = function () {
 	});
 };
 
-
 //关闭手机绑定后打开实名认证
 sdk.closeBindToRealNameAuth = function () {
 	var retData = jQuery.parseJSON(sdk.getItem("bindData"));
@@ -877,7 +828,6 @@ sdk.closeBindToRealNameAuth = function () {
 
 //绑定手机号码-提审
 sdk.bindMobilePhone = function () {
-
 	var mobilePhone = $("#mobilePhone").val();
 	var mobileCode = $("#mobileCode").val();
 	var userId = $("#bind_phone_uid").val();
@@ -890,6 +840,7 @@ sdk.bindMobilePhone = function () {
 		sdk.confirmDialog("请输入验证码");
 		return;
 	}
+
 	var params = {};
 	params["mobile"] = mobilePhone;
 	params["smsCode"] = mobileCode;
@@ -973,7 +924,6 @@ sdk.reportRoleInfo = function (params) {
 		window.frames["gameFrame"].postMessage(p, "*");
 	});
 };
-
 
 function touchstart(e) {
 	var touches = e.touches[0];
@@ -1061,7 +1011,6 @@ sdk.unbindTouchEvent = function () {
 	sdk.shortcut.removeEventListener("touchend", touchend, false);
 };
 
-
 //启动悬浮窗
 sdk.enableFloatBox = function () {
 	$("#shortcut").remove();
@@ -1111,7 +1060,6 @@ sdk.initFloatBox = function () {
 
 			$("#navDiv").css("width", (data.length * 44) + "px");
 			$("#navDiv").append(html);
-
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
@@ -1122,7 +1070,6 @@ sdk.initFloatBox = function () {
 sdk.showNav = function () {
 	var r = $("#navDiv").css("display");
 	if (r == "none") {
-
 		sdk.unbindTouchEvent();
 
 		$("#navDiv").css("display", "block");
@@ -1144,16 +1091,14 @@ sdk.showNav = function () {
 
 		sdk.bindTouchEvent();
 	}
-
 }
-
 
 //打开用户中心
 sdk.closeUcBox = function () {
 	$("#showUcBox").remove();
 };
-sdk.showUcBox = function (ucurl) {
 
+sdk.showUcBox = function (ucurl) {
 	$("#iconDiv").trigger("click");
 
 	var param = {};
@@ -1175,7 +1120,6 @@ sdk.showUcBox = function (ucurl) {
 	param["ucHost"] = ucurl;
 
 	var url = sdk.buildURL(sdk.apiUrl + "openUc", param);
-
 	var ucCenterUrl = "";
 	sdk.httpGet(url, function (retData) {
 		if (retData.code == sdk.SUCCESS) {
@@ -1193,9 +1137,7 @@ sdk.showUcBox = function (ucurl) {
 			sdk.confirmDialog(retData.msg);
 		}
 	}, "json");
-
 };
-
 
 //第三方登录
 sdk.thirdLogin = function (type) {
@@ -1284,13 +1226,13 @@ sdk.confirmDialog = function (txt, oklabel, cancellabel, okcallback, cancelcallb
 			}
 		}
 		$(this).parents("#confirmDialog").remove()
-	})
+	});
 };
-
 
 sdk.closeLoading = function () {
 	$("#loadingBox").remove();
 };
+
 //加载loading动画
 sdk.showLoading = function () {
 	if (!$("#loadingBox").length) {
@@ -1299,17 +1241,14 @@ sdk.showLoading = function () {
 	}
 };
 
-
 sdk.api = function (param, apiName, callback) {
 	var url = sdk.buildURL(sdk.apiUrl + apiName, param);
 	sdk.httpGet(url, function (retData) {
 		callback(retData);
 	}, "json");
-
 };
 
 sdk.httpGet = function (url, callback, type) {
-
 	$.ajax({
 		type: "GET",
 		url: url,
@@ -1358,7 +1297,7 @@ sdk.setURLVar = function (url, key, value) {
 		}
 		return result + (urlList[1] ? "#" + urlList[1] : "")
 	}
-	return ""
+	return "";
 };
 
 sdk.buildURL = function (url, args) {
@@ -1388,7 +1327,6 @@ sdk.buildURL = function (url, args) {
 	}
 	return "";
 };
-
 
 sdk.isMobile = function () {
 	var userAgent = navigator.userAgent.toLowerCase();
@@ -1507,38 +1445,38 @@ sdk.getIsAudit = function (channelGameId, callback) {
 /**
  * @desc 显示开屏
  */
-sdk.showOpenScreen = function (type) {
+sdk.showOpenScreen = function () {
 	//判断标签类型
-	switch (type) {
-		case 0: //文字
-			sdk.showOpenScreenTextBox("消费返优惠券","[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次");
-			break;
-		case 1: //图片
-			sdk.showOpenScreenImage(null, "http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
-			break;
-		case 2: //代金券
-			sdk.showOpenScreenCoupon(null, 1, 1, 1);
-			$("#open-screen-coupon-box").css("visibility", "visible");
-			break;
-		default:
-			break;
-	}
+	// switch (type) {
+	// 	case 0: //文字
+	// 		sdk.showOpenScreenTextBox("消费返优惠券","[活动时间]<br>2020年9月1日0点-2020年9月31日25点<br>[活动内容]<br>活动期间,每位用户限参与一次");
+	// 		break;
+	// 	case 1: //图片
+	// 		sdk.showOpenScreenImage(null, "http://images.paojiao.cn/images/basicconfig/popupImg/1597800101684.png");
+	// 		break;
+	// 	case 2: //代金券
+	// 		sdk.showOpenScreenCoupon(null, 1, 1, 1);
+	// 		$("#open-screen-coupon-box").css("visibility", "visible");
+	// 		break;
+	// 	default:
+	// 		break;
+	// }
 
-	// sdk.initOpenScreen(function (data) {
-	// 	if (!data.popupList || data.popupList.length <= 0) return;
-	//
-	// 	for(var i = 0; i < data.popupList.length; i++) {
-	// 		if(data.popupList[i].type == 1) {
-	// 			sdk.showOpenScreenTextBox(data.popupList[i].title, data.popupList[i].content);
-	// 		} else if(data.popupList[i].type == 2) {
-	// 			sdk.showOpenScreenImage(data.popupList[i].url, data.popupList[i].imgUrl);
-	// 		}
-	// 		else if(data.popupList[i].type == 3) {
-	// 			sdk.showOpenScreenCoupon(data.popupList[i].url, data.popupList[i].voucher.rule,
-	// 					data.popupList[i].voucher.deduct, data.popupList[i].voucher.achieveMoney);
-	// 		}
-	// 	}
-	// });
+	sdk.initOpenScreen(function (data) {
+		if (!data.popupList || data.popupList.length <= 0) return;
+
+		for(var i = 0; i < data.popupList.length; i++) {
+			if(data.popupList[i].type == 1) {
+				sdk.showOpenScreenTextBox(data.popupList[i].title, data.popupList[i].content);
+			} else if(data.popupList[i].type == 2) {
+				sdk.showOpenScreenImage(data.popupList[i].url, data.popupList[i].imgUrl);
+			}
+			else if(data.popupList[i].type == 3) {
+				sdk.showOpenScreenCoupon(data.popupList[i].url, data.popupList[i].voucher.rule,
+						data.popupList[i].voucher.deduct, data.popupList[i].voucher.achieveMoney);
+			}
+		}
+	});
 }
 
 sdk.hasOpenScreenText = false;
@@ -1553,7 +1491,7 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	var date = sdk.getItem("open_text_date");
 	if (newDate == date) return;
 
-	const openScreenTextHtml = '<div id="opne-screen-text-box" class="open-screen-mask">' +
+	const openScreenTextHtml = '<div id="open-screen-text-box" class="open-screen-mask">' +
 		'<div class="open-screen">' +
 		'<div class="open-screen-head">' +
 		'<div class="flex">' +
@@ -1604,7 +1542,7 @@ sdk.updateCheckUrl = function (id) {
  * @desc 关闭开屏文字框
  */
 sdk.closeOpenScreenTextBox = function () {
-	$("#opne-screen-text-box").remove();
+	$("#open-screen-text-box").remove();
 	sdk.hasOpenScreenText = false;
 
 	//判断是否勾选今日不再提示,若已勾选,则保存今日日期
@@ -1898,8 +1836,8 @@ sdk.enableFloatBox02 = function () {
 			sdk.enableRedDot(false);
 			sdk.enableFloatTip(false);
 
-			var url = "https://platform.paojiao.cn/sdk2/index.html";
-			sdk.showHomeViewHtml(url);
+			//var url = "https://platform.paojiao.cn/sdk2/index.html";
+			sdk.showHomeViewHtml(data);
 		});
 	}
 };
@@ -1910,8 +1848,8 @@ sdk.enableFloatBox02 = function () {
  */
 sdk.showHomeViewHtml = function (url) {
 	const homeViewHtml = '<div id="home-mask-div" class="bg000"></div>' +
-		'<div id="home-img" class="imgfloat"></div>' +
-		'<div id="home-div" class="iframe_css">' +
+		'<div id="home-img" class="img-float"></div>' +
+		'<div id="home-div" class="iframe-css">' +
 		'<iframe src=' + url + ' bordr="0px" style="width: 100%; height: 100%; background: #f2f2f2; border: 0px; overflow-x: hidden; border-radius: 15px 15px 0 0px;"></iframe>' +
 		'</div>';
 
@@ -2100,29 +2038,31 @@ sdk.closePayBox02 = function () {
  * @desc 自动登录
  */
 sdk.autoLogin02 = function () {
+	var sdkToken = sdk.getItem("sdkToken");
 	var userName = sdk.getItem("userName");
-	var password = sdk.getItem("password");
 
-	if (!userName) {
+	if (sdkToken != null && sdkToken != "null" && sdkToken != "") {
+		// if (sdk.isWeixin()) {
+		//     //微信使用微信自动登录
+		//     sdk.wxLoginByOpenId();
+		// } else {
+		hasUpdateAccount = false;
+		var params = {};
+		params["sdkToken"] = sdkToken;
+		params["token"] = sdkToken;
+		sdk.showLoadingLoginBox(userName, params);
+		//}
+	} else {
+		//isIp 等于1时证明是17 开头的Ip
+		var isIp = sdk.getItem("isAmericaIp");
 		var userName = "P" + Math.floor(Math.random() * 1000000000);
 		var password = "r" + Math.floor(Math.random() * 1000000);
 
 		sdk.userNameReg02(userName, password, function (data) {
 			sdk.setItem("userName", userName);
 			sdk.setItem("password", password);
-
 			sdk.showQuickLoginBox(userName, password);
 		});
-	} else {
-		//启用一键登录取消切换账号登录
-		hasUpdateAccount = false;
-		//检查本地是否有保存账号,走自动登录
-		if (userName && password) {
-			sdk.showLoadingLoginBox(userName, password);
-			return;
-		}
-
-		sdk.showAccountLoginBox();
 	}
 }
 
@@ -2132,7 +2072,6 @@ sdk.autoLogin02 = function () {
  * @param {string} password 密码
  */
 sdk.showQuickLoginBox = function (userName, password) {
-	//style="margin: 0 0 0 0; width: 100%; background: #BA494B; border-radius: 5px; font-weight: bold;"
 	const quickLoginHtml = '<div id="quick-login-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
 		'<div class="login-head-02">' +
@@ -2257,7 +2196,7 @@ sdk.showAccountLoginBox = function () {
 		'<div class="flex">' +
 		'<a id="account-login-quick-button" class="flex-02" >' +
 		'<img  src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
-		'<p >一键注册</p>' +
+		'<p>一键注册</p>' +
 		'</a>' +
 		'<a id="account-login-mobile-button" class="flex-02" >' +
 		'<img src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
@@ -2324,7 +2263,7 @@ sdk.showAccountLoginBox = function () {
 			userNameArray.push(userName);
 			sdk.distinct(userNameArray);
 		});
-		
+
 	}
 
 	document.getElementById("account-login-eye").onclick = function () {
@@ -2438,19 +2377,19 @@ sdk.closeMobileLoginBox = function () {
 sdk.showMobileLoginVeriPwdBox = function (userName) {
 	const mobileLoginVeriPwdHtml = '<div id="mobile-login-veri-pwd-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
-		'<div class="login-head-02" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
+		'<div class="login-head-02">' +
+		'<p>手机登录</p>' +
+		'</div>' +
 		'<div class="login-body-02">' +
 		'<div>' +
 		'<h5 style="color: #BABABA;">你的账号半年以上未登录,需要验证登录密码</h5>' +
 		'<div id="mobile-login-veri-pwd-flex" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/password2.png"></img>' +
-		'<input id="mobile-login-veri-pwd-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="password" value="" placeholder="请输入登录密码">' +
-		'<img id="mobile-login-veri-pwd-eye" style="top: 10px; right: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
+		'<img src="/images/sdk2.0/password2.png"></img>' +
+		'<input id="mobile-login-veri-pwd-input" class="flex-list" type="password" placeholder="请输入登录密码">' +
+		'<img id="mobile-login-veri-pwd-eye" style="left: 0px; right: 5px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
 		'</div>' +
 		'</div>' +
-		'<div class="flex">' +
-		'<button id="mobile-login-veri-pwd-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
-		'</div>' +
+		'<a href="javascript:;" id="mobile-login-veri-pwd-button" class="btn">登录</a>' +
 		'<h5 style="color: #BABABA; text-align: left;">忘记密码?请与人工服务联系,提供手机号绑定的账号全称或所玩过的游戏信息。</h5>' +
 		'</div>' +
 		'</div>' +
@@ -2497,20 +2436,20 @@ sdk.closeMobileLoginVeriPwdBox = function () {
  * @param {Number} mobile 手机号码
  */
 sdk.showMobileLoginVeriUserNameBox = function (mobile) {
-	const mobileLoginVeriUserNameHtml = '<div id="mobile-login-veri-username-box" class="mask login-box">' +
+	const mobileLoginVeriUserNameHtml = '<div id="mobile-login-veri-username-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
-		'<div class="login-body">' +
+		'<div class="login-head-02">' +
+		'<p>手机登录</p>' +
+		'</div>' +
+		'<div class="login-body-02">' +
 		'<div>' +
 		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请输入您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
 		'<div id="mobile-login-veri-username-flex" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input id="mobile-login-veri-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" placeholder="请输入游戏账号">' +
+		'<img  src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="mobile-login-veri-username-input" class="flex-list" type="text" placeholder="请输入游戏账号">' +
 		'</div>' +
 		'</div>' +
-		'<div class="flex">' +
-		'<button id="mobile-login-veri-username-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
-		'</div>' +
+		'<a href="javascript:;" id="mobile-login-veri-username-button" class="btn">登录</a>' +
 		'</div>' +
 		'</div>' +
 		'</div>';
@@ -2556,29 +2495,29 @@ sdk.closeMobileLoginVeriUserNameBox = function () {
  * @param {Object} data 用户数据
  */
 sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
-	const mobileLogSelectedUserNameHtml = '<div id="mobile-login-selected-username-box" class="mask login-box">' +
+	const mobileLogSelectedUserNameHtml = '<div id="mobile-login-selected-username-box" class="mask-02 login-box-02">' +
 		'<div class="r5">' +
-		'<div class="login-head" style="padding: 0 0; border-bottom: .05rem;"><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">手机登录</p></div>' +
-		'<div class="login-body">' +
+		'<div class="login-head-02">' +
+		'<p>手机登录</p>' +
+		'</div>' +
+		'<div class="login-body-02">' +
 		'<div>' +
 		'<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
 		'<div id="mobile-login-selected-username-flex" class="flex">' +
-		'<img style="top: 5px; left: 5px; width: 25px; height: 25px;" src="/images/sdk2.0/user2.png"></img>' +
-		'<input id="mobile-login-selected-username-input" style="width: 84%; height: 40px; color: #000000;" class="flex-list"  type="text" value="" list="fruit" placeholder="请选择游戏账号">' +
+		'<img  src="/images/sdk2.0/user2.png"></img>' +
+		'<input id="mobile-login-selected-username-input" class="flex-list"  type="text" list="fruit" placeholder="请选择游戏账号">' +
 		'<datalist id="fruit">' +
 		'</datalist>' +
 		'</div>' +
 		'</div>' +
-		'<div class="flex">' +
-		'<button id="mobile-login-selected-username-button" style="width: 100%; height: 40px; border-radius:5px; border-style: solid; background-color: #BA494B; border-color: #BA494B; outline: none; font-size: 16px; font-weight: bold; color: #FFFFFF;">登录</button>' +
-		'</div>' +
+		'<a href="javascript:;" id="mobile-login-selected-username-button" class="btn">登录</a>' +
 		'</div>' +
 		'</div>' +
 		'</div>';
 
 	$("body").append(mobileLogSelectedUserNameHtml);
 
-	if (data.userList && data.userList.length > 0) {
+	if (data && data.userList && data.userList.length > 0) {
 		for (var i = 0; i < data.userList.length; i++) {
 			$("#fruit").append('<option>' + data.userList[i].userName + '</option>');
 		}
@@ -2637,21 +2576,20 @@ var hasUpdateAccount = false;
 /**
  * @desc 显示加载登录框
  * @param {string} userName 账号
- * @param {string} password 密码
+ * @param {Object} params 参数
  */
-sdk.showLoadingLoginBox = function (userName, password) {
-	var loadingLoginBox = '<div id="loading-login-box" class="mask">' +
-		'<div class="r5" style="width: 280px; height: 50px; top: 5%">' +
-		'<div class="flex" style="padding: 15px 0 0 15px;">' +
-		'<img src="/images/pj_image_float_logo.png" style="width: 25px; height: 25px;"></img>' +
-		'<h5 style="margin-top: 3px; margin-left: 5px; font-size: 14px; color: #BA4970;">' + userName + '</h5>' +
-		'<h5 style="margin-top: 3px; margin-left: 5px; font-size: 14px; font-weight: normal;">登录中</h5>' +
+sdk.showLoadingLoginBox = function (userName, params) {
+	var loadingLoginBox = '<div id="loading-login-box" class="mask-02">' +
+		'<div class="loading-body">' +
+		'<div class="flex-loading">' +
+		'<img src="/images/pj_image_float_logo.png" ></img>' +
+		'<p style="color: #BA4970;">' + userName + '</p>' +
+		'<p style="font-weight: normal;">登录中</p>' +
 		'<div class="ball-clip-rotate">' +
 		'<div></div>' +
 		'</div>' +
-		'<button id="loading-login-update-button" style="position:absolute; top: 10px; right: 10px; border-style: solid; border-radius: 5px; padding: 5px 5px 5px 5px; outline: none;">切换账号</button>' +
 		'</div>' +
-		'</div>' +
+		'<div id="loading-login-update-button" class="btn">切换账号</div>' +
 		'</div>';
 
 	$("body").append(loadingLoginBox);
@@ -2659,21 +2597,38 @@ sdk.showLoadingLoginBox = function (userName, password) {
 	setTimeout(function () {
 		$("loading-login-update-button").css("visibility", "hidden");
 		if (!hasUpdateAccount) {
-			sdk.login02(userName, password, function (data) {
+			sdk.loginByToken02(params, function (reData) {
 				sdk.closeLoadingLoginBox();
 
-				var uid = data.uid;
-				var token = data.token;
-
-				var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-				var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
-				if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-					sdk.showRealNameAuth(openRealNameAuth, uid, token);
+				var uid = reData.data.uid;
+				var token = reData.data.token;
+				var openRealNameAuth = reData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+				var realNameAuthStatus = reData.data.realNameAuthStatus; //0:未实名
+				var isMobile = reData.data.bindMobile; //0:未实名
+				sdk.setItem("bindData", JSON.stringify(reData.data));
+				var isIp = sdk.getItem("isAmericaIp");
+				if (isIp == "1") {
+					if (isMobile == null || isMobile == "") {
+						sdk.showBindPhone(data);
+					} else {
+						if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+							sdk.showRealNameAuth(openRealNameAuth, uid, token);
+						} else {
+							sdk.setItem("uid", uid);
+							sdk.setItem("sdkToken", token);
+							sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+							window.location.href = sdk.mainUrl;
+						}
+					}
 				} else {
-					sdk.setItem("uid", uid);
-					sdk.setItem("sdkToken", token);
-					sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-					window.location.href = sdk.mainUrl;
+					if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+						sdk.showRealNameAuth(openRealNameAuth, uid, token);
+					} else {
+						sdk.setItem("uid", uid);
+						sdk.setItem("sdkToken", token);
+						sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+						window.location.href = sdk.mainUrl;
+					}
 				}
 
 				var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
@@ -2691,25 +2646,6 @@ sdk.showLoadingLoginBox = function (userName, password) {
 }
 
 /**
- * @desc 数组去重
- * @param {Array} array 数组
- */
-sdk.distinct = function (array) {
-	var result = [],
-		i, j, len = array.length;
-	for (i = 0; i < len; i++) {
-		for (j = i + 1; j < len; j++) {
-			if (array[i] === array[j]) {
-				j = ++i;
-			}
-		}
-		result.push(array[i]);
-	}
-
-	sdk.setItem("username_array", JSON.stringify(result));
-}
-
-/**
  * @desc 关闭加载登录框
  */
 sdk.closeLoadingLoginBox = function () {
@@ -2722,17 +2658,19 @@ sdk.closeLoadingLoginBox = function () {
  * @param {string} password 密码
  */
 sdk.showRegisterSuccBox = function (userName, password) {
-	var registerSuccHtml = '<div id="register-succ-box" class="mask login-box">' +
+	var registerSuccHtml = '<div id="register-succ-box" class="mask-02 login-box-02">' +
 		'<div class="r5" style="padding-bottom: 0px;">' +
-		'<div class="login-head" style="border-bottom: none; padding: 0 0 0 0; "><p style="height: 40px; left: 150px; color: #BA494B; font-weight: bold;">注册成功</p></div>' +
-		'<div class="login-body">' +
-		'<div style="background-color: #BA494B; height: 100px; border-radius: 5px; margin-bottom: 50px;">' +
-		'<h5 id="userName" class="flex" style="padding: 20px 0 0 20px; color: #ffffff; font-size: 20px;">账号: ' + userName + '</h5>' +
-		'<h5 id="password" class="flex" style="padding: 20px 0 0 20px; color: #ffffff; font-size: 20px;">密码: ' + password + '</h5>' +
+		'<div class="login-head-02">' +
+		'<p>注册成功</p>' +
 		'</div>' +
+		'<div class="login-body-02">' +
+		'<div class="register-succ">' +
+		'<p id="register-succ-userName">账号: ' + userName + '</p>' +
+		'<p id="register-succ-password">密码: ' + password + '</p>' +
 		'</div>' +
 		// '<h5 style="padding: 10% 10% 10% 10%; color: #BABABA;">该图片已截图保存</h5>' +
-		'<button href="#" id="register-succ-button" class="button" style="background-color: #BA494B; width: 100%; height: 40px; color: #ffffff; font-size: 16px; font-weight: bold; border-radius: 0 0 5px 5px;  text-decoration: none; border-style: none; outline: none;" onclick="sdk.closeRegisterSuccBox()">进入游戏</button>' +
+		'</div>' +
+		'<button id="register-succ-button" class="register-btn" onclick="sdk.closeRegisterSuccBox()">进入游戏</button>' +
 		'</div>' +
 		'</div>';
 
@@ -2769,6 +2707,25 @@ sdk.showRegisterSuccBox = function (userName, password) {
  */
 sdk.closeRegisterSuccBox = function () {
 	$("#register-succ-box").remove();
+}
+
+/**
+ * @desc 数组去重
+ * @param {Array} array 数组
+ */
+sdk.distinct = function (array) {
+	var result = [],
+		i, j, len = array.length;
+	for (i = 0; i < len; i++) {
+		for (j = i + 1; j < len; j++) {
+			if (array[i] === array[j]) {
+				j = ++i;
+			}
+		}
+		result.push(array[i]);
+	}
+
+	sdk.setItem("username_array", JSON.stringify(result));
 }
 
 /**
@@ -3219,5 +3176,27 @@ sdk.getPayUrl = function (params, callback) {
 		}
 	});
 }
+
+
+/**
+ * @desc token登录
+ * @param {Object} params 参数
+ * @param {Function} callback 回调参数
+ */
+sdk.loginByToken02 = function (params, callback) {
+	params["sdkVersion"] = sdk.sdkVersion;
+	params["udid"] = sdk.getUdid();
+	params["channel"] = sdk.getItem("channel");
+	params["channelGameId"] = sdk.getItem("channelGameId");
+	sdk.api(params, "loginByToken", function (retData) {
+		if (retData.code == sdk.SUCCESS) {
+			if(callback) callback(retData);
+		} else {
+			sdk.closeLoading();
+			sdk.confirmDialog(retData.msg);
+			sdk.logout();
+		}
+	});
+};
 
 window.PJ_SDK = sdk;
