@@ -103,8 +103,6 @@ Example.FunctionDesc = function () {
     console.info("Amumu 箭头函数 a = ", a(3, 4));
 };
 
-
-
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
 }

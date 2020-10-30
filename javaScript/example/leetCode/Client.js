@@ -15,11 +15,6 @@ function ListNode(val, node) {
     this.val = val;
     this.next = node;
 }
-/**
- * @param {ListNode} l1 
- * @param {ListNode} l2 
- * @return {ListNode}
- */
 
 /**
  * @param {ListNode} l1
@@ -89,6 +84,7 @@ Example.lengthOfLongestSubstring = function (s) {
     }
     return max;
 }
+
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
 }
