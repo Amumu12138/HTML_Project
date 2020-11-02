@@ -13,6 +13,7 @@ sdk.apiUrl = sdk.host + "/api/";
 sdk.mainUrl = sdk.host + '/main.html';
 sdk.loginUrl = sdk.host + '/login.html';
 sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
+sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
 sdk.xieYiUrl = sdk.host + "/xieyi.html";
 
 sdk.findPwdUrl = 'https://member.paojiao.cn/retrievePassword?os=h5';

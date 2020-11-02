@@ -6,8 +6,8 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-// sdk.host = "https://h5.paojiao.cn";
-sdk.host = "http://localhost:8888";
+sdk.host = "https://h5.paojiao.cn";
+// sdk.host = "http://localhost:8888";
 
 sdk.apiUrl = sdk.host + "/api/";
 // sdk.mainUrl = sdk.host + '/main.html';
@@ -1459,7 +1459,7 @@ sdk.showOpenScreen = function () {
 			}
 			else if(data.popupList[i].type == 3) {
 				sdk.showOpenScreenCoupon(data.popupList[i].url, data.popupList[i].voucher.rule,
-						data.popupList[i].voucher.deduct, data.popupList[i].voucher.achieveMoney);
+					data.popupList[i].voucher.deduct, data.popupList[i].voucher.achieveMoney);
 			}
 		}
 	});
@@ -1497,14 +1497,15 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	sdk.hasOpenScreenText = true;
 
 	//注册监听事件
-	document.getElementById("open-screen-text-close-img").onclick = function () {
+	$("#open-screen-text-close-img").click(function () {
 		sdk.closeOpenScreenTextBox();
 		$("#open-screen-coupon-box").css("visibility", "visible");
-	}
+	});
 
-	document.getElementById("open-screen-text-loginCheck").onclick = function () {
+
+	$("#open-screen-text-loginCheck").click(function () {
 		sdk.updateCheckUrl("open-screen-text-loginCheck");
-	}
+	});
 }
 
 var isOpenScreenFlag = false;
@@ -1562,21 +1563,20 @@ sdk.showOpenScreenImage = function (url, imgUrl) {
 	$("body").append(openScreenImageHtml);
 
 	//注册监听事件
-	document.getElementById("open-screen-image-close-img").onclick = function () {
+	$("#open-screen-image-close-img").click(function () {
 		sdk.closeOpenScreenImage();
 		$("#open-screen-coupon-box").css("visibility", "visible");
+	});
 
-	}
-
-	document.getElementById("open-screen-image-img").onclick = function () {
+	$("#open-screen-image-img").click(function () {
 		sdk.closeOpenScreenImage();
 		var jumpUrl = sdk.concatJumpUrl(url);
 		sdk.showHomeViewHtml(jumpUrl);
-	};
+	});
 
-	document.getElementById("open-screen-image-loginCheck").onclick = function () {
+	$("#open-screen-image-loginCheck").click(function () {
 		sdk.updateCheckUrl("open-screen-image-loginCheck");
-	}
+	});
 }
 
 /**
@@ -1835,14 +1835,13 @@ sdk.showHomeViewHtml = function (url) {
 	const homeViewHtml = '<div id="home-mask-div" class="bg000"></div>' +
 		'<div id="home-img" class="img-float"></div>' +
 		'<div id="home-div" class="iframe-css">' +
-		'<iframe src=' + url + ' bordr="0px" style="width: 100%; height: 100%; background: #f2f2f2; border: 0px; overflow-x: hidden; border-radius: 15px 15px 0 0px;"></iframe>' +
+		'<iframe src=' + url + ' style="width: 100%; height: 100%; background: #f2f2f2; border: 0px; overflow-x: hidden; border-radius: 15px 15px 0 0px;"></iframe>' +
 		'</div>';
 
 	$("body").append(homeViewHtml);
 
 	document.getElementById("home-mask-div").onclick = function () {
 		sdk.closeHomeViewHtml();
-
 		$("#shortcut").css("visibility", "visible");
 	}
 }
@@ -1997,9 +1996,9 @@ sdk.loadPayBox02 = function (params) {
  */
 sdk.showPayBox02 = function (url) {
 	const payBoxHtml = '<div id="payBox-02" class="bg000"></div>' +
-		'<div id="payBox-02-img" class="imgfloat"></div>' +
-		'<div id="payBox-02-div" class="iframe_css">' +
-		'<iframe src=' + url + ' bordr="0px" style="width: 100%; height: 100%; background: #f2f2f2; border: 0px; border-radius: 15px 15px 0 0px;"></iframe>' +
+		'<div id="payBox-02-img" class="img-float"></div>' +
+		'<div id="payBox-02-div" class="iframe-css">' +
+		'<iframe src=' + url + ' style="width: 100%; height: 100%; background: #f2f2f2; border: 0px; border-radius: 15px 15px 0 0px;"></iframe>' +
 		'</div>';
 
 	$("body").append(payBoxHtml);
@@ -2069,7 +2068,7 @@ sdk.showQuickLoginBox = function (userName, password) {
 		'</div>' +
 		'<div id="quick-login-pwdBox" class="flex">' +
 		'<img src="/images/sdk2.0/password2.png"></img>' +
-		'<input id="quick-login-pwd-input" class="flex-list" type="text" value=' + password + ' placeholder="请输入密码">' +
+		'<input id="quick-login-pwd-input" class="flex-list" type="text" value=' + password + ' disabled="disabled">' +
 		'<img id="quick-login-pwd-eye" style="left: 0px; right: 5px;" src="/images/sdk2.0/pj_pw_visible.png"></img>' +
 		'</div>' +
 		'</div>' +
@@ -2304,8 +2303,8 @@ sdk.showMobileLoginBox = function () {
 	}
 
 	document.getElementById("mobile-login-loading-button").onclick = function () {
-		var mobile = $("#mobile").val();
-		var smsCode = $("#smsCode").val();
+		var mobile = $("#mobile-login-mobile-input").val();
+		var smsCode = $("#mobile-login-smsCode-input").val();
 		sdk.mobileLogin(mobile, smsCode, function (data) {
 			sdk.closeMobileLoginBox();
 			var uid = data.uid;
@@ -2334,7 +2333,7 @@ sdk.showMobileLoginBox = function () {
 	}
 
 	document.getElementById("mobile-login-getSmsCode-button").onclick = function () {
-		var mobile = $("#mobile").val();
+		var mobile = $("#mobile-login-mobile-input").val();
 		//点击后禁用60s
 		$("#mobile-login-getSmsCode-button").attr('disabled', true);
 		$("#mobile-login-getSmsCode-button").css("background-color", "#BABABA");
@@ -2567,8 +2566,8 @@ sdk.showLoadingLoginBox = function (userName, params) {
 		'<div class="loading-body">' +
 		'<div class="flex-loading">' +
 		'<img src="/images/pj_image_float_logo.png" ></img>' +
-		'<p style="color: #BA4970;">' + userName + '</p>' +
-		'<p style="font-weight: normal;">登录中</p>' +
+		'<p style="color: #BA4970; font-weight: bold;">' + userName + '</p>' +
+		'<p style="font-weight: bold;">登录中</p>' +
 		'<div class="ball-clip-rotate">' +
 		'<div></div>' +
 		'</div>' +

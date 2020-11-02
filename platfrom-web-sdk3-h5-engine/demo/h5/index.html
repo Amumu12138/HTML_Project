@@ -15,11 +15,13 @@
 
 	<script type="text/javascript" src="js/test.js"></script>
 	<script type="text/javascript" src="js/pj_sdk_client.js"></script>
-	<script type="text/javascript" src="js/pj_sdk_host_v1.js"></script>
 	<script type="text/javascript" src="js/pj_channel_sdk.js"></script>
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="/js/jquery.md5.js"></script>
-	<script type="text/javascript" src="/js/pj_api.js"></script>
+	<script type="text/javascript" src="js/jquery.md5.js"></script>
+	<script type="text/javascript" src="js/pj_api.js"></script> 
+	<script type="text/javascript" src="js/pj_sdk_host_v1.js"></script>
+	<!-- <script type="module" src="js/pj_api.js"></script> -->
+	<!-- <script type="module" src="js/pj_sdk_host_v1.js"></script> -->
 
 	<script type="text/javascript" src="http://image-h5.520youx.com/api/js/GameSdk.js"></script>
 	<script type="text/javascript" src="http://h5.wan.360.cn/h5-cp-sdk-loader.js"></script>
@@ -442,7 +444,9 @@
 	//显示开屏
 	function showOpenScreen() {
 		var type = Math.floor(Math.random() * 3);
-		sdk.showOpenScreen(2);
+		console.log("pjapi = ", pjapi);
+		console.log("sdk = ", sdk);
+		sdk.showOpenScreen(0);
 	}
 
 	function showOutGameHtml() {

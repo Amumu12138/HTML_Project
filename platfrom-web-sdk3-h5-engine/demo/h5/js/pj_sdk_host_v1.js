@@ -1,3 +1,4 @@
+// import { pjapi } from "../js/pj_api.js";
 //泡椒h5sdk-服务器端
 var sdk = window.PJ_SDK || {};
 
@@ -14,6 +15,7 @@ sdk.apiUrl = sdk.host + "/api/";
 sdk.mainUrl = sdk.host + '/main2.html';
 sdk.loginUrl = sdk.host + '/login2.html';
 sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
+sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
 sdk.xieYiUrl = sdk.host + "/xieyi.html";
 
 sdk.findPwdUrl = 'https://member.paojiao.cn/retrievePassword?os=h5';
@@ -135,14 +137,10 @@ sdk.initLoading = function (callback) {
 			});
 		}, 1000);
 	}
-
-
 };
-
 
 //获取游戏详细
 sdk.getGameInfo = function (isLogin, callback) {
-
 	var params = {};
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	params["channel"] = sdk.getItem("channel");
@@ -153,13 +151,12 @@ sdk.getGameInfo = function (isLogin, callback) {
 	});
 };
 
-
 sdk.closeLoginBox = function () {
 	$("#loginBox").remove();
 };
+
 //打开登录框
 sdk.loadLoginBox = function () {
-
 	var loginHtml = '<div id="loginBox" class="mask login-box">';
 	loginHtml += '<div class="r5">';
 	loginHtml += '<div class="login-head"><img style="width: 220px;height:40px;" src="/images/titleIcon.png" />&nbsp;</div>';
@@ -177,7 +174,6 @@ sdk.loadLoginBox = function () {
 		loginHtml += '<fieldset class=""><legend>其他登录方式</legend></fieldset>';
 	}
 
-
 	loginHtml += '</div>';
 	loginHtml += '<div class="login-mode">';
 	loginHtml += '<ol class="flex active">';
@@ -186,7 +182,6 @@ sdk.loadLoginBox = function () {
 		loginHtml += '<div class="r50"><i class="icod-wechat"></i></div>';
 		loginHtml += '</li>';
 	}
-
 
 	/*loginHtml += '<li class="flex-list qq list-show" onclick="sdk.thirdLogin(2)" title="QQ登录">';
     loginHtml += '<div class="r50"><i class="icod-qq"></i></div>';
@@ -233,10 +228,8 @@ sdk.loadLoginBoxTo2 = function () {
 	$("body").append(loginHtml);
 };
 
-
 //登录
 sdk.login = function () {
-
 	var userName = $("#userName").val();
 	var password = $("#password").val();
 	if (userName == '') {
@@ -247,7 +240,6 @@ sdk.login = function () {
 		sdk.confirmDialog("请输入密码");
 		return;
 	}
-
 
 	var params = {};
 	params["userName"] = userName;
@@ -301,12 +293,10 @@ sdk.login = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
 
 //自动登录
 sdk.autoLogin = function () {
-
 	var sdkToken = sdk.getItem("sdkToken");
 	if (sdkToken != null && sdkToken != "null" && sdkToken != "") {
 		var p = {};
@@ -328,10 +318,7 @@ sdk.autoLogin = function () {
 				sdk.loadLoginBox();
 			}
 		}
-
-
 	}
-
 };
 
 
@@ -374,16 +361,13 @@ sdk.loginByToken = function (params) {
 					window.location.href = sdk.mainUrl;
 				}
 			}
-
 		} else {
 			sdk.closeLoading();
 			sdk.confirmDialog(retData.msg);
 			sdk.logout();
 		}
-
 	});
 };
-
 
 //退出登录
 sdk.logout = function () {
@@ -400,7 +384,6 @@ sdk.logout = function () {
 	window.location.href = url;
 };
 
-
 //验证token
 sdk.getToken = function (params) {
 	params["sdkVersion"] = sdk.sdkVersion;
@@ -408,7 +391,6 @@ sdk.getToken = function (params) {
 	params["channel"] = sdk.getItem("channel");
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	sdk.api(params, "getToken", function (retData) {
-
 		if (retData.code == sdk.SUCCESS) {
 			sdk.closeLoginBox();
 			var suid = retData.data.userInfo.suid;
@@ -418,19 +400,15 @@ sdk.getToken = function (params) {
 			sdk.setItem("uid", uid);
 			sdk.setItem("sdkToken", token);
 			window.location.href = sdk.mainUrl;
-
 		} else {
 			sdk.closeLoading();
 			sdk.confirmDialog(retData.msg);
 		}
-
 	});
 };
 
-
 //一键注册
 sdk.reg1 = function () {
-
 	var params = {};
 	params["channelGameId"] = sdk.getItem("channelGameId");
 	params["udid"] = sdk.getUdid();
@@ -451,15 +429,12 @@ sdk.reg1 = function () {
 			}
 			$("#userName").val(retData.data.userName);
 			$("#password").val(retData.data.password);
-
 		} else {
 			sdk.closeLoading();
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
-
 
 sdk.closeRegInfo = function () {
 	var isIp = sdk.getItem("isAmericaIp");
@@ -469,8 +444,8 @@ sdk.closeRegInfo = function () {
 	} else {
 		$("#showRegInfo").remove();
 	}
-
 };
+
 //显示注册账号信息
 sdk.showRegInfo = function (retData) {
 	var loginHtml = '<div id="showRegInfo" class="mask login-box">';
@@ -496,7 +471,6 @@ sdk.showRegInfo = function (retData) {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
 
 //显示注册账号信息-苹果审核页
@@ -524,24 +498,20 @@ sdk.showRegInfoToIp = function (retData) {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
 
 
 sdk.checkMobile = function (phone) {
-
 	if (!/^1[3|4|5|7|8]\d{9}$/.test(phone) && phone !== undefined) {
 		sdk.confirmDialog("请填入有效的手机号码！");
 		return false;
 	}
 	return true;
-
 };
 
 //发送短信验证码
 sdk.sendUserInfo = function () {
 	var phone = $("#phone").val();
-
 	var ret = sdk.checkMobile(phone);
 	if (!ret) {
 		return false;
@@ -566,7 +536,6 @@ sdk.sendUserInfo = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
 
 
@@ -579,8 +548,8 @@ sdk.closeRegBox = function () {
 	} else {
 		$("#showRegBox").remove();
 	}
-
 };
+
 sdk.showRegBox = function () {
 	var loginHtml = '<div id="showRegBox" class="mask login-box">';
 	loginHtml += '<div class="r5">';
@@ -599,8 +568,8 @@ sdk.showRegBox = function () {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
+
 //账号密码注册-苹果提审
 sdk.showRegBoxToIp = function () {
 	var loginHtml = '<div id="showRegBoxToIp" class="mask login-box">';
@@ -621,13 +590,12 @@ sdk.showRegBoxToIp = function () {
 	loginHtml += '</div>';
 
 	$("body").append(loginHtml);
-
 };
-
 
 sdk.closeXieYi = function () {
 	$("#showXieYi").remove();
 };
+
 sdk.showXieYi = function () {
 	var loginHtml = '<div id="showXieYi" style="top:0px;" class="mask2 login-box2">';
 	loginHtml += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
@@ -639,7 +607,6 @@ sdk.showXieYi = function () {
 	loginHtml += '</div>';
 	$("body").append(loginHtml);
 };
-
 
 //账号密码注册
 sdk.reg2 = function () {
@@ -654,7 +621,6 @@ sdk.reg2 = function () {
 			return false;
 		}
 	}
-
 
 	if (r_userName == '') {
 		sdk.confirmDialog("请输入用户名");
@@ -691,14 +657,13 @@ sdk.reg2 = function () {
 			sdk.confirmDialog(retData.msg);
 		}
 	});
-
 };
-
 
 //关闭忘记密码页面
 sdk.closeFotPwdBox = function () {
 	$("#showFotPwdBox").remove();
 };
+
 sdk.showFotPwdBox = function () {
 	/*var loginHtml = '<div id="showFotPwdBox" class="mask2 login-box2">';
     loginHtml += '<div class="r5" style="width: 16rem;margin:0 auto;">';
@@ -719,8 +684,6 @@ sdk.showFotPwdBox = function () {
 	loginHtml += '</div>';
 	loginHtml += '</div>';
 	$("body").append(loginHtml);
-
-
 };
 
 sdk.closePayBox = function () {
@@ -738,7 +701,6 @@ sdk.loadPayBox = function (params) {
 
 	sdk.closePayBox();
 	sdk.showLoading();
-
 
 	//获取支付Url
 	sdk.api(params, "getPayUrl", function (retData) {
@@ -761,31 +723,23 @@ sdk.loadPayBox = function (params) {
 				payBox += '</div>';
 				$("body").append(payBox);
 			}
-
 		} else {
 			sdk.confirmDialog(retData.msg);
 			sdk.closeLoading();
 		}
-
 	});
-
-
 };
-
-
 
 //实名认证
 sdk.closeRealNameBox = function (bool, uid, token) {
 	$("#showRealNameBox").remove();
-
 	if (bool) {
 		window.location.href = sdk.mainUrl;
 	}
-
 };
+
 //打开实名认证页面
 sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
-
 	sdk.setItem("uid", uid);
 	sdk.setItem("sdkToken", token);
 
@@ -795,12 +749,9 @@ sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
 	params["gameId"] = sdk.gameInfo.gameId;
 
 	sdk.api(params, "getRealNameAuthUrl", function (retData) {
-
 		sdk.closeRealNameBox(false);
-
 		if (retData.code == 1) {
 			var url = retData.data;
-
 			var realNameAuth = '<div id="showRealNameBox" style="top:0px;" class="mask2 login-box2">';
 			realNameAuth += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
 			if (openRealNameAuth == 1) {
@@ -819,15 +770,12 @@ sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
 			sdk.confirmDialog(retData.msg);
 			sdk.closeLoading();
 		}
-
 	});
 };
 
 //获取验证码
 sdk.getMobileCode = function () {
-
 	var mobilePhone = $("#mobilePhone").val();
-
 	if (mobilePhone == '') {
 		sdk.confirmDialog("请输入手机号码");
 		return;
@@ -856,7 +804,6 @@ sdk.getMobileCode = function () {
 	});
 };
 
-
 //关闭手机绑定后打开实名认证
 sdk.closeBindToRealNameAuth = function () {
 	var retData = jQuery.parseJSON(sdk.getItem("bindData"));
@@ -874,10 +821,8 @@ sdk.closeBindToRealNameAuth = function () {
 	}
 };
 
-
 //绑定手机号码-提审
 sdk.bindMobilePhone = function () {
-
 	var mobilePhone = $("#mobilePhone").val();
 	var mobileCode = $("#mobileCode").val();
 	var userId = $("#bind_phone_uid").val();
@@ -909,7 +854,6 @@ sdk.bindMobilePhone = function () {
 	});
 	sdk.closeBindToRealNameAuth();
 };
-
 
 //关闭绑定手机界面-提审
 sdk.closeBindPhone = function () {
@@ -953,13 +897,11 @@ sdk.showBindPhone = function (bindData) {
 	$("body").append(loginHtml);
 };
 
-
 //实名认证回调
 sdk.doRealNameAuthCallBack = function (code) {
 	sdk.setItem("realNameAuthStatus", code);
 	window.location.href = sdk.mainUrl;
 };
-
 
 //上报玩家信息
 sdk.reportRoleInfo = function (params) {
@@ -973,7 +915,6 @@ sdk.reportRoleInfo = function (params) {
 		window.frames["gameFrame"].postMessage(p, "*");
 	});
 };
-
 
 function touchstart(e) {
 	var touches = e.touches[0];
@@ -1083,7 +1024,6 @@ sdk.enableFloatBox = function () {
 
 //初始化悬浮球
 sdk.initFloatBox = function () {
-
 	var params = {};
 	params["appVersion"] = sdk.appVersion;
 	params["channel"] = sdk.getItem("channel");
@@ -1099,7 +1039,6 @@ sdk.initFloatBox = function () {
 	sdk.httpGet(url, function (retData) {
 		if (retData.code == sdk.SUCCESS) {
 			var data = retData.data;
-
 			var html = "";
 			for (var i = 0; i < data.length; i++) {
 				var url = "'" + data[i]["url"] + "'";
@@ -1108,10 +1047,8 @@ sdk.initFloatBox = function () {
 				html += '<div style="width: 25px;height:25px;color:white;font-size:12px;">' + data[i]["name"] + '</div>';
 				html += '</div>';
 			};
-
 			$("#navDiv").css("width", (data.length * 44) + "px");
 			$("#navDiv").append(html);
-
 		} else {
 			sdk.confirmDialog(retData.msg);
 		}
@@ -1122,9 +1059,7 @@ sdk.initFloatBox = function () {
 sdk.showNav = function () {
 	var r = $("#navDiv").css("display");
 	if (r == "none") {
-
 		sdk.unbindTouchEvent();
-
 		$("#navDiv").css("display", "block");
 
 		var leftW = $("#shortcut").css("left");
@@ -1141,21 +1076,17 @@ sdk.showNav = function () {
 	} else {
 		$("#navDiv").css("display", "none");
 		$("#shortcut").css("width", "50px");
-
 		sdk.bindTouchEvent();
 	}
-
 }
-
 
 //打开用户中心
 sdk.closeUcBox = function () {
 	$("#showUcBox").remove();
 };
+
 sdk.showUcBox = function (ucurl) {
-
 	$("#iconDiv").trigger("click");
-
 	var param = {};
 	param["channel"] = sdk.getItem("channel");
 	param["channelId"] = sdk.channelId;
@@ -1175,7 +1106,6 @@ sdk.showUcBox = function (ucurl) {
 	param["ucHost"] = ucurl;
 
 	var url = sdk.buildURL(sdk.apiUrl + "openUc", param);
-
 	var ucCenterUrl = "";
 	sdk.httpGet(url, function (retData) {
 		if (retData.code == sdk.SUCCESS) {
@@ -1193,9 +1123,7 @@ sdk.showUcBox = function (ucurl) {
 			sdk.confirmDialog(retData.msg);
 		}
 	}, "json");
-
 };
-
 
 //第三方登录
 sdk.thirdLogin = function (type) {
@@ -1276,15 +1204,15 @@ sdk.confirmDialog = function (txt, oklabel, cancellabel, okcallback, cancelcallb
 		var type = $(this).attr("data-type");
 		if (type == "cancel") {
 			if (cancelcallback) {
-				cancelcallback()
+				cancelcallback();
 			}
 		} else if (type == "ok") {
 			if (okcallback) {
-				okcallback()
+				okcallback();
 			}
 		}
 		$(this).parents("#confirmDialog").remove()
-	})
+	});
 };
 
 
@@ -1524,6 +1452,7 @@ sdk.showOpenScreen = function (type) {
 		default:
 			break;
 	}
+	console.log("Amumu api = ". pjapi.log());
 }
 
 sdk.hasOpenScreenText = false;
@@ -1559,14 +1488,18 @@ sdk.showOpenScreenTextBox = function (title, content) {
 	sdk.hasOpenScreenText = true;
 
 	//注册监听事件
-	document.getElementById("open-screen-text-close-img").onclick = function () {
-		sdk.closeOpenScreenTextBox();
-		$("#open-screen-coupon-box").css("visibility", "visible");
-	}
+	// document.getElementById("open-screen-text-close-img").onclick = function () {
+	// 	sdk.closeOpenScreenTextBox();
+	// 	$("#open-screen-coupon-box").css("visibility", "visible");
+	// }
 
-	document.getElementById("open-screen-text-loginCheck").onclick = function () {
-		sdk.updateCheckUrl("open-screen-text-loginCheck");
-	}
+	$("#open-screen-text-close-img").click(function() {
+		console.log('AMumu click');
+	});
+
+	// document.getElementById("open-screen-text-loginCheck").onclick = function () {
+	// 	sdk.updateCheckUrl("open-screen-text-loginCheck");
+	// }
 }
 
 var isOpenScreenFlag = false;
