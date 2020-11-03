@@ -246,7 +246,7 @@
                 console.log("Amumu roleCreateTime = ", window.localStorage.getItem("yh_quick_createRoleTime"));
                 var roleInfo = new Object();
                 roleInfo.isCreateRole = isCreateRole; //仅创建角色时传true,更新信息时传false
-                roleInfo.roleCreateTime = window.localStorage.getItem("createRoleTime") || time;; //角色创建时间
+                roleInfo.roleCreateTime = window.localStorage.getItem("createRoleTime") || time; //角色创建时间
                 roleInfo.uid = channelSDK.channelUserID; //UID
                 roleInfo.username = channelSDK.username; //username
                 roleInfo.serverId = server_id; //区服ID
