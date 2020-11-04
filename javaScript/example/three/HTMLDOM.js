@@ -36,7 +36,7 @@ var Example = Example || {};
  * 
  * 2.通过标签名找到HTML元素
  * 例如: var x = document.getElementById("main");
- *      var y = x.getElementByTagName("p");
+ *      var y = x.getElementsByTagName("p");
  * 3.通过类名找到HTML
  * 例如: var z = document.getElementsByClassName("intro");
  * 

@@ -47,7 +47,67 @@ var Example = Example || {};
  * onclick事件
  */
 Example.HTMLDOMEventListener = function () {
+    document.write(`<p onclick="this.innerHTML='123'">点击文本</p>`);
 
+    // console.log("", document.getElementsByTagName("body"));
+    document.write(`
+        <script>
+            document.getElementsByTagName("body")[0].onload = function() {
+                console.log("Amumu body");
+            }
+        </script>
+    `);
+
+    //onchange响应函数,当你离开输入框后,函数将被触发,将小写字母转为大写字母
+    document.write(`
+        输入你的名字: <input type="text" id="fname" onchange="toUpperCase()">
+        <p>当你离开输入框后,函数将被触发,将小写字母转为大写字母</p>
+    `);
+
+    document.write(`
+        <script>
+        function toUpperCase() {
+            var x = document.getElementById("fname");
+            x.value = x.value.toUpperCase();
+        }
+        </script>
+    `);
+
+    //onmouseover和onmouseout事件
+    document.write(`
+        <div onmouseover="mOver(this)" onmouseout="mOut(this)" style="background-color: #D94A38; width: 120px; height: 20px; padding: 40px;">Mouse Over Me</div>
+        <p>onmouseover和onmouseout事件示例</p>
+    `);
+
+    document.write(`
+        <script>
+            function mOver(obj) {
+                obj.innerHTML = "Thank You";
+            } 
+            function mOut(obj) {
+                obj.innerHTML = "Mouse Over Me";
+            }
+        </script>
+    `);
+
+    //onmousedown和onmouseup响应事件
+    document.write(`
+        <img id="light-bulb" onmousedown="lighton()" onmouseup="lightoff()"
+         src="images/bulboff.gif" width="100" hright="100">
+        <p>onmousedown和onmouseup响应事件： 点击不释放鼠标灯一直亮着</p>
+    `);
+
+    document.write(`
+        <script>
+            function lighton() {
+                document.getElementById("light-bulb").src="images/bulbon.gif";
+            }
+
+            function lightoff() {
+                document.getElementById("light-bulb").src="images/bulboff.gif";
+            }
+        </script>
+    `);
 };
 
 if (typeof module !== 'undefined') {
