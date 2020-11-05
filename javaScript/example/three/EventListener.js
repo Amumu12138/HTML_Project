@@ -80,10 +80,8 @@ Example.EventListener = function () {
     var btn = document.getElementById("bing-btn");
     bind(btn, "click", function() {
         console.log("Amumu EventListener bing-btn click");
-    })
-
+    });
 };
-
 
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
