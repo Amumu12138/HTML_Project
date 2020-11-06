@@ -46,7 +46,7 @@ var Example = Example || {};
  * NodeList节点列表不是一个数组
  * 节点列表看起来可能是一个数组,但其实不是
  * 你可以像数组一样,使用索引来获取元素
- * 节点列表无法使用数组的方法,例如: valuef(), pop(), jon等等
+ * 节点列表无法使用数组的方法,例如: valueOf(), pop(), join等等
  * 五、HTMLCollection与NodeList的区别
  * HTMLCollection是HTML元素的集合
  * NodeList是一个文档节点的集合
@@ -59,8 +59,8 @@ var Example = Example || {};
 Example.Collection = function () {
     document.write(
         "<div id='div1'>" 
-         + "<p>段落1</p>" 
-        +"<p>段落2</p>" 
+        + "<p>段落1</p>" 
+        + "<p>段落2</p>" 
         + "<p>段落3</p>" 
         + "</div>"
     );
