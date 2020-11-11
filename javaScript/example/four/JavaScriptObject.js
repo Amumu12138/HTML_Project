@@ -96,7 +96,6 @@ Example.JavaScriptObject = function () {
     console.log("Amumu JavaScriptObject x.age = ", x.age, " person.age = ", person.age); // x.age = 0, person.age = 0
 };
 
-
 if (typeof module !== 'undefined') {
     module.export = Example[Object.keys(Example)[0]];
 }
