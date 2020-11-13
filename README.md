@@ -9,6 +9,7 @@
     platfrom-web-sdk3-h5-engine-copy --- 基于泡椒-h5-sdk2.0的IDEA项目
     test                --- 练手实操文件
     threeJs             --- three.js 3d引擎项目
+    typeScript          --- ts教程学习
     vue                 --- vue 学习项目
     webgl               --- webgl 教程学习
     helloWorld.html     --- html测试案例
