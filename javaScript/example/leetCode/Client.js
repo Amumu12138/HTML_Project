@@ -100,7 +100,7 @@ Example.lengthOfLongestSubstring = function (s) {
 输出: 21
 注意:
 
-假设我们的环境只能存储得下 32 位的有符号整数，则其数值范围为 [−231,  231 − 1]。请根据这个假设，如果反转后整数溢出那么就返回 0。
+假设我们的环境只能存储得下 32 位的有符号整数，则其数值范围为 [−2^31,  2^31 − 1]。请根据这个假设，如果反转后整数溢出那么就返回 0。
  */
 Example.reverse = function (x) {
     var max = Math.pow(2, 31) - 1;
@@ -116,23 +116,18 @@ Example.reverse = function (x) {
             mod = x % 10;
             x = Math.floor(x / 10);
             arr.push(mod);
-        }
-
-         //反转
-        for(var i = 0; i < arr.length; i++) {
-            sum = sum * 10 + arr[i];
-        }
+        } 
     } else {
         while(x < 0) {
             mod = x % 10;
             x = Math.ceil(x / 10);
             arr.push(mod);
         }
+    }
 
-        //反转
-        for(var i = 0; i < arr.length; i++) {
-            sum = sum * 10 + arr[i];
-        }
+     //反转
+    for(var i = 0; i < arr.length; i++) {
+        sum = sum * 10 + arr[i];
     }
    
     if(sum > max || sum < min) return 0 ;
