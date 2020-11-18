@@ -34,7 +34,7 @@ var Example = Example || {};
  * window.resizeTo()-调整当前窗口的尺寸
  */
 Example.Window = function() {
-
+    console.log("Amumu Window");
 }
 
 if(typeof module !== "undefined") {
