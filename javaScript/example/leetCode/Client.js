@@ -221,7 +221,52 @@ IC 和 IM 这样的例子并不符合题目要求，49 应该写作 XLIX，999 �
  * @param {*} s 
  */
 Example.romanToInt = function(s) {
+    var sum = 0;
+    var len = s.length;
+    for(var i = 0; i < len; i++) {
+        if(s[i] == "I"){
+            sum += 1;
+        } else if(s[i] == "V"){
+            if(i - 1 >= 0 && s[i - 1] == "I") {
+                sum += 3;
+            } else {
+                sum += 5;
+            }
+        } else if(s[i] == "X"){
+            if(i - 1 >= 0 && s[i - 1] == "I") {
+                sum += 8;
+            } else {
+                sum += 10;
+            }
+        } else if(s[i] == "L"){
+            if(i - 1 >= 0 && s[i - 1] == "X") {
+                sum += 30;
+            } else {
+                sum += 50;
+            }
+        } else if(s[i] == "C"){
+            if(i - 1 >= 0 && s[i - 1] == "X") {
+                sum += 80;
+            } else {
+                sum += 100;
+            }
+        } else if(s[i] == "D"){
+            if(i - 1 >= 0 && s[i - 1] == "C") {
+                sum += 300;
+            } else {
+                sum += 500;
+            }
+        } else if(s[i] == "M") {
+            if(i - 1 >= 0 && s[i - 1] == "C") {
+                sum += 800;
+            } else {
+                sum += 1000;
+            }
+        }
+    }
 
+    if(sum < 1 || sum > 3999) return -1;
+    return sum;
 }
 
 if (typeof module !== 'undefined') {
