@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONPObject;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Inject;
 import com.jfinal.kit.JsonKit;
+import com.paojiao.sdk3.common.util.PjMap;
 import com.paojiao.sdk3.common.util.SignUtil2;
 import com.paojiao.sdk3.controller.thirdsdk.HttpAgent;
 import com.paojiao.sdk3.controller.thirdsdk.UicodeBackslashU;
@@ -160,6 +161,34 @@ public class RoleReportController extends BaseController {
         }
     }
 
+
+    /**
+     * 湖南句芒文化传媒 角色上报
+     */
+    public void hnjmRoleReport() {
+        log.info("---hnjmRoleReport---角色上报参数：" + JsonKit.toJson(getParaMap1()));
+        this.channelGame = channelGameService.findGameById(getParaToInt("channelGameId"));
+        try {
+            Map<String, String> roleMap = new HashMap<>();
+            roleMap.put("user_id", getPara("user_id"));
+            roleMap.put("game_appid", getPara("game_appid"));
+            roleMap.put("server_id", getPara("server_id"));
+            roleMap.put("server_name", getPara("server_name"));
+            roleMap.put("role_id", getPara("role_id"));
+            roleMap.put("role_name", getPara("role_name"));
+            roleMap.put("level", getPara("level"));
+            //roleMap.put("power", getPara("power"));
+            String params = SignUtil2.sortParam2(roleMap) + channelGame.getPayKey();
+            log.info("---hnjmRoleReport---加密参数：" + params);
+            String sign = SignUtil2.md5(params);
+            log.info("---hnjmRoleReport---加密结果为：" + sign);
+            Map<String, String> signMap = new HashMap<>();
+            signMap.put("sign", sign);
+            super.renderJson(JSONObject.toJSONString(signMap));
+        } catch (Exception e) {
+            log.info("---hnjmRoleReport---系统错误：" + e.getMessage());
+        }
+    }
 
     public static void main(String[] args) {
         String url = "http://apigameh5.93jd3.com/index.php?c=game_api&a=query_server_list&appid=pjyx&game_id=52&sign=";

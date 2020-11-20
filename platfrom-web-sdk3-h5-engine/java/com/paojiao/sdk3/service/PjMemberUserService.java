@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jfinal.aop.Inject;
 import com.paojiao.sdk3.common.DS;
 import com.paojiao.sdk3.common.mongo.manager.LoginSessionManager;
 import com.paojiao.sdk3.common.util.TokenGenerator;
+import com.paojiao.sdk3.model.PjThirdSdkChannelGame;
 import com.paojiao.sdk3.model.pojo.LoginEntity;
 import org.apache.commons.lang.RandomStringUtils;
 
@@ -16,6 +18,9 @@ import com.paojiao.sdk3.model.PjMemberBinding;
 import com.paojiao.sdk3.model.PjMemberUser;
 
 public class PjMemberUserService {
+
+	@Inject
+	private PjThirdSdkChannelGameService channelGameService;
 
 	/**
 	 * * 随机产生一个用户.T3开头的用户名表示第三方SDK用户 保存到平台新用户和游戏新用户表
@@ -43,7 +48,7 @@ public class PjMemberUserService {
 	}
 
 
-	public Map<String,String> findByBinding(Integer flag,String bindType, String bindId, String nickname, String headimgurl, String udid, String channel) {
+	public Map<String,String> findByBinding(Integer flag,String bindType, String bindId, String nickname, String headimgurl, String udid, String channel,int channelGameId) {
 		String sql = "select *from pj_member_binding where bindType=? and bindId=? LIMIT 1";
 		PjMemberBinding bind = PjMemberBinding.dao.use(DS.ucSlave).findFirst(sql,bindType,bindId);
         Map<String,String> retMap = null;
@@ -65,7 +70,7 @@ public class PjMemberUserService {
 		}else{
 			if (flag != 1){
 				// 没有绑定，创建一个用户，并绑定当前QQ
-				PjMemberUser bindUser = generateUserAndBind(bindType, bindId, nickname, headimgurl,udid,channel);
+				PjMemberUser bindUser = generateUserAndBind(bindType, bindId, nickname, headimgurl,udid,channel,channelGameId);
 				token = LoginSessionManager.inst().addSession(user2LoginEntity(bindUser));
 				retMap = new HashMap<String,String>();
 				retMap.put("uid",bindUser.getId()+"");
@@ -79,7 +84,7 @@ public class PjMemberUserService {
 	}
 
 
-	private PjMemberUser generateUserAndBind(String bindType, String bindId,String nickname,String headimgurl,String udid,String channel){
+	private PjMemberUser generateUserAndBind(String bindType, String bindId,String nickname,String headimgurl,String udid,String channel,int channelGameId){
 
 		//生成用户
         PjMemberUser user  = new PjMemberUser();
@@ -104,8 +109,13 @@ public class PjMemberUserService {
 		PjMemberBinding bind = new PjMemberBinding();
 		bind.setBindId(bindId);
 		bind.setBindType(bindType);
+		bind.setSdkUserName(user.getUserName());
 		bind.setUserId(user.getId());
 		bind.setAddTime(new Date());
+        PjThirdSdkChannelGame channelGame = channelGameService.findGameById(channelGameId);
+        if (channelGame != null) {
+			bind.setSdkChannelId(channelGame.getSdkChannelId());
+		}
 		bind.use(DS.ucMaster).save();
 		return user;
 

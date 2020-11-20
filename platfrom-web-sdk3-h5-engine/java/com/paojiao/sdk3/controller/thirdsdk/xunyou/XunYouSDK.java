@@ -15,7 +15,6 @@ import com.paojiao.sdk3.model.PjThirdSdkOrder;
 import com.paojiao.sdk3.service.PjThirdSdkChannelGameService;
 import com.paojiao.sdk3.service.PjThirdSdkChannelService;
 import com.paojiao.sdk3.service.PjThirdSdkOrderService;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 

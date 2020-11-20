@@ -26,6 +26,7 @@ public class _NgSdk209MappingKit {
 		arp.addMapping("stat_device_cid", "id", StatDeviceCid.class);
 		arp.addMapping("stat_new_client", "id", StatNewClient.class);
 		arp.addMapping("stat_user_cid", "id", StatUserCid.class);
+		arp.addMapping("stat_review_login_user", "id", StatReviewLoginUser.class);
 
 	}
 }

@@ -70,14 +70,14 @@ public class QuickSDK implements ItfSdk {
 				callback.onFailed("QuickSDK-verify: uid is null.");
 				return;
 			}
-			if (StringUtils.isBlank(obj.getString("username"))) {
+			/*if (StringUtils.isBlank(obj.getString("username"))) {
 				log.info("QuickSDK-username is null");
 				callback.onFailed("QuickSDK-verify: username is null.");
 				return;
-			}
+			}*/
 			String token = obj.getString("token");
 			String uid = obj.getString("uid");
-			String username = obj.getString("username");
+			String username = obj.getString("username") == null ?"":obj.getString("username");
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("token", token);//游戏客户端从SDK客户端中获取的token值,原样传递无需解密,此值长度范围小于512,CP需预留足够长度
 			params.put("uid", uid);//从客户端接口获取到的渠道原始uid,无需任何加工如拼接渠道ID等

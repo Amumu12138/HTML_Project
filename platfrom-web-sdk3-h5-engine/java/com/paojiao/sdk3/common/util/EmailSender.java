@@ -300,7 +300,7 @@ public final class EmailSender {
 		emailSender.from = "m18682012116_1@163.com";
 		emailSender.password = "pj2017";
 		Set<String> to = new HashSet<String>();
-		to.add("wangdeyu@paojiao.cn");
+		to.add("jiangkun@paojiao.cn");
 		emailSender.to = to;
 
 		emailSender.send();

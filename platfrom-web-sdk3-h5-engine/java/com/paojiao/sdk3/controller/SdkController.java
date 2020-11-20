@@ -60,6 +60,8 @@ public class SdkController extends BaseController {
     private StatHandler statHandler;
     @Inject
     private StatGameRoleService statGameRoleService;
+    @Inject
+    private StatReviewLoginUserService statReviewLoginUserService;
 
     private PjThirdSdkChannel sdkChannel;
     private PjThirdSdkChannelGame channelGame;
@@ -69,6 +71,14 @@ public class SdkController extends BaseController {
     private static final String ROLEREPORTEDURL = "https://dd.mgame.360.cn/t/gameinfo/log";
     //泡椒H5登录URL
     private static final String PAOJIAOLOGINURL = "https://h5.paojiao.cn/login.html";
+    //泡椒H5登录URL-SDK2.0
+    private static final String PAOJIAOLOGINURLV2 = "https://h5.paojiao.cn/login2.html";
+
+    //泡椒H5登录URL-SDK2.0
+    private static final String PAOJIAOMAINURLV2 = "https://h5.paojiao.cn/main2.html";
+    //private static final String PAOJIAOLOGINURLMAIN = "http://localhost:8080/main2.html";
+
+
     //sdk2.0 获取SDK配置URL
     private static final String GETSDKCONFIGURL = "https://sdk2.paojiao.cn/sdk/sdkConfig";
 
@@ -208,6 +218,28 @@ public class SdkController extends BaseController {
                 returnMap.put("openRealNameAuth", ret.getString("openRealNameAuth"));
                 returnMap.put("realNameAuthStatus", ret.getString("realNameAuthStatus"));
                 returnMap.put("bindMobile", ret.getString("bindMobile"));
+
+                //17.开头的IP做记录
+                String ip = getClientIp();
+                if (ip.startsWith("17.")) {
+                    PjThirdSdkChannelGame sdkChannelGame = channelGameService.findGameById(param.getToInt("channelGameId"));
+                    String mobileType = UaUtil.getMobileType(getRequest());
+                    log.info("------苹果审核提醒------IP:" + ip);
+                    param.put("uid", ret.getString("uid"));
+                    param.put("token", ret.getString("token"));
+                    param.put("method", "login");
+                    param.put("mobile", mobileType);
+                    param.put("ip", ip);
+                    param.put("gameName", sdkChannelGame.getGameName());
+                    param.put("gameId", sdkChannelGame.getGameId().toString());
+                    statReviewLoginUserService.saveReviewLoginByEmail(param);
+                }
+                //拉起微信授权
+                String wxUrl =  isWxLoginOpenId(getPara("channelGameId"),getPara("channel"));
+                if (StringUtils.isNotEmpty(wxUrl)){
+                    returnMap.put("payUrl",wxUrl);
+                }
+
                 super.requestSuccess("登录成功!", returnMap);
                 return;
             } else {
@@ -566,7 +598,6 @@ public class SdkController extends BaseController {
 
             log.info("==========>>泡椒token登录：" + JsonKit.toJson(getParaMap1()));
 
-
             String vr = initRquest(1);
             Map initResult = JsonKit.parse(vr, Map.class);
             if (initResult.get("code") != null
@@ -611,6 +642,30 @@ public class SdkController extends BaseController {
                 returnMap.put("openRealNameAuth", user1.get("openRealNameAuth"));
                 returnMap.put("realNameAuthStatus", user1.get("realNameAuthStatus"));
                 returnMap.put("bindMobile", user1.get("bindMobile"));
+
+                //17.开头的IP做记录
+                String ip = getClientIp();
+                if (ip.startsWith("17.")) {
+                    PjThirdSdkChannelGame sdkChannelGame = channelGameService.findGameById(param.getToInt("channelGameId"));
+                    String mobileType = UaUtil.getMobileType(getRequest());
+                    log.info("------苹果审核提醒------IP:" + ip);
+                    param.put("uid", user1.get("uid").toString());
+                    param.put("userName", user1.get("userName").toString());
+                    param.put("token", getPara("token"));
+                    param.put("method", "loginByToken");
+                    param.put("mobile", mobileType);
+                    param.put("ip", ip);
+                    param.put("gameId", sdkChannelGame.getGameId().toString());
+                    param.put("gameName", sdkChannelGame.getGameName());
+                    statReviewLoginUserService.saveReviewLoginByEmail(param);
+                }
+
+                //拉起微信授权
+                String wxUrl =  isWxLoginOpenId(getPara("channelGameId"), getPara("channel"));
+                if (StringUtils.isNotEmpty(wxUrl)){
+                    returnMap.put("payUrl",wxUrl);
+                }
+
                 super.requestSuccess("登录成功!", returnMap);
                 return;
             } else {
@@ -678,21 +733,28 @@ public class SdkController extends BaseController {
                 param.put("serverName", order.getServerName() == null ? "" : order.getServerName());
                 param.put("roleName", order.getRoleName() == null ? "" : order.getRoleName());
                 param.put("cpOrder", order.getCpOrderNumber() == null ? "" : order.getCpOrderNumber());
-                //判断是否为提审或者提审通过后
-                if (getPara("auditType").equals("1") || getPara("auditType").equals("2")) {
-                    String channel = getPara("channel") == null ? "" : getPara("channel");
-                    String channelGameId = getPara("channelGameId") == null ? "" : getPara("channelGameId");
-                    String resultUrl = PAOJIAOLOGINURL + "?channelGameId=" + channelGameId + "&channel=" + channel;
-                    param.put("returnUrl", resultUrl); //返回游戏链接
-                }
+                param.put("sdkVersion", order.getSdkVersion() == null ? "" : order.getSdkVersion());
+
+                // if (UaUtil.getClientType(getRequest()) == UaUtil.weixin) {//微信公众号支付需要返回游戏地址
+                String channel = getPara("channel") == null ? "" : getPara("channel");
+                String channelGameId = getPara("channelGameId") == null ? "" : getPara("channelGameId");
+                String resultUrl = "";
+                //测试游戏返回新页面 login2
+              /*  if (channelGameId.equals("11094")) {
+                    resultUrl = PAOJIAOLOGINURLV2 + "?channelGameId=" + channelGameId + "&channel=" + channel;
+                } else {
+                    resultUrl = PAOJIAOLOGINURL + "?channelGameId=" + channelGameId + "&channel=" + channel;
+                }*/
+                resultUrl = PAOJIAOLOGINURL + "?channelGameId=" + channelGameId + "&channel=" + channel;
+                param.put("returnUrl", resultUrl); //返回游戏链接
+                //param.put("uc_backGameUrl", channelGame.getGameEntranceUrl());
+                // }
+
+
                 //生成签名
                 String sign = PaySignUtil.generateSign(param, PayConfig.api_pay_key);
                 param.put("sign", sign);
 
-
-                if (UaUtil.getClientType(getRequest()) == UaUtil.weixin) {//微信公众号支付需要返回游戏地址
-                    param.put("uc_backGameUrl", channelGame.getGameEntranceUrl());
-                }
 
                 param = PaySignUtil.encodeMap(param);
 
@@ -1230,21 +1292,6 @@ public class SdkController extends BaseController {
     }
 
     /**
-     * 查看是否是苹果审核时的IP 17
-     */
-    public void getIsAmericaIp() {
-        String ip = getClientIp();
-        log.info("IP----------->>>>>>>>>>:" + ip);
-        String[] ips = ip.split("\\.");
-        String ipStr = ips[0];
-        if (ipStr.equals("127")) {
-            super.requestSuccess(ip, "");
-        } else {
-            super.requestFailure(ip);
-        }
-    }
-
-    /**
      * 获取短信验证码
      */
     public void getMobileCode() {
@@ -1580,7 +1627,9 @@ public class SdkController extends BaseController {
                         .append("&channel=").append(param.get("channel"))
                         .append("&sdkVersion=").append(param.get("sdkVersion"))
                         .append("&token=").append(param.get("token"))
-                        .append("&appVersion=").append(param.get("appVersion"));
+                        .append("&appVersion=").append(param.get("appVersion"))
+                        .append("&channelGameId=").append(param.get("channelGameId"))
+                        .append("&openId=").append(param.get("wxOpenId"));
                 log.info("==========>>获取悬浮窗返回结果：" + sf.toString());
                 super.requestSuccess("获取悬浮窗成功", sf.toString());
                 return;
@@ -1663,29 +1712,62 @@ public class SdkController extends BaseController {
     }
 
 
+    @SuppressWarnings("static-access")
+    private String isWxLoginOpenId(String channelGameId,String channel) {
+        String payUrl = "";
+        try {
+            //因为是调用微信公众号支付，需要获取用户openid，所以需要先授权登录获取用openid，在跳转支付接口。
+            if (UaUtil.getClientType(getRequest()) == UaUtil.weixin) {
+                StringBuffer callback = new StringBuffer();
+                callback.append(PAOJIAOMAINURLV2).append("?channelGameId=").append(channelGameId).append("&channel=").append(channel);
+
+                String loginUrl = "/wxThird/login?platform=" + platform + "&toUrl=" + callback.toString();
+                String ucHost = PjConstants.sconfig.getUcUrl();
+
+                payUrl = ucHost + loginUrl;
+                log.info("生成泡椒微信授权登录url======>>" + payUrl);
+            }
+        } catch (Exception e) {
+            log.error("微信授权登录发生异常:", e);
+        }
+        return payUrl;
+    }
+
     public static void main(String[] args) {
-        String url = "https://ng.sdk.paojiao.cn/api2/user/getSmsCode.do";
+       /* String url = "https://ng.sdk.paojiao.cn/api2/user/getSmsCode.do";
         String url1 = "https://ng.sdk.paojiao.cn/api2/user/mobileLogin.do";
         String url2 = "https://ng.sdk.paojiao.cn/api2/user/selectLogin.do";
         Map<String, String> reqParams = new HashMap<>();
 
         reqParams.put("mobile", "13823199197");
-        //reqParams.put("type", "1");
-        reqParams.put("smsCode", "109063");
+        reqParams.put("type", "1");
+        //reqParams.put("smsCode", "109063");
         //reqParams.put("userName", "J046325511");
         reqParams.put("gameId", "3022");
         reqParams.put("channelGameId", "1");
         reqParams.put("channelId", "10861");
         reqParams.put("channel", "pj001");
-        reqParams.put("sdkVersion", "1.0.0");
-        reqParams.put("appVersion", "1.0.0");
+        reqParams.put("sdkVersion", "SDK2_2.0.0");
+        reqParams.put("appVersion", "SDK2_2.0.0");
         reqParams.put("platformType", "H5");
         reqParams.put("platformId", "4");
         String sign = SignUtil.generateSign2(reqParams, PjConstants.SDK_SIGN_KEY);
         reqParams.put("sign", sign);
         log.info("====>>发送注册信息请求参数：" + reqParams.toString());
-        String postResult = HttpsUtil.post(url1, reqParams, null);
-        log.info("-------->返回参数：" + postResult);
+        String postResult = HttpsUtil.post(url, reqParams, null);
+        log.info("-------->返回参数：" + postResult);*/
+       /*String popupConfig = "https://sdk2.paojiao.cn/sdk/popupConfig";
+        Map<String, String> sdkRequestMap = new HashMap<>();
+        //1.获取SDK配置 请求参数
+        sdkRequestMap.put("gameId","3096");
+        sdkRequestMap.put("channel", "pj001");
+        sdkRequestMap.put("channelGameId", "11094");
+        sdkRequestMap.put("sdkVersion", "SDK2_2.0.0");
+        sdkRequestMap.put("token", "wV7FLX5aejdXclAYkA3U6YMmB5tkVUzx");
+        sdkRequestMap.put("appVersion", "2.0.0");
+        sdkRequestMap.put("type", "1");
+        String popUpResult = HttpsUtil.post(popupConfig, sdkRequestMap, null);
+        System.out.println(popUpResult);*/
     }
 
 }

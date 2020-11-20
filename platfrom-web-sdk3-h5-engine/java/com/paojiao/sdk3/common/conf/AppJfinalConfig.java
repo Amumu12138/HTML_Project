@@ -18,12 +18,14 @@ import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
+import com.paojiao.sdk3.common.DS;
 import com.paojiao.sdk3.common.PjConstants;
 import com.paojiao.sdk3.controller.RoleReportController;
 import com.paojiao.sdk3.controller.SdkController;
 import com.paojiao.sdk3.controller.ThirdLoginController;
 import com.paojiao.sdk3.controller.YinLianLoginController;
 import com.paojiao.sdk3.controller.pay.PaoJiaoPayCallbackController;
+import com.paojiao.sdk3.controller.pay.PayController;
 import com.paojiao.sdk3.interceptor.DomainInterceptor;
 import com.paojiao.sdk3.model._NgSdk162MappingKit;
 import com.paojiao.sdk3.model._NgSdk209MappingKit;
@@ -48,7 +50,7 @@ public class AppJfinalConfig extends JFinalConfig {
 		// 设置当前是否为开发模式
 		me.setDevMode(PropKit.getBoolean("devMode"));
 		// 设置默认视图类型
-		me.setViewType(ViewType.JSP);
+		me.setViewType(ViewType.JFINAL_TEMPLATE);
 
 		// 404页面
 		me.setError404View("/error/404.html");
@@ -71,6 +73,7 @@ public class AppJfinalConfig extends JFinalConfig {
 		me.add("/pay/paojiao", PaoJiaoPayCallbackController.class);
 		me.add("/yinlian", YinLianLoginController.class);
 		me.add("/roleReport", RoleReportController.class);
+		me.add("/pay", PayController.class);
 		this.routes = me;
 	}
 
@@ -138,6 +141,49 @@ public class AppJfinalConfig extends JFinalConfig {
 			arp4.setDialect(new MysqlDialect());
 			me.add(arp4);
 
+
+
+			// 配置数据库连接池插件
+			//===========================公共管理主库====================================
+			DruidPlugin pm = new DruidPlugin(PropKit.get(DS.pubMaster+".url"),
+					PropKit.get(DS.pubMaster+".user"),
+					PropKit.get(DS.pubMaster+".password"));
+			me.add(pm);
+
+			ActiveRecordPlugin apm = new ActiveRecordPlugin(DS.pubMaster, pm);
+			apm.setShowSql(PropKit.getBoolean(DS.pubMaster+".devMode"));
+			apm.setDevMode(PropKit.getBoolean(DS.pubMaster+".devMode"));
+			apm.setDialect(new MysqlDialect());
+			me.add(apm);
+			//===========================公共管理主库====================================
+
+
+			//=========================公共管理从库====================================
+			DruidPlugin ps = new DruidPlugin(PropKit.get(DS.pubSlave+".url"),
+					PropKit.get(DS.pubSlave+".user"),
+					PropKit.get(DS.pubSlave+".password"));
+			me.add(ps);
+
+			ActiveRecordPlugin aps = new ActiveRecordPlugin(DS.pubSlave, ps);
+			aps.setShowSql(PropKit.getBoolean(DS.pubSlave+".devMode"));
+			aps.setDevMode(PropKit.getBoolean(DS.pubSlave+".devMode"));
+			aps.setDialect(new MysqlDialect());
+			me.add(aps);
+			//=========================公共管理从库====================================
+
+			//=========================泡椒业务平台从库====================================
+
+			/*DruidPlugin pjl = new DruidPlugin(PropKit.get(DS.pjSlave+".url"),
+					PropKit.get(DS.pjSlave+".user"),
+					PropKit.get(DS.pjSlave+".password"));
+			me.add(pjl);
+
+			ActiveRecordPlugin apjl = new ActiveRecordPlugin(DS.pjSlave, pjl);
+			apjl.setShowSql(PropKit.getBoolean(DS.pjSlave+".devMode"));
+			apjl.setDevMode(PropKit.getBoolean(DS.pjSlave+".devMode"));
+			apjl.setDialect(new MysqlDialect());
+			me.add(apjl);*/
+			//=========================泡椒业务平台从库====================================
 
 		} catch (Exception e) {
 			log.error("===========>>数据库连接错误", e);
@@ -245,7 +291,7 @@ public class AppJfinalConfig extends JFinalConfig {
 			Scanner scan = new Scanner(System.in);
 			String read = scan.nextLine();
 			if ("1".equals(read)) {
-				String[] inc1 = { "pj_third_sdk_channel_game"};
+				String[] inc1 = { "stat_review_login_user"};
 				GeneratorModel.generatorModel(mappingKitClassName, inc1,
 						baseModelPkg, baseModelDir, modelPkg, "1");
 			}

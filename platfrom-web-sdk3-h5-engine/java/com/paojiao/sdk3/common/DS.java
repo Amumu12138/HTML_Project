@@ -9,6 +9,9 @@ public class DS {
 	public static String sdkSlave = "sdkSlave";
 	public static String ucMaster = "ucMaster";
 	public static String ucSlave = "ucSlave";
+	public static String pubMaster = "pubMaster";
+	public static String pubSlave = "pubSlave";
+	/*public static String pjSlave = "pjSlave";*/
 
 
 }

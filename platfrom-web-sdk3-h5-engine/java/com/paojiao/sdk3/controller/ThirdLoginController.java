@@ -5,9 +5,11 @@ import com.jfinal.kit.JsonKit;
 import com.jfinal.kit.StrKit;
 import com.paojiao.sdk3.common.PjConstants;
 import com.paojiao.sdk3.common.StatusType;
+import com.paojiao.sdk3.common.mongo.manager.LoginSessionManager;
 import com.paojiao.sdk3.handler.StatHandler;
 import com.paojiao.sdk3.model.PjThirdSdkChannelGame;
 import com.paojiao.sdk3.model.StatNewUser;
+import com.paojiao.sdk3.model.pojo.LoginEntity;
 import com.paojiao.sdk3.service.PjCpGameService;
 import com.paojiao.sdk3.service.PjMemberUserService;
 import com.paojiao.sdk3.service.PjThirdSdkChannelGameService;
@@ -38,7 +40,6 @@ public class ThirdLoginController extends BaseController {
 
     private  static final String UTF_8 = "UTF-8";
     private  final static String HOST_URL=  PjConstants.sconfig.getSdkHost()+"/thirdLogin/";
-    private  final static String UC_HOST_URL=  PjConstants.sconfig.getUserCenterHost();
     private  final static String WX_CALLBACK = HOST_URL+"wxCallback";
     private  final static String WX_CALLBACKOPENID = HOST_URL+"wxCallbackOpenId";
     private  final static Integer FLAG_YES = 1;
@@ -80,9 +81,9 @@ public class ThirdLoginController extends BaseController {
 
             int channelGameId = getParaToInt("channelGameId");
             String channel = getPara("channel");
-            String udid = getPara("udid");
+           String udid = getPara("udid");
             String ip = getPara("ip");
-            String nickname =getPara("uc_nickName");
+           String nickname =getPara("uc_nickName");
             String openid = getPara("uc_openid");
             String headimgurl = getPara("uc_headImgUrl");
             if(StrKit.isBlank(openid) || StrKit.isBlank(channel) || StrKit.isBlank(udid)){
@@ -90,7 +91,7 @@ public class ThirdLoginController extends BaseController {
                 return;
             }
 
-                    Map<String, String> retMap = userService.findByBinding(FLAG_NO,"wechat",openid,nickname,headimgurl,udid,channel);
+                    Map<String, String> retMap = userService.findByBinding(FLAG_YES,"wechat",openid,nickname,headimgurl,udid,channel,channelGameId);
                     if(retMap == null){
                         this.stateFailure("微信登录失败！");
                         return;
@@ -103,7 +104,7 @@ public class ThirdLoginController extends BaseController {
                         StatNewUser  user = new StatNewUser();
                         PjThirdSdkChannelGame channelGame = channelGameService.findGameById(channelGameId);
                         user.setGameId(channelGame.getGameId());
-                        user.setImei(udid);
+                       user.setImei(udid);
                         user.setModel(ip);
                         user.setUdid(udid);
                         user.setUid(Long.parseLong(uid));
@@ -115,9 +116,14 @@ public class ThirdLoginController extends BaseController {
                         log.error("统计新增/活跃用户异常", e);
                     }
 
-                    //进入游戏
+                   //进入游戏
                     StringBuffer url  = new StringBuffer();
-                    url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
+                  if (channelGameId == 11094){
+                        url.append(PjConstants.sconfig.getSdkHost()+"/main2.html?");
+                    }else{
+                        url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
+                    }
+                    //url.append(PjConstants.sconfig.getSdkHost()+"/main2.html?");
                     url.append("uid=").append(uid);
                     url.append("&sdkToken=").append(token);
                     url.append("&channel=").append(channel);
@@ -177,11 +183,16 @@ public class ThirdLoginController extends BaseController {
                 return;
             }
 
-            Map<String, String> retMap = userService.findByBinding(FLAG_YES,"wechat",openid,nickname,headimgurl,udid,channel);
+            Map<String, String> retMap = userService.findByBinding(FLAG_YES,"wechat",openid,nickname,headimgurl,udid,channel,channelGameId);
             if(retMap == null){
                 //进入游戏
                 StringBuffer url  = new StringBuffer();
-                url.append(PjConstants.sconfig.getSdkHost()+"/login.html?");
+                if (channelGameId == 11094){
+                    url.append(PjConstants.sconfig.getSdkHost()+"/login2.html?");
+                }else {
+                    url.append(PjConstants.sconfig.getSdkHost()+"/login.html?");
+                }
+                //url.append(PjConstants.sconfig.getSdkHost()+"/login2.html?");
                 url.append("channel=").append(channel);
                 url.append("&channelGameId=").append(channelGameId);
                 url.append("&isAutoLogin=").append(FLAG_YES); //1 是
@@ -209,7 +220,12 @@ public class ThirdLoginController extends BaseController {
 
             //进入游戏
             StringBuffer url  = new StringBuffer();
-            url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
+            if (channelGameId == 11094){
+                url.append(PjConstants.sconfig.getSdkHost()+"/main2.html?");
+            }else {
+                url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
+            }
+           // url.append(PjConstants.sconfig.getSdkHost()+"/main2.html?");
             url.append("uid=").append(uid);
             url.append("&sdkToken=").append(token);
             url.append("&channel=").append(channel);
@@ -222,6 +238,62 @@ public class ThirdLoginController extends BaseController {
             this.requestFailure(StatusType.PJ_LOGIN_EXCEPTION);
         }
 
+    }
+
+
+    public void loginByToken(){
+        try{
+            log.info("=========>>第三方token登录:"+JsonKit.toJson(getParaMap1()));
+
+            Integer channelGameId = getParaToInt("channelGameId");
+            String channel = getPara("channel");
+            String sdkToken = getPara("sdkToken");
+            String ip = getClientIp();
+            if(channelGameId == null || StrKit.isBlank(channel) || StrKit.isBlank(sdkToken)){
+                this.requestFailure(StatusType.PJ_LOGIN_EXCEPTION);
+                return;
+            }
+
+            // 2.查找登录信息\验证token
+            LoginEntity session = LoginSessionManager.inst().findByToken(sdkToken, true);
+            if (session == null) {
+                this.requestFailure(StatusType.VERIFY_TOKEN_EXCEPTION);
+                return;
+            }
+
+            //统计新增活跃用户
+            try{
+                StatNewUser  user = new StatNewUser();
+                PjThirdSdkChannelGame channelGame = channelGameService.findGameById(channelGameId);
+                user.setGameId(channelGame.getGameId());
+                user.setModel(ip);
+                user.setUid(Long.parseLong(session.getUid()+""));
+                user.setCid(channel);
+                user.setCreateDate(new Date());
+                user.setCreateTime(new Date());
+                statHandler.saveUserStat(user);
+            }catch(Exception e){
+                log.error("统计新增/活跃用户异常", e);
+            }
+
+            //进入游戏
+            StringBuffer url  = new StringBuffer();
+            if (channelGameId == 11094){
+                url.append(PjConstants.sconfig.getSdkHost()+"/main2.html?");
+            }else {
+                url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
+            }
+            //url.append(PjConstants.sconfig.getSdkHost()+"/main2.html?");
+            url.append("uid=").append(session.getUid());
+            url.append("&sdkToken=").append(session.getToken());
+            url.append("&channel=").append(channel);
+            url.append("&channelGameId=").append(channelGameId);
+            this.redirect301(url.toString(), false);
+            return;
+        }catch(Exception ex){
+            log.error("第三方token登录异常", ex);
+            this.requestFailure(StatusType.PJ_LOGIN_EXCEPTION);
+        }
     }
 
 
@@ -318,7 +390,7 @@ public class ThirdLoginController extends BaseController {
 
             //进入游戏
             StringBuffer url  = new StringBuffer();
-            url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
+            url.append(PjConstants.sconfig.getSdkHost()+"/main3.html?");
             url.append("uid=").append(uid);
             url.append("&sdkToken=").append(token);
             url.append("&channel=").append(channel);

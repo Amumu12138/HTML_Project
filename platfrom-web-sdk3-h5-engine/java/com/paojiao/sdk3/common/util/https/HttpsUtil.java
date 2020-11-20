@@ -68,6 +68,7 @@ public class HttpsUtil {
 
         if (request != null) {
             postMethod.setRequestHeader("x-forwarded-for", getClientIp(request));
+            postMethod.setRequestHeader("User-Agent", request.getHeader("User-Agent"));
         }
 
         // 设置建立连接超时时间

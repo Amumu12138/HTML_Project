@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.jfinal.kit.JsonKit;
+import com.paojiao.sdk3.common.util.ErrorMsg;
 import org.apache.log4j.Logger;
 import com.jfinal.core.ActionException;
 import com.jfinal.core.Controller;
@@ -337,4 +338,6 @@ public class BaseController extends Controller {
 	}
 
 
+	protected void renderError(ErrorMsg queryUserException) {
+	}
 }
