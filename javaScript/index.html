@@ -14,6 +14,7 @@
             height: 100%
         }
     </style>
+     <link href="css/common.css" rel="stylesheet">
 
     <script type="text/javascript" src="example/libs/jquery-1.9.1.min.js"> </script>
     <script type="text/javascript" src="example/libs/jquery.md5.js"> </script>
@@ -71,19 +72,29 @@
     <script type="text/javascript" src="example/five/WindowDialog.js"></script>
     <script type="text/javascript" src="example/five/WindowTime.js"></script>
     <script type="text/javascript" src="example/five/WindowCookie.js"></script>
+
     <!-- leetCode -->
     <script type="text/javascript" src="example/leetCode/Client.js"> </script>
+
 </head>
 
 <body>
 
     <script type="text/javascript">
-        Example.WindowCookie();
+        //添加按钮
+        document.write(`        
+        <button id="slideShow-btn" class="common-btn">SlideShowBtn</button>`);
+        document.getElementById("slideShow-btn").onclick = function() {
+           window.location.href = "../example/client/SlideShow/index.html";
+        }
+        document.write(`<button id="xxx-btn" class="common-btn">xxxBtn</button>`);
+       
+        // Example.WindowCookie();
 
-        var strs = ["flower","flow","flight"];
-        var strB = ["dog","racecar","car"];
-        var commonStr = Example.longestCommonPrefix(strB);
-        console.log("Amumu longestCommonPrefix = ", commonStr);
+        // var strs = ["flower","flow","flight"];
+        // var strB = ["dog","racecar","car"];
+        // var commonStr = Example.longestCommonPrefix(strB);
+        // console.log("Amumu longestCommonPrefix = ", commonStr);
         // document.write(`
         // <div class='checkbox'>
         // <input type='checkbox' id='checkbox1' name='checkboox[]'>
