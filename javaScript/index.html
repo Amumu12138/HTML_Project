@@ -81,11 +81,24 @@
 <body>
 
     <script type="text/javascript">
-        //添加按钮
+        // var gameUrl = "https://lngame.ijunhai.com/shj_pj115665/index.html?game_id=208&channel_id=8591&game_channel_id=115665&mirror_js_name=yinhuh5&sdkToken=110XFCP9Zr3Uygkl1qe0gjTRpXUtNBWd&uid=1008866589&realNameAuthStatus=0";
+        // var hasIphoneX = window.innerHeight / window.innerWidth >= 2 ? true: false;
+		// 		var offsetHeight = 0, offsetTop = 0;
+		// 		if(hasIphoneX) {
+		// 			offsetHeight = -50;
+		// 			offsetTop = 50;
+		// 		}
+        // $("body").append('<div id="gameFrameDiv" style="width: ' + $(window).width() + 'px; height: ' + ($(window).height() + offsetHeight)  + 'px; position: relative; display:none; top: '+ offsetTop +'px; left: 0px;">' + 
+        // '<iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" allowTransparency="true" style="width:'+ $(window).width() + 'px; height: ' + ($(window).height() + offsetHeight) + 'px;">' + 
+        // '</iframe></div>');
+        //console.log("innerHeight = ", window.innerHeight, "innerWidth = ", window.innerWidth); 
+
+        // //添加按钮
         document.write(`        
-        <button id="slideShow-btn" class="common-btn">SlideShowBtn</button>`);
+            <button id="slideShow-btn" class="common-btn">SlideShowBtn</button>
+        `);
         document.getElementById("slideShow-btn").onclick = function() {
-           window.location.href = "../example/client/SlideShow/index.html";
+           window.location.href = "example/client/SlideShow/index.html";
         }
         document.write(`<button id="xxx-btn" class="common-btn">xxxBtn</button>`);
        
