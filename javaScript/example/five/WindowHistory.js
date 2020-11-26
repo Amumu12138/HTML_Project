@@ -10,11 +10,11 @@ var Example = Example || {};
  * history.back(): 与浏览器点击后退按钮相同
  * history.forward(): 与浏览器中点击向前安妮相同
  * 
- * 二、window history.back()
+ * 二、window.history.back()
  * history.back()方法加载历史列表中的前一个URL
  * 这与在浏览器中点击后退按钮是相同的
  * 
- * 三、window history.forward()
+ * 三、window.history.forward()
  * history.forward()方法加载历史列表中的下一个URL
  * 这与浏览器中点击前进按钮是相同的
  * 

@@ -16,11 +16,19 @@
     <script src="./example/SoftBody.js"></script>
     <script src="./example/Car.js"></script>
     <script src="./example/Cross.js"></script>
+
+    <link href="/webgl/css/common.css" rel="stylesheet">
 </head>
 
 <body>
+    <button class="common-matter-btn" style="position: absolute;" onclick="onBack()">Back</button>
     <script type="text/javascript">
-        Example.Cross();
+        //返回上一层级
+        onBack = function() {
+            window.history.back();
+        }
+
+        Example.Test();
     </script>
 </body>
 

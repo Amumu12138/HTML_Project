@@ -30,7 +30,7 @@
     <div>
         <input name="name" type="button" onClick="greenClick();" value="绿色">
     </div> -->
-
+    <link href="/webgl/css/common.css" rel="stylesheet">
     <!-- 引入库文件 -->
     <script src="js/three.js"></script>
     <script src="js/OrbitControls.js"></script>
@@ -128,7 +128,13 @@
     <!-- 飞机小游戏文件 -->
     <script type="text/javascript" src="js/libs/dat.gui.min.js"></script>
     <script src="example/airPlane/AirPlaneGame.js"></script>
+
+    <button class="common-three-btn" style="position: absolute;" onclick="onBack()">Back</button>
     <script>
+         //返回上一层级
+         onBack = function() {
+            window.history.back();
+        }
         Example.AirPlane();
 
 

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTML-INDEX</title>
+    <link href="/webgl/css/common.css" rel="stylesheet">
+    <script type="text/javascript" src="/webgl/example/common.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <p class="title-text">WEBGL</p>
+        <button class="common-btn" onclick="onClickWebGLResp(0)">Test</button>
+        <button class="common-btn" onclick="onClickWebGLResp(1)">TestGLSL</button>
+        <button class="common-btn" onclick="onClickWebGLResp(2)">Canvas</button>
+        <button class="common-btn" onclick="onClickWebGLResp(3)">Cube</button>
+        <button class="common-btn" onclick="onClickWebGLResp(4)">ColorCube</button>
+        <button class="common-btn" onclick="onClickWebGLResp(5)">Rect</button>
+        <button class="common-btn" onclick="onClickWebGLResp(6)">AlphaBlend</button>
+        <button class="common-btn" onclick="onClickWebGLResp(7)">AlphaCube</button>
+        <button class="common-btn" onclick="onClickWebGLResp(8)">GrayTexture2D</button>
+        <button class="common-btn" onclick="onClickWebGLResp(9)">Ring</button>
+        <button class="common-btn" onclick="onClickWebGLResp(10)">Texture2D</button>
+        <button class="common-btn" onclick="onClickWebGLResp(11)">Transform</button>
+        <button class="common-btn" onclick="onClickWebGLResp(12)">Triangles</button>
+        <button class="common-btn" onclick="onClickWebGLResp(13)">TwoCube</button>
+        <button class="common-btn" onclick="onClickWebGLResp(14)">UnitCube</button>
+    </div>
+    <div>
+        <p class="title-text">THREEJS</p>
+        <button class="common-three-btn" onclick="onClickThreeJsLResp(0)">Test</button>
+    </div>
+    <div>
+        <p class="title-text">MATTER</p>
+        <button class="common-matter-btn " onclick="onClickMatterLResp(0)">Test</button>
+    </div>
+      
+    <script>
+        console.log("Amumu this is html-index");
+
+        //点击WebGL区域按钮响应
+        onClickWebGLResp = function(value) {
+            switch(value) {
+                case 0:
+                    window.localStorage.setItem("exampleName", "test");
+                    break;
+                case 1:
+                    window.localStorage.setItem("exampleName", "testGLSL");
+                    break;
+                case 2:
+                    window.localStorage.setItem("exampleName", "canvas");
+                    break;
+                case 3:
+                    window.localStorage.setItem("exampleName", "cube");
+                    break;
+                case 4:
+                    window.localStorage.setItem("exampleName", "colorCube");
+                    break;
+                case 5:
+                    window.localStorage.setItem("exampleName", "rect");
+                    break;
+                case 6:
+                    window.localStorage.setItem("exampleName", "alphaBlend");
+                    break;
+                case 7:
+                    window.localStorage.setItem("exampleName", "alphaCube");
+                    break;
+                case 8:
+                    window.localStorage.setItem("exampleName", "grayTexture2D");
+                    break;
+                case 9:
+                    window.localStorage.setItem("exampleName", "ring");
+                    break;
+                case 10:
+                    window.localStorage.setItem("exampleName", "texture2D");
+                    break;
+                case 11:
+                    window.localStorage.setItem("exampleName", "transform");
+                    break;
+                case 12:
+                    window.localStorage.setItem("exampleName", "triangles");
+                    break;
+                case 13:
+                    window.localStorage.setItem("exampleName", "twoCube");
+                    break;
+                case 14:
+                    window.localStorage.setItem("exampleName", "unitCube");
+                    break;
+                default: 
+                    break;
+            }
+            //跳转页面
+            window.location.href = "/webgl/index.html";
+        }
+
+
+         //点击ThrreJs区域按钮响应
+         onClickThreeJsLResp = function(value) {
+            switch(value) {
+                case 0: 
+                    window.localStorage.setItem("threeJsName", "test");
+                    break;
+                default: 
+                    break;
+            }
+            //跳转页面
+            window.location.href = "/threeJs/index.html";
+        }
+
+          //点击Matter区域按钮响应
+          onClickMatterLResp = function(value) {
+            switch(value) {
+                case 0: 
+                    window.localStorage.setItem("matterName", "test");
+                    break;
+                default: 
+                    break;
+            }
+            //跳转页面
+            window.location.href = "/matter/index.html";
+        }
+    
+    </script>
+</body>
+
+</html>

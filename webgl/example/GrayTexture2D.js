@@ -77,20 +77,21 @@ Example.GrayTexture2D = function () {
      * 传入旋转矩阵数据
      */
     // var angle = Math.PI / 6; //旋转30度
-    // var sin = Math.sin(angle);
-    // var cos = Math.cos(angle);
+    var angle = 0;
+    var sin = Math.sin(angle);
+    var cos = Math.cos(angle);
     // //旋转矩阵数据
-    // var mxArr = new Float32Array([1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1]);
-    // var myArr = new Float32Array([cos, 0, -sin, 0, 0, 1, 0, 0, sin, 0, cos, 0, 0, 0, 0, 1]);
+    var mxArr = new Float32Array([1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1]);
+    var myArr = new Float32Array([cos, 0, -sin, 0, 0, 1, 0, 0, sin, 0, cos, 0, 0, 0, 0, 1]);
     // //类型数组传入矩阵
-    // gl.uniformMatrix4fv(mx, false, mxArr);
-    // gl.uniformMatrix4fv(my, false, myArr);
+    gl.uniformMatrix4fv(mx, false, mxArr);
+    gl.uniformMatrix4fv(my, false, myArr);
 
     /**
      * 加载纹理图像像素数据
      **/
     var image = new Image();
-    image.src = 'res/texture/panda.jpg'; //设置图片路径
+    image.src = '../res/texture/panda.jpg'; //设置图片路径
     image.onload = texture; //图片加载成功后执行texture函数
 
     /**

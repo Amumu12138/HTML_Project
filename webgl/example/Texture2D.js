@@ -69,7 +69,7 @@ Example.Texture2D = function () {
      * 加载纹理图像像素数据t
      **/
     var image = new Image();
-    image.src = 'res/texture/texture.jpg'; //设置图片路径
+    image.src = '../res/texture/texture.jpg'; //设置图片路径
     image.onload = texture; //图片加载成功后执行texture函数
     /**
      创建缓冲区buffer，向顶点着色器传入顶点位置数据data

@@ -3,41 +3,95 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>WebGL</title>
+    <title>WEBGL</title>
+
+    <link href="css/common.css" rel="stylesheet">
+    <script type="text/javascript" src="example/common.js"></script>
 </head>
 
 <body>
+    <button class="common-btn" style="position: absolute;" onclick="onBack()">Back</button>
+    
     <!--canvas标签创建一个宽高均为500像素，背景为白色的矩形画布-->
-    <canvas id="webgl" width="500" height="500" style="background-color:white"></canvas>
-    <script src="example/Test.js"></script>
-    <script src="example/Canvas.js"></script>
-    <script src="example/Rect.js"></script>
-    <script src="example/Triangles.js"></script>
-    <script src="example/Transform.js"></script>
-    <script src="example/Cube.js"></script>
-    <script src="example/UnitCube.js"></script>
-    <script src="example/colorLerp/ColorLine.js"></script>
-    <script src="example/colorLerp/ColorTriangle.js"></script>
-    <script src="example/colorLerp/ColorTwoTri.js"></script>
-    <script src="example/colorLerp/ColorElementTri.js"></script>
-    <script src="example/ColorCube.js"></script>
-    <script src="example/illumination/IllRedCube.js"></script>
-    <script src="example/illumination/PointLightRedCube.js"></script>
-    <script src="example/rotate/RotateCube.js"></script>
-    <script src="example/rotate/RotateColorCube.js"></script>
-    <script src="example/TwoCube.js"></script>
-    <script src="example/Texture2D.js"></script>
-    <script src="example/GrayTexture2D.js"></script>
-    <script src="example/switchShader/SwitchShader_01.js"></script>
-    <script src="example/switchShader/SwitchShader_02.js"></script>
-    <script src="example/switchShader/SwitchShader_03.js"></script>
-    <script src="example/AlphaBlend.js"></script>
-    <script src="example/AlphaCube.js"></script>
-    <script src="example/Ring.js"></script>
-    <script src="test.js"></script>
+    <canvas id="webgl" width="500" height="500" style="background-color: white"></canvas>
+    <script type="text/javascript" src="example/Test.js"></script>
+    <script type="text/javascript" src="example/TestGLSL.js"></script>
+    <script type="text/javascript" src="example/Canvas.js"></script>
+    <script type="text/javascript" src="example/Cube.js"></script>
+    <script type="text/javascript" src="example/ColorCube.js"></script>
+    <script type="text/javascript" src="example/Rect.js"></script>
+    <script type="text/javascript" src="example/AlphaBlend.js"></script>
+    <script type="text/javascript" src="example/AlphaCube.js"></script>
+    <script type="text/javascript" src="example/GrayTexture2D.js"></script>
+    <script type="text/javascript" src="example/Ring.js"></script>
+    <script type="text/javascript" src="example/Texture2D.js"></script>
+    <script type="text/javascript" src="example/Transform.js"></script>
+    <script type="text/javascript" src="example/Triangles.js"></script>
+    <script type="text/javascript" src="example/TwoCube.js"></script>
+    <script type="text/javascript" src="example/UnitCube.js"></script>
 
     <script>
-        // Example.Texture2D();
+        //返回上一层级
+        onBack = function() {
+            window.history.back();
+        }
+
+        var exampleName = window.localStorage.getItem("exampleName");
+        switch(exampleName) {
+            //示例: 点
+            case "test":
+                Example.Test();
+                break;
+            //线框矩形
+            case "testGLSL":
+                Example.TestGLSL();
+                break;
+            //画布 2d描线三角形
+            case "canvas":
+                Example.Canvas();
+                break;
+            //线框正方体
+            case "cube":
+                Example.Cube();
+                break
+            //平面正方体 添加颜色
+            case "colorCube":
+                Example.ColorCube();
+                break
+            //线框矩形
+            case "rect":
+                Example.Rect();
+                break;
+            case "alphaBlend":
+                Example.AlphaBlend();
+                break;
+            case "alphaCube":
+                Example.AlphaCube();
+                break;
+            case "grayTexture2D":
+                Example.GrayTexture2D();
+                break;
+            case "ring":
+                Example.Ring();
+                break;
+            case "texture2D":
+                Example.Texture2D();
+                break;
+            case "transform":
+                Example.Transform();
+                break;
+            case "triangles":
+                Example.Triangles();
+                break;
+            case "twoCube":
+                Example.TwoCube();
+                break;
+            case "unitCube":
+                Example.UnitCube();
+                break;
+            default: 
+                break;
+        }
     </script>
 </body>
 
