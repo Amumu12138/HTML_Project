@@ -21,14 +21,45 @@
 </head>
 
 <body>
-    <button class="common-matter-btn" style="position: absolute;" onclick="onBack()">Back</button>
+    <button class="common-matter-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
     <script type="text/javascript">
         //返回上一层级
-        onBack = function() {
-            window.history.back();
+        var matterName = window.localStorage.getItem("matterName");
+        switch(matterName) {
+            case "Test":
+                Example.Test();
+                break;
+            case "Car":
+                Example.Car();
+                break;
+            case "Chain":
+                Example.Chain();
+                break;
+            case "Constraint":
+                Example.Constraint();
+                break;
+            case "Cross":
+                Example.Cross();
+                break;
+            case "Demo":
+                Example.Demo();
+                break;
+            case "MouseConstraint":
+                Example.MouseConstraint();
+                break;
+            case "NewtonsCradle":
+                Example.NewtonsCradle();
+                break;
+            case "SoftBody":
+                Example.SoftBody();
+                break;
+            case "Stack":
+                Example.Stack();
+                break;
+            default:
+                break;
         }
-
-        Example.Test();
+        
     </script>
 </body>
 

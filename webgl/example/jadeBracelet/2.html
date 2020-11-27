@@ -11,6 +11,8 @@
             overflow: hidden;
         }
     </style>
+    <!-- 引入样式文件 -->
+    <link href="../../css/common.css" rel="stylesheet">
     <!--引入three.js三维引擎-->
     <script src="http://www.yanhuangxueyuan.com/threejs/build/three.js"></script>
     <!-- 引入threejs扩展控件OrbitControls.js -->
@@ -18,6 +20,7 @@
 </head>
 
 <body>
+    <button class="common-btn" style="position: absolute;" onclick='window.history.back();'>Back</button>
     <script>
         /**
          * 创建场景对象
@@ -27,7 +30,7 @@
         var loader = new THREE.ObjectLoader(); //模型加载器
 
         // 加载模型文件，加载"model.json"文件返回一个网格模型对象，包含玉镯的几何体和包含纹理贴图的材质
-        loader.load("res/jadeBracelet/model.json", function (Object3D) {
+        loader.load("../../res/jadeBracelet/model.json", function (Object3D) {
             // 对玉镯对象进行命名,render函数中可以通过getObjectByName方法把name作为参数遍历到玉镯进行旋转操作
             Object3D.name = "obj";
 

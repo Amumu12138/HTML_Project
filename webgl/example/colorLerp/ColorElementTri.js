@@ -43,9 +43,9 @@ Example.ColorElementTri = function () {
     var a_color = gl.getAttribLocation(program, 'a_color');
 
     /**
- 创建顶点位置数据数组data，存储两个顶点(-0.5,0.5、(0.5,0.5)
- 存储两个顶点对应RGB颜色值(0,0,1)、(1,0,0)
- **/
+     创建顶点位置数据数组data，存储两个顶点(-0.5,0.5、(0.5,0.5)
+    存储两个顶点对应RGB颜色值(0,0,1)、(1,0,0)
+    **/
     var data = new Float32Array([
         -0.5, 0.5,
         0, 0, 1,
@@ -73,7 +73,7 @@ Example.ColorElementTri = function () {
     //开始绘制图形，使用TRIANGLES模式，三点构成一个平面
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     //开始绘制图形 LINES模式为直线
-    //gl.drawArrays(gl.LINES, 0, 2);
+    // gl.drawArrays(gl.LINES, 0, 2);
 
     //声明初始化着色器函数
     function initShader(gl, vertexShaderSource, fragmentShaderSource) {

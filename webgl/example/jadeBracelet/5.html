@@ -11,6 +11,8 @@
       overflow: hidden;
     }
   </style>
+  <!-- 引入样式文件 -->
+  <link href="../../css/common.css" rel="stylesheet">
   <!--引入three.js三维引擎-->
   <script src="http://www.yanhuangxueyuan.com/threejs/build/three.js"></script>
   <!-- 引入threejs扩展控件OrbitControls.js 可以对象场景进行旋转缩放平移操作-->
@@ -25,6 +27,7 @@
 </head>
 
 <body>
+  <button class="common-btn" style="position: absolute;" onclick='window.history.back();'>Back</button>
   <div id="app">
     <!-- 加载本地模型或者网速比较快，进度条可能一闪而过不明显，网速慢或者模型非常大的时候比较明显-->
     <!-- 加载完成后，如果想隐藏进度条可以设置  v-if="loadedData!==100"，也就是loadedData等于100隐藏进度条-->
@@ -45,7 +48,7 @@
     // 加载模型文件，load方法是第一函数是加载完成后执行，第二个函数是加载
     // load方法参数2是加载成功后的回调函数
     // load方法参数3是加载过程回调函数
-    loader.load("res/jadeBracelet/model.json", onLoad, onProgress);
+    loader.load("../../res/jadeBracelet/model.json", onLoad, onProgress);
 
     // 加载完成的回调函数
     function onLoad(Object3D) {

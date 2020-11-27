@@ -129,13 +129,49 @@
     <script type="text/javascript" src="js/libs/dat.gui.min.js"></script>
     <script src="example/airPlane/AirPlaneGame.js"></script>
 
-    <button class="common-three-btn" style="position: absolute;" onclick="onBack()">Back</button>
+    <button class="common-three-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
     <script>
-         //返回上一层级
-         onBack = function() {
-            window.history.back();
+        var threeName = window.localStorage.getItem("threeJsName");
+        switch(threeName) {
+            case "0":
+                Example.AirPlane();
+                break;
+            //one
+            case "Cube":
+                Example.Cube();
+                break;
+            case "DrawLine":
+                Example.DrawLine();
+                break;
+            case "Light":
+                Example.Light();
+                break;
+            case "Material":
+                Example.Material();
+                break;
+            case "OrbitControl":
+                Example.OrbitControl();
+                break;
+            case "RequestAnimationFrame":
+                Example.RequestAnimationFrame();
+                break;
+            case "SphereGeometry":
+                Example.SphereGeometry();
+                break;
+            case "Test":
+                Example.Test();
+                break;
+            //two
+            case "BoxGeometry":
+                Example.BoxGeometry();
+                break;
+            case "BufferAttributeColor":
+                Example.BufferAttributeColor();
+                break;
+            default: 
+                break;
         }
-        Example.AirPlane();
+       
 
 
         //Base64 编码解码

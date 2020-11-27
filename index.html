@@ -27,14 +27,92 @@
         <button class="common-btn" onclick="onClickWebGLResp(12)">Triangles</button>
         <button class="common-btn" onclick="onClickWebGLResp(13)">TwoCube</button>
         <button class="common-btn" onclick="onClickWebGLResp(14)">UnitCube</button>
+        <div class="dropdown">
+            <button class="common-btn">ColorLerp</button>
+            <div class="dropdown-content">
+                <a onclick="onClickWebGLResp(15)"> ColorET </a>
+                <a onclick="onClickWebGLResp(16)"> ColorLine </a>
+                <a onclick="onClickWebGLResp(17)"> ColorT </a>
+                <a onclick="onClickWebGLResp(18)"> ColorTT </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="common-btn">Illumination</button>
+            <div class="dropdown-content">
+                <a onclick="onClickWebGLResp(19)"> IllRedCube </a>
+                <a onclick="onClickWebGLResp(20)"> PointLightRC </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="common-btn"> Rotate </button>
+            <div class="dropdown-content">
+                <a onclick="onClickWebGLResp(21)"> RotateCCube </a>
+                <a onclick="onClickWebGLResp(22)"> RotateCube </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="common-btn"> SwitchShader </button>
+            <div class="dropdown-content">
+                <a onclick="onClickWebGLResp(23)"> SwShader_01 </a>
+                <a onclick="onClickWebGLResp(24)"> SwShader_02 </a>
+                <a onclick="onClickWebGLResp(25)"> SwShader_03 </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="common-btn"> JadeBracelet </button>
+            <div class="dropdown-content">
+                <a onclick="onClickWebGLResp(26)"> JB_0 </a>
+                <a onclick="onClickWebGLResp(27)"> JB_1 </a>
+                <a onclick="onClickWebGLResp(28)"> JB_2 </a>
+                <a onclick="onClickWebGLResp(29)"> JB_3 </a>
+                <a onclick="onClickWebGLResp(30)"> JB_4 </a>
+                <a onclick="onClickWebGLResp(31)"> JB_5 </a>
+                <a onclick="onClickWebGLResp(32)"> JB_6 </a>
+            </div>
+        </div>
     </div>
     <div>
         <p class="title-text">THREEJS</p>
         <button class="common-three-btn" onclick="onClickThreeJsLResp(0)">Test</button>
+        <div class="dropdown">
+            <button class="common-three-btn"> One </button>
+            <div class="dropdown-three-content" style="background-color: #2323ff;">
+                <a onclick="onClickThreeJsLResp('Cube')"> Cube </a>
+                <a onclick="onClickThreeJsLResp('DrawLine')"> DrawLine </a>
+                <a onclick="onClickThreeJsLResp('Light')"> Light </a>
+                <a onclick="onClickThreeJsLResp('Material')"> Material </a>
+                <a onclick="onClickThreeJsLResp('OrbitControl')"> OrbitControl </a>
+                <a onclick="onClickThreeJsLResp('RequestAnimationFrame')"> RequestAF </a>
+                <a onclick="onClickThreeJsLResp('SphereGeometry')"> SphereGeometry </a>
+                <a onclick="onClickThreeJsLResp('Test')"> Test </a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="common-three-btn"> Two </button>
+            <div class="dropdown-three-content" style="background-color: #2323ff;">
+                <a onclick="onClickThreeJsLResp('BoxGeometry')"> BoxGeometry </a>
+                <a onclick="onClickThreeJsLResp('BufferAttributeColor')"> BufferAC </a>
+                <a onclick="onClickThreeJsLResp('BufferAttributeIndex')"> BufferAI </a>
+                <a onclick="onClickThreeJsLResp('BufferAttributeNormal')"> BufferAN </a>
+                <a onclick="onClickThreeJsLResp('BufferGeometry')"> BufferGeometry </a>
+                <a onclick="onClickThreeJsLResp('Geometry')"> Geometry </a>
+                <a onclick="onClickThreeJsLResp('GeometryFaces')"> GeometryFaces </a>
+                <a onclick="onClickThreeJsLResp('Translate')"> Translate </a>
+            </div>
+        </div>
     </div>
     <div>
         <p class="title-text">MATTER</p>
-        <button class="common-matter-btn " onclick="onClickMatterLResp(0)">Test</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Test')">Test</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Demo')">Demo</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Car')">Car</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Chain')">Chain</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Constraint')">Constraint</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Cross')">Cross</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('MouseConstraint')">MouseConstraint</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('NewtonsCradle')">NewtonsCradle</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('SoftBody')">SoftBody</button>
+        <button class="common-matter-btn " onclick="onClickMatterLResp('Stack')">Stack</button>
     </div>
       
     <script>
@@ -44,50 +122,105 @@
         onClickWebGLResp = function(value) {
             switch(value) {
                 case 0:
-                    window.localStorage.setItem("exampleName", "test");
+                    window.localStorage.setItem("exampleName", "Test");
                     break;
                 case 1:
-                    window.localStorage.setItem("exampleName", "testGLSL");
+                    window.localStorage.setItem("exampleName", "TestGLSL");
                     break;
                 case 2:
-                    window.localStorage.setItem("exampleName", "canvas");
+                    window.localStorage.setItem("exampleName", "Canvas");
                     break;
                 case 3:
-                    window.localStorage.setItem("exampleName", "cube");
+                    window.localStorage.setItem("exampleName", "Cube");
                     break;
                 case 4:
-                    window.localStorage.setItem("exampleName", "colorCube");
+                    window.localStorage.setItem("exampleName", "ColorCube");
                     break;
                 case 5:
-                    window.localStorage.setItem("exampleName", "rect");
+                    window.localStorage.setItem("exampleName", "Rect");
                     break;
                 case 6:
-                    window.localStorage.setItem("exampleName", "alphaBlend");
+                    window.localStorage.setItem("exampleName", "AlphaBlend");
                     break;
                 case 7:
-                    window.localStorage.setItem("exampleName", "alphaCube");
+                    window.localStorage.setItem("exampleName", "AlphaCube");
                     break;
                 case 8:
-                    window.localStorage.setItem("exampleName", "grayTexture2D");
+                    window.localStorage.setItem("exampleName", "GrayTexture2D");
                     break;
                 case 9:
-                    window.localStorage.setItem("exampleName", "ring");
+                    window.localStorage.setItem("exampleName", "Ring");
                     break;
                 case 10:
-                    window.localStorage.setItem("exampleName", "texture2D");
+                    window.localStorage.setItem("exampleName", "Texture2D");
                     break;
                 case 11:
-                    window.localStorage.setItem("exampleName", "transform");
+                    window.localStorage.setItem("exampleName", "Transform");
                     break;
                 case 12:
-                    window.localStorage.setItem("exampleName", "triangles");
+                    window.localStorage.setItem("exampleName", "Triangles");
                     break;
                 case 13:
-                    window.localStorage.setItem("exampleName", "twoCube");
+                    window.localStorage.setItem("exampleName", "TwoCube");
                     break;
                 case 14:
-                    window.localStorage.setItem("exampleName", "unitCube");
+                    window.localStorage.setItem("exampleName", "UnitCube");
                     break;
+                case 15:
+                    window.localStorage.setItem("exampleName", "ColorElementTri");
+                    break;
+                case 16:
+                    window.localStorage.setItem("exampleName", "ColorLine");
+                    break;
+                case 17:
+                    window.localStorage.setItem("exampleName", "ColorTriangle");
+                    break;
+                case 18:
+                    window.localStorage.setItem("exampleName", "ColorTwoTri");
+                    break;
+                case 19:
+                    window.localStorage.setItem("exampleName", "IllRedCube");
+                    break;
+                case 20:
+                    window.localStorage.setItem("exampleName", "PointLightRedCube");
+                    break;
+                case 21:
+                    window.localStorage.setItem("exampleName", "RotateColorCube");
+                    break;
+                case 22:
+                    window.localStorage.setItem("exampleName", "RotateCube");
+                    break;
+                case 23:
+                    window.localStorage.setItem("exampleName", "SwitchShader_01");
+                    break;
+                case 24:
+                    window.localStorage.setItem("exampleName", "SwitchShader_02");
+                    break;
+                case 25:
+                    window.localStorage.setItem("exampleName", "SwitchShader_03");
+                    break;
+                // jadeBracelet
+                case 26:
+                    window.location.href = "/webgl/example/jadeBracelet/0.html";
+                    return;
+                case 27:
+                    window.location.href = "/webgl/example/jadeBracelet/1.html";
+                    return;
+                case 28:
+                    window.location.href = "/webgl/example/jadeBracelet/2.html";
+                    return;
+                case 29:
+                    window.location.href = "/webgl/example/jadeBracelet/3.html";
+                    return;
+                case 30:
+                    window.location.href = "/webgl/example/jadeBracelet/4.html";
+                    return;
+                case 31:
+                    window.location.href = "/webgl/example/jadeBracelet/5.html";
+                    return;
+                case 32:
+                    window.location.href = "/webgl/example/jadeBracelet/6.html";
+                    return;
                 default: 
                     break;
             }
@@ -100,7 +233,32 @@
          onClickThreeJsLResp = function(value) {
             switch(value) {
                 case 0: 
-                    window.localStorage.setItem("threeJsName", "test");
+                    window.localStorage.setItem("threeJsName", "0");
+                    break;
+                //one
+                case "Cube": 
+                    window.localStorage.setItem("threeJsName", "Cube");
+                    break;
+                case "DrawLine": 
+                    window.localStorage.setItem("threeJsName", "DrawLine");
+                    break;
+                case "Light": 
+                    window.localStorage.setItem("threeJsName", "Light");
+                    break;
+                case "Material": 
+                    window.localStorage.setItem("threeJsName", "Material");
+                    break;
+                case "OrbitControl": 
+                    window.localStorage.setItem("threeJsName", "OrbitControl");
+                    break;
+                case "RequestAnimationFrame": 
+                    window.localStorage.setItem("threeJsName", "RequestAnimationFrame");
+                    break;
+                case "SphereGeometry": 
+                    window.localStorage.setItem("threeJsName", "SphereGeometry");
+                    break;
+                case "Test": 
+                    window.localStorage.setItem("threeJsName", "Test");
                     break;
                 default: 
                     break;
@@ -112,8 +270,35 @@
           //点击Matter区域按钮响应
           onClickMatterLResp = function(value) {
             switch(value) {
-                case 0: 
-                    window.localStorage.setItem("matterName", "test");
+                case "Test": 
+                    window.localStorage.setItem("matterName", "Test");
+                    break;
+                case "Car": 
+                    window.localStorage.setItem("matterName", "Car");
+                    break;
+                case "Chain": 
+                    window.localStorage.setItem("matterName", "Chain");
+                    break;
+                case "Constraint": 
+                    window.localStorage.setItem("matterName", "Constraint");
+                    break;
+                case "Cross": 
+                    window.localStorage.setItem("matterName", "Cross");
+                    break;
+                case "Demo": 
+                    window.localStorage.setItem("matterName", "Demo");
+                    break;
+                case "MouseConstraint": 
+                    window.localStorage.setItem("matterName", "MouseConstraint");
+                    break;
+                case "NewtonsCradle": 
+                    window.localStorage.setItem("matterName", "NewtonsCradle");
+                    break;
+                case "SoftBody": 
+                    window.localStorage.setItem("matterName", "SoftBody");
+                    break;
+                case "Stack": 
+                    window.localStorage.setItem("matterName", "Stack");
                     break;
                 default: 
                     break;

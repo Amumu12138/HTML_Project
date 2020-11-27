@@ -23,6 +23,13 @@ Example.Canvas = function () {
     var canvas3d = canvas.getContext('3d');
     console.log("Amumu Canvas canvas_3d = ", canvas3d);
 
+    var ctx = canvas.getContext("2d");
+    //绘制蓝色矩形
+    ctx.fillStyle = 'rgba(0, 0, 255, 1.0)';
+    ctx.fillRect(200, 50, 100, 100);
+    //绘制文字
+    ctx.fillText("Hello AMUMU", 20, 200);
+
     // //调用WebGL API绘制渲染方法drawArrays
     // canvas.drawArrays(canvas.POINTS, 0, 1);
 };

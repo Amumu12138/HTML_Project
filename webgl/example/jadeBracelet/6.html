@@ -11,6 +11,7 @@
       /* 隐藏body窗口区域滚动条 */
     }
   </style>
+   <link href="../../css/common.css" rel="stylesheet">
   <!--引入three.js三维引擎-->
   <script src="http://www.yanhuangxueyuan.com/threejs/build/three.js"></script>
   <!-- 引入threejs扩展控件OrbitControls.js -->
@@ -22,6 +23,7 @@
 </head>
 
 <body>
+  <button class="common-btn" style="position: absolute;" onclick='window.history.back();'>Back</button>
   <script>
     /**
      * 创建场景对象Scene
@@ -32,12 +34,12 @@
      */
     var OBJLoader = new THREE.OBJLoader(); //obj加载器
     var MTLLoader = new THREE.MTLLoader(); //材质文件加载器
-    MTLLoader.load('res/jadeBracelet/material.mtl', function (materials) {
+    MTLLoader.load('../../res/jadeBracelet/material.mtl', function (materials) {
       // 返回一个包含材质的对象MaterialCreator
       console.log(materials);
       //obj的模型会和MaterialCreator包含的材质对应起来
       OBJLoader.setMaterials(materials);
-      OBJLoader.load('res/jadeBracelet/model.obj', function (obj) {
+      OBJLoader.load('../../res/jadeBracelet/model.obj', function (obj) {
         scene.add(obj); //返回的组对象插入场景中
         obj.children[0].scale.set(5, 5, 5); //网格模型缩放
         // 更换纹理贴图

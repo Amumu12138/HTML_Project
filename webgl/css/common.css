@@ -36,9 +36,63 @@
 }
 
 .common-three-btn {
-    background: blue;
+    background: #2323ff;
 }
 
 .common-matter-btn {
-    background: green;
+    background: #1DC64F;
+}
+
+/* 下拉菜单 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content,
+.dropdown-three-content,
+.dropdown-matter-content {
+    display: none;
+    position: absolute;
+    left: 10px;
+    margin-top: -10px;
+    background-color: #D82B25;
+    min-width: 100px;
+    max-width: 125px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown-content a,
+.dropdown-three-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown:hover .dropdown-three-content {
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: red;
+}
+
+.dropdown-three-content a:hover {
+    background-color: blue;
+}
+
+.dropdown:hover .common-btn {
+    background-color: red;
+}
+
+.dropdown:hover .common-three-btn {
+    background-color: blue;
+}
+
+.dropdown:hover .common-matter-btn {
+    background-color: green;
 }

@@ -10,10 +10,11 @@
 </head>
 
 <body>
-    <button class="common-btn" style="position: absolute;" onclick="onBack()">Back</button>
+    <button class="common-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
     
     <!--canvas标签创建一个宽高均为500像素，背景为白色的矩形画布-->
     <canvas id="webgl" width="500" height="500" style="background-color: white"></canvas>
+    <!-- WebGL -->
     <script type="text/javascript" src="example/Test.js"></script>
     <script type="text/javascript" src="example/TestGLSL.js"></script>
     <script type="text/javascript" src="example/Canvas.js"></script>
@@ -29,65 +30,110 @@
     <script type="text/javascript" src="example/Triangles.js"></script>
     <script type="text/javascript" src="example/TwoCube.js"></script>
     <script type="text/javascript" src="example/UnitCube.js"></script>
-
+    <!-- colorLerp -->
+    <script type="text/javascript" src="example/colorLerp/ColorElementTri.js"></script>
+    <script type="text/javascript" src="example/colorLerp/ColorLine.js"></script>
+    <script type="text/javascript" src="example/colorLerp/ColorTriangle.js"></script>
+    <script type="text/javascript" src="example/colorLerp/ColorTwoTri.js"></script>
+    <!-- illumination -->
+    <script type="text/javascript" src="example/illumination/IllRedCube.js"></script>
+    <script type="text/javascript" src="example/illumination/PointLightRedCube.js"></script>
+    <!-- rotate -->
+    <script type="text/javascript" src="example/rotate/RotateColorCube.js"></script>
+    <script type="text/javascript" src="example/rotate/RotateCube.js"></script>
+    <!-- switchShader -->
+    <script type="text/javascript" src="example/switchShader/SwitchShader_01.js"></script>
+    <script type="text/javascript" src="example/switchShader/SwitchShader_02.js"></script>
+    <script type="text/javascript" src="example/switchShader/SwitchShader_03.js"></script>
+    
     <script>
-        //返回上一层级
-        onBack = function() {
-            window.history.back();
-        }
+
 
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
             //示例: 点
-            case "test":
+            case "Test":
                 Example.Test();
                 break;
             //线框矩形
-            case "testGLSL":
+            case "TestGLSL":
                 Example.TestGLSL();
                 break;
             //画布 2d描线三角形
-            case "canvas":
+            case "Canvas":
                 Example.Canvas();
                 break;
             //线框正方体
-            case "cube":
+            case "Cube":
                 Example.Cube();
                 break
             //平面正方体 添加颜色
-            case "colorCube":
+            case "ColorCube":
                 Example.ColorCube();
                 break
             //线框矩形
-            case "rect":
+            case "Rect":
                 Example.Rect();
                 break;
-            case "alphaBlend":
+            case "AlphaBlend":
                 Example.AlphaBlend();
                 break;
-            case "alphaCube":
+            case "AlphaCube":
                 Example.AlphaCube();
                 break;
-            case "grayTexture2D":
+            case "GrayTexture2D":
                 Example.GrayTexture2D();
                 break;
-            case "ring":
+            case "Ring":
                 Example.Ring();
                 break;
-            case "texture2D":
+            case "Texture2D":
                 Example.Texture2D();
                 break;
-            case "transform":
+            case "Transform":
                 Example.Transform();
                 break;
-            case "triangles":
+            case "Triangles":
                 Example.Triangles();
                 break;
-            case "twoCube":
+            case "TwoCube":
                 Example.TwoCube();
                 break;
-            case "unitCube":
+            case "UnitCube":
                 Example.UnitCube();
+                break;
+            case "ColorElementTri":
+                Example.ColorElementTri();
+                break;
+            case "ColorLine":
+                Example.ColorLine();
+                break;
+            case "ColorTriangle":
+                Example.ColorTriangle();
+                break;
+            case "ColorTwoTri":
+                Example.ColorTwoTri();
+                break;
+            case "IllRedCube":
+                Example.IllRedCube();
+                break;
+            case "PointLightRedCube":
+                Example.PointLightRedCube();
+                break;
+            case "RotateColorCube":
+                Example.RotateColorCube();
+                break;
+            case "RotateCube":
+                Example.RotateCube();
+                break;
+            case "SwitchShader_01":
+                Example.SwitchShader_01();
+                break;
+            case "SwitchShader_02":
+                Example.SwitchShader_02();
+                break;
+            case "SwitchShader_03":
+                Example.SwitchShader_03();
                 break;
             default: 
                 break;

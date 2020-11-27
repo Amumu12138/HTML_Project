@@ -44,7 +44,7 @@ Example.AirPlane = function () {
         // 这种转换很简单的伙计！tx = (x-width/2)/(width/2)
         var tx = -1 + (event.clientX / WIDTH) * 2;
 
-        // y轴在窗口坐标系和webg坐标系的方向是相反的，因此我们把他逆一下就可以
+        // y轴在窗口坐标系和webgl坐标系的方向是相反的，因此我们把他逆一下就可以
         var ty = 1 - (event.clientY / HEIGHT) * 2;
         mousePos = {
             x: tx,
