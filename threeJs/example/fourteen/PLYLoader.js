@@ -24,10 +24,9 @@ Example.PLYLoader = function () {
      */
     var loader = new THREE.PLYLoader();
     loader.load("resources/ply/binary/Lucy100k.ply", function (ply) {
-
         console.log("PLYLoader ply = ", ply);
         var material = new THREE.MeshLambertMaterial({
-            color: 0xff0000
+            color: 0xffffff
         });
         var mesh = new THREE.Mesh(ply, material);
         scene.add(mesh);

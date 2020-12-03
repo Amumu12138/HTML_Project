@@ -3,8 +3,8 @@
 gl_PointSize     点渲染模式,方形点区域渲染像素大小          float
 gl_Position      顶点位置坐标                              vec4
 gl_FragColor     片元颜色值                                vec4
-gl_FragCoord     片元坐标,单位像素                          vec2
-gl_PointCoord    点渲染模式对应点像素坐标                    vec2
+gl_FragCoord     片元坐标,单位像素                         vec2
+gl_PointCoord    点渲染模式对应点像素坐标                   vec2
 
 //gl_PointSize
 当WebGL执行绘制函数gl.drawArrays()绘制模式是点模式gl.POINTS的时候，
@@ -54,10 +54,10 @@ void main() {
 gl_FragCoord的值是vec2(x,y),通过gl_FragCoord.x、gl_FragCoord.y方式可以分别访问片元坐标的纵横坐标。
 
 //片元的颜色随着坐标变化(设置一个渐变色效果)
-  void main() {
-    // 片元沿着x方向渐变
-    gl_FragColor = vec4(gl_FragCoord.x/500.0*1.0,1.0,0.0,1.0);
-  }
+void main() {
+  // 片元沿着x方向渐变
+  gl_FragColor = vec4(gl_FragCoord.x/500.0*1.0,1.0,0.0,1.0);
+}
 
 //canvas画布上不同区域片元设置为不同颜色
  void main() {

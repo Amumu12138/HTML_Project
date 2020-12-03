@@ -20,7 +20,7 @@ Example.ColorElementTri = function () {
         ' void main() {' +
         //顶点坐标apos赋值给内置变量gl_Position
         //逐顶点处理数据
-        'gl_Position = apos;' +
+        '   gl_Position = apos;' +
         //顶点颜色插值计算
         '   v_color = a_color;' +
         '}';

@@ -21,21 +21,21 @@ Example.Ring = function () {
     //  highp ; //高精度
     //片元着色器源码
     var fragShaderSource = `
-    precision lowp float;// 所有float类型数据的精度是lowp
-    void main() {
-        // 计算方形区域每个片元距离方形几何中心的距离
-        // gl.POINTS模式点渲染的方形区域,方形中心是0.5,0.5,左上角是坐标原点,右下角是1.0,1.0，
-        float r = distance(gl_PointCoord, vec2(0.5, 0.5));
-        //根据距离设置片元,圈型色块
-        if(r > 0.5){
-            // 距离方形中心距离大于0.5的片元剪裁舍弃掉
-            discard;
-        } else if(r > 0.0 && r < 0.4) {
-            // 距离方形中心距离大于0且小于0.4的片元剪裁舍弃掉
-            discard;
+        precision lowp float;// 所有float类型数据的精度是lowp
+        void main() {
+            // 计算方形区域每个片元距离方形几何中心的距离
+            // gl.POINTS模式点渲染的方形区域,方形中心是0.5,0.5,左上角是坐标原点,右下角是1.0,1.0
+            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+            //根据距离设置片元,圈型色块
+            if(r > 0.5){
+                // 距离方形中心距离大于0.5的片元剪裁舍弃掉
+                discard;
+            } else if(r > 0.0 && r < 0.4) {
+                // 距离方形中心距离大于0且小于0.4的片元剪裁舍弃掉
+                discard;
+            }
+            gl_FragColor = vec4(1.0,0.0,0.0,1.0);
         }
-        gl_FragColor = vec4(1.0,0.0,0.0,1.0);
-    }
     `;
 
     //通过getElementById()方法获取canvas画布

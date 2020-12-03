@@ -1,0 +1,36 @@
+import { Vector2 } from "three";
+import { Rect } from "../utils/Rect";
+import { DisplayObject } from "./DisplayObject";
+import { FillMesh } from "./mesh/FillMesh";
+import { IMeshFactory } from "./mesh/MeshFactory";
+import { VertexBuffer } from "./mesh/VertexBuffer";
+import { NTexture } from "./NTexture";
+export declare class Image extends DisplayObject implements IMeshFactory {
+    protected _scaleByTile: boolean;
+    protected _scale9Grid: Rect;
+    protected _textureScale: Vector2;
+    protected _tileGridIndice: number;
+    protected _fillMesh?: FillMesh;
+    constructor();
+    get texture(): NTexture;
+    set texture(value: NTexture);
+    get textureScale(): Vector2;
+    set textureScale(value: Vector2);
+    get scale9Grid(): Rect;
+    set scale9Grid(value: Rect);
+    get scaleByTile(): boolean;
+    set scaleByTile(value: boolean);
+    get tileGridIndice(): number;
+    set tileGridIndice(value: number);
+    get fillMethod(): number;
+    set fillMethod(value: number);
+    get fillOrigin(): number;
+    set fillOrigin(value: number);
+    get fillClockwise(): boolean;
+    set fillClockwise(value: boolean);
+    get fillAmount(): number;
+    set fillAmount(value: number);
+    onPopulateMesh(vb: VertexBuffer): void;
+    private sliceFill;
+    private tileFill;
+}

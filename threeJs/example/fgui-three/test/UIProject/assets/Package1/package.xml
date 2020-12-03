@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="rbw1tv9t">
+  <resources>
+    <component id="fvaib" name="Main.xml" path="/" exported="true"/>
+    <image id="o3dsl" name="logo128.png" path="/"/>
+    <component id="qpb6m" name="Test.xml" path="/" exported="true"/>
+    <component id="qpb6n" name="Btn.xml" path="/"/>
+  </resources>
+  <publish name="">
+    <atlas name="Default" index="0"/>
+  </publish>
+</packageDescription>

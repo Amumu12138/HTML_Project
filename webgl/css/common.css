@@ -1,4 +1,8 @@
 /* 公共样式 */
+body {
+    background: #E9E5E2;
+}
+
 .common-btn,
 .common-three-btn,
 .common-matter-btn {

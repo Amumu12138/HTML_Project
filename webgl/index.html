@@ -6,7 +6,6 @@
     <title>WEBGL</title>
 
     <link href="css/common.css" rel="stylesheet">
-    <script type="text/javascript" src="example/common.js"></script>
 </head>
 
 <body>
@@ -45,10 +44,10 @@
     <script type="text/javascript" src="example/switchShader/SwitchShader_01.js"></script>
     <script type="text/javascript" src="example/switchShader/SwitchShader_02.js"></script>
     <script type="text/javascript" src="example/switchShader/SwitchShader_03.js"></script>
-    
+    <!-- client -->
+    <script type="text/javascript" src="example/client/Flame.js"></script>
+    <script type="text/javascript" src="example/client/ColorTest.js"></script>
     <script>
-
-
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
             //示例: 点
@@ -134,6 +133,12 @@
                 break;
             case "SwitchShader_03":
                 Example.SwitchShader_03();
+                break;
+            case "Flame": 
+                Example.Flame();
+                break;
+            case "ColorTest": 
+                Example.ColorTest();
                 break;
             default: 
                 break;

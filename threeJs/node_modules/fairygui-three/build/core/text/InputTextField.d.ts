@@ -1,0 +1,34 @@
+import { TextField } from "./TextField";
+export declare class InputTextField extends TextField {
+    maxLength: number;
+    keyboardType: string;
+    restrict: string;
+    editable: boolean;
+    private _text2;
+    private _password;
+    private _promptText;
+    private _decodedPromptText?;
+    private _border;
+    private _corner;
+    private _borderColor;
+    private _backgroundColor;
+    private _editing;
+    private _element;
+    constructor();
+    get text(): string;
+    set text(value: string);
+    get promptText(): string;
+    set promptText(value: string);
+    get password(): boolean;
+    set password(value: boolean);
+    private updateText;
+    protected onSizeChanged(): void;
+    applyFormat(): void;
+    private createElement;
+    private setFormat;
+    dispose(): void;
+    private __focusIn;
+    private locateInputElement;
+    private __focusOut;
+    private __removed;
+}

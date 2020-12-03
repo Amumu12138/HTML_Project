@@ -13,10 +13,10 @@ Example.GrayTexture2D = function () {
     var vertexShaderSource = '' +
         ' attribute vec4 a_Position;' + //顶点位置坐标
         ' attribute vec2 a_TexCoord;' + //纹理坐标
-        'varying vec2 v_TexCoord;' + //插值后纹理坐标
-        'uniform mat4 mx;' + //绕x轴旋转矩阵
-        'uniform mat4 my;' + //绕宇宙旋转矩阵
-        'void main(){' +
+        ' varying vec2 v_TexCoord;' + //插值后纹理坐标
+        ' uniform mat4 mx;' + //绕x轴旋转矩阵
+        ' uniform mat4 my;' + //绕宇宙旋转矩阵
+        ' void main(){' +
         //顶点坐标apos赋值给内置变量gl_Position
         '   gl_Position = mx * my * a_Position;' +
         //纹理坐标插值计算
@@ -36,6 +36,7 @@ Example.GrayTexture2D = function () {
         '   vec4 texture = texture2D(u_Sampler, v_TexCoord);' +
         //计算RGB三个分量光能量之和,也就是亮度
         '   float luminance = 0.299 * texture.r + 0.578 * texture.g + 0.114 * texture.b;' +
+        // '   float luminance = 0.2 * texture.r + 0.1 * texture.g + 0.1 * texture.b;' +
         // 逐片元赋值像素值,RGB相同均为亮度值,用黑白两色表达图片的明暗变化
         '   gl_FragColor = vec4(luminance, luminance, luminance, 1.0);' +
         '}';
