@@ -8,6 +8,7 @@
      <% for (var css in htmlWebpackPlugin.files.css) { %>
     <link href="<%=htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
     <% } %>
+    <link href="/webgl/css/common.css" rel="stylesheet">
 </head>
 <body style="	margin: 0;
 background-color: #000;
@@ -16,6 +17,7 @@ font-family: Monospace;
 font-size: 13px;
 line-height: 24px;
 overscroll-behavior: none;">
+<button class="common-three-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
 <div id="app"></div>
 
 </body>

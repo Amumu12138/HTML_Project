@@ -14,6 +14,7 @@ export class Threescene {
 
     private scene: THREE.Scene
     private renderer: THREE.WebGLRenderer;
+    private camera: THREE.Camera;
 
     private _mainMenu: fgui.GComponent;
     private _btnTest: fgui.GComponent;
@@ -72,6 +73,8 @@ export class Threescene {
         }); //材质对象Material
         var box = new THREE.Mesh(geometry, material); //网格模型对象Mesh
         this.scene.add(box); //网格模型添加到场景中
+        box.translateX(-300);
+        // box.translateX(-300);
 
         //点光源
         var point = new THREE.PointLight(0xffffff);
@@ -83,14 +86,22 @@ export class Threescene {
         var height = window.innerHeight; //窗口高度
         var k = width / height; //窗口宽高比
         var s = 100; //三维场景显示范围控制系数，系数越大，显示的范围越大
-        fgui.Stage.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
-        fgui.Stage.camera.position.set(200, 300, 200); //设置相机位置
-        fgui.Stage.camera.lookAt(this.scene.position); //设置相机方向(指向的场景对象)
+        //this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
+        this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
+        //this.camera.position.set(200, 300, 200); //设置相机位置
+        // fgui.Stage.camera.position.set(0, 0, 0); //设置相机位置
+        fgui.Stage.camera.lookAt(box.position); //设置相机方向(指向的场景对象)
+
+        // 辅助坐标系  参数250表示坐标系大小，可以根据场景大小去设置
+        var axisHelper = new THREE.AxesHelper(250);
+        this.scene.add(axisHelper);
+        console.log("Amumu fgui.Stage.camera = ", fgui.Stage.camera, " camera = ", this.camera);
     }
 
     private render() {
         fgui.Stage.update();
         this.renderer.render(this.scene, fgui.Stage.camera);
+        // this.renderer.render(this.scene, this.camera);
     }
 
     private animate = () => {
@@ -104,7 +115,6 @@ export class Threescene {
      */
     private onClickTest() {
         console.log("Amumu Threescene onClickTest");
-        // fgui.GRoot.inst.removeChild(this._mainMenu);
         this.hide();
         Test.TestScene.Instance.show();
     }
