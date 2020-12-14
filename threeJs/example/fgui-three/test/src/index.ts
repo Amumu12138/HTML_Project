@@ -48,6 +48,7 @@ export class Threescene {
 
         fgui.UIPackage.loadPackage("assets/UI/Package1").then(this.start.bind(this));
 
+        this.initGame();
         this.animate();
     }
 
@@ -59,6 +60,32 @@ export class Threescene {
         this._btnTest = this._mainMenu.getChild("btnTest").asCom;
         //注册按钮监听事件
         this._btnTest.onClick(this.onClickTest, this);
+    }
+
+    /**
+     * @desc 初始化游戏
+     */
+    private initGame() {
+        var geometry = new THREE.BoxGeometry(10, 10, 10); //创建一个立方体几何对象Geometry
+        var material = new THREE.MeshLambertMaterial({
+            color: 0xffffff
+        }); //材质对象Material
+        var box = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+        this.scene.add(box); //网格模型添加到场景中
+
+        //点光源
+        var point = new THREE.PointLight(0xffffff);
+        point.position.set(400, 200, 300); //点光源位置
+        this.scene.add(point); //点光源添加到场景中
+
+        //创建相机对象
+        var width = window.innerWidth; //窗口宽度
+        var height = window.innerHeight; //窗口高度
+        var k = width / height; //窗口宽高比
+        var s = 100; //三维场景显示范围控制系数，系数越大，显示的范围越大
+        fgui.Stage.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
+        fgui.Stage.camera.position.set(200, 300, 200); //设置相机位置
+        fgui.Stage.camera.lookAt(this.scene.position); //设置相机方向(指向的场景对象)
     }
 
     private render() {
