@@ -67,35 +67,39 @@ export class Threescene {
      * @desc 初始化游戏
      */
     private initGame() {
-        var geometry = new THREE.BoxGeometry(10, 10, 10); //创建一个立方体几何对象Geometry
+        var geometry = new THREE.BoxGeometry(1, 1, 1); //创建一个立方体几何对象Geometry
         var material = new THREE.MeshLambertMaterial({
             color: 0xffffff
         }); //材质对象Material
         var box = new THREE.Mesh(geometry, material); //网格模型对象Mesh
         this.scene.add(box); //网格模型添加到场景中
-        box.translateX(-300);
-        // box.translateX(-300);
+        box.position.set(0, 0, 0);
+        box.layers.set(0);    //修改物体层级
 
         //点光源
         var point = new THREE.PointLight(0xffffff);
         point.position.set(400, 200, 300); //点光源位置
         this.scene.add(point); //点光源添加到场景中
+        point.layers.set(0);
 
         //创建相机对象
         var width = window.innerWidth; //窗口宽度
         var height = window.innerHeight; //窗口高度
         var k = width / height; //窗口宽高比
         var s = 100; //三维场景显示范围控制系数，系数越大，显示的范围越大
+        //  _camera = new three.OrthographicCamera(-1, 1, 1, -1, 0, 1000);
         //this.camera = new THREE.PerspectiveCamera(60, width / height, 1, 1000);
-        this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
+        // this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
         //this.camera.position.set(200, 300, 200); //设置相机位置
         // fgui.Stage.camera.position.set(0, 0, 0); //设置相机位置
-        fgui.Stage.camera.lookAt(box.position); //设置相机方向(指向的场景对象)
-
+        // fgui.Stage.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1000);
+        fgui.Stage.camera.layers.set(0);
+        fgui.Stage.camera.position.set(200, 300, 200);
+        fgui.Stage.camera.lookAt(this.scene.position); //设置相机方向(指向的场景对象)
         // 辅助坐标系  参数250表示坐标系大小，可以根据场景大小去设置
         var axisHelper = new THREE.AxesHelper(250);
         this.scene.add(axisHelper);
-        console.log("Amumu fgui.Stage.camera = ", fgui.Stage.camera, " camera = ", this.camera);
+        console.log("Amumu fgui.Stage.camera.pos = ", fgui.Stage.camera.position, " box.position = ", box.position);
     }
 
     private render() {
