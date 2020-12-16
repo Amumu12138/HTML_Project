@@ -232,6 +232,10 @@
         <button class="common-matter-btn " onclick="onClickMatterLResp('SoftBody')">SoftBody</button>
         <button class="common-matter-btn " onclick="onClickMatterLResp('Stack')">Stack</button>
     </div>
+    <div>
+        <p class="title-text">JavaScript</p>
+        <button class="common-js-btn " onclick="onClickJavaScriptResp('Test')">Test</button>
+    </div>
       
     <script>
         console.log("Amumu this is html-index");
@@ -620,6 +624,18 @@
             //跳转页面
             window.location.href = "/matter/index.html";
         }
+
+        onClickJavaScriptResp = function(value) {
+            switch(value) {
+                case "Test":
+                    window.localStorage.setItem("jsName", "Test");
+                    break;
+                default:
+                    break;
+            }
+            window.location.href = "/javaScript/index.html";
+        }
+
     
     </script>
 </body>

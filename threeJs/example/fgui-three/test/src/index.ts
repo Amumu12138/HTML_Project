@@ -74,13 +74,13 @@ export class Threescene {
         var box = new THREE.Mesh(geometry, material); //网格模型对象Mesh
         this.scene.add(box); //网格模型添加到场景中
         box.position.set(0, 0, 0);
-        box.layers.set(0);    //修改物体层级
+        // box.layers.set(0);    //修改物体层级
 
         //点光源
         var point = new THREE.PointLight(0xffffff);
         point.position.set(400, 200, 300); //点光源位置
         this.scene.add(point); //点光源添加到场景中
-        point.layers.set(0);
+        // point.layers.set(0);
 
         //创建相机对象
         var width = window.innerWidth; //窗口宽度
@@ -92,9 +92,9 @@ export class Threescene {
         // this.camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
         //this.camera.position.set(200, 300, 200); //设置相机位置
         // fgui.Stage.camera.position.set(0, 0, 0); //设置相机位置
-        // fgui.Stage.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1000);
-        fgui.Stage.camera.layers.set(0);
-        fgui.Stage.camera.position.set(200, 300, 200);
+        fgui.Stage.camera = new THREE.OrthographicCamera(-5, 5, 5, -5, 0, 1000);
+        // fgui.Stage.camera.layers.set(0);
+        fgui.Stage.camera.position.set(500, 500, 500);
         fgui.Stage.camera.lookAt(this.scene.position); //设置相机方向(指向的场景对象)
         // 辅助坐标系  参数250表示坐标系大小，可以根据场景大小去设置
         var axisHelper = new THREE.AxesHelper(250);

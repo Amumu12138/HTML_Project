@@ -15,6 +15,7 @@
         }
     </style>
      <link href="css/common.css" rel="stylesheet">
+     <link href="/webgl/css/common.css" rel="stylesheet">
 
     <script type="text/javascript" src="example/libs/jquery-1.9.1.min.js"> </script>
     <script type="text/javascript" src="example/libs/jquery.md5.js"> </script>
@@ -78,8 +79,9 @@
 </head>
 
 <body>
-
+    <button class="common-js-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
     <script type="text/javascript">
+        console.error("Amumu Js Test");
         // var gameUrl = "https://lngame.ijunhai.com/shj_pj115665/index.html?game_id=208&channel_id=8591&game_channel_id=115665&mirror_js_name=yinhuh5&sdkToken=110XFCP9Zr3Uygkl1qe0gjTRpXUtNBWd&uid=1008866589&realNameAuthStatus=0";
         // var hasIphoneX = window.innerHeight / window.innerWidth >= 2 ? true: false;
 		// 		var offsetHeight = 0, offsetTop = 0;
@@ -93,13 +95,13 @@
         //console.log("innerHeight = ", window.innerHeight, "innerWidth = ", window.innerWidth); 
 
         // //添加按钮
-        document.write(`        
-            <button id="slideShow-btn" class="common-btn">SlideShowBtn</button>
-        `);
-        document.getElementById("slideShow-btn").onclick = function() {
-           window.location.href = "example/client/SlideShow/index.html";
-        }
-        document.write(`<button id="xxx-btn" class="common-btn">xxxBtn</button>`);
+        // document.write(`        
+        //     <button id="slideShow-btn" class="common-btn">SlideShowBtn</button>
+        // `);
+        // document.getElementById("slideShow-btn").onclick = function() {
+        //    window.location.href = "example/client/SlideShow/index.html";
+        // }
+        // document.write(`<button id="xxx-btn" class="common-btn">xxxBtn</button>`);
        
         // Example.WindowCookie();
 

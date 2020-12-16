@@ -5,7 +5,8 @@ body {
 
 .common-btn,
 .common-three-btn,
-.common-matter-btn {
+.common-matter-btn,
+.common-js-btn {
     position: relative;
     width: 100px;
     margin: 10px;
@@ -45,6 +46,10 @@ body {
 
 .common-matter-btn {
     background: #1DC64F;
+}
+
+.common-js-btn {
+    background: #D34234;
 }
 
 /* 下拉菜单 */
