@@ -25,6 +25,7 @@
         <button class="common-btn" onclick="onClickWebGLResp(12)">Triangles</button>
         <button class="common-btn" onclick="onClickWebGLResp(13)">TwoCube</button>
         <button class="common-btn" onclick="onClickWebGLResp(14)">UnitCube</button>
+        <button class="common-btn" onclick="onClickWebGLResp('WEBGLTest')">WEBGLTest</button>
         <div class="dropdown">
             <button class="common-btn">ColorLerp</button>
             <div class="dropdown-content">
@@ -73,6 +74,7 @@
             <div class="dropdown-content">
                 <a onclick="onClickWebGLResp('Flame')"> Flame </a>
                 <a onclick="onClickWebGLResp('ColorTest')"> ColorTest </a>
+                <a onclick="onClickWebGLResp('WEBGLTest')"> WEBGLTest </a>
             </div>
         </div>
     </div>
@@ -234,11 +236,24 @@
     </div>
     <div>
         <p class="title-text">JavaScript</p>
-        <button class="common-js-btn " onclick="onClickJavaScriptResp('Test')">Test</button>
+        <!-- <button class="common-js-btn " onclick="onClickJavaScriptResp('Test')">Test</button> -->
+        <button class="common-js-btn " onclick="pushHistory()">Test</button>
     </div>
       
     <script>
         console.log("Amumu this is html-index");
+
+        // function pushHistory(){
+        //     var state = {
+        //         title: "",
+        //         url: "#"     
+        //         }
+        //     window.history.pushState(state, "title", "#");   
+        // }
+        // pushHistory()
+        window.addEventListener("popstate", function(data){
+            console.log("Amumu  window.addEventListener popstate", data);
+        }, false);
 
         //点击WebGL区域按钮响应
         onClickWebGLResp = function(value) {
@@ -348,6 +363,9 @@
                     break;
                 case "ColorTest":
                     window.localStorage.setItem("exampleName", "ColorTest");
+                    break;
+                case "WEBGLTest":
+                    window.localStorage.setItem("exampleName", "WEBGLTest");
                     break;
                 default: 
                     break;

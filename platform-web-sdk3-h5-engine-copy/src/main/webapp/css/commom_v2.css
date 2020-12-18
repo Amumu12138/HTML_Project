@@ -164,6 +164,53 @@
     font-weight: normal;
 }
 
+/*退游弹窗*/
+.outGame-close-img {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+}
+
+.outGame-exit-btn,
+.outGame-resume-btn {
+    font-size: 16px;
+    background: #f2f2f2;
+    padding: 5px 5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.outGame-exit-btn {
+    position: relative;
+    right: 10px;
+    color: #616161;
+}
+
+.outGame-resume-btn {
+    position: relative;
+    left: 10px;
+    color: #FD0238;
+}
+
+.outGame-related-flex-btn {
+    position: relative;
+    top: 33px;
+    background-color: #FD0238;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    width: 45px;
+    height: 25px;
+    outline: none;
+}
+
+
 /*提示框*/
 .shortcut-tooltip {
     width: 100px;
@@ -211,6 +258,11 @@
 .login-box-02>div>div {
     width: 84%;
     margin: 0 auto;
+}
+
+.login-box-02 > div > p {
+    position: relative;
+    top: 10px;
 }
 
 .login-head-02 {
@@ -486,6 +538,16 @@
     transform: scale(0.9);
 }
 
+/*====子元素====*/
+.flex-list-02 {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
 /* 竖屏 */
 @media screen and (orientation: portrait) {
     .iframe-css {
@@ -519,35 +581,101 @@
     }
 }
 
-/* 横屏 */
-@media screen and (orientation: landscape) {
-    .iframe-css {
-        width: 60%;
-        height: 100%;
-        background: #f2f2f2;
-        z-index: 4;
-        left: 28px;
-        top: 0px;
-        position: absolute;
-        border-radius: 0px 15px 15px 0px;
-    }
+#loadPayCode {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, .8);
+}
 
-    /* .shortcut {
-        transform: scale(0.8);
-    } */
+#imgBack {
+    border-radius: 20px;
+    width: 390px;
+    height: 390px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 200px;
+    background-color: #f5f6f7;
+}
 
-    .open-screen {
-        margin-top: -30px;
-    }
+#payCodeImg {
+    border-radius: 20px;
+    width: 280px;
+    height: 280px;
+    display: block;
+    margin: 0 auto;
+}
 
-    .img-float {
-        position: absolute;
-        top: 8%;
-        left: 65%;
-        width: 34px;
-        height: 194px;
-        z-index: 9999;
-        background: url(/images/sdk2.0/pj_float_close_landspace.png) no-repeat;
-        transform: scale(0.35);
-    }
+#markedWords span {
+    text-align: center;
+    color: #2DD5FF;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    padding-top: 5px;
+}
+
+#closePayCode button {
+    text-align: center;
+    width: 200px;
+    background-color: #2DD5FF;
+    font-size: 18px;
+    color: aliceblue;
+    border-radius: 5px;
+    height: 40px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+
+
+
+#pjPubCode {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, .8);
+}
+
+.imgBack {
+    border-radius: 20px;
+    width: 310px;
+    height: 330px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 120px;
+    background-color: #f5f6f7;
+}
+
+#codeImg {
+    border-radius: 20px;
+    width: 220px;
+    height: 220px;
+    display: block;
+    margin: 0 auto;
+}
+
+.titleName span {
+    text-align: center;
+    color: #d70c19;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    padding-top: 5px;
+}
+
+.closeCode button {
+    text-align: center;
+    width: 200px;
+    background-color: #d70c19;
+    font-size: 18px;
+    color: aliceblue;
+    border-radius: 5px;
+    height: 40px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
 }

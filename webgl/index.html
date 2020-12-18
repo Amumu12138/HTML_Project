@@ -47,6 +47,7 @@
     <!-- client -->
     <script type="text/javascript" src="example/client/Flame.js"></script>
     <script type="text/javascript" src="example/client/ColorTest.js"></script>
+    <script type="text/javascript" src="example/client/WEBGLTest.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -139,6 +140,9 @@
                 break;
             case "ColorTest": 
                 Example.ColorTest();
+                break;
+            case "WEBGLTest": 
+                Example.WEBGLTest();
                 break;
             default: 
                 break;
