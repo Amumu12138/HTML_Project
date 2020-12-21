@@ -11,7 +11,6 @@ pjChannelSdk.init = function(channelGameId,channel,appVersion){
     pjChannelSdk.initData["channelGameId"] = channelGameId;
     pjChannelSdk.initData["channel"] = channel;
     pjChannelSdk.initData["appVersion"] = appVersion;
-
 };
 
 //验证渠道token
