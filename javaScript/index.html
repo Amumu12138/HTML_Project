@@ -80,7 +80,16 @@
 
 <body>
     <button class="common-js-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
+    <!-- <button class="common-js-btn" style="position: absolute;" onclick="wxClose()">wxClose</button> -->
     <script type="text/javascript">
+        function wxClose() {
+            // window.open("about:blank","_self").close();
+            // wx.closeWindow();
+            // WeixinJSBridge.invoke('closeWindow',{},function(res){
+            //     // alert(res.err_msg);
+            //     WeixinJSBridge.call('closeWindow');
+            // });
+        }
         // function add(a, b) { 
         //     return a + b;
         // }
@@ -136,6 +145,8 @@
         myObj.sayName.bind(heros, "qwqw", "asasa")();
         myObj.sayName.bind(heros)("123", "456");
         myObj.sayName.bind(heros, "qwqw", "asasa")("123", "456");
+
+      
         // var gameUrl = "https://lngame.ijunhai.com/shj_pj115665/index.html?game_id=208&channel_id=8591&game_channel_id=115665&mirror_js_name=yinhuh5&sdkToken=110XFCP9Zr3Uygkl1qe0gjTRpXUtNBWd&uid=1008866589&realNameAuthStatus=0";
         // var hasIphoneX = window.innerHeight / window.innerWidth >= 2 ? true: false;
 		// 		var offsetHeight = 0, offsetTop = 0;

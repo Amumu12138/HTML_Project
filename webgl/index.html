@@ -13,6 +13,11 @@
     
     <!--canvas标签创建一个宽高均为500像素，背景为白色的矩形画布-->
     <canvas id="webgl" width="500" height="500" style="background-color: white"></canvas>
+    <!-- libs -->
+    <script type="text/javascript" src="libs/cuon-matrix.js"></script>
+    <script type="text/javascript" src="libs/cuon-utils.js"></script>
+    <script type="text/javascript" src="libs/webgl-debug.js"></script>
+    <script type="text/javascript" src="libs/webgl-utils.js"></script>
     <!-- WebGL -->
     <script type="text/javascript" src="example/Test.js"></script>
     <script type="text/javascript" src="example/TestGLSL.js"></script>
@@ -48,6 +53,7 @@
     <script type="text/javascript" src="example/client/Flame.js"></script>
     <script type="text/javascript" src="example/client/ColorTest.js"></script>
     <script type="text/javascript" src="example/client/WEBGLTest.js"></script>
+    <script type="text/javascript" src="example/client/Point.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -143,6 +149,9 @@
                 break;
             case "WEBGLTest": 
                 Example.WEBGLTest();
+                break;
+            case "Point": 
+                Example.Point();
                 break;
             default: 
                 break;

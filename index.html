@@ -75,6 +75,7 @@
                 <a onclick="onClickWebGLResp('Flame')"> Flame </a>
                 <a onclick="onClickWebGLResp('ColorTest')"> ColorTest </a>
                 <a onclick="onClickWebGLResp('WEBGLTest')"> WEBGLTest </a>
+                <a onclick="onClickWebGLResp('Point')"> Point </a>
             </div>
         </div>
     </div>
@@ -237,7 +238,7 @@
     <div>
         <p class="title-text">JavaScript</p>
         <!-- <button class="common-js-btn " onclick="onClickJavaScriptResp('Test')">Test</button> -->
-        <button class="common-js-btn " onclick="pushHistory()">Test</button>
+        <button class="common-js-btn " onclick="onClickJavaScriptResp()">Test</button>
     </div>
       
     <script>
@@ -366,6 +367,9 @@
                     break;
                 case "WEBGLTest":
                     window.localStorage.setItem("exampleName", "WEBGLTest");
+                    break;
+                case "Point":
+                    window.localStorage.setItem("exampleName", "Point");
                     break;
                 default: 
                     break;
