@@ -12,7 +12,7 @@
     <button class="common-btn" style="position: absolute;" onclick="window.history.back();">Back</button>
     
     <!--canvas标签创建一个宽高均为500像素，背景为白色的矩形画布-->
-    <canvas id="webgl" width="500" height="500" style="background-color: white"></canvas>
+    <canvas id="webgl" width="1000px" height="1000px" style="background-color: white;"></canvas>
     <!-- libs -->
     <script type="text/javascript" src="libs/cuon-matrix.js"></script>
     <script type="text/javascript" src="libs/cuon-utils.js"></script>
@@ -54,6 +54,9 @@
     <script type="text/javascript" src="example/client/ColorTest.js"></script>
     <script type="text/javascript" src="example/client/WEBGLTest.js"></script>
     <script type="text/javascript" src="example/client/Point.js"></script>
+    <script type="text/javascript" src="example/client/Point2.js"></script>
+    <script type="text/javascript" src="example/client/ClickedPoints.js"></script>
+    <script type="text/javascript" src="example/client/ColoredPoints.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -152,6 +155,15 @@
                 break;
             case "Point": 
                 Example.Point();
+                break;
+            case "Point2": 
+                Example.Point2();
+                break;
+            case "ClickedPoints": 
+                Example.ClickedPoints();
+                break;
+            case "ColoredPoints": 
+                Example.ColoredPoints();
                 break;
             default: 
                 break;

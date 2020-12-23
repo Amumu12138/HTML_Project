@@ -76,6 +76,9 @@
                 <a onclick="onClickWebGLResp('ColorTest')"> ColorTest </a>
                 <a onclick="onClickWebGLResp('WEBGLTest')"> WEBGLTest </a>
                 <a onclick="onClickWebGLResp('Point')"> Point </a>
+                <a onclick="onClickWebGLResp('Point2')"> Point2 </a>
+                <a onclick="onClickWebGLResp('ClickedPoints')"> ClickedPoints </a>
+                <a onclick="onClickWebGLResp('ColoredPoints')"> ColoredPoints </a>
             </div>
         </div>
     </div>
@@ -370,6 +373,15 @@
                     break;
                 case "Point":
                     window.localStorage.setItem("exampleName", "Point");
+                    break;
+                case "Point2":
+                    window.localStorage.setItem("exampleName", "Point2");
+                    break;
+                case "ClickedPoints":
+                    window.localStorage.setItem("exampleName", "ClickedPoints");
+                    break;
+                 case "ColoredPoints":
+                    window.localStorage.setItem("exampleName", "ColoredPoints");
                     break;
                 default: 
                     break;
