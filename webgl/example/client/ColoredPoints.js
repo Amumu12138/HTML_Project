@@ -68,7 +68,7 @@ Example.ColoredPoints = function () {
     var g_points = [];
     var g_colors = [];
     var scale = canvas.height / canvas.width;
-    function click(ev, gl, canvas, pos, u_FragColor) {
+    function click(ev, gl, canvas, a_pos, u_FragColor) {
         var x = ev.clientX; 
         var y = ev.clientY;
         var rect = ev.target.getBoundingClientRect();

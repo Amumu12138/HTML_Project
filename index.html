@@ -79,6 +79,7 @@
                 <a onclick="onClickWebGLResp('Point2')"> Point2 </a>
                 <a onclick="onClickWebGLResp('ClickedPoints')"> ClickedPoints </a>
                 <a onclick="onClickWebGLResp('ColoredPoints')"> ColoredPoints </a>
+                <a onclick="onClickWebGLResp('MultipPoints')"> MultipPoints </a>
             </div>
         </div>
     </div>
@@ -380,8 +381,11 @@
                 case "ClickedPoints":
                     window.localStorage.setItem("exampleName", "ClickedPoints");
                     break;
-                 case "ColoredPoints":
+                case "ColoredPoints":
                     window.localStorage.setItem("exampleName", "ColoredPoints");
+                    break;
+                case "MultipPoints":
+                    window.localStorage.setItem("exampleName", "MultipPoints");
                     break;
                 default: 
                     break;
