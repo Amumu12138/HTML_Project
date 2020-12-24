@@ -12,7 +12,7 @@ Example.MultipPoints= function () {
     canvas.height = window.innerHeight;
   
    if(!gl) {
-       console.error("Failed to retrieve this <canvas> element");
+       console.error("Failed to retrieve this canvas element");
        return;
    }
 
