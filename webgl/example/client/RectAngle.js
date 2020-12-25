@@ -50,7 +50,24 @@ Example.RectAngle = function () {
         0.0, 0.5, 1.0, 0.5, 0.5, -0.5,
         0.5, -0.5, -0.5, -0.5, 0.0, 0.5
     ]);
-    var count = initVertexBuffers(gl, vertices02, 2, a_pos);
+
+     //两条线段
+     var vertices_line = new Float32Array([
+        -1.0, 0.0, -0.5, -0.5,
+        0.0, 0.0, 0.5, -0.5
+     ]);
+
+     //扇形
+     var vertices_fan = new Float32Array([
+        0.0, -1.0, 
+        -1.0, 0.0,
+        -0.5, 0.0, 
+        0.0, 0.5,
+        0.5, 0.0,
+        1.0, 0.0 
+    ]);
+
+    var count = initVertexBuffers(gl, vertices_fan, 2, a_pos);
     if(count < 0) {
         console.error("Failed tos set the positions of the vertices");
         return;
@@ -60,7 +77,7 @@ Example.RectAngle = function () {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     //绘制点
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 6);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
 
     //自动适配屏幕
     window.onresize = function() {
