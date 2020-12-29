@@ -67,17 +67,28 @@ Example.RectAngle = function () {
         1.0, 0.0 
     ]);
 
-    var count = initVertexBuffers(gl, vertices_fan, 2, a_pos);
-    if(count < 0) {
-        console.error("Failed tos set the positions of the vertices");
-        return;
-    }
+     //矩形
+     var vertices_triangle_strip = new Float32Array([
+        -0.5, 0.5, 
+        -0.5, -0.5,
+        0.5, 0.5, 
+        0.5, -0.5
+    ]);
 
+    //两个三角形组成的飘带
+    var vertices_triangle_ribbon = new Float32Array([
+        -0.5, -0.5, 
+        -0.5, 0.5,
+        0.5, 0.5, 
+        0.5, -0.5
+    ]);
+
+    initVertexBuffers(gl, vertices_triangle_ribbon, 2, a_pos);
     //清理画布
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     //绘制点
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
     //自动适配屏幕
     window.onresize = function() {
@@ -102,8 +113,6 @@ Example.RectAngle = function () {
         gl.vertexAttribPointer(attribName, ponitNum, gl.FLOAT, false, 0, 0);
         //连接a_pos变量与分配给它的缓冲区对象
         gl.enableVertexAttribArray(attribName);
-
-        return 1;
     }
 };
 

@@ -82,6 +82,7 @@
                 <a onclick="onClickWebGLResp('MultipPoints')"> MultipPoints </a>
                 <a onclick="onClickWebGLResp('Triangle')"> Triangle </a>
                 <a onclick="onClickWebGLResp('RectAngle')"> RectAngle </a>
+                <a onclick="onClickWebGLResp('TranslateTriangle')"> TranslateTriangle </a>
             </div>
         </div>
     </div>
@@ -394,6 +395,9 @@
                     break;
                 case "RectAngle":
                     window.localStorage.setItem("exampleName", "RectAngle");
+                    break;
+                case "TranslateTriangle":
+                    window.localStorage.setItem("exampleName", "TranslateTriangle");
                     break;
                 default: 
                     break;
