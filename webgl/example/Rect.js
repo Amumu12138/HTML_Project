@@ -45,7 +45,6 @@ Example.Rect = function () {
     gl.vertexAttribPointer(aposLocation, 2, gl.FLOAT, false, 0, 0);
     //允许数据传递
     gl.enableVertexAttribArray(aposLocation);
-
     //开始绘制图形
     gl.drawArrays(gl.LINE_LOOP, 0, 4);
 

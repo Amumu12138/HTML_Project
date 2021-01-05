@@ -45,7 +45,7 @@ Example.TranslateTriangle = function () {
 
     var count = initVertexBuffers(gl);
     if(count < 0) {
-        console.error("Failed tos set the positions of the vertices");
+        console.error("Failed to set the positions of the vertices");
         return;
     }
 

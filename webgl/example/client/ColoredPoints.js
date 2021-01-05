@@ -88,9 +88,12 @@ Example.ColoredPoints = function () {
         
         //清理canvas
         gl.clear(gl.COLOR_BUFFER_BIT);
+        var colorArr = null;
         for(var i = 0; i < g_points.length; i++) {
             gl.vertexAttrib3f(a_pos, g_points[i].x, g_points[i].y, 0.0);
-            gl.uniform4f(u_FragColor, g_colors[i][0], g_colors[i][1], g_colors[i][2], g_colors[i][3]);
+            // gl.uniform4f(u_FragColor, g_colors[i][0], g_colors[i][1], g_colors[i][2], g_colors[i][3]);
+            colorArr = new Float32Array([g_colors[i][0], g_colors[i][1], g_colors[i][2], g_colors[i][3]]);
+            gl.uniform4fv(u_FragColor, colorArr);
             //绘制点
             gl.drawArrays(gl.POINTS, 0, 1);
         }
