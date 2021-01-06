@@ -97,7 +97,7 @@ Example.RectAngle = function () {
     }
 
     //初始化顶点数据
-    function initVertexBuffers(gl, vertices, ponitNum, attribName) {
+    function initVertexBuffers(gl, vertices, pointNum, attribName) {
         //创建缓冲区对象
         var vertexBuffer = gl.createBuffer();
         if(!vertexBuffer) {
@@ -110,7 +110,7 @@ Example.RectAngle = function () {
         //向缓冲区对象中写入数据
         gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
         //将缓冲区对象分配给a_pos变量
-        gl.vertexAttribPointer(attribName, ponitNum, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(attribName, pointNum, gl.FLOAT, false, 0, 0);
         //连接a_pos变量与分配给它的缓冲区对象
         gl.enableVertexAttribArray(attribName);
     }
