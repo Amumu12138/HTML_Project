@@ -289,7 +289,7 @@
     margin: 0 auto;
 }
 
-.login-box-02 > div > p {
+.login-box-02>div>p {
     position: relative;
     top: 20px;
 }
@@ -310,7 +310,7 @@
 .login-head-02 p {
     position: relative;
     left: 50%;
-    color:#474747;
+    color: #474747;
     font-weight: normal;
     transform: translate(-50%, 20%);
 }
@@ -606,12 +606,12 @@
     .img-float {
         position: absolute;
         top: 22%;
-        left: 24%;
+        left: 50%;
         width: 194px;
         height: 34px;
         z-index: 9999;
         background: url(/images/sdk2.0/pj_float_close_port.png) no-repeat;
-        transform: scale(0.35);
+        transform: translate(-50%, 0) scale(0.35);
     }
 }
 
@@ -752,7 +752,7 @@
     text-align: center;
 }
 
-#addiction_Hint span{
+#addiction_Hint span {
     margin: 10px;
 }
 
@@ -780,13 +780,12 @@
 }
 
 /* 滑动框 */
-.scroll
-{
+.scroll {
     background-color: #FFFFFF;
     width: 100%;
     height: 150px;
     overflow: scroll;
-    overflow-y:auto;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
