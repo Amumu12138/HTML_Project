@@ -1,0 +1,1478 @@
+//泡椒h5sdk-服务器端
+var sdk = window.PJ_SDK || {};
+
+sdk.debug = false;
+sdk.platformId = 4;
+sdk.channelId = -1;
+sdk.platformType = "h5";
+
+sdk.host = "https://h5.paojiao.cn";
+//sdk.host = "http://localhost:8080";
+
+sdk.apiUrl = sdk.host + "/api/";
+sdk.mainUrl = sdk.host + '/main3.html';
+sdk.loginUrl = sdk.host + '/login3.html';
+sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
+sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
+sdk.xieYiUrl = sdk.host + "/xieyi.html";
+
+sdk.findPwdUrl = 'https://member.paojiao.cn/retrievePassword?os=h5';
+
+sdk.navInfo = {};
+sdk.gameInfo = {};
+
+sdk.SUCCESS = 1;
+sdk.ERROR = 0;
+
+
+sdk.appVersion = "1.0";
+sdk.sdkVersion = "1.0.0";
+
+sdk.shortcut = {};
+sdk.oW = 0;
+sdk.oH = 0;
+
+sdk.init = function () {
+    var channelGameId = sdk.getURLVar("channelGameId");
+    var channel = sdk.getURLVar("channel");
+
+    if (channelGameId != null && channelGameId != "null" && channelGameId != "") {
+        sdk.setItem("channelGameId", channelGameId);
+    }
+    if (channel != null && channel != "null" && channel != "") {
+        sdk.setItem("channel", channel);
+    }
+
+};
+
+
+
+sdk.init2 = function () {
+    var channelGameId = sdk.getURLVar("channelGameId");
+    var channel = sdk.getURLVar("channel");
+    var uid = sdk.getURLVar("uid");
+    var sdkToken = sdk.getURLVar("sdkToken");
+    var openid = sdk.getURLVar("openid");
+    sdk.setItem("openid", openid);
+
+    if (channelGameId != null && channelGameId != "null" && channelGameId != "") {
+        sdk.setItem("channelGameId", channelGameId);
+    }
+    if (channel != null && channel != "null" && channel != "") {
+        sdk.setItem("channel", channel);
+    }
+
+    if (uid != null && uid != "null" && uid != "") {
+        sdk.setItem("uid", sdk.getURLVar("uid"));
+    }
+    if (sdkToken != null && sdkToken != "null" && sdkToken != "") {
+        sdk.setItem("sdkToken", sdk.getURLVar("sdkToken"));
+    }
+};
+
+
+sdk.init3 = function (channelGameId, channel) {
+    var channelGameId = channelGameId;
+    var channel = channel;
+
+    if (channelGameId != null && channelGameId != "null" && channelGameId != "") {
+        sdk.setItem("channelGameId", channelGameId);
+    }
+    if (channel != null && channel != "null" && channel != "") {
+        sdk.setItem("channel", channel);
+    }
+
+};
+
+sdk.log = function (title, data) {
+    if (sdk.debug) {
+        console.log("\n" + title + "\n" + JSON.stringify(data) + "\n");
+    }
+};
+
+//生成udid
+sdk.getUdid = function () {
+    var u = sdk.getItem("udid");
+    if (!u) {
+        var gu = sdk.genUdid();
+        sdk.setItem("udid", gu);
+        return gu;
+    } else {
+        return u;
+    }
+};
+sdk.s4 = function () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+};
+sdk.genUdid = function () {
+    return (sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4() + sdk.s4());
+};
+
+
+//加载loading页
+sdk.initLoading = function (callback) {
+    var isAmericaIp = sdk.getItem("isAmericaIp");
+    if (isAmericaIp == "1") {
+        $("#flashToAudit").show();
+        setTimeout(function () {
+            $("#flashToAudit").animate({
+                opacity: 0
+            }, 500, "swing", function () {
+                $("#flashToAudit").remove();
+                callback();
+            });
+        }, 1000);
+        $("#flashToAuditBody").show();
+    }
+    if (isAmericaIp == "0" || isAmericaIp == "2") {
+        $("#flash").show();
+        $("#flash").append("<img src='/images/pj_background_flash_logo.png'/>");
+        setTimeout(function () {
+            $("#flash").animate({
+                opacity: 0
+            }, 500, "swing", function () {
+                $("#flash").remove();
+                callback();
+            });
+        }, 1000);
+    }
+
+
+};
+
+
+//获取游戏详细
+sdk.getGameInfo = function (isLogin, callback) {
+
+    var params = {};
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["channel"] = sdk.getItem("channel");
+    params["udid"] = sdk.getUdid();
+    params["isLogin"] = isLogin;
+    sdk.api(params, "getGameInfo", function (data) {
+        callback(data);
+    });
+};
+
+
+sdk.closeLoginBox = function () {
+    $("#loginBox").remove();
+};
+//打开登录框
+sdk.loadLoginBox = function () {
+
+    var loginHtml = '<div id="loginBox" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    loginHtml += '<div class="login-head"><img style="width: 220px;height:40px;" src="/images/titleIcon.png" />&nbsp;</div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+    loginHtml += '<div id="userBox" class="flex"><i class="icod-user"></i><input class="flex-list" id="userName" type="text" value="" placeholder="请输入账号"></div>';
+    loginHtml += '<div id="pwdBox" class="flex"><i class="icod-lock"></i><input class="flex-list" id="password" type="password" value="" placeholder="请填写密码"></div>';
+    loginHtml += '</div>';
+    loginHtml += '<a href="javascript:;" style="background:#3997EE;width:50%;" class="btn" onclick="sdk.reg1()">一键注册</a><a href="javascript:;" style="width:50%;" class="btn" onclick="sdk.login()">登录</a>';
+
+    loginHtml += '<div id="loginOption"   class="flex flex-x-between">';
+    loginHtml += '<a href="javascript:;" onclick="sdk.showRegBox()" style="color:#999;">账号密码注册<a><a href="javascript:;" onclick="sdk.showFotPwdBox()" style="color:#999;">忘了密码?</a>';
+    loginHtml += '</div>';
+    if (sdk.isWeixin()) {
+        loginHtml += '<fieldset class=""><legend>其他登录方式</legend></fieldset>';
+    }
+
+
+    loginHtml += '</div>';
+    loginHtml += '<div class="login-mode">';
+    loginHtml += '<ol class="flex active">';
+    if (sdk.isWeixin()) {
+        loginHtml += '<li class="flex-list list-show" onclick="sdk.thirdLogin(1)" title="微信扫码登录">';
+        loginHtml += '<div class="r50"><i class="icod-wechat"></i></div>';
+        loginHtml += '</li>';
+    }
+
+
+    /*loginHtml += '<li class="flex-list qq list-show" onclick="sdk.thirdLogin(2)" title="QQ登录">';
+    loginHtml += '<div class="r50"><i class="icod-qq"></i></div>';
+    loginHtml += '</li>';
+
+    loginHtml += '<li class="flex-list sina list-show" onclick="sdk.thirdLogin(3)" title="新浪微博登录">';
+    loginHtml += '<div class="r50"><i class="icod-sina"></i></div>';
+    loginHtml += '</li>';*/
+
+    loginHtml += '</ol>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+};
+
+//打开登录框-提审
+sdk.loadLoginBoxTo2 = function () {
+    var loginHtml = '<div id="loginBox" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    //<img style="width: 220px;height:40px;" src="/images/titleIcon.png" />&nbsp;
+    loginHtml += '<div class="login-head"></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+    loginHtml += '<div style="color:#03044b;" id="userBox" class="flex"><i style="background: #a4def09c;" class="icod-user"></i><input class="flex-list" id="userName" type="text" value="" placeholder="请输入账号"></div>';
+    loginHtml += '<div style="color:#03044b;" id="pwdBox" class="flex"><i style="background: #a4def09c;" class="icod-lock"></i><input class="flex-list" id="password" type="password" value="" placeholder="请填写密码"></div>';
+    loginHtml += '</div>';
+    loginHtml += '<a href="javascript:;" style="background:#55d7ecd9;width:50%;" class="btn" onclick="sdk.reg1()">一键注册</a><a href="javascript:;" style="width:50%;background:#184979" class="btn" onclick="sdk.login()">登录</a>';
+
+    loginHtml += '<div id="loginOption"   class="flex flex-x-between">';
+    loginHtml += '<a href="javascript:;" onclick="sdk.showRegBoxToIp()" style="color:#999;">账号密码注册<a>';
+    loginHtml += '</div>';
+
+    loginHtml += '</div>';
+    loginHtml += '<div class="login-mode">';
+    loginHtml += '<ol class="flex active">';
+
+    loginHtml += '</ol>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+};
+
+
+//登录
+sdk.login = function () {
+
+    var userName = $("#userName").val();
+    var password = $("#password").val();
+    if (userName == '') {
+        sdk.confirmDialog("请输入用户名");
+        return;
+    }
+    if (password == '') {
+        sdk.confirmDialog("请输入密码");
+        return;
+    }
+
+
+    var params = {};
+    params["userName"] = userName;
+    params["password"] = password;
+    params["udid"] = sdk.getUdid();
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["gameId"] = sdk.gameInfo.gameId;
+    params["platformId"] = sdk.platformId;
+    params["channel"] = sdk.getItem("channel");
+
+    sdk.showLoading();
+    sdk.api(params, "login", function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            sdk.closeLoading();
+
+            var uid = retData.data.uid;
+            var token = retData.data.token;
+
+            var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+            var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
+            var bindMobile = retData.data.bindMobile; //手机号码
+            sdk.setItem("bindData", JSON.stringify(retData));
+            var isIp = sdk.getItem("isAmericaIp");
+            console.info("-------login:-----:" + JSON.stringify(retData));
+            if (isIp == "1") {
+                console.info("-----mobile-----:" + retData);
+                if (bindMobile == null || bindMobile == "") {
+                    sdk.showBindPhone(retData);
+                } else {
+                    if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+                        sdk.showRealNameAuth(openRealNameAuth, uid, token);
+                    } else {
+                        sdk.setItem("uid", uid);
+                        sdk.setItem("sdkToken", token);
+                        sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+                        window.location.href = sdk.mainUrl;
+                    }
+                }
+            } else {
+                if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+                    sdk.showRealNameAuth(openRealNameAuth, uid, token);
+                } else {
+                    sdk.setItem("uid", uid);
+                    sdk.setItem("sdkToken", token);
+                    sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+                    window.location.href = sdk.mainUrl;
+                }
+            }
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+
+};
+
+//自动登录
+sdk.autoLogin = function () {
+
+    var sdkToken = sdk.getItem("sdkToken");
+    if (sdkToken != null && sdkToken != "null" && sdkToken != "") {
+        var p = {};
+        p["sdkToken"] = sdkToken;
+        p["token"] = sdkToken;
+        sdk.loginByToken(p); //token登录
+    } else {
+        //微信使用微信自动登录
+        if (sdk.isWeixin()) {
+            sdk.wxLoginByOpenId();
+        } else {
+            //是否是17ip
+            console.info("------------1:" + sdk.getItem("isAmericaIp"));
+            //isIp 等于1时证明是17 开头的Ip
+            var isIp = sdk.getItem("isAmericaIp");
+            if (isIp == "1") {
+                sdk.loadLoginBoxTo2();
+            } else {
+                sdk.loadLoginBox();
+            }
+        }
+
+
+    }
+
+};
+
+
+//泡椒sdk token 登录
+sdk.loginByToken = function (params) {
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["udid"] = sdk.getUdid();
+    params["channel"] = sdk.getItem("channel");
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    sdk.api(params, "loginByToken", function (retData) {
+
+        if (retData.code == sdk.SUCCESS) {
+            var uid = retData.data.uid;
+            var token = retData.data.token;
+            var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+            var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
+            var isMobile = retData.data.bindMobile; //0:未实名
+            sdk.setItem("bindData", JSON.stringify(retData));
+            var isIp = sdk.getItem("isAmericaIp");
+            if (isIp == "1") {
+                if (isMobile == null || isMobile == "") {
+                    sdk.showBindPhone(retData);
+                } else {
+                    if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+                        sdk.showRealNameAuth(openRealNameAuth, uid, token);
+                    } else {
+                        sdk.setItem("uid", uid);
+                        sdk.setItem("sdkToken", token);
+                        sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+                        window.location.href = sdk.mainUrl;
+                    }
+                }
+            } else {
+                if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+                    sdk.showRealNameAuth(openRealNameAuth, uid, token);
+                } else {
+                    sdk.setItem("uid", uid);
+                    sdk.setItem("sdkToken", token);
+                    sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+                    window.location.href = sdk.mainUrl;
+                }
+            }
+
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+            sdk.logout();
+        }
+
+    });
+};
+
+
+//退出登录
+sdk.logout = function () {
+    var param = {};
+    param["channel"] = sdk.getItem("channel");
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["isAutoLogin"] = "0";
+    var url = sdk.buildURL(sdk.loginUrl, param);
+
+    sdk.removeItem("channel");
+    sdk.removeItem("channelGameId");
+    sdk.removeItem("sdkToken");
+    sdk.removeItem("uid");
+    window.location.href = url;
+};
+
+
+//验证token
+sdk.getToken = function (params) {
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["udid"] = sdk.getUdid();
+    params["channel"] = sdk.getItem("channel");
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    sdk.api(params, "getToken", function (retData) {
+
+        if (retData.code == sdk.SUCCESS) {
+            sdk.closeLoginBox();
+            var suid = retData.data.userInfo.suid;
+            var token = retData.data.userInfo.token;
+            var uid = retData.data.userInfo.uid;
+
+            sdk.setItem("uid", uid);
+            sdk.setItem("sdkToken", token);
+            window.location.href = sdk.mainUrl;
+
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+
+    });
+};
+
+
+//一键注册
+sdk.reg1 = function () {
+
+    var params = {};
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["udid"] = sdk.getUdid();
+    params["a"] = "y";
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["channel"] = sdk.getItem("channel");
+    params["platformId"] = sdk.platformId;
+
+    sdk.showLoading();
+    sdk.api(params, "reg", function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            sdk.closeLoading();
+            var isIp = sdk.getItem("isAmericaIp");
+            if (isIp == "1") {
+                sdk.showRegInfoToIp(retData.data);
+            } else {
+                sdk.showRegInfo(retData.data);
+            }
+            $("#userName").val(retData.data.userName);
+            $("#password").val(retData.data.password);
+
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+
+};
+
+
+sdk.closeRegInfo = function () {
+    var isIp = sdk.getItem("isAmericaIp");
+    console.info("---------------2:" + isIp);
+    if (isIp == "1") {
+        $("#showRegInfoToIp").remove();
+    } else {
+        $("#showRegInfo").remove();
+    }
+
+};
+//显示注册账号信息
+sdk.showRegInfo = function (retData) {
+    var loginHtml = '<div id="showRegInfo" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    loginHtml += '<div class="login-head" style="text-align: right;"><span style="color:#d70c19">恭喜你注册成功！</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-cancel" onclick="sdk.closeRegInfo()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+
+    loginHtml += '<div class="flex" style="border:none"><span style="color:#999;">您的账号：</span>' + retData.userName + '</div>';
+    loginHtml += '<div class="flex" style="border:none"><span style="color:#999;">您的密码：</span>' + retData.password + '</div>';
+
+    loginHtml += '<div class="flex" style="border:none"><span style="color:#999;"> 你也可以将账号信息发送至手机!</span></div>';
+
+    loginHtml += '<input type="hidden" id="h_userName" value="' + retData.userName + '" />';
+    loginHtml += '<input type="hidden" id="h_password" value="' + retData.password + '" />';
+    loginHtml += '<input type="hidden" id="h_uid" value="' + retData.uid + '" />';
+
+    loginHtml += '<div class="flex"><i class="icod-mobile"></i><input class="flex-list" id="phone" type="text" value="" placeholder="请输入手机号码"></div>';
+    loginHtml += '</div>';
+    loginHtml += '<a href="javascript:;" style="width:50%;" class="btn" onclick="sdk.sendUserInfo()">发送</a>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+
+};
+
+//显示注册账号信息-苹果审核页
+sdk.showRegInfoToIp = function (retData) {
+    var loginHtml = '<div id="showRegInfoToIp" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    loginHtml += '<div class="login-head" style="text-align: right;"><span style="color:#00ad46">恭喜你注册成功！</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-cancel" onclick="sdk.closeRegInfo()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+
+    loginHtml += '<div style="color:#07821d;" class="flex" style="border:none"><span style="color:#031f4a;">您的账号：</span>' + retData.userName + '</div>';
+    loginHtml += '<div style="color:#07821d;" class="flex" style="border:none"><span style="color:#031f4a;">您的密码：</span>' + retData.password + '</div>';
+
+    loginHtml += '<div class="flex" style="border:none"><span style="color:#031f4a;"> 你也可以将账号信息发送至手机!</span></div>';
+
+    loginHtml += '<input type="hidden" id="h_userName" value="' + retData.userName + '" />';
+    loginHtml += '<input type="hidden" id="h_password" value="' + retData.password + '" />';
+    loginHtml += '<input type="hidden" id="h_uid" value="' + retData.uid + '" />';
+
+    loginHtml += '<div style="color:#07821d;" class="flex"><i class="icod-mobile"></i><input class="flex-list" id="phone" type="text" value="" placeholder="请输入手机号码"></div>';
+    loginHtml += '</div>';
+    loginHtml += '<a href="javascript:;" style="width:50%;background: #1b8e06;" class="btn" onclick="sdk.sendUserInfo()">发送</a>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+
+};
+
+
+sdk.checkMobile = function (phone) {
+
+    if (!/^1[3|4|5|7|8]\d{9}$/.test(phone) && phone !== undefined) {
+        sdk.confirmDialog("请填入有效的手机号码！");
+        return false;
+    }
+    return true;
+
+};
+
+//发送短信验证码
+sdk.sendUserInfo = function () {
+    var phone = $("#phone").val();
+
+    var ret = sdk.checkMobile(phone);
+    if (!ret) {
+        return false;
+    }
+
+    var params = {};
+    params["userName"] = $("#h_userName").val();
+    params["password"] = $("#h_password").val();
+    params["uid"] = $("#h_uid").val();
+    params["mobile"] = phone;
+    params["udid"] = sdk.getUdid();
+    params["channelGameId"] = sdk.getItem("channelGameId");
+
+    sdk.showLoading();
+    sdk.api(params, "sendUserInfo", function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            sdk.closeRegInfo();
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+
+};
+
+
+//打开账号注册页面
+sdk.closeRegBox = function () {
+    var isIp = sdk.getItem("isAmericaIp");
+    console.info("---------------3:" + isIp);
+    if (isIp == "1") {
+        $("#showRegBoxToIp").remove();
+    } else {
+        $("#showRegBox").remove();
+    }
+
+};
+sdk.showRegBox = function () {
+    var loginHtml = '<div id="showRegBox" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    loginHtml += '<div class="login-head" style="text-align: right;"><img style="width: 220px;height:40px;" src="/images/titleIcon.png" />&nbsp;<span><i class="icon-cancel" onclick="sdk.closeRegBox()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+    loginHtml += '<div  class="flex"><i class="icod-user"></i><input class="flex-list" id="r_userName" type="text" value="" placeholder="请输入账号"></div>';
+    loginHtml += '<div  class="flex"><i class="icod-lock"></i><input class="flex-list" id="r_password" type="password" value="" placeholder="请填写密码"></div>';
+    loginHtml += '<div  class="flex"><i class="icod-lock"></i><input class="flex-list" id="r1_password" type="password" value="" placeholder="请确认密码"></div>';
+
+    loginHtml += '<div  class="flex" style="border:none"><input type="checkbox" id="agreeCk" style="-webkit-appearance:checkbox;height:21px;" checked="checked" />&nbsp;<font style="color:#999">我已阅读并接受</font>&nbsp;<font style="color:#3997EE"> <a href="javascript:;" onclick="sdk.showXieYi()" style="line-height:0px;">>>用户服务协议</a></font></div>';
+
+    loginHtml += '</div>';
+    loginHtml += '<a href="javascript:;" class="btn" onclick="sdk.reg2()">注册</a>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+
+};
+//账号密码注册-苹果提审
+sdk.showRegBoxToIp = function () {
+    var loginHtml = '<div id="showRegBoxToIp" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    //<img style="width: 220px;height:40px;" src="/images/titleIcon.png" />
+    loginHtml += '<div class="login-head" style="text-align: right;"><span style="color:#03044b">账号密码注册&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-cancel" onclick="sdk.closeRegBox()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+    loginHtml += '<div style="color:#03044b;" class="flex"><i style="background: #a4def09c;"  class="icod-user"></i><input class="flex-list" id="r_userName" type="text" value="" placeholder="请输入账号"></div>';
+    loginHtml += '<div style="color:#03044b;"  class="flex"><i style="background: #a4def09c;"  class="icod-lock"></i><input class="flex-list" id="r_password" type="password" value="" placeholder="请填写密码"></div>';
+    loginHtml += '<div style="color:#03044b;" class="flex"><i style="background: #a4def09c;"  class="icod-lock"></i><input class="flex-list" id="r1_password" type="password" value="" placeholder="请确认密码"></div>';
+
+    //loginHtml += '<div  class="flex" style="border:none"><input type="checkbox" id="agreeCk" style="-webkit-appearance:checkbox;height:21px;" checked="checked" />&nbsp;<font style="color:#999">我已阅读并接受</font>&nbsp;<font style="color:#3997EE"> <a href="javascript:;" onclick="sdk.showXieYi()" style="line-height:0px;">>>用户服务协议</a></font></div>';
+
+    loginHtml += '</div>';
+    loginHtml += '<a style="background: #55d7ecd9;" href="javascript:;" class="btn" onclick="sdk.reg2()">注册</a>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+
+};
+
+
+sdk.closeXieYi = function () {
+    $("#showXieYi").remove();
+};
+sdk.showXieYi = function () {
+    var loginHtml = '<div id="showXieYi" style="top:0px;" class="mask2 login-box2">';
+    loginHtml += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+    loginHtml += '<div class="login-head2" style="text-align: right;"><span><i class="icon-cancel" onclick="sdk.closeXieYi()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<iframe width="100%" frameborder="no" border="0px"  height="' + ($(window).height() - 60) + 'px" src="' + sdk.xieYiUrl + '"></iframe>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    $("body").append(loginHtml);
+};
+
+
+//账号密码注册
+sdk.reg2 = function () {
+    var r_userName = $("#r_userName").val();
+    var r_password = $("#r_password").val();
+    var r1_password = $("#r1_password").val();
+
+    if (sdk.getItem("isAmericaIp") == "0" || sdk.getItem("isAmericaIp") == "2") {
+        var isChecked = $('#agreeCk').is(":checked");
+        if (!isChecked) {
+            sdk.confirmDialog("必须接受用户协议");
+            return false;
+        }
+    }
+
+
+    if (r_userName == '') {
+        sdk.confirmDialog("请输入用户名");
+        return false;
+    }
+    if (r_password == '' || r1_password == '') {
+        sdk.confirmDialog("请输入密码");
+        return false;
+    }
+    if (r_password != r1_password) {
+        sdk.confirmDialog("两次输入的密码不一致");
+        return false;
+    }
+
+    var params = {};
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["udid"] = sdk.getUdid();
+    params["a"] = "n";
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["channel"] = sdk.getItem("channel");
+    params["platformId"] = sdk.platformId;
+    params["userName"] = r_userName;
+    params["password"] = r_password;
+    sdk.showLoading();
+    sdk.api(params, "reg", function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            sdk.closeRegBox();
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+            $("#userName").val(r_userName);
+            $("#password").val(r_password);
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+
+};
+
+
+//关闭忘记密码页面
+sdk.closeFotPwdBox = function () {
+    $("#showFotPwdBox").remove();
+};
+sdk.showFotPwdBox = function () {
+    /*var loginHtml = '<div id="showFotPwdBox" class="mask2 login-box2">';
+    loginHtml += '<div class="r5" style="width: 16rem;margin:0 auto;">';
+    loginHtml += '<div class="login-head" style="text-align: right;"><span><i class="icon-cancel" onclick="sdk.closeFotPwdBox()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<iframe style="width: 16rem !important" frameborder="no" border="0px" height="300px" src="'+sdk.findPwdUrl+'"></iframe>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    $("body").append(loginHtml);*/
+
+    var loginHtml = '<div id="showFotPwdBox" style="top:0px;" class="mask2 login-box2">';
+    loginHtml += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+    loginHtml += '<div class="login-head2" style="text-align: right;"><span><i class="icon-cancel" onclick="sdk.closeFotPwdBox()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<iframe width="100%" frameborder="no" border="0px"  height="' + ($(window).height() - 60) + 'px" src="' + sdk.findPwdUrl + '"></iframe>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    $("body").append(loginHtml);
+
+
+};
+
+sdk.closePayBox = function () {
+    $("#payBox").remove();
+};
+
+//打开支付
+sdk.loadPayBox = function (params) {
+    params["channel"] = sdk.getItem("channel");
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["auditType"] = sdk.getItem("isAmericaIp");
+    if (sdk.isWeixin()) { //微信公众号支付需要用户oppenid
+        params["openid"] = sdk.getItem("openid");
+    }
+
+    sdk.closePayBox();
+    sdk.showLoading();
+
+
+    //获取支付Url
+    sdk.api(params, "getPayUrl", function (retData) {
+        if (retData.code == 1) {
+            var data = retData.data;
+            sdk.closeLoading();
+
+            if (sdk.isWeixin()) { //微信浏览器内使用iframe加载，拉不起公众号支付。
+                window.location.href = data.payUrl;
+            } else if (sdk.is_safari()) {
+                window.location.href = data.payUrl;
+            }else {
+                var payBox = '<div id="payBox" style="top:0px;" class="mask2 login-box2">';
+                payBox += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+                payBox += '<div class="login-head2"  style="text-align: right;"><span><i class="icon-cancel" onclick="sdk.closePayBox()"></i></span></div>';
+                payBox += '<div class="login-body" style="height:' + ($(window).height() - 40) + 'px !important;-webkit-overflow-scrolling: touch; overflow-y: scroll;">';
+                payBox += '<iframe  width="' + $(window).width() + 'px !important" frameborder="no" scrolling="yes" border="0px" height="' + $(window).height() + 'px !important"   src="' + data.payUrl + '"></iframe>';
+                payBox += '</div>';
+                payBox += '</div>';
+                payBox += '</div>';
+                $("body").append(payBox);
+            }
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+            sdk.closeLoading();
+        }
+
+    });
+
+
+};
+
+
+
+//实名认证
+sdk.closeRealNameBox = function (bool, uid, token) {
+    $("#showRealNameBox").remove();
+
+    if (bool) {
+        window.location.href = sdk.mainUrl;
+    }
+
+};
+//打开实名认证页面
+sdk.showRealNameAuth = function (openRealNameAuth, uid, token) {
+
+    sdk.setItem("uid", uid);
+    sdk.setItem("sdkToken", token);
+
+    var params = {};
+    params["uid"] = uid;
+    params["channel"] = sdk.getItem("channel");
+    params["gameId"] = sdk.gameInfo.gameId;
+
+    sdk.api(params, "getRealNameAuthUrl", function (retData) {
+
+        sdk.closeRealNameBox(false);
+
+        if (retData.code == 1) {
+            var url = retData.data;
+
+            var realNameAuth = '<div id="showRealNameBox" style="top:0px;" class="mask2 login-box2">';
+            realNameAuth += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+            if (openRealNameAuth == 1) {
+                realNameAuth += '<div class="login-head2"  style="text-align: right;"><span><i class="icon-cancel" onclick="sdk.closeRealNameBox(true)"></i></span></div>';
+            } else if (openRealNameAuth == 2) {
+                realNameAuth += '<div class="login-head2"  style="text-align: right;"></div>';
+            }
+            realNameAuth += '<div class="login-body" style="height:' + ($(window).height() - 40) + 'px !important;-webkit-overflow-scrolling: touch; overflow-y: scroll;">';
+            realNameAuth += '<iframe  width="' + $(window).width() + 'px !important" frameborder="no" scrolling="yes" border="0px" height="400px;"   src="' + url + '"></iframe>';
+            realNameAuth += '</div>';
+            realNameAuth += '</div>';
+            realNameAuth += '</div>';
+            $("body").append(realNameAuth);
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+            sdk.closeLoading();
+        }
+
+    });
+};
+
+//获取验证码
+sdk.getMobileCode = function () {
+
+    var mobilePhone = $("#mobilePhone").val();
+
+    if (mobilePhone == '') {
+        sdk.confirmDialog("请输入手机号码");
+        return;
+    }
+    var params = {};
+    params["mobile"] = mobilePhone;
+    params["channelId"] = sdk.getItem("channelGameId");
+    params["channel"] = sdk.getItem("channel");
+    params["channelGameId"]=sdk.getItem("channelGameId");
+    params["udid"]=sdk.getUdid();
+    params["platformId"]=sdk.platformId;
+    params["type"]=2;
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["appVersion"]= sdk.sdkVersion;
+    params["platformType"]= sdk.platformType;
+
+    sdk.showLoading();
+    sdk.api(params, "getMobileCode", function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+};
+
+
+//关闭手机绑定后打开实名认证
+sdk.closeBindToRealNameAuth = function () {
+    var retData = jQuery.parseJSON(sdk.getItem("bindData"));
+    var openRealNameAuth = retData.data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+    var realNameAuthStatus = retData.data.realNameAuthStatus; //0:未实名
+    var uid = retData.data.uid; //用户ID
+    var token = retData.data.token; //用户token
+    if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+        sdk.showRealNameAuth(openRealNameAuth, uid, token);
+    } else {
+        sdk.setItem("uid", uid);
+        sdk.setItem("sdkToken", token);
+        sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+        window.location.href = sdk.mainUrl;
+    }
+};
+
+
+//绑定手机号码-提审
+sdk.bindMobilePhone = function () {
+
+    var mobilePhone = $("#mobilePhone").val();
+    var mobileCode = $("#mobileCode").val();
+    var userId = $("#bind_phone_uid").val();
+
+    if (mobilePhone == '') {
+        sdk.confirmDialog("请输入手机号码");
+        return;
+    }
+    if (mobileCode == '') {
+        sdk.confirmDialog("请输入验证码");
+        return;
+    }
+    var params = {};
+    params["mobile"] = mobilePhone;
+    params["smsCode"] = mobileCode;
+    params["userId"] = userId;
+    params["channelId"] = sdk.getItem("channelGameId");
+    params["channel"] = sdk.getItem("channel");
+    sdk.showLoading();
+    sdk.api(params, "bindMobilePhone", function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            console.info(retData.msg);
+            sdk.closeBindPhone();
+            sdk.closeLoading();
+        } else {
+            sdk.closeLoading();
+            sdk.confirmDialog(retData.msg);
+        }
+    });
+    sdk.closeBindToRealNameAuth();
+};
+
+
+//关闭绑定手机界面-提审
+sdk.closeBindPhone = function () {
+    $("#showBindPhone").remove();
+    sdk.closeBindToRealNameAuth();
+};
+
+//打开绑定手机号码页面-提审
+sdk.showBindPhone = function (bindData) {
+    var loginHtml = '<div id="showBindPhone" class="mask login-box">';
+    loginHtml += '<div class="r5">';
+    //<img style="width: 220px;height:40px;" src="/images/titleIcon.png" />
+    //loginHtml += '<div class="login-head">&nbsp;<i class="icon-cancel" onclick="sdk.closeBindPhone()"></i></div>';
+    loginHtml += '<div class="login-head" style="text-align: right;"><span style="color:#184979">绑定手机号</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-cancel" onclick="sdk.closeBindPhone()"></i></span></div>';
+
+    //loginHtml += '<div class="login-head" style="text-align: right;">&nbsp;<span><i class="icon-cancel" onclick="sdk.closeBindPhone()"></i></span></div>';
+    loginHtml += '<div class="login-body">';
+    loginHtml += '<div>';
+    loginHtml += '<div style="color:#03044b;" id="userBox" class="flex"><i style="background: #a4def09c;" class="icod-user"></i><input class="flex-list" id="mobilePhone" type="text" value="" placeholder="请输入电话号码"></div>';
+    loginHtml += '<div style="color:#03044b;" id="pwdBox" class="flex"><i style="background: #a4def09c;" class="icod-lock"></i>' +
+        '<input style="width:65%; class="flex-list" id="mobileCode"  value="" placeholder="验证码"/>' +
+        '<a href="javascript:;"  style="width:35%;color:#f0f0f6; background:#55d7ecd9;vertical-align:center;" onclick="sdk.getMobileCode()">获取验证码</a></div>';
+    loginHtml += '<input type="hidden" id="bind_phone_uid" value="' + bindData.data.uid + '" />';
+    loginHtml += '</div>';
+    //<a href="javascript:;" style="background:#3997EE;width:50%;" class="btn" onclick="sdk.reg1()">一键注册</a>
+    loginHtml += '<a href="javascript:;" style="width:80%;background:#184979;" class="btn" onclick="sdk.bindMobilePhone()">绑定手机</a>';
+
+    loginHtml += '<div id="loginOption"   class="flex flex-x-between">';
+    //loginHtml += '<a href="javascript:;" onclick="sdk.showRegBox()" style="color:#999;">账号密码注册<a><a href="javascript:;" onclick="sdk.showFotPwdBox()" style="color:#999;">忘了密码?</a>';
+    loginHtml += '</div>';
+
+    loginHtml += '</div>';
+    loginHtml += '<div class="login-mode">';
+    loginHtml += '<ol class="flex active">';
+
+    loginHtml += '</ol>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+    loginHtml += '</div>';
+
+    $("body").append(loginHtml);
+};
+
+
+//实名认证回调
+sdk.doRealNameAuthCallBack = function (code) {
+    sdk.setItem("realNameAuthStatus", code);
+    window.location.href = sdk.mainUrl;
+};
+
+
+//上报玩家信息
+sdk.reportRoleInfo = function (params) {
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["channel"] = sdk.getItem("channel");
+    sdk.api(params, "reportRoleInfo", function (data) {
+        var p = {};
+        p["method"] = "rriCallBack";
+        p["code"] = data.code;
+        p["msg"] = data.msg;
+        window.frames["gameFrame"].postMessage(p, "*");
+    });
+};
+
+
+function touchstart(e) {
+    var touches = e.touches[0];
+    sdk.oW = touches.clientX - sdk.shortcut.offsetLeft;
+    sdk.oW = touches.clientY - sdk.shortcut.offsetTop;
+    document.addEventListener("touchmove", defaultEvent, false);
+}
+
+function touchmove(e) {
+    var touches = e.touches[0];
+    var oLeft = touches.clientX - sdk.oW;
+    var oTop = touches.clientY - sdk.oW;
+
+    if (oLeft < 0) {
+        oLeft = 0;
+    }
+    if (oTop < 0) {
+        oTop = 0;
+    }
+
+    var rLeft = document.documentElement.clientWidth - sdk.shortcut.offsetWidth;
+    if (oLeft > rLeft) {
+        oLeft = rLeft;
+    }
+
+    var htop = document.documentElement.clientHeight - sdk.shortcut.offsetHeight;
+    if (oTop > htop) {
+        oTop = htop;
+    }
+
+    sdk.shortcut.style.left = oLeft + "px";
+    sdk.shortcut.style.top = oTop + "px";
+}
+
+function touchend(e) {
+    document.removeEventListener("touchmove", defaultEvent, false);
+    var touches = e.changedTouches[0];
+
+    var oLeft = touches.clientX - sdk.oW;
+    var oTop = touches.clientY - sdk.oW;
+
+    if (oLeft > (document.documentElement.clientWidth / 2)) {
+        sdk.shortcut.style.right = "-25px";
+        sdk.shortcut.style.left = "auto";
+    } else {
+        sdk.shortcut.style.left = "-25px";
+    }
+}
+
+function defaultEvent(e) {
+    e.preventDefault();
+}
+
+sdk.bindTouchEvent = function () {
+    sdk.shortcut = document.getElementById("shortcut");
+    sdk.shortcut.addEventListener("touchstart", touchstart, false)
+    sdk.shortcut.addEventListener("touchmove", touchmove, false);
+    sdk.shortcut.addEventListener("touchend", touchend, false);
+};
+
+//移除touch事件
+sdk.unbindTouchEvent = function () {
+    sdk.shortcut.removeEventListener("touchmove", touchmove, false);
+    sdk.shortcut.removeEventListener("touchstart", touchstart, false);
+    sdk.shortcut.removeEventListener("touchend", touchend, false);
+};
+
+
+//启动悬浮窗
+sdk.enableFloatBox = function () {
+    $("#shortcut").remove();
+    var t = '<div id="shortcut"  style="width: 50px;height:50px;left: -25px;"  class="shortcut">';
+    t += '<div class="flex" onclick="sdk.showNav()" id="iconDiv" style="width: 50px;height:50px;float:left;">';
+    t += '<div id="ic-menu" class="r50" style="width: 50px;height:50px;"><span style="width: 50px;height:50px;" class="r50"></span></div>';
+    t += "</div>";
+    t += '<div  id="navDiv" style="display:none;width: auto;height:50px;border: 3px solid #232529;border-radius:25px;background-color:#44474e;float:left;">';
+    t += "</div>";
+    t += "</div>";
+    $("body").append(t);
+
+    //绑定touch事件
+    sdk.bindTouchEvent();
+
+    //初始化悬浮球菜单
+    sdk.initFloatBox();
+};
+
+//初始化悬浮球
+sdk.initFloatBox = function () {
+
+    var params = {};
+    params["appVersion"] = sdk.appVersion;
+    params["channel"] = sdk.getItem("channel");
+    params["channelGameId"] = sdk.getItem("channelGameId");
+    params["channelId"] = sdk.channelId;
+    params["gameId"] = sdk.gameInfo.gameId;
+    params["os"] = sdk.platformType;
+    params["platformId"] = sdk.platformId;
+    params["platformType"] = sdk.platformType;
+    params["sdkVersion"] = sdk.sdkVersion;
+    params["tBrand"] = "h5";
+    var url = sdk.buildURL(sdk.apiUrl + "openGame", params);
+    sdk.httpGet(url, function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            var data = retData.data;
+
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                var url = "'" + data[i]["url"] + "'";
+                html += '<div style="width: 25px;height:25px;margin-left:15px;float:left;" onclick="sdk.showUcBox(' + url + ')">';
+                html += '<div  style="background:url(' + data[i]["iconUrl"] + ') no-repeat;width: 25px;height:25px;background-size: 100% auto;"></div>';
+                html += '<div style="width: 25px;height:25px;color:white;font-size:12px;">' + data[i]["name"] + '</div>';
+                html += '</div>';
+            };
+
+            $("#navDiv").css("width", (data.length * 44) + "px");
+            $("#navDiv").append(html);
+
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    }, "json");
+};
+
+//显示悬浮菜单
+sdk.showNav = function () {
+    var r = $("#navDiv").css("display");
+    if (r == "none") {
+
+        sdk.unbindTouchEvent();
+
+        $("#navDiv").css("display", "block");
+
+        var leftW = $("#shortcut").css("left");
+        var left = parseInt(leftW.replace("px", ""));
+
+        if (left > 0 || isNaN(left)) { //图标在右边
+            $("#iconDiv").css("float", "right");
+            $("#shortcut").css("right", "0px");
+        } else {
+            $("#iconDiv").css("float", "left");
+            $("#shortcut").css("left", "0px");
+        }
+        $("#shortcut").css("width", ($("#iconDiv").width() + $("#navDiv").width() + 6) + "px");
+    } else {
+        $("#navDiv").css("display", "none");
+        $("#shortcut").css("width", "50px");
+
+        sdk.bindTouchEvent();
+    }
+
+}
+
+
+//打开用户中心
+sdk.closeUcBox = function () {
+    $("#showUcBox").remove();
+};
+sdk.showUcBox = function (ucurl) {
+
+    $("#iconDiv").trigger("click");
+
+    var param = {};
+    param["channel"] = sdk.getItem("channel");
+    param["channelId"] = sdk.channelId;
+    param["udid"] = sdk.getUdid();
+    param["gameId"] = sdk.gameInfo.gameId;
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["uid"] = sdk.getItem("uid");
+    param["token"] = sdk.getItem("sdkToken");
+    param["sdkVersion"] = sdk.sdkVersion;
+    param["appVersion"] = sdk.appVersion;
+    param["imei"] = sdk.getUdid();
+    param["mac"] = sdk.getUdid();
+    param["os"] = "h5";
+    param["tBrand"] = "h5";
+    param["platformType"] = "h5"; //uc需要此参数判断来源
+    param["platformId"] = sdk.platformId;
+    param["ucHost"] = ucurl;
+
+    var url = sdk.buildURL(sdk.apiUrl + "openUc", param);
+
+    var ucCenterUrl = "";
+    sdk.httpGet(url, function (retData) {
+        if (retData.code == sdk.SUCCESS) {
+            ucCenterUrl = retData.data;
+            var loginHtml = '<div id="showUcBox" style="top:0px;" class="mask2 login-box2">';
+            loginHtml += '<div class="r5" style="margin:0 auto;top:0px;-webkit-border-radius:0px;border-radius:0px;">';
+            loginHtml += '<div class="login-head2"  style="text-align: right;"><span><i class="icon-cancel" onclick="sdk.closeUcBox()"></i></span></div>';
+            loginHtml += '<div class="login-body" style="height:' + ($(window).height() - 40) + 'px !important;-webkit-overflow-scrolling: touch; overflow-y: scroll;">';
+            loginHtml += '<iframe  width="' + $(window).width() + 'px !important" frameborder="no" scrolling="yes" border="0px" height="100%"   src="' + ucCenterUrl + '"></iframe>';
+            loginHtml += '</div>';
+            loginHtml += '</div>';
+            loginHtml += '</div>';
+            $("body").append(loginHtml);
+        } else {
+            sdk.confirmDialog(retData.msg);
+        }
+    }, "json");
+
+};
+
+
+//第三方登录
+sdk.thirdLogin = function (type) {
+    switch (type) {
+        case 1: { //微信登录
+            sdk.wxLogin(type);
+            break;
+        }
+        case 2: { //QQ登录
+            sdk.qqLogin(type);
+            break;
+        }
+        case 3: { //新浪微博登录
+            sdk.wbLogin(type);
+            break;
+        }
+    }
+};
+
+//微信登录
+sdk.wxLogin = function (type) {
+    var param = {};
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["channel"] = sdk.getItem("channel");
+    param["udid"] = sdk.getUdid();
+    param["loginType"] = type;
+    window.location.href = sdk.buildURL(sdk.thirdLoginUrl, param);
+};
+
+//qq登录
+sdk.qqLogin = function (type) {
+    var param = {};
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["channel"] = sdk.getItem("channel");
+    param["udid"] = sdk.getUdid();
+    param["loginType"] = type;
+    var url = sdk.buildURL(sdk.thirdLoginUrl, param);
+    window.location.href = url;
+};
+
+//微博登录
+sdk.wbLogin = function (type) {
+    var param = {};
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["channel"] = sdk.getItem("channel");
+    param["udid"] = sdk.getUdid();
+    param["loginType"] = type;
+    var url = sdk.buildURL(sdk.thirdLoginUrl, param);
+    window.location.href = url;
+};
+
+//微信登录查询OpenId
+sdk.wxLoginByOpenId = function (type) {
+    var param = {};
+    param["channelGameId"] = sdk.getItem("channelGameId");
+    param["channel"] = sdk.getItem("channel");
+    param["udid"] = sdk.getUdid();
+    param["loginType"] = type;
+    window.location.href = sdk.buildURL(sdk.thirdLoginToOpenIdUrl, param);
+};
+
+sdk.confirmDialog = function (txt, oklabel, cancellabel, okcallback, cancelcallback, title, callback) {
+    var html = '<div id="confirmDialog" class="mask dialog-box">';
+    html += '<div class="r5">';
+    html += "<div>" + (title ? title : "提示信息") + "</div>";
+    html += "<div>" + txt + "</div>";
+    html += '<div class="flex">';
+    html += '<a href="javascript:;" data-type="cancel" class="flex-list unselect">' + (cancellabel ? cancellabel : "关闭") + "</a>";
+    if (oklabel) {
+        html += '<a href="javascript:;" data-type="ok" class="flex-list unselect ok">' + oklabel + "</a>"
+    }
+    html += "</div></div></div>";
+    $("body").append(html);
+    if (callback) {
+        callback()
+    }
+    $("#confirmDialog .flex a").click(function () {
+        var type = $(this).attr("data-type");
+        if (type == "cancel") {
+            if (cancelcallback) {
+                cancelcallback()
+            }
+        } else if (type == "ok") {
+            if (okcallback) {
+                okcallback()
+            }
+        }
+        $(this).parents("#confirmDialog").remove()
+    })
+};
+
+
+sdk.closeLoading = function () {
+    $("#loadingBox").remove();
+};
+//加载loading动画
+sdk.showLoading = function () {
+    if (!$("#loadingBox").length) {
+        var html = '<div id="loadingBox" class="mask loading"><div><div></div><div></div><div></div><div></div><div></div></div></div>';
+        $("body").append(html);
+    }
+};
+
+
+sdk.api = function (param, apiName, callback) {
+    var url = sdk.buildURL(sdk.apiUrl + apiName, param);
+    sdk.httpGet(url, function (retData) {
+        callback(retData);
+    }, "json");
+
+};
+
+sdk.httpGet = function (url, callback, type) {
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: type,
+        success: function (data) {
+            callback(data);
+        },
+        error: function (e) {
+            console.log(e);
+            sdk.closeLoading();
+            sdk.confirmDialog("网络错误，请重试！");
+        }
+    });
+};
+
+
+sdk.getURLVar = function (name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    return r != null ? unescape(r[2]) : null
+};
+
+sdk.setURLVar = function (url, key, value) {
+    if (url) {
+        var urlList = url.split("#");
+        var params = {};
+        var query = urlList[0].split("?")[1];
+        var result = urlList[0].split("?")[0] + "?";
+        if (query) {
+            query = query.split("&");
+            for (var i in query) {
+                var vars = query[i].split("=");
+                params[vars[0]] = vars[1]
+            }
+        }
+        if (value) {
+            params[key] = value
+        } else {
+            params[key] = null;
+            delete params[key]
+        }
+        var first = true;
+        for (var i in params) {
+            result += (first ? "" : "&") + i + "=" + (params[i] ? params[i] : "");
+            first = false
+        }
+        return result + (urlList[1] ? "#" + urlList[1] : "")
+    }
+    return ""
+};
+
+sdk.buildURL = function (url, args) {
+    if (url) {
+        var urlList = url.split("#");
+        var params = {};
+        var query = urlList[0].split("?")[1];
+        var result = urlList[0].split("?")[0] + "?";
+        if (query) {
+            query = query.split("&");
+            for (var i in query) {
+                var vars = query[i].split("=");
+                params[vars[0]] = vars[1]
+            }
+        }
+        for (var i in args) {
+            if (args[i] !== undefined && args[i] !== null) {
+                params[i] = args[i];
+            }
+        }
+        var first = true;
+        for (var i in params) {
+            result += (first ? "" : "&") + i + "=" + (params[i] ? params[i] : "");
+            first = false;
+        }
+        return result + (urlList[1] ? "#" + urlList[1] : "");
+    }
+    return "";
+};
+
+
+sdk.isMobile = function () {
+    var userAgent = navigator.userAgent.toLowerCase();
+    var agents = ["android", "iphone", "symbianos", "windows phone", "ipad", "ipod"];
+    for (var v = 0; v < agents.length; v++) {
+        if (userAgent.indexOf(agents[v]) > 0) {
+            return true;
+        }
+    }
+    return false;
+};
+
+sdk.isWeixin = function () {
+    return navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == "micromessenger"
+};
+
+sdk.isiOS = function () {
+    return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+};
+sdk.isApp = function () {
+    var ua = navigator.userAgent.toLowerCase();
+    return ua.indexOf('isApp') > -1;
+};
+
+sdk.setItem = function (key, value) {
+    if (window.localStorage) {
+        try {
+            window.localStorage.setItem("pj_" + key, value);
+        } catch (err) {}
+    } else {
+        var exp = new Date;
+        exp.setTime(exp.getTime() + 365 * 24 * 60 * 60 * 1e3);
+        document.cookie = "pj_" + key + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    }
+};
+sdk.getItem = function (key) {
+    if (window.localStorage) {
+        return window.localStorage.getItem("pj_" + key)
+    } else {
+        var arr = document.cookie.match(new RegExp("(^| )pj_" + key + "=([^;]*)(;|$)"));
+        if (arr != null) {
+            return unescape(arr[2]);
+        }
+    }
+    return null;
+};
+sdk.removeItem = function (key) {
+    if (window.localStorage) {
+        window.localStorage.removeItem("pj_" + key);
+    } else {
+        var exp = new Date;
+        exp.setTime(exp.getTime() - 1);
+        var cval = sdk.getItem(key);
+        if (cval != null) {
+            document.cookie = "pj_" + key + "=" + cval + ";expires=" + exp.toGMTString();
+        }
+    }
+};
+sdk.setSession = function (key, value) {
+    if (window.sessionStorage) {
+        window.sessionStorage.setItem("pj_" + key, value);
+    }
+};
+sdk.getSession = function (key) {
+    if (window.sessionStorage) {
+        return window.sessionStorage.getItem("pj_" + key);
+    }
+    return null
+};
+sdk.removeSession = function (key) {
+    if (window.sessionStorage) {
+        window.sessionStorage.removeItem("pj_" + key);
+    }
+};
+//判断是不是在iPhone的Safair浏览器打开的本页面
+sdk.is_safari = function () {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf('applewebkit') > -1 && ua.indexOf('mobile') > -1 && ua.indexOf('safari') > -1 &&
+        ua.indexOf('linux') === -1 && ua.indexOf('android') === -1 && ua.indexOf('chrome') === -1 &&
+        ua.indexOf('ios') === -1 && ua.indexOf('browser') === -1) {
+        return true;
+    } else {
+        //alert("请使用iPhone中的Safari浏览器打开本页面！");
+        //document.write("【不是 Safari】");
+        return false;
+    }
+};
+
+//查询渠道是否是提审状态
+sdk.getIsAudit = function (channelGameId, callback) {
+    var params = {};
+    params["channelGameId"] = channelGameId;
+    pjapi.httpPost(sdk.apiUrl + "getIsAudit", params, function (data) {
+        if (data.code == 1) {
+            sdk.setItem("isAmericaIp", data.code);
+            callback(data);
+        } else {
+            sdk.setItem("isAmericaIp", data.code);
+            callback(data);
+        }
+    });
+
+};
+
+
+window.PJ_SDK = sdk;

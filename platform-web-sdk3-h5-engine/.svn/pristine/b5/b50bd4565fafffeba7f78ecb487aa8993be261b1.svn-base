@@ -1,0 +1,328 @@
+package com.paojiao.sdk3.common.conf;
+
+import com.jfinal.config.*;
+import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.json.FastJsonFactory;
+import com.jfinal.kit.PathKit;
+import com.jfinal.kit.Prop;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
+import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.render.ViewType;
+import com.jfinal.template.Engine;
+import com.paojiao.sdk3.common.DS;
+import com.paojiao.sdk3.common.PjConstants;
+import com.paojiao.sdk3.controller.*;
+import com.paojiao.sdk3.controller.pay.PaoJiaoPayCallbackController;
+import com.paojiao.sdk3.controller.pay.PayController;
+import com.paojiao.sdk3.model._NgSdk162MappingKit;
+import com.paojiao.sdk3.model._NgSdk209MappingKit;
+import com.paojiao.sdk3.model._Uc209MappingKit;
+import org.apache.log4j.Logger;
+
+import java.util.Scanner;
+
+public class AppJfinalConfig extends JFinalConfig {
+
+	public static final Logger log = Logger
+			.getLogger(AppJfinalConfig.class);
+
+	Routes routes;
+
+	/**
+	 * 配置JFinal常量
+	 */
+	@Override
+	public void configConstant(Constants me) {
+		me.setEncoding("utf-8");
+		// 读取数据库配置文件
+		PropKit.use("config.properties");
+		// 设置当前是否为开发模式
+		me.setDevMode(PropKit.getBoolean("devMode"));
+		// 设置默认视图类型
+		me.setViewType(ViewType.JFINAL_TEMPLATE);
+
+		// 404页面
+		me.setError404View("/error/404.html");
+
+		me.setInjectDependency(true);
+
+		me.setJsonFactory(new FastJsonFactory());
+
+	}
+
+	/**
+	 * 配置JFinal路由映射
+	 */
+	@Override
+	public void configRoute(Routes me) {
+
+		me.add("/api", SdkController.class);
+		me.add("/thirdLogin", ThirdLoginController.class);
+
+		me.add("/pay/paojiao", PaoJiaoPayCallbackController.class);
+		me.add("/yinlian", YinLianLoginController.class);
+		me.add("/roleReport", RoleReportController.class);
+		me.add("/pay", PayController.class);
+		me.add("/onlineReport", OnlineReportController.class);
+		this.routes = me;
+	}
+
+	/**
+	 * 配置JFinal插件 数据库连接池 ORM 缓存等插件 自定义插件
+	 */
+	@Override
+	public void configPlugin(Plugins me) {
+		// 配置数据库连接池插件
+		// pj13_ng_sdk 209的库
+		try {
+			DruidPlugin dp = new DruidPlugin(PropKit.get("jdbcUrl1"),
+					PropKit.get("user1"), PropKit.get("password1"));
+			dp.setTestWhileIdle(true);
+			dp.setTestOnBorrow(true);
+			dp.setTestOnReturn(true);
+
+			me.add(dp);
+			ActiveRecordPlugin arp = new ActiveRecordPlugin("sdkMaster", dp);
+			arp.setShowSql(PropKit.getBoolean("devMode1"));
+			arp.setDialect(new MysqlDialect());
+			// /******** 在此添加数据库 表-Model 映射 *********/
+			_NgSdk209MappingKit.mapping(arp);
+			me.add(arp);
+
+			// pj13_ng_sdk 162的库
+			DruidPlugin dp2 = new DruidPlugin(PropKit.get("jdbcUrl2"),
+					PropKit.get("user2"), PropKit.get("password2"));
+			dp2.setTestWhileIdle(true);
+			dp2.setTestOnBorrow(true);
+			dp2.setTestOnReturn(true);
+
+			me.add(dp2);
+			ActiveRecordPlugin arp2 = new ActiveRecordPlugin("sdkSlave", dp2);
+			arp2.setShowSql(PropKit.getBoolean("devMode2"));
+			arp2.setDialect(new MysqlDialect());
+			_NgSdk162MappingKit.mapping(arp2);
+			me.add(arp2);
+
+			//
+			// pj13_ucenter 209的库
+			DruidPlugin dp3 = new DruidPlugin(PropKit.get("jdbcUrl3"),
+					PropKit.get("user3"), PropKit.get("password3"));
+			dp3.setTestWhileIdle(true);
+			dp3.setTestOnBorrow(true);
+			dp3.setTestOnReturn(true);
+
+			me.add(dp3);
+			ActiveRecordPlugin arp3 = new ActiveRecordPlugin("ucMaster", dp3);
+			arp3.setShowSql(PropKit.getBoolean("devMode3"));
+			arp3.setDialect(new MysqlDialect());
+			_Uc209MappingKit.mapping(arp3);
+			me.add(arp3);
+
+			// pj13_ucenter 162的库
+			DruidPlugin dp4 = new DruidPlugin(PropKit.get("jdbcUrl4"),
+					PropKit.get("user4"), PropKit.get("password4"));
+			dp4.setTestWhileIdle(true);
+			dp4.setTestOnBorrow(true);
+			dp4.setTestOnReturn(true);
+
+			me.add(dp4);
+			ActiveRecordPlugin arp4 = new ActiveRecordPlugin("ucSlave", dp4);
+			arp4.setShowSql(PropKit.getBoolean("devMode4"));
+			arp4.setDialect(new MysqlDialect());
+			me.add(arp4);
+
+
+
+			// 配置数据库连接池插件
+			//===========================公共管理主库====================================
+			DruidPlugin pm = new DruidPlugin(PropKit.get(DS.pubMaster+".url"),
+					PropKit.get(DS.pubMaster+".user"),
+					PropKit.get(DS.pubMaster+".password"));
+			me.add(pm);
+
+			ActiveRecordPlugin apm = new ActiveRecordPlugin(DS.pubMaster, pm);
+			apm.setShowSql(PropKit.getBoolean(DS.pubMaster+".devMode"));
+			apm.setDevMode(PropKit.getBoolean(DS.pubMaster+".devMode"));
+			apm.setDialect(new MysqlDialect());
+			me.add(apm);
+			//===========================公共管理主库====================================
+
+
+			//=========================公共管理从库====================================
+			DruidPlugin ps = new DruidPlugin(PropKit.get(DS.pubSlave+".url"),
+					PropKit.get(DS.pubSlave+".user"),
+					PropKit.get(DS.pubSlave+".password"));
+			me.add(ps);
+
+			ActiveRecordPlugin aps = new ActiveRecordPlugin(DS.pubSlave, ps);
+			aps.setShowSql(PropKit.getBoolean(DS.pubSlave+".devMode"));
+			aps.setDevMode(PropKit.getBoolean(DS.pubSlave+".devMode"));
+			aps.setDialect(new MysqlDialect());
+			me.add(aps);
+			//=========================公共管理从库====================================
+
+			//=========================泡椒业务平台从库====================================
+
+			/*DruidPlugin pjl = new DruidPlugin(PropKit.get(DS.pjSlave+".url"),
+					PropKit.get(DS.pjSlave+".user"),
+					PropKit.get(DS.pjSlave+".password"));
+			me.add(pjl);
+
+			ActiveRecordPlugin apjl = new ActiveRecordPlugin(DS.pjSlave, pjl);
+			apjl.setShowSql(PropKit.getBoolean(DS.pjSlave+".devMode"));
+			apjl.setDevMode(PropKit.getBoolean(DS.pjSlave+".devMode"));
+			apjl.setDialect(new MysqlDialect());
+			me.add(apjl);*/
+			//=========================泡椒业务平台从库====================================
+
+		} catch (Exception e) {
+			log.error("===========>>数据库连接错误", e);
+		}
+
+	}
+
+	/**
+	 * 配置全局拦截器
+	 */
+	@Override
+	public void configInterceptor(Interceptors me) {
+	}
+
+	/**
+	 * 配置全局处理器
+	 */
+	@Override
+	public void configHandler(Handlers me) {
+		me.add(new ContextPathHandler("ctx"));
+	}
+
+	/**
+	 * JFinal启动后调用
+	 */
+	@Override
+	public void onStart() {
+	    	SdkConfig sconfig = new SdkConfig();
+		String sdkHost = PropKit.get("sdkHost");
+
+		String ngSdkHost = PropKit.get("ngSdkHost");
+		String ngLoginUrl = PropKit.get("ngLoginUrl");
+		String ngTokenUrl = PropKit.get("ngTokenUrl");
+
+		String userCenterHost = PropKit.get("userCenterHost");
+		String sendUserInfoToMobileUrl = PropKit.get("sendUserInfoToMobileUrl");
+		String findpwdFirstUrl = PropKit.get("findpwdFirstUrl");
+
+		String ngReportRoleInfoUrl = PropKit.get("ngReportRoleInfoUrl");
+
+		String ngRandomUserUrl = PropKit.get("ngRandomUserUrl");
+		String ngRegUrl = PropKit.get("ngRegUrl");
+		String ngOpenGameUrl = PropKit.get("ngOpenGameUrl");
+
+		String payUrl = PropKit.get("payUrl");
+		String ucUrl = PropKit.get("ucUrl");
+
+		String ngPhoneCodeUrl = PropKit.get("ngPhoneCodeUrl");
+		String ngBindMobileUrl = PropKit.get("ngBindMobileUrl");
+
+		String ngMobileLoginUrl = PropKit.get("ngMobileLoginUrl");
+		String ngSelectLoginUrl = PropKit.get("ngSelectLoginUrl");
+
+		sconfig.setSdkHost(sdkHost);
+		sconfig.setNgSdkHost(ngSdkHost);
+		sconfig.setUserCenterHost(userCenterHost);
+		sconfig.setSendUserInfoToMobileUrl(userCenterHost+sendUserInfoToMobileUrl);
+		sconfig.setFindpwdFirstUrl(userCenterHost+findpwdFirstUrl);
+		sconfig.setNgReportRoleInfoUrl(ngSdkHost+ngReportRoleInfoUrl);
+		sconfig.setNgLoginUrl(ngSdkHost+ngLoginUrl);
+		sconfig.setNgTokenUrl(ngSdkHost+ngTokenUrl);
+		sconfig.setNgRandomUserUrl(ngSdkHost+ngRandomUserUrl);
+		sconfig.setNgRegUrl(ngSdkHost+ngRegUrl);
+		sconfig.setNgOpenGameUrl(ngSdkHost+ngOpenGameUrl);
+		sconfig.setNgOpenGameUrl(ngSdkHost+ngOpenGameUrl);
+		sconfig.setNgOpenGameUrl(ngSdkHost+ngOpenGameUrl);
+
+		sconfig.setPayUrl(payUrl);
+		sconfig.setUcUrl(ucUrl);
+
+		sconfig.setNgPhoneCodeUrl(ngSdkHost+ngPhoneCodeUrl);
+		sconfig.setNgBindMobileUrl(ngSdkHost+ngBindMobileUrl);
+
+		sconfig.setNgMobileLoginUrl(ngSdkHost+ngMobileLoginUrl);
+		sconfig.setNgSelectLoginUrl(ngSdkHost+ngSelectLoginUrl);
+		PjConstants.sconfig = sconfig;
+
+		//mongodb连接uri
+		Prop pro = PropKit.use("mongo.properties");
+		PjConstants.MONGODB_ONLINEUSER_URI = pro.get("mongodb_onlineUser_uri");
+	}
+
+	/**
+	 * JFinal Stop之前调用
+	 */
+	@Override
+	public void onStop() {
+	}
+
+	/**
+	 * 生成模版
+	 *
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String mappingKitClassName = "_NgSdk209MappingKit";
+
+		// base model 所使用的包名
+		String baseModelPkg = "com.paojiao.sdk3.model.base";
+		// base model 文件保存路径
+		String baseModelDir = PathKit.getWebRootPath()
+				+ "/../src/com/paojiao/sdk3/model/base";
+		// model 所使用的包名
+		String modelPkg = "com.paojiao.sdk3.model";
+		try {
+			System.out
+					.print("请输入数据源，1.sdkMaster,2.sdkSlave,3.ucMaster,4.ucSlave,5.yhStatMaster,6.yhStatSlave");
+			Scanner scan = new Scanner(System.in);
+			String read = scan.nextLine();
+			if ("1".equals(read)) {
+				String[] inc1 = { "stat_review_login_user"};
+				GeneratorModel.generatorModel(mappingKitClassName, inc1,
+						baseModelPkg, baseModelDir, modelPkg, "1");
+			}
+			if ("2".equals(read)) {
+				String[] inc = { "sys_package", "stat_new_user",
+						"pj_ad_monitor", "stat_active_user", "pj_player_login",
+						"pj_ad_monitor_to_sync", "pj_pay_iorder","pj_user_vip",
+						"pj_user_vip_config","pj_user_vip_growth_record"};
+				mappingKitClassName = "_NgSdk162MappingKit";
+				GeneratorModel.generatorModel(mappingKitClassName, inc,
+						baseModelPkg, baseModelDir, modelPkg, "2");
+			}
+			if ("3".equals(read)) {
+				String[] inc = { "pj_member_binding", "pj_member_user",
+						"pj_member_ticket","pj_member_user_idcard"};
+				mappingKitClassName = "_Uc209MappingKit";
+				GeneratorModel.generatorModel(mappingKitClassName, inc,
+						baseModelPkg, baseModelDir, modelPkg, "3");
+			}
+			if ("4".equals(read)) {
+				String[] inc = {};
+				mappingKitClassName = "_Uc162MappingKit";
+				GeneratorModel.generatorModel(mappingKitClassName, inc,
+						baseModelPkg, baseModelDir, modelPkg, "4");
+			}
+
+			scan.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void configEngine(Engine me) {
+		// TODO Auto-generated method stub
+
+	}
+}

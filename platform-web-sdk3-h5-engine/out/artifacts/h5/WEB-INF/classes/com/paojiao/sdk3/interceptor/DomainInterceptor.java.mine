@@ -1,0 +1,53 @@
+package com.paojiao.sdk3.interceptor;
+
+import com.jfinal.aop.Interceptor;
+import com.jfinal.aop.Invocation;
+import com.jfinal.core.Controller;
+import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 域名白名单拦截器
+ * @author zhouzhenyi
+ * @date 2019年3月18日
+ */
+public class DomainInterceptor implements Interceptor {
+
+    private final Logger log = Logger.getLogger(DomainInterceptor.class);
+
+    //域名白名单
+    private final List<String> domainList = Arrays.asList(
+            "localhost",
+            "127.0.0.1",
+            "192.168.1.171",
+            "10.11.181.44",
+            "h5.infoxgame.com",
+             "h5.paojiao.cn");
+
+
+
+
+
+    @Override
+    public void intercept(Invocation inv) {
+        Controller controller = (Controller) inv.getController();
+
+        String domain = controller.getRequest().getServerName();
+        if(!domainList.contains(domain)){
+            Map<String, Object> res = new HashMap<String, Object>();
+            res.put("msg", "非法的域名["+domain+"],请添加白名单！");
+            res.put("code", 0);
+            log.info("==========>>非法的域名["+domain+"],请添加白名单！");
+            controller.renderJson(res);
+            return;
+        }
+
+        inv.invoke();
+
+    }
+
+}
