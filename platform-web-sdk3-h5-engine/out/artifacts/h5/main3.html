@@ -15,7 +15,7 @@
 
     <link href="/css/common.css?20171011" rel="stylesheet">
     <link href="/css/layout.css?20171011" rel="stylesheet">
-    <link href="/css/commom_v2.css?20171011" rel="stylesheet">
+    <link href="/css/common_v2.1.css?20171011" rel="stylesheet">
 
     <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
@@ -94,8 +94,6 @@
         }
 
         gameUrl =  sdk.setURLVar(gameUrl,"realNameAuthStatus",realNameAuthStatus);
-
-
         if(orientation == 0){//横屏游戏
             $("body").append('<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
 
@@ -104,7 +102,6 @@
                     $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});
                 }
             }
-
         }else{//竖屏游戏
             //刘海屏和水滴屏适配
             var hasIphoneX = window.innerHeight / window.innerWidth > 2 ? true : false;
@@ -126,49 +123,32 @@
 
     //开始消息监听
     function startEventListener(){
-
         window.addEventListener("message", receiveMessage, false);
 
         function  receiveMessage(event){
             sdk.log("host receive data",event.data);
             switch (event.data.method) {
-
-                // case "initLoading": {//加载loading页面
-                // 	sdk.initLoading();
-                // 	break;
-                // }
-                //
-                // case "loadLoginBox": {//登录
-                // 	sdk.loadLoginBox(event.data.param);
-                // 	break;
-                // }
-                //
-                // case "getToken": {//token验证
-                // 	sdk.getToken(event.data.param);
-                // 	break;
-                // }
-
-                case "PJ_loadPayBox": {//拉起支付框
+                case "PJ_loadPayBox": //拉起支付框
                     sdk.loadPayBox02(event.data.param);
                     break;
-                }
-
-                case "PJ_reportRoleInfo": {//上报玩家信息
+                case "PJ_reportRoleInfo": //上报玩家信息
                     sdk.reportRoleInfo(event.data.param);
                     break;
-                }
-                case "closePayBox": {//关闭支付框页面
+                case "closePayBox": //关闭支付框页面
                     sdk.closePayBox02();
                     break;
-                }
-
-                case "logout": {//退出登录
+                case "logout": //退出登录
                     sdk.logout();
                     break;
-                }
-
+                case "loadPubPay":  //拉起公众号支付
+                    sdk.loadPubPay(event.data.param);
+                    break;
+                case "openUc":  //打开用户中心菜单
+                    sdk.loadOpenUc(event.data.param);
+                    break;
+                default:
+                    break;
             }
-
         }
     }
 
@@ -179,7 +159,6 @@
                 //
             });
         },1000*60);
-
     }
 
     $(function(){
@@ -202,9 +181,6 @@
             window.history.pushState(state, "title", "#");
         }
     };
-
-
-
 </script>
 
 
