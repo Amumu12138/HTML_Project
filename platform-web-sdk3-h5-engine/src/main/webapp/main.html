@@ -80,8 +80,6 @@
 </div>
 
 </body>
-
-
     <script type="text/javascript">
 		//初始化
 		sdk.init2();
@@ -101,7 +99,6 @@
 		}
 		//页面主方法
 		function start() {
-
 			//获取游戏信息
 			sdk.getGameInfo("false", function (ret) {
 				if (ret.code == sdk.SUCCESS) { //成功
@@ -128,7 +125,6 @@
 					callHistory();
 				} else {
 					sdk.confirmDialog(ret.msg);
-
 				}
 			});
 		}
@@ -136,7 +132,6 @@
 		//加载游戏
 		function loadGame(gameInfo) {
 			var orientation = gameInfo.orientation;
-
 			var gameUrl = gameInfo.gameUrl;
 			gameUrl = sdk.setURLVar(gameUrl, "sdkToken", sdk.getItem("sdkToken"));
 			gameUrl = sdk.setURLVar(gameUrl, "uid", sdk.getItem("uid"));
@@ -146,10 +141,7 @@
 				realNameAuthStatus = 0;
 			}
 
-
 			gameUrl = sdk.setURLVar(gameUrl, "realNameAuthStatus", realNameAuthStatus);
-
-
 			if (orientation == 0) { //横屏游戏
 				$("body").append(
 					'<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
@@ -164,7 +156,6 @@
 						});
 					}
 				}
-
 			} else { //竖屏游戏
                 //刘海屏和水滴屏适配
                 var hasIphoneX = window.innerHeight / window.innerWidth > 2 ? true : false;
@@ -178,15 +169,11 @@
                     + '<iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + ($(window).height() + offsetHeight) + 'px;">'
                     + '</iframe></div>');
 			}
-			// sdk.enableFloatBox();
-
 			var isIp = sdk.getItem("isAmericaIp");
 			if (isIp == "0" || isIp == "2"){
-				//sdk.enableFloatBox();
 				sdk.enableFloatBox02();
 			}
 		}
-
 
 		//开始消息监听
 		function startEventListener() {
@@ -219,7 +206,7 @@
 			}
 		}
 
-			//上报在线
+        //上报在线
 		function startReportOnline(uid,channel,gameId){
 			setInterval(function (){
 				$.post("/onlineReport/report",{uid:uid,channel: channel,gameId:gameId},function(result){
@@ -251,14 +238,11 @@
 					}
 				});
 			},1000*60);
-
 		}
 
 		$(function () {
 			start();
 		});
-
-
 
         function onBridgeReady(payObj){
             WeixinJSBridge.invoke(
@@ -278,6 +262,7 @@
                     }
                 });
         }
+
         //拉起微信公众号支付
         function callWxPay(payObj){
             if (typeof WeixinJSBridge == "undefined"){
@@ -308,7 +293,6 @@
 				window.history.pushState(state, "title", "#");
 			}
 		};
-
 
 		function closeRealNameBox(){
 			$("#showRealNameBox").remove();
