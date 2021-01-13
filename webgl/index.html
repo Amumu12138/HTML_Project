@@ -61,6 +61,7 @@
     <script type="text/javascript" src="example/client/Triangle.js"></script>
     <script type="text/javascript" src="example/client/RectAngle.js"></script>
     <script type="text/javascript" src="example/client/TranslateTriangle.js"></script>
+    <script type="text/javascript" src="example/client/RotatedTriangle.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -180,6 +181,9 @@
                 break;
             case "TranslateTriangle": 
                 Example.TranslateTriangle();
+                break;
+            case "RotatedTriangle": 
+                Example.RotatedTriangle();
                 break;
             default: 
                 break;
