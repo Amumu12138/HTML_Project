@@ -82,8 +82,9 @@
                 <a onclick="onClickWebGLResp('MultipPoints')"> MultipPoints </a>
                 <a onclick="onClickWebGLResp('Triangle')"> Triangle </a>
                 <a onclick="onClickWebGLResp('RectAngle')"> RectAngle </a>
-                <a onclick="onClickWebGLResp('TranslateTriangle')"> TranslateTriangle </a>
-                <a onclick="onClickWebGLResp('RotatedTriangle')"> RotatedTriangle </a>
+                <a onclick="onClickWebGLResp('TranslateTriangle')"> TranslateTri </a>
+                <a onclick="onClickWebGLResp('RotatedTriangle')"> RotatedTri </a>
+                <a onclick="onClickWebGLResp('RotatedTriangle_Matrix')"> RotatedTri_Mat </a>
             </div>
         </div>
     </div>
@@ -402,6 +403,9 @@
                     break;
                 case "RotatedTriangle":
                     window.localStorage.setItem("exampleName", "RotatedTriangle");
+                    break;
+                case "RotatedTriangle_Matrix":
+                    window.localStorage.setItem("exampleName", "RotatedTriangle_Matrix");
                     break;
                 default: 
                     break;

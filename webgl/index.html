@@ -62,6 +62,7 @@
     <script type="text/javascript" src="example/client/RectAngle.js"></script>
     <script type="text/javascript" src="example/client/TranslateTriangle.js"></script>
     <script type="text/javascript" src="example/client/RotatedTriangle.js"></script>
+    <script type="text/javascript" src="example/client/RotatedTriangle_Matrix.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -184,6 +185,9 @@
                 break;
             case "RotatedTriangle": 
                 Example.RotatedTriangle();
+                break;
+            case "RotatedTriangle_Matrix": 
+                Example.RotatedTriangle_Matrix();
                 break;
             default: 
                 break;
