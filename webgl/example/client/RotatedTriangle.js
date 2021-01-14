@@ -22,7 +22,9 @@ Example.RotatedTriangle = function() {
         attribute vec4 a_position;
         uniform float u_sinB, u_cosB;
         void main() {
-            gl_Position = vec4(a_position.x * u_cosB - a_position.y * u_sinB, a_position.x * u_sinB + a_position.y * u_cosB, a_position.z, 1.0);
+            float after_x = a_position.x * u_cosB - a_position.y * u_sinB;
+            float after_y = a_position.x * u_sinB + a_position.y * u_cosB;
+            gl_Position = vec4(after_x, after_y, a_position.z, 1.0);
         }
     `;
 
@@ -53,7 +55,7 @@ Example.RotatedTriangle = function() {
     gl.uniform4f(u_fragColor, 1.0, 0.0, 0.0, 1.0);
 
     //使用缓冲区对象写入定点数据
-    var vertices = new Float32Array([0.5, 0.5, 0.0, 1.0]);
+    var vertices = new Float32Array([0.5, 0.5, 0.0, 1.0, 0.0, 0.0]);
     var v_buffer = gl.createBuffer();   //创建缓冲区
     gl.bindBuffer(gl.ARRAY_BUFFER, v_buffer);   //绑定缓冲区
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);   //将数据写入缓冲区         

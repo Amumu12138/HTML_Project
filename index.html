@@ -85,6 +85,7 @@
                 <a onclick="onClickWebGLResp('TranslateTriangle')"> TranslateTri </a>
                 <a onclick="onClickWebGLResp('RotatedTriangle')"> RotatedTri </a>
                 <a onclick="onClickWebGLResp('RotatedTriangle_Matrix')"> RotatedTri_Mat </a>
+                <a onclick="onClickWebGLResp('RotatedTranslateTriangle')"> RotatedTranTri </a>
             </div>
         </div>
     </div>
@@ -406,6 +407,9 @@
                     break;
                 case "RotatedTriangle_Matrix":
                     window.localStorage.setItem("exampleName", "RotatedTriangle_Matrix");
+                    break;
+                case "RotatedTranslateTriangle":
+                    window.localStorage.setItem("exampleName", "RotatedTranslateTriangle");
                     break;
                 default: 
                     break;

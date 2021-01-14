@@ -47,7 +47,8 @@ Example.RotateCube = function () {
     gl.uniformMatrix4fv(mx, false, mxArr);
 
     //绕y轴旋转45度
-    var myArr = new Float32Array([Math.cos(Math.PI / 4), 0, -Math.sin(Math.PI / 4), 0,
+    var myArr = new Float32Array([
+        Math.cos(Math.PI / 4), 0, -Math.sin(Math.PI / 4), 0,
         0, 1, 0, 0,
         Math.sin(Math.PI / 4), 0, Math.cos(Math.PI / 4), 0,
         0, 0, 0, 1
