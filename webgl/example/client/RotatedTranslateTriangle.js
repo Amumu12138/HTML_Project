@@ -43,10 +43,10 @@ Example.RotatedTranslateTriangle = function() {
     //绕Z轴旋转ANGLE角度
     const ANGLE = 90.0;
     var mat = new Matrix4();
-    mat.setRotate(ANGLE, 0, 0, 1);
+    mat.setTranslate(-0.5, 0, 0);
     //沿x轴平移0.5个单位
-    mat.translate(-0.5, 0.0, 0.0);
-    //再沿x、y、轴各缩放0.5倍
+    mat.rotate(ANGLE, 0, 0, 1);
+    //再沿x、y、z轴各缩放0.5倍
     mat.scale(0.5, 0.5, 0.5);
     gl.uniformMatrix4fv(u_modleMat, false, mat.elements);
 

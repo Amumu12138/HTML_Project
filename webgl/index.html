@@ -64,6 +64,7 @@
     <script type="text/javascript" src="example/client/RotatedTriangle.js"></script>
     <script type="text/javascript" src="example/client/RotatedTriangle_Matrix.js"></script>
     <script type="text/javascript" src="example/client/RotatedTranslateTriangle.js"></script>
+    <script type="text/javascript" src="example/client/RequestAnimationFrame.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -192,6 +193,9 @@
                 break;
             case "RotatedTranslateTriangle": 
                 Example.RotatedTranslateTriangle();
+                break;
+            case "RequestAnimationFrame": 
+                Example.RequestAnimationFrame();
                 break;
             default: 
                 break;
