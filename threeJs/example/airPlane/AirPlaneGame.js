@@ -4,7 +4,6 @@ var Example = Example || {};
  * @decs 飞机小游戏
  */
 Example.AirPlane = function () {
-
     //调用dat.GUI库改变环境光
     var colorControl = new function () {
         this.ambientLightColor = "#dc8874";

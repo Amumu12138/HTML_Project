@@ -61,14 +61,18 @@ Example.RequestAnimationFrame = function() {
     //绘制图形
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
-    //每隔deltaTime毫秒绕z轴旋转addAngle角度
+    //每隔deltaTime毫秒绕z轴旋转addAngle角度,并沿x轴增加addDis距离
     // const addAngle = 30.0;
+    // const addDis = 0.05;
     // const deltaTime = 100;
     // var curAngle = 0.0;
+    // var curDis = 0.0;
     // setInterval(function() {
     //     curAngle = (curAngle + addAngle) % 360;
+    //     curDis += addDis;
     //     var newMat = new Matrix4();
     //     newMat.setRotate(curAngle, 0, 0, 1);
+    //     newMat.translate(curDis, 0, 0, 1);
     //     gl.uniformMatrix4fv(u_modelMat, false, newMat.elements); 
 
     //     //清理画布
@@ -95,16 +99,16 @@ Example.RequestAnimationFrame = function() {
         var now = Date.now();
         var elapsed = now - g_last;
         g_last = now;
-        var newAngle = angle + (45.0 * elapsed) / 1000.0;
-        return newAngle %= 360; 
+        var newAngle = angle + (45.0 * elapsed) / 1000.0 % 360;
+     
+        return newAngle; 
     } 
-
 
     var currentAngle = 0.0;
     //运行动画
     function tick() {
         //更新旋转角
-        currentAngle = animate(currentAngle);   
+        currentAngle = animate(currentAngle); 
         draw(gl, 3, currentAngle, mat, u_modelMat);
         //请求浏览器调用tick
         requestAnimationFrame(tick);
