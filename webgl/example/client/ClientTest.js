@@ -11,18 +11,22 @@ Example.ClientTest = function () {
     //顶点着色器程序
     const VSHADER_SOURCE = `
         attribute vec4 a_position;
-        uniform mat4 u_mat;
+        attribute float a_pointSize;
+        attribute vec4 a_color;
+        varying vec4 v_color;
         void main() {
-            gl_Position = u_mat * a_position;
+            gl_Position = a_position;
+            gl_PointSize = a_pointSize;
+            v_color = a_color;
         }
     `;
 
-    //片元着色器
+    //片元着色器程序
     const FSHADER_SOURCE = `
-        precision highp float;
-        uniform vec4 u_fragColor;
+        precision mediump float;
+        varying vec4 v_color;
         void main() {
-            gl_FragColor = u_fragColor;
+            gl_FragColor = v_color;
         }
     `;
 
@@ -31,66 +35,46 @@ Example.ClientTest = function () {
 
     //获取着色器程序中变量
     var a_position = gl.getAttribLocation(gl.program, "a_position");
-    var u_mat = gl.getUniformLocation(gl.program, "u_mat");
-    var u_fragColor = gl.getUniformLocation(gl.program, "u_fragColor");
+    var a_pointSize = gl.getAttribLocation(gl.program, "a_pointSize");
+    var a_color = gl.getAttribLocation(gl.program, "a_color");
 
     //将数据传递给变量
-    //正方体顶点数据
+    //顶点数据
     var vertices = new Float32Array([
-        //z为0.5时，xOy平面上的四个点坐标
-        0.5, 0.5, 0.5,
-        -0.5, 0.5, 0.5,
-        -0.5, -0.5, 0.5,
-        0.5, -0.5, 0.5,
-        //z为-0.5时，xOy平面上的四个点坐标
-        0.5, 0.5, -0.5,
-        -0.5, 0.5, -0.5,
-        -0.5, -0.5, -0.5,
-        0.5, -0.5, -0.5,
-        //上面两组坐标分别对应起来组成一一对
-        0.5, 0.5, 0.5,
-        0.5, 0.5, -0.5,
-
-        -0.5, 0.5, 0.5,
-        -0.5, 0.5, -0.5,
-
-        -0.5, -0.5, 0.5,
-        -0.5, -0.5, -0.5,
-
-        0.5, -0.5, 0.5,
-        0.5, -0.5, -0.5,
+        -0.5, -0.5, 
+        0.5, -0.5,
+        0.0, 0.5
     ]);
-    //创建缓冲区对象
-    var buffer = gl.createBuffer();
+
+    //创建顶点位置缓冲区
+    var vertexBuffer = gl.createBuffer();
     //绑定缓冲区对象
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    //将数据传递给缓冲区对象
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    //将数据传递给缓冲区
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-    //将缓冲区变量分配给变量
-    gl.vertexAttribPointer(a_position, 3, gl.FLOAT, false, 0, 0);
+    //将缓冲区对象分配给变量
+    gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 0, 0);
     //开启指定的变量
     gl.enableVertexAttribArray(a_position);
 
-    //给u_fragColor变量传递数据
-    var colors = new Float32Array([1.0, 0.0, 0.0, 1.0]);
-    gl.uniform4fv(u_fragColor, colors);
+    //顶点尺寸数据
+    var sizes = new Float32Array([5.0, 10.0, 15.0]);
+    //传递顶点数据给a_pointSize
+    var sizeBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, sizes, gl.STATIC_DRAW);
+    gl.vertexAttribPointer(a_pointSize, 1, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(a_pointSize);
 
-    //给u_mat变量传递数据
-    var mat = new Matrix4();
-    mat.setRotate(20.0, 0, 1, 0);
-    mat.rotate(20.0, 1, 0, 0);
-    gl.uniformMatrix4fv(u_mat, false, mat.elements);
+    //传递数据给a_color变量
+    var colors = new Float32Array([1.0, 1.0, 0.0, 1.0]);
+    gl.vertexAttrib4fv(a_color, colors);
 
     //清理画布
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     //绘制图形
-    //LINE_LOOP模式绘制前四个点
-    gl.drawArrays(gl.LINE_LOOP, 0, 4);
-    //LINE_LOOP模式从第五个点开始绘制四个点
-    gl.drawArrays(gl.LINE_LOOP, 4, 4);
-    //LINES模式绘制后8个点
-    gl.drawArrays(gl.LINES, 8, 8);
+    gl.drawArrays(gl.POINTS, 0, 3);
 };
 
 if (typeof module !== 'undefined') {
