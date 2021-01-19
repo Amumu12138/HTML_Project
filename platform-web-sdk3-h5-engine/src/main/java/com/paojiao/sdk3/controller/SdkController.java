@@ -85,6 +85,7 @@ public class SdkController extends BaseController {
 
     //泡椒H5登录URL-SDK2.0
     private static final String PAOJIAOMAINURLV2 = "https://h5.paojiao.cn/main.html";
+    private static final String PAOJIAOMAINURLV3 = "https://h5.paojiao.cn/main3.html";
     //private static final String PAOJIAOMAINURLV2 = "http://10.11.181.200:8080/main.html";
 
 
@@ -1817,8 +1818,13 @@ public class SdkController extends BaseController {
             //因为是调用微信公众号支付，需要获取用户openid，所以需要先授权登录获取用openid，在跳转支付接口。
             if (UaUtil.getClientType(getRequest()) == UaUtil.weixin) {
                 StringBuffer callback = new StringBuffer();
-                callback.append(PAOJIAOMAINURLV2).append("?channelGameId=").append(channelGameId)
-                        .append("&channel=").append(channel);
+                if (channelGameId.equals("11190") ){
+                    callback.append(PAOJIAOMAINURLV3).append("?channelGameId=").append(channelGameId)
+                            .append("&channel=").append(channel);
+                }else{
+                    callback.append(PAOJIAOMAINURLV2).append("?channelGameId=").append(channelGameId)
+                            .append("&channel=").append(channel);
+                }
 
                 String loginUrl = "/wxThird/login?platform=" + platform + "&toUrl=" + callback.toString();
                 String ucHost = PjConstants.sconfig.getUcUrl();
@@ -1948,11 +1954,6 @@ public class SdkController extends BaseController {
         } catch (Exception e) {
             log.info("游戏闪屏背景图查询异常ERROR：" + e.getMessage());
         }
-    }
-
-
-    public static void main(String[] args) {
-
     }
 
 }

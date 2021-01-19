@@ -188,7 +188,7 @@ sdk.initLoading = function (callback) {
             }else{
                 $("#flash").append("<img style='height: 100%; width: 100%;' src='/images/sdk2.0/pj_flash.gif'/ >");
             }
-        })
+        });
 
         setTimeout(function () {
             $("#flash").animate({
@@ -1753,8 +1753,17 @@ sdk.closeOpenScreenCoupon = function () {
  */
 sdk.showOutGameBox = function () {
     sdk.initOutGame(function (data) {
-        var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
-        sdk.showOutGameRelatedBox(relatedArr);
+        //判断接受的退游弹窗数据是否存在
+        if (data.popupList != null && data.popupList != "" && data.popupList.length > 0) {
+            var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
+            sdk.showOutGameRelatedBox(relatedArr);
+        }else{
+            if (sdk.isWeixin()) {
+                window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
+            } else {
+                window.open("about:blank", "_self").close();
+            }
+        }
     });
 };
 
@@ -1805,8 +1814,7 @@ sdk.showOutGameRelatedBox = function (relatedArr) {
 
     $("#outGame-related-exit-btn").click(function () {
         if (sdk.isWeixin()) {
-            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-            });
+            window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
         } else {
             window.open("about:blank", "_self").close();
         }
@@ -3134,7 +3142,7 @@ sdk.initOutGame = function (callback) {
     params["token"] = sdk.getItem("sdkToken"); //用户登录token
     params["type"] = "2"; //类型
 
-    sdk.api(params, "getPopUpConfig", function (retData) {
+    sdk.api(params, "exitPopupBox", function (retData) {
         if (retData.code == sdk.SUCCESS) {
             if (callback) callback(retData.data);
         } else {

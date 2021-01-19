@@ -281,8 +281,8 @@
 		function callHistory() {
 			pushHistory();
 			window.addEventListener("popstate", function (e) {
-				sdk.showOutGameBox();
-				pushHistory();
+                sdk.showOutGameBox();
+                pushHistory();
 			}, false);
 
 			function pushHistory() {

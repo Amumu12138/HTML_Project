@@ -182,22 +182,22 @@
 			function receiveMessage(event) {
 				sdk.log("host receive data", event.data);
 				switch (event.data.method) {
-					case "PJ_loadPayBox": //拉起支付框
+                    case "PJ_loadPayBox": //拉起支付框
 						sdk.loadPayBox02(event.data.param);
 						break;
-					case "PJ_reportRoleInfo":  //上报玩家信息
+                    case "PJ_reportRoleInfo":  //上报玩家信息
 						sdk.reportRoleInfo(event.data.param);
 						break;
-					case "closePayBox": //关闭支付框页面
+                    case "closePayBox": //关闭支付框页面
 						sdk.closePayBox02();
 						break;
-					case "logout":  //退出登录
+                    case "logout":  //退出登录
 						sdk.logout();
 						break;
-					case "loadPubPay":  //拉起公众号支付
+                    case "loadPubPay":  //拉起公众号支付
 						sdk.loadPubPay(event.data.param);
 						break;
-					case "openUc":  //打开用户中心菜单
+                    case "openUc":  //打开用户中心菜单
 						sdk.loadOpenUc(event.data.param);
 						break;
                     default:
@@ -279,25 +279,45 @@
 
 		//注册退游弹出事件
 		function callHistory() {
-			pushHistory();
-			window.addEventListener("popstate", function (e) {
-				sdk.showOutGameBox();
-				pushHistory();
-			}, false);
+            pushHistory();
+            window.addEventListener("popstate", function (e) {
+                sdk.showOutGameBox();
+            }, false);
 
-			function pushHistory() {
-				var state = {
-					title: "title",
-					url: "#"
-				};
-				window.history.pushState(state, "title", "#");
-			}
-		};
+            function pushHistory() {
+                var state = {
+                    title: "title",
+                    url: "#"
+                };
+                window.history.pushState(state, "title", "");
+            }
 
-		function closeRealNameBox(){
+            /**
+             * 监听手机右滑后退返回游戏大厅功能实现
+             **/
+            let startX = 0, startY = 0;
+            document.body.addEventListener("touchstart", function (e) {
+                startX = e.changedTouches[0].pageX;
+                startY = e.changedTouches[0].pageY;
+            });
+
+            document.body.addEventListener("touchmove", function (e) {
+
+                let moveEndX = e.changedTouches[0].pageX;
+                let moveEndY = e.changedTouches[0].pageY;
+                let X = moveEndX - startX;
+                let Y = moveEndY - startY;
+
+                if ((Math.abs(X) > Math.abs(Y)) && (startX >= 0 && startX <= 50) && X > 50) {
+                    // window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
+                }
+            });
+        }
+
+        function closeRealNameBox() {
 			$("#showRealNameBox").remove();
-		};
-	</script>
+        }
+    </script>
 </body>
 
 </html>

@@ -6,7 +6,6 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-
 // sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8080";
 sdk.host = "http://10.11.181.44:8080";
@@ -27,7 +26,6 @@ sdk.gameInfo = {};
 
 sdk.SUCCESS = 1;
 sdk.ERROR = 0;
-
 
 sdk.appVersion = "1.0";
 sdk.sdkVersion = "1.0.0";
@@ -1701,7 +1699,7 @@ sdk.showOpenScreenCoupon = function (voucherList) {
     $("body").append(openScreenCouponHtml);
 
     //添加代金券滑动列表
-    for(var i = 0; i < voucherList.length; i++) {
+    for (var i = 0; i < voucherList.length; i++) {
         var coupon_text = "";
         var coupon_desc = "";
         var coupon_expiredEnd_text = voucherList[i].expiredEndDesc + "日前有效";
@@ -1754,8 +1752,17 @@ sdk.closeOpenScreenCoupon = function () {
  */
 sdk.showOutGameBox = function () {
     sdk.initOutGame(function (data) {
-        var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
-        sdk.showOutGameRelatedBox(relatedArr);
+        //判断接受的退游弹窗数据是否存在
+        if (data && data.popupList && data.popupList.length > 0) {
+            var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
+            sdk.showOutGameRelatedBox(relatedArr);
+        } else {
+            if (sdk.isWeixin()) {
+                window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
+            } else {
+                window.open("about:blank", "_self").close();
+            }
+        }
     });
 };
 
@@ -1806,11 +1813,12 @@ sdk.showOutGameRelatedBox = function (relatedArr) {
 
     $("#outGame-related-exit-btn").click(function () {
         if (sdk.isWeixin()) {
-            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-            });
+            //跳转到大厅页面
+            window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
         } else {
             window.open("about:blank", "_self").close();
         }
+
     });
 };
 
@@ -2141,7 +2149,7 @@ sdk.showQuickLoginBox = function (userName, password) {
         '</div>' +
         '<div class="flex">' +
         '<a id="quick-login-quick-button" class="flex-02" >' +
-        '<img style="transform: scale(1.2, 1.2);" src="/images/sdk2.0/quick_login.png" >' +
+        '<img src="/images/sdk2.0/quick_login.png" >' +
         '<p style="font-weight: bold;">一键登录</p>' +
         '<a id="quick-login-account-button" class="flex-02" >' +
         '<img src="/images/sdk2.0/pj_user.png">' +
@@ -2259,7 +2267,7 @@ sdk.showAccountLoginBox = function () {
         '<img src="/images/sdk2.0/quick_login.png">' +
         '<p>一键登录</p>' +
         '<a id="account-login-account-button" class="flex-02">' +
-        '<img src="/images/sdk2.0/pj_user.png" style="transform: scale(1.2, 1.2);">' +
+        '<img src="/images/sdk2.0/pj_user.png">' +
         '<p style="font-weight: bold;">已有账户</p>' +
         '</a>' +
         '<a id="account-login-mobile-button" class="flex-02">' +
@@ -2382,11 +2390,11 @@ sdk.showMobileLoginBox = function () {
         '<img src="/images/sdk2.0/quick_login.png">' +
         '<p>一键登录</p>' +
         '<a id="mobile-login-account-button" class="flex-02">' +
-        '<img src="/images/sdk2.0/pj_user.png" >' +
+        '<img src="/images/sdk2.0/pj_user.png">' +
         '<p >已有账户</p>' +
         '</a>' +
         '<a id="mobile-login-mobile-button" class="flex-02">' +
-        '<img src="/images/sdk2.0/pj_mobile.png" style="transform: scale(1.2, 1.2);">' +
+        '<img src="/images/sdk2.0/pj_mobile.png">' +
         '<p style="font-weight: bold;">手机登录</p>' +
         '</a>' +
         '</div>' +
