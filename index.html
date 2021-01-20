@@ -88,6 +88,7 @@
                 <a onclick="onClickWebGLResp('RotatedTranslateTriangle')"> RotatedTranTri </a>
                 <a onclick="onClickWebGLResp('RequestAnimationFrame')"> ReqAniFrame </a>
                 <a onclick="onClickWebGLResp('ColoredTriangle')"> ColoredTri </a>
+                <a onclick="onClickWebGLResp('TexturedQuad')"> TexturedQuad </a>
             </div>
         </div>
     </div>
@@ -418,6 +419,9 @@
                     break;
                 case "ColoredTriangle":
                     window.localStorage.setItem("exampleName", "ColoredTriangle");
+                    break;
+                case "TexturedQuad":
+                    window.localStorage.setItem("exampleName", "TexturedQuad");
                     break;
                 default: 
                     break;
