@@ -39,10 +39,11 @@ Example.TexturedQuad = function() {
     /* 将数据传递给变量 */
     //顶点和纹理坐标数组
     var verticesTexCoords = new Float32Array([
-        -0.5, 0.5, 0.0, 1.0,
-        -0.5, -0.5, 0.0, 0.0,
-        0.5, -0.5, 1.0, 0.0,
-        0.5, 0.5, 1.0, 1.0 
+        -0.5, 0.5, -0.3, 1.7,
+        -0.5, -0.5, -0.3, 0.2,
+        0.5, 0.5, 1.7, 1.7,
+        0.5, -0.5, 1.7, -0.2
+
     ]);
     const FSIZE = verticesTexCoords.BYTES_PER_ELEMENT;
 
@@ -53,32 +54,35 @@ Example.TexturedQuad = function() {
 
     //创建一个Image对象
     var image = new Image();
+    image.onload = initTextures;
     image.src = "res/texture/panda.jpg";
-    image.onload = initTextures();
-
+  
     //初始化纹理图像
     function initTextures() {
         //创建纹理对象
         var texture = gl.createTexture();
         //对纹理图像进行y轴翻转
+        // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
         //开启0号纹理单元
         gl.activeTexture(gl.TEXTURE0);
         //向目标纹理绑定纹理对象
         gl.bindTexture(gl.TEXTURE_2D, texture);
         //配置纹理参数
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);  //纹理缩小
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);   //纹理放大
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);    //纹理水平填充
+        // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);  //纹理垂直填充
         //配置纹理图像
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+        // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_SHORT_5_5_5_1, image); //RGBA格式
         //将0号纹理传递给着色器
         gl.uniform1i(u_sampler, 0);
 
          //清理画布
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
-
-        //绘制图形
+         //绘制图形
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
@@ -98,8 +102,6 @@ Example.TexturedQuad = function() {
     //     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     // }
 
-   
-
     //将数据传递给缓冲区对象
     function dataToBuffer(location, count, array, stride, offset) {
         var buffer = gl.createBuffer();
@@ -108,7 +110,6 @@ Example.TexturedQuad = function() {
         gl.vertexAttribPointer(location, count, gl.FLOAT, false, stride, offset);
         gl.enableVertexAttribArray(location);
     }
-
 }
 
 if(typeof module !== 'undefined') {

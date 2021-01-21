@@ -192,7 +192,7 @@ Example.TwoCube = function () {
         ]);
         //把数据txArr传递给着色器旋转矩阵变量tx
         gl.uniformMatrix4fv(tx, false, txArr);
-        // j'jrequestAnimationFrame()可以实现周期性调用某个函数，主要用于动画
+        // requestAnimationFrame()可以实现周期性调用某个函数，主要用于动画
         // requestAnimationFrame(draw);
         /**执行绘制命令**/
         gl.drawArrays(gl.TRIANGLES, 0, 36);

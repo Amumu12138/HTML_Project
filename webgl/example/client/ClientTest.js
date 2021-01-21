@@ -50,7 +50,7 @@ Example.ClientTest = function() {
     //将数据传递给u_mat变量
     // const ANGLE = 0.0;
     // var mat = new Matrix4();
-    // mat.setRotate(angle, 0.25, 0.25, 1);
+    // mat.setRotate(ANGLE, 0.25, 0.25, 1);
     // gl.uniformMatrix4fv(u_mat, false, mat.elements);
 
     //清理画布
@@ -95,8 +95,7 @@ Example.ClientTest = function() {
         var now = Date.now();
         var deltaTime = now - g_last;
         g_last = now;
-
-        return (angle + 1.0) % 360.0;
+        return angle + (10.0 * deltaTime) / 1000.0 % 360;
     }
 
     function tick() {

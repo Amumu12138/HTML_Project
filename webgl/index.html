@@ -67,6 +67,7 @@
     <script type="text/javascript" src="example/client/RequestAnimationFrame.js"></script>
     <script type="text/javascript" src="example/client/ColoredTriangle.js"></script>
     <script type="text/javascript" src="example/client/TexturedQuad.js"></script>
+    <script type="text/javascript" src="example/client/MultiTexture.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -204,6 +205,9 @@
                 break;
             case "TexturedQuad": 
                 Example.TexturedQuad();
+                break;
+            case "MultiTexture": 
+                Example.MultiTexture();
                 break;
             default: 
                 break;
