@@ -68,6 +68,7 @@
     <script type="text/javascript" src="example/client/ColoredTriangle.js"></script>
     <script type="text/javascript" src="example/client/TexturedQuad.js"></script>
     <script type="text/javascript" src="example/client/MultiTexture.js"></script>
+    <script type="text/javascript" src="example/client/LookAtTriangle.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -208,6 +209,9 @@
                 break;
             case "MultiTexture": 
                 Example.MultiTexture();
+                break;
+            case "LookAtTriangle": 
+                Example.LookAtTriangle();
                 break;
             default: 
                 break;
