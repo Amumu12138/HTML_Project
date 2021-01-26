@@ -91,6 +91,7 @@
                 <a onclick="onClickWebGLResp('TexturedQuad')"> TexturedQuad </a>
                 <a onclick="onClickWebGLResp('MultiTexture')"> MultiTexture </a>
                 <a onclick="onClickWebGLResp('LookAtTriangle')"> LookAtTri </a>
+                <a onclick="onClickWebGLResp('LookAtTriangleWithKeys')"> LookAtTriWithKeys </a>
             </div>
         </div>
     </div>
@@ -430,6 +431,9 @@
                     break;
                 case "LookAtTriangle":
                     window.localStorage.setItem("exampleName", "LookAtTriangle");
+                    break;
+                case "LookAtTriangleWithKeys":
+                    window.localStorage.setItem("exampleName", "LookAtTriangleWithKeys");
                     break;
                 default: 
                     break;
