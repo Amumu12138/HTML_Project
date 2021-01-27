@@ -19,7 +19,7 @@ Example.ClientTest = function() {
         }
     `;
 
-    //片元着色器程序
+    // //片元着色器程序
     const FSHADER_SOURCE = `
         #ifdef GL_ES
         #ifdef GL_FRAGMENT_PRESICION_HIGH
@@ -37,9 +37,8 @@ Example.ClientTest = function() {
         }
     `;
 
-    //初始化着色器
-    initShaders(gl, VSDHADER_SOURCE,  FSHADER_SOURCE);
-
+    initShaders(gl, VSDHADER_SOURCE, FSHADER_SOURCE);
+    
     //获取着色器程序中变量
     var a_position = gl.getAttribLocation(gl.program, "a_position");
     var a_texCoord = gl.getAttribLocation(gl.program, "a_texCoord");
@@ -62,7 +61,7 @@ Example.ClientTest = function() {
         -sin54, 0.5 / cos54 - sin36, -0.5, -0.5 / cos54 * sin54, 0.5, -0.5 / cos54 * sin54, 
         sin54, 0.5 / cos54 - sin36, 0.0, 0.5 / cos54  
     ]);
-    dataToBuffer(a_position, 2, vertices);
+    utils.dataToBuffer(gl, a_position, 2, vertices, 0, 0);
 
     //将纹理坐标数据传递给a_texture变量
     var radius18 = Math.PI * 18.0 / 180.0;
@@ -73,13 +72,16 @@ Example.ClientTest = function() {
         // 0.0, 1 - sin36, 1.0, 1 - sin36, 0.5, 1.0 //三角形ADE
         0.0, 1 - sin36 , 0.5 - (1 / (4 * sin54)), 0.0, 0.5 + (1 / (4 * sin54)), 0.0,
         1.0, 1 - sin36, 0.5, 1.0
-     ]);
-    dataToBuffer(a_texCoord, 2, coords);
+    ]);
+    utils.dataToBuffer(gl, a_texCoord, 2, coords, 0, 0);
 
     //将纹理图像数据传递给u_sampler变量
-     var image = new Image();
-     image.onload = () => loadTexture(u_sampler, image, draw);
-    image.src = "res/client/redflower.jpg"
+    var image = new Image();
+    image.onload = () => utils.loadTexture(gl, u_sampler, gl.TEXTURE0, image,  0, function(){
+        utils.draw(gl, gl.TRIANGLE_FAN, 0, 5);
+    });
+    image.src = "res/client/redflower.jpg";
+
      //加载纹理图像
     function loadTexture(location, image, callback) {
         //创建纹理对象
@@ -114,7 +116,6 @@ Example.ClientTest = function() {
         //清理画布
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT);
-
         //绘制图形
         gl.drawArrays(gl.TRIANGLE_FAN, 0, 5);
     }

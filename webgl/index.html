@@ -18,6 +18,7 @@
     <script type="text/javascript" src="libs/cuon-utils.js"></script>
     <script type="text/javascript" src="libs/webgl-debug.js"></script>
     <script type="text/javascript" src="libs/webgl-utils.js"></script>
+    <script type="text/javascript" src="libs/utils.js"></script>
     <!-- WebGL -->
     <script type="text/javascript" src="example/Test.js"></script>
     <script type="text/javascript" src="example/TestGLSL.js"></script>
@@ -70,6 +71,8 @@
     <script type="text/javascript" src="example/client/MultiTexture.js"></script>
     <script type="text/javascript" src="example/client/LookAtTriangle.js"></script>
     <script type="text/javascript" src="example/client/LookAtTriangleWithKeys.js"></script>
+    <script type="text/javascript" src="example/client/OrthoView.js"></script>
+    <script type="text/javascript" src="example/client/PerspectiveView.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -216,6 +219,12 @@
                 break;
             case "LookAtTriangleWithKeys": 
                 Example.LookAtTriangleWithKeys();
+                break;
+            case "OrthoView": 
+                Example.OrthoView();
+                break;
+            case "PerspectiveView": 
+                Example.PerspectiveView();
                 break;
             default: 
                 break;

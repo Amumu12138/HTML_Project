@@ -92,6 +92,8 @@
                 <a onclick="onClickWebGLResp('MultiTexture')"> MultiTexture </a>
                 <a onclick="onClickWebGLResp('LookAtTriangle')"> LookAtTri </a>
                 <a onclick="onClickWebGLResp('LookAtTriangleWithKeys')"> LookAtTriWithKeys </a>
+                <a onclick="onClickWebGLResp('OrthoView')"> OrthoView </a>
+                <a onclick="onClickWebGLResp('PerspectiveView')"> PersView </a>
             </div>
         </div>
     </div>
@@ -434,6 +436,12 @@
                     break;
                 case "LookAtTriangleWithKeys":
                     window.localStorage.setItem("exampleName", "LookAtTriangleWithKeys");
+                    break;
+                case "OrthoView":
+                    window.localStorage.setItem("exampleName", "OrthoView");
+                    break;
+                case "PerspectiveView":
+                    window.localStorage.setItem("exampleName", "PerspectiveView");
                     break;
                 default: 
                     break;

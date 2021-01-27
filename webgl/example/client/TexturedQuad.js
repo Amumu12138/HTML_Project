@@ -43,7 +43,6 @@ Example.TexturedQuad = function() {
         -0.5, -0.5, -0.3, 0.2,
         0.5, 0.5, 1.7, 1.7,
         0.5, -0.5, 1.7, -0.2
-
     ]);
     const FSIZE = verticesTexCoords.BYTES_PER_ELEMENT;
 
