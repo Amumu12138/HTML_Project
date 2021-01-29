@@ -73,6 +73,8 @@
     <script type="text/javascript" src="example/client/LookAtTriangleWithKeys.js"></script>
     <script type="text/javascript" src="example/client/OrthoView.js"></script>
     <script type="text/javascript" src="example/client/PerspectiveView.js"></script>
+    <script type="text/javascript" src="example/client/PerspectiveView_MvpMatrix.js"></script>
+    <script type="text/javascript" src="example/client/DrawCube.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -225,6 +227,12 @@
                 break;
             case "PerspectiveView": 
                 Example.PerspectiveView();
+                break;
+            case "PerspectiveView_MvpMatrix": 
+                Example.PerspectiveView_MvpMatrix();
+                break;
+            case "DrawCube": 
+                Example.DrawCube();
                 break;
             default: 
                 break;

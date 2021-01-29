@@ -94,6 +94,8 @@
                 <a onclick="onClickWebGLResp('LookAtTriangleWithKeys')"> LookAtTriWithKeys </a>
                 <a onclick="onClickWebGLResp('OrthoView')"> OrthoView </a>
                 <a onclick="onClickWebGLResp('PerspectiveView')"> PersView </a>
+                <a onclick="onClickWebGLResp('PerspectiveView_MvpMatrix')"> Pers_MvpMat </a>
+                <a onclick="onClickWebGLResp('DrawCube')"> DrawCube </a>
             </div>
         </div>
     </div>
@@ -274,6 +276,7 @@
             console.log("Amumu  window.addEventListener popstate", data);
         }, false);
 
+
         //点击WebGL区域按钮响应
         onClickWebGLResp = function(value) {
             switch(value) {
@@ -442,6 +445,12 @@
                     break;
                 case "PerspectiveView":
                     window.localStorage.setItem("exampleName", "PerspectiveView");
+                    break;
+                case "PerspectiveView_MvpMatrix":
+                    window.localStorage.setItem("exampleName", "PerspectiveView_MvpMatrix");
+                    break;
+                case "DrawCube":
+                    window.localStorage.setItem("exampleName", "DrawCube");
                     break;
                 default: 
                     break;
