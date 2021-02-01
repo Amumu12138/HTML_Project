@@ -19,7 +19,7 @@ Example.ClickedPoints = function () {
         attribute float a_pointSize;
         void main() {
             gl_Position = a_pos;
-            gl_PointSize = a_pointSize;
+            gl_PointSize = a_pointSize; 
         }
    `;
 

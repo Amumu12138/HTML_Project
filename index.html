@@ -96,6 +96,7 @@
                 <a onclick="onClickWebGLResp('PerspectiveView')"> PersView </a>
                 <a onclick="onClickWebGLResp('PerspectiveView_MvpMatrix')"> Pers_MvpMat </a>
                 <a onclick="onClickWebGLResp('DrawCube')"> DrawCube </a>
+                <a onclick="onClickWebGLResp('LightedCube')"> LightedCube </a>
             </div>
         </div>
     </div>
@@ -451,6 +452,9 @@
                     break;
                 case "DrawCube":
                     window.localStorage.setItem("exampleName", "DrawCube");
+                    break;
+                case "LightedCube":
+                    window.localStorage.setItem("exampleName", "LightedCube");
                     break;
                 default: 
                     break;

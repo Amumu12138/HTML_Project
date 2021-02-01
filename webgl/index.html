@@ -75,6 +75,7 @@
     <script type="text/javascript" src="example/client/PerspectiveView.js"></script>
     <script type="text/javascript" src="example/client/PerspectiveView_MvpMatrix.js"></script>
     <script type="text/javascript" src="example/client/DrawCube.js"></script>
+    <script type="text/javascript" src="example/client/LightedCube.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -233,6 +234,9 @@
                 break;
             case "DrawCube": 
                 Example.DrawCube();
+                break;
+            case "LightedCube": 
+                Example.LightedCube();
                 break;
             default: 
                 break;
