@@ -79,8 +79,9 @@ public class NotifyTask extends TimerTask {
 		try {
 			params = mapToUrlNotEncode(notifyMap);
 			return postReturnString(params);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error("runTask异常",e);
+
 		}
 		return null;
 	}
@@ -178,10 +179,8 @@ public class NotifyTask extends TimerTask {
 				buffer.append(line);
 			}
 			return buffer.toString();
-		} catch (ProtocolException e1) {
-			e1.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e1) {
+			log.error("postReturnString异常：",e1);
 		} finally {
 			if (conn != null) {
 				conn.disconnect();
@@ -260,8 +259,6 @@ public class NotifyTask extends TimerTask {
 			}catch (Exception e){
 				log.error("IOS异步上报用户充值异常",e);
 			}
-
-
 
 			this.cancel();
 		}

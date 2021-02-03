@@ -6,7 +6,6 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-
 sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8080";
 // sdk.host = "http://10.11.181.44:8080";
@@ -27,7 +26,6 @@ sdk.gameInfo = {};
 
 sdk.SUCCESS = 1;
 sdk.ERROR = 0;
-
 
 sdk.appVersion = "1.0";
 sdk.sdkVersion = "1.0.0";
@@ -1754,8 +1752,17 @@ sdk.closeOpenScreenCoupon = function () {
  */
 sdk.showOutGameBox = function () {
     sdk.initOutGame(function (data) {
-        var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
-        sdk.showOutGameRelatedBox(relatedArr);
+        //判断接受的退游弹窗数据是否存在
+        if (data && data.popupList && data.popupList.length > 0) {
+            var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
+            sdk.showOutGameRelatedBox(relatedArr);
+        } else {
+            if (sdk.isWeixin()) {
+                window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
+            } else {
+                window.open("about:blank", "_self").close();
+            }
+        }
     });
 };
 
@@ -1806,11 +1813,12 @@ sdk.showOutGameRelatedBox = function (relatedArr) {
 
     $("#outGame-related-exit-btn").click(function () {
         if (sdk.isWeixin()) {
-            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
-            });
+            //跳转到大厅页面
+            window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
         } else {
             window.open("about:blank", "_self").close();
         }
+
     });
 };
 
@@ -2354,6 +2362,8 @@ sdk.closeAccountLoginBox = function () {
  * @desc 打开手机登录弹框
  */
 sdk.showMobileLoginBox = function () {
+    var smsCodeTime = 60;
+
     const mobileLoginHtml = '<div id="mobile-login-box" class="mask-02 login-box-02">' +
         '<div class="r5-02">' +
         '<div class="login-head-02">' +
@@ -2453,17 +2463,25 @@ sdk.showMobileLoginBox = function () {
         });
     });
 
+
     $("#mobile-login-smsCode-text").click(function () {
         var mobile = $("#mobile-login-mobile-input").val();
-        //点击后禁用60s
-        $("#mobile-login-smsCode-text").attr('disabled', true);
-        $("#mobile-login-smsCode-text").css("color", "#BABABA");
-        setTimeout(function () {
-            $("#mobile-login-smsCode-text").attr('disabled', false);
-            $("#mobile-login-smsCode-text").css(" color", "#FD073C");
-        }, 60 * 1000);
-
-        sdk.getMobileCode(mobile, 1, null);
+        sdk.getMobileCode(mobile, 1, function (data) {
+            //点击后禁用60s
+            $("#mobile-login-smsCode-text").attr('disabled', true);
+            $("#mobile-login-smsCode-text").css("color", "#BABABA");
+            var cutDownSmsCodeFun = setInterval(function () {
+                smsCodeTime--;
+                $("#mobile-login-smsCode-text").text('获取验证码(' + smsCodeTime + 's)');
+                if (smsCodeTime <= 0) {
+                    clearInterval(cutDownSmsCodeFun);
+                    smsCodeTime = 60;
+                    $("#mobile-login-smsCode-text").text('获取验证码');
+                    $("#mobile-login-smsCode-text").attr('disabled', false);
+                    $("#mobile-login-smsCode-text").css("color", "#FD073C");
+                }
+            }, 1000);
+        });
     });
 };
 
@@ -2811,11 +2829,11 @@ sdk.showRegisterSuccBox = function (userName, password) {
     $("body").append(registerSuccHtml);
 
     //倒计时
-    var cutDowmFun = setInterval(function () {
+    var cutDownFun = setInterval(function () {
         cutDownTime--;
         document.getElementById("register-succ-button").innerText = '进入游戏(' + cutDownTime + ')';
         if (cutDownTime <= 0) {
-            clearInterval(cutDowmFun);
+            clearInterval(cutDownFun);
             document.getElementById("register-succ-button").innerText = '进入游戏';
             sdk.login02(userName, password, function (data) {
                 sdk.closeRegisterSuccBox();
@@ -3054,7 +3072,7 @@ sdk.getMobileCode = function (mobile, type, callback) {
 
     sdk.api(params, "getMobileCode", function (retData) {
         if (retData.code == sdk.SUCCESS) {
-            if (callback) callback();
+            if (callback) callback(retData);
         } else {
             sdk.confirmDialog(retData.msg);
         }

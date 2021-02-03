@@ -6,10 +6,10 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-
  sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8096";
 // sdk.host = "http://10.11.181.44:8080";
+//sdk.host = "http://10.11.181.200:8080";
 
 sdk.apiUrl = sdk.host + "/api/";
 sdk.payUrl = sdk.host + "/pay/";
@@ -43,6 +43,7 @@ sdk.init = function () {
         sdk.setItem("channelGameId", channelGameId);
     }
     var isEdition = sdk.getURLVar("isEdition");  //ios封包专属字段 标识字段
+    var iscpl = sdk.getURLVar("iscpl");  //cpl渠道专属字段 标识字段
     var idfa = "";
     if (isEdition != null && isEdition != "") {
         idfa = sdk.getURLVar("idfa"); //IOS设备idfa
@@ -54,7 +55,15 @@ sdk.init = function () {
         } else {
             sdk.getIOSMatchIdfa(channelGameId, isEdition, idfa);
         }
-    } else {
+
+    } else if (iscpl  != null && iscpl != ""){
+        var idfa = sdk.getURLVar("idfa"); //IOS设备idfa
+        sdk.setItem("idfa", idfa);
+        var channel = sdk.getURLVar("channel");
+        if (channel != null && channel != "null" && channel != "") {
+            sdk.setItem("channel", channel);
+        }
+    }else {
         var channel = sdk.getURLVar("channel");
         if (channel != null && channel != "null" && channel != "") {
             sdk.setItem("channel", channel);
@@ -188,7 +197,7 @@ sdk.initLoading = function (callback) {
             }else{
                 $("#flash").append("<img style='height: 100%; width: 100%;' src='/images/sdk2.0/pj_flash.gif'/ >");
             }
-        })
+        });
 
         setTimeout(function () {
             $("#flash").animate({
@@ -1587,7 +1596,7 @@ sdk.showOpenScreenTextBox = function (title, content) {
         '<div class="flex">' +
         // '<div class="icon-float-logo"></div>' +
         '<p>' + title + '</p>' +
-        '<div id="open-screen-text-close-img" class="icon-jurisdiction-delete"></div>' +
+        '<div id="open-screen-text-close-img" class="icon-jurisdiction-dee"></div>' +
         '</div>' +
         '</div>' +
         '<h5 class="open-screen-text">' + content + '</h5>' +
@@ -1753,8 +1762,19 @@ sdk.closeOpenScreenCoupon = function () {
  */
 sdk.showOutGameBox = function () {
     sdk.initOutGame(function (data) {
-        var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
-        sdk.showOutGameRelatedBox(relatedArr);
+        //判断接受的退游弹窗数据是否存在
+        if (data && data.popupList && data.popupList.length > 0) {
+            var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
+            sdk.showOutGameRelatedBox(relatedArr);
+        } else {
+            if (sdk.isWeixin()) {
+                window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
+               /* WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+                });*/
+            } else {
+                window.open("about:blank", "_self").close();
+            }
+        }
     });
 };
 
@@ -1805,6 +1825,7 @@ sdk.showOutGameRelatedBox = function (relatedArr) {
 
     $("#outGame-related-exit-btn").click(function () {
         if (sdk.isWeixin()) {
+            //window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
             WeixinJSBridge.invoke('closeWindow', {}, function (res) {
             });
         } else {
@@ -2324,6 +2345,7 @@ sdk.closeAccountLoginBox = function () {
  * @desc 打开手机登录弹框
  */
 sdk.showMobileLoginBox = function () {
+
     const mobileLoginHtml = '<div id="mobile-login-box" class="mask-02 login-box-02">' +
         '<div class="r5">' +
         '<div class="login-head-02"><p>手机登录</p></div>' +
@@ -2391,17 +2413,26 @@ sdk.showMobileLoginBox = function () {
         });
     });
 
+    var cutDownTime = 60;
     $("#mobile-login-getSmsCode-button").click(function () {
         var mobile = $("#mobile-login-mobile-input").val();
-        //点击后禁用60s
-        $("#mobile-login-getSmsCode-button").attr('disabled', true);
-        $("#mobile-login-getSmsCode-button").css("background-color", "#BABABA");
-        setTimeout(function () {
-            $("#mobile-login-getSmsCode-button").attr('disabled', false);
-            $("#mobile-login-getSmsCode-button").css("background-color", "#BA494B");
-        }, 60 * 1000);
+        sdk.getMobileCode(mobile, 1, function (data) {
+            //点击后禁用60s
+            $("#mobile-login-getSmsCode-button").attr('disabled', true);
+            $("#mobile-login-getSmsCode-button").css("background-color", "#BABABA");
+            var cutDownFun = setInterval(function () {
+                cutDownTime--;
+                $("#mobile-login-getSmsCode-button").text('获取验证码(' + cutDownTime + 's)');
 
-        sdk.getMobileCode(mobile, 1, null);
+                if (cutDownTime <= 0) {
+                    clearInterval(cutDownFun);
+                    cutDownTime = 60;
+                    $("#mobile-login-getSmsCode-button").text("获取验证码");
+                    $("#mobile-login-getSmsCode-button").attr('disabled', false);
+                    $("#mobile-login-getSmsCode-button").css("background-color", "#BA494B");
+                }
+            }, 1000);
+        });
     });
 };
 
@@ -2933,7 +2964,7 @@ sdk.getMobileCode = function (mobile, type, callback) {
 
     sdk.api(params, "getMobileCode", function (retData) {
         if (retData.code == sdk.SUCCESS) {
-            if (callback) callback();
+            if (callback) callback(retData);
         } else {
             sdk.confirmDialog(retData.msg);
         }
@@ -3134,7 +3165,7 @@ sdk.initOutGame = function (callback) {
     params["token"] = sdk.getItem("sdkToken"); //用户登录token
     params["type"] = "2"; //类型
 
-    sdk.api(params, "getPopUpConfig", function (retData) {
+    sdk.api(params, "exitPopupBox", function (retData) {
         if (retData.code == sdk.SUCCESS) {
             if (callback) callback(retData.data);
         } else {
@@ -3333,6 +3364,16 @@ sdk.weChatCode = function (userName, password) {
 sdk.loadOpenUc = function (params) {
     var url = sdk.concatJumpUrl(params.url); //获取用户中心Url
     sdk.showHomeViewHtml(url); //打开用户中心菜单
+};
+/**
+ * Safari 浏览器打开展示引导图
+ */
+sdk.guidanceDown = function () {
+    if (sdk.is_safari()) {
+        console.info("引导图");
+        $("#guideFigure").css("display", "block");
+        $("#guideFigure").css("z-index", "999999");
+    }
 };
 
 

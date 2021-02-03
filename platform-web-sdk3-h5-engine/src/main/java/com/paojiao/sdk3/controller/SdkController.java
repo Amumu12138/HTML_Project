@@ -85,7 +85,6 @@ public class SdkController extends BaseController {
 
     //泡椒H5登录URL-SDK2.0
     private static final String PAOJIAOMAINURLV2 = "https://h5.paojiao.cn/main.html";
-    //private static final String PAOJIAOMAINURLV2 = "http://10.11.181.200:8080/main.html";
 
 
     //sdk2.0 获取SDK配置URL
@@ -1088,10 +1087,16 @@ public class SdkController extends BaseController {
                 return;
             }
 
-            PjMap<String, String> param = getParaMap1();
-            param.put("gameId", channelGame.getGameId() + "");
-
-            String retData = HttpKit.get(PjConstants.sconfig.getNgReportRoleInfoUrl(), param);
+            Map<String, String> reqParams = getParaMap1();
+            reqParams.put("channelId", "1");
+            //reqParams.put("channel", channelGame.getCid() == null ? "pj001" : channelGame.getCid());
+            reqParams.put("sdkVersion", "1.0.0");
+            reqParams.put("appVersion", "1.0.0");
+            reqParams.put("platformType", "H5");
+            reqParams.put("gameId", channelGame.getGameId() + "");
+            String sign = SignUtil.generateSign2(reqParams, PjConstants.SDK_SIGN_KEY);
+            reqParams.put("sign", sign);
+            String retData = HttpKit.get(PjConstants.sconfig.getNgReportRoleInfoUrl(), reqParams);
             Map reMap = JsonKit.parse(retData, Map.class);
             log.info("====>>上报玩家角色信息[" + JsonKit.toJson(getParaMap1()) + "]====>>返回结果:" + retData);
             if ("1".equals(reMap.get("code"))) {
@@ -1334,13 +1339,14 @@ public class SdkController extends BaseController {
             super.requestFailure("手机号码为空");
         }
         Map<String, String> reqParams = getParaMap1();
+
      /*   reqParams.put("type", "2");
         reqParams.put("sdkVersion", "1.0.0");
         reqParams.put("appVersion", "1.0.0");
         reqParams.put("platformType", "H5");*/
         String sign = SignUtil.generateSign2(reqParams, PjConstants.SDK_SIGN_KEY);
         reqParams.put("sign", sign);
-        log.info("CODE---URL:" + PjConstants.sconfig.getNgPhoneCodeUrl());
+        log.info("================>短信验证码请求参数：" + reqParams.toString());
         String postResult = HttpsUtil.post(PjConstants.sconfig.getNgPhoneCodeUrl(), reqParams, null);
         log.info("================>获取短信验证码返回结果：" + postResult);
         JSONObject jsonObject = JSONObject.parseObject(postResult);
@@ -1817,8 +1823,8 @@ public class SdkController extends BaseController {
             //因为是调用微信公众号支付，需要获取用户openid，所以需要先授权登录获取用openid，在跳转支付接口。
             if (UaUtil.getClientType(getRequest()) == UaUtil.weixin) {
                 StringBuffer callback = new StringBuffer();
-                callback.append(PAOJIAOMAINURLV2).append("?channelGameId=").append(channelGameId)
-                        .append("&channel=").append(channel);
+                    callback.append(PAOJIAOMAINURLV2).append("?channelGameId=").append(channelGameId)
+                            .append("&channel=").append(channel);
 
                 String loginUrl = "/wxThird/login?platform=" + platform + "&toUrl=" + callback.toString();
                 String ucHost = PjConstants.sconfig.getUcUrl();
@@ -1948,11 +1954,6 @@ public class SdkController extends BaseController {
         } catch (Exception e) {
             log.info("游戏闪屏背景图查询异常ERROR：" + e.getMessage());
         }
-    }
-
-
-    public static void main(String[] args) {
-
     }
 
 }
