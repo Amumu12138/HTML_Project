@@ -118,7 +118,7 @@ public class ThirdLoginController extends BaseController {
 
                    //进入游戏
                     StringBuffer url  = new StringBuffer();
-                    if (channelGameId == 11094 || channelGameId == 11190){
+                    if (channelGameId == 11094){
                         url.append(PjConstants.sconfig.getSdkHost()+"/main3.html?");
                     }else{
                         url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
@@ -187,7 +187,7 @@ public class ThirdLoginController extends BaseController {
             if(retMap == null){
                 //进入游戏
                StringBuffer url  = new StringBuffer();
-                if (channelGameId == 11094 || channelGameId == 11190){
+                if (channelGameId == 11094){
                     url.append(PjConstants.sconfig.getSdkHost()+"/login3.html?");
                 }else{
                     url.append(PjConstants.sconfig.getSdkHost()+"/login.html?");
@@ -219,7 +219,7 @@ public class ThirdLoginController extends BaseController {
 
             //进入游戏
             StringBuffer url  = new StringBuffer();
-            if (channelGameId == 11094 || channelGameId == 11190){
+            if (channelGameId == 11094){
                 url.append(PjConstants.sconfig.getSdkHost()+"/main3.html?");
             }else{
                 url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");
@@ -277,7 +277,7 @@ public class ThirdLoginController extends BaseController {
 
             //进入游戏
             StringBuffer url  = new StringBuffer();
-            if (channelGameId == 11094 || channelGameId == 11190){
+            if (channelGameId == 11094){
                 url.append(PjConstants.sconfig.getSdkHost()+"/main3.html?");
             }else{
                 url.append(PjConstants.sconfig.getSdkHost()+"/main.html?");

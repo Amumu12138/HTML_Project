@@ -170,6 +170,7 @@
         pushHistory();
         window.addEventListener("popstate", function (e) {
             sdk.showOutGameBox();
+            pushHistory();
         }, false);
 
         function pushHistory() {
@@ -177,29 +178,8 @@
                 title: "title",
                 url: "#"
             };
-            window.history.pushState(state, "title", "");
+            window.history.pushState(state, "title", "#");
         }
-
-        /**
-         * 监听手机右滑后退返回游戏大厅功能实现
-         **/
-        let startX = 0, startY = 0;
-        document.body.addEventListener("touchstart", function (e) {
-            startX = e.changedTouches[0].pageX;
-            startY = e.changedTouches[0].pageY;
-        });
-
-        document.body.addEventListener("touchmove", function (e) {
-
-            let moveEndX = e.changedTouches[0].pageX;
-            let moveEndY = e.changedTouches[0].pageY;
-            let X = moveEndX - startX;
-            let Y = moveEndY - startY;
-
-            if ((Math.abs(X) > Math.abs(Y)) && (startX >= 0 && startX <= 50) && X > 50) {
-                //window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
-            }
-        });
     }
 </script>
 

@@ -233,7 +233,7 @@
             <!-- 线上环境97服务器 -->
             <id>online97</id>
             <properties>
-                <profiles.active>dev</profiles.active>
+                <profiles.active>online97</profiles.active>
             </properties>
         </profile>
 
@@ -241,7 +241,7 @@
             <!-- 线上环境113服务器 -->
             <id>online113</id>
             <properties>
-                <profiles.active>dev</profiles.active>
+                <profiles.active>online113</profiles.active>
             </properties>
         </profile>
 

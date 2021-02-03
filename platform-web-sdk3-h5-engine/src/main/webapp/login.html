@@ -23,6 +23,9 @@
     <link href="/css/layout.css?20171011" rel="stylesheet">
     <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/pj_api.js"></script>
+
+    <!--<script type="text/javascript" src="/js/pj_sdk_host.js"></script>-->
+
     <script type="text/javascript" src="/js/pj_sdk_host_v1.js"></script>
 
 </head>
@@ -40,6 +43,8 @@
         <div class="closeCode" id="closeCode-btn"><button>关闭</button></div>
     </div>
 </div>
+
+
     <script type="text/javascript">
         sdk.init();
         var channelGameId = sdk.getItem("channelGameId");
@@ -50,6 +55,7 @@
             window.location.href=sdk.loginUrl+"?channelGameId="+channelGameId+"&channel="+channel+"&isEdition=true";
         }
         var isAutoLogin = pjapi.getURLVar("isAutoLogin");
+
 
         sdk.getIsAudit(channelGameId, function (retData) {
             console.info(retData.code);
@@ -71,11 +77,12 @@
                             startEventListener();
                         } else {
                             sdk.confirmDialog(ret.msg);
-
+                            return;
                         }
                     });
                 });
             } else {
+
                 sdk.initLoading(function () {
                     sdk.getGameInfo("true", function (ret) {
                         if (ret.code == sdk.SUCCESS) {//成功
@@ -91,14 +98,16 @@
                             startEventListener();
                         } else {
                             sdk.confirmDialog(ret.msg);
-
+                            return;
                         }
                     });
+
                 });
             }
         });
 
         function startEventListener() {
+
             window.addEventListener("message", receiveMessage, false);
 
             function receiveMessage(event) {

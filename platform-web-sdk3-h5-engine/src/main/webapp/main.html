@@ -80,6 +80,8 @@
 </div>
 
 </body>
+
+
     <script type="text/javascript">
 		//初始化
 		sdk.init2();
@@ -99,6 +101,7 @@
 		}
 		//页面主方法
 		function start() {
+
 			//获取游戏信息
 			sdk.getGameInfo("false", function (ret) {
 				if (ret.code == sdk.SUCCESS) { //成功
@@ -125,6 +128,7 @@
 					callHistory();
 				} else {
 					sdk.confirmDialog(ret.msg);
+
 				}
 			});
 		}
@@ -132,6 +136,7 @@
 		//加载游戏
 		function loadGame(gameInfo) {
 			var orientation = gameInfo.orientation;
+
 			var gameUrl = gameInfo.gameUrl;
 			gameUrl = sdk.setURLVar(gameUrl, "sdkToken", sdk.getItem("sdkToken"));
 			gameUrl = sdk.setURLVar(gameUrl, "uid", sdk.getItem("uid"));
@@ -141,7 +146,10 @@
 				realNameAuthStatus = 0;
 			}
 
+
 			gameUrl = sdk.setURLVar(gameUrl, "realNameAuthStatus", realNameAuthStatus);
+
+
 			if (orientation == 0) { //横屏游戏
 				$("body").append(
 					'<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
@@ -156,6 +164,7 @@
 						});
 					}
 				}
+
 			} else { //竖屏游戏
                 //刘海屏和水滴屏适配
                 var hasIphoneX = window.innerHeight / window.innerWidth > 2 ? true : false;
@@ -169,11 +178,15 @@
                     + '<iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + ($(window).height() + offsetHeight) + 'px;">'
                     + '</iframe></div>');
 			}
+			// sdk.enableFloatBox();
+
 			var isIp = sdk.getItem("isAmericaIp");
 			if (isIp == "0" || isIp == "2"){
+				//sdk.enableFloatBox();
 				sdk.enableFloatBox02();
 			}
 		}
+
 
 		//开始消息监听
 		function startEventListener() {
@@ -182,31 +195,55 @@
 			function receiveMessage(event) {
 				sdk.log("host receive data", event.data);
 				switch (event.data.method) {
-                    case "PJ_loadPayBox": //拉起支付框
+
+					// case "initLoading": {//加载loading页面
+					// 	sdk.initLoading();
+					// 	break;
+					// }
+					//
+					// case "loadLoginBox": {//登录
+					// 	sdk.loadLoginBox(event.data.param);
+					// 	break;
+					// }
+					//
+					// case "getToken": {//token验证
+					// 	sdk.getToken(event.data.param);
+					// 	break;
+					// }
+
+					case "PJ_loadPayBox": { //拉起支付框
 						sdk.loadPayBox02(event.data.param);
 						break;
-                    case "PJ_reportRoleInfo":  //上报玩家信息
+					}
+
+					case "PJ_reportRoleInfo": { //上报玩家信息
 						sdk.reportRoleInfo(event.data.param);
 						break;
-                    case "closePayBox": //关闭支付框页面
+					}
+
+					case "closePayBox": {//关闭支付框页面
 						sdk.closePayBox02();
 						break;
-                    case "logout":  //退出登录
+					}
+
+					case "logout": { //退出登录
 						sdk.logout();
 						break;
-                    case "loadPubPay":  //拉起公众号支付
+					}
+					case "loadPubPay": { //拉起公众号支付
 						sdk.loadPubPay(event.data.param);
 						break;
-                    case "openUc":  //打开用户中心菜单
+					}
+					case "openUc": { //打开用户中心菜单
 						sdk.loadOpenUc(event.data.param);
 						break;
-                    default:
-                        break;
+					}
+
 				}
 			}
 		}
 
-        //上报在线
+			//上报在线
 		function startReportOnline(uid,channel,gameId){
 			setInterval(function (){
 				$.post("/onlineReport/report",{uid:uid,channel: channel,gameId:gameId},function(result){
@@ -238,11 +275,14 @@
 					}
 				});
 			},1000*60);
+
 		}
 
 		$(function () {
 			start();
 		});
+
+
 
         function onBridgeReady(payObj){
             WeixinJSBridge.invoke(
@@ -262,7 +302,6 @@
                     }
                 });
         }
-
         //拉起微信公众号支付
         function callWxPay(payObj){
             if (typeof WeixinJSBridge == "undefined"){
@@ -279,45 +318,26 @@
 
 		//注册退游弹出事件
 		function callHistory() {
-            pushHistory();
-            window.addEventListener("popstate", function (e) {
-                sdk.showOutGameBox();
-            }, false);
+			pushHistory();
+			window.addEventListener("popstate", function (e) {
+				sdk.showOutGameBox();
+				pushHistory();
+			}, false);
 
-            function pushHistory() {
-                var state = {
-                    title: "title",
-                    url: "#"
-                };
-                window.history.pushState(state, "title", "");
-            }
+			function pushHistory() {
+				var state = {
+					title: "title",
+					url: "#"
+				};
+				window.history.pushState(state, "title", "#");
+			}
+		};
 
-            /**
-             * 监听手机右滑后退返回游戏大厅功能实现
-             **/
-            let startX = 0, startY = 0;
-            document.body.addEventListener("touchstart", function (e) {
-                startX = e.changedTouches[0].pageX;
-                startY = e.changedTouches[0].pageY;
-            });
 
-            document.body.addEventListener("touchmove", function (e) {
-
-                let moveEndX = e.changedTouches[0].pageX;
-                let moveEndY = e.changedTouches[0].pageY;
-                let X = moveEndX - startX;
-                let Y = moveEndY - startY;
-
-                if ((Math.abs(X) > Math.abs(Y)) && (startX >= 0 && startX <= 50) && X > 50) {
-                    // window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
-                }
-            });
-        }
-
-        function closeRealNameBox() {
+		function closeRealNameBox(){
 			$("#showRealNameBox").remove();
-        }
-    </script>
+		};
+	</script>
 </body>
 
 </html>

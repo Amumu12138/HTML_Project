@@ -6,6 +6,7 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
+
 sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8080";
 // sdk.host = "http://10.11.181.44:8080";
@@ -26,6 +27,7 @@ sdk.gameInfo = {};
 
 sdk.SUCCESS = 1;
 sdk.ERROR = 0;
+
 
 sdk.appVersion = "1.0";
 sdk.sdkVersion = "1.0.0";
@@ -1469,6 +1471,7 @@ sdk.is_safari = function () {
         return false;
     }
 };
+
 //查询渠道是否是提审状态
 sdk.getIsAudit = function (channelGameId, callback) {
     var params = {};
@@ -1482,7 +1485,6 @@ sdk.getIsAudit = function (channelGameId, callback) {
             callback(data);
         }
     });
-
 };
 
 /************************************************** 泡椒-SDK-H5 2.0需求实现 **************************************************/
@@ -1752,17 +1754,8 @@ sdk.closeOpenScreenCoupon = function () {
  */
 sdk.showOutGameBox = function () {
     sdk.initOutGame(function (data) {
-        //判断接受的退游弹窗数据是否存在
-        if (data && data.popupList && data.popupList.length > 0) {
-            var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
-            sdk.showOutGameRelatedBox(relatedArr);
-        } else {
-            if (sdk.isWeixin()) {
-                window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
-            } else {
-                window.open("about:blank", "_self").close();
-            }
-        }
+        var relatedArr = data.popupList[0].h5GameList ? data.popupList[0].h5GameList : null;
+        sdk.showOutGameRelatedBox(relatedArr);
     });
 };
 
@@ -1813,12 +1806,11 @@ sdk.showOutGameRelatedBox = function (relatedArr) {
 
     $("#outGame-related-exit-btn").click(function () {
         if (sdk.isWeixin()) {
-            //跳转到大厅页面
-            window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
+            WeixinJSBridge.invoke('closeWindow', {}, function (res) {
+            });
         } else {
             window.open("about:blank", "_self").close();
         }
-
     });
 };
 
