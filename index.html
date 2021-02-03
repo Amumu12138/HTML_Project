@@ -97,6 +97,7 @@
                 <a onclick="onClickWebGLResp('PerspectiveView_MvpMatrix')"> Pers_MvpMat </a>
                 <a onclick="onClickWebGLResp('DrawCube')"> DrawCube </a>
                 <a onclick="onClickWebGLResp('LightedCube')"> LightedCube </a>
+                <a onclick="onClickWebGLResp('Circle')"> Circle </a>
             </div>
         </div>
     </div>
@@ -455,6 +456,9 @@
                     break;
                 case "LightedCube":
                     window.localStorage.setItem("exampleName", "LightedCube");
+                    break;
+                case "Circle":
+                    window.localStorage.setItem("exampleName", "Circle");
                     break;
                 default: 
                     break;
