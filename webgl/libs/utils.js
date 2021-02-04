@@ -10,6 +10,11 @@ var utils = utils || {};
  * @param {*} offset 
  */
 utils.dataToBuffer = function(gl, location, count, array, stride, offset) {
+    if(!gl) return;
+    if(location == null || location == undefined || location < 0) return;
+    if(count <= 0 ) return;
+    if(!array || array.length <= 0) return;
+
     var buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
@@ -27,6 +32,9 @@ utils.dataToBuffer = function(gl, location, count, array, stride, offset) {
  * @param {*} callback 
  */
 utils.loadTexture = function(gl, location, texUnit, image, number, callback) {
+    if(!gl) return;
+    if(location == null || location == undefined || location < 0) return;
+
     var texture = gl.createTexture();
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.activeTexture(texUnit);
@@ -46,6 +54,9 @@ utils.loadTexture = function(gl, location, texUnit, image, number, callback) {
  * @param {*} count 
  */
 utils.draw = function(gl, mode, start, count) {
+    if(!gl) return;
+    if(count <= 0) return;
+
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(mode, start, count);

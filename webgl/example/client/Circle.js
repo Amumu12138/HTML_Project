@@ -61,6 +61,8 @@ Example.Circle = function() {
         y: 0
     };   
     var angle = 360 / CIRCLE_DIV;
+    vertices.push(0.0);
+    vertices.push(0.0);
     //将圆形切割成多个三角形组成的图形
     for(var i = 0; i < CIRCLE_DIV; i++) {
         var radius = i * angle * Math.PI / 180;
@@ -69,9 +71,22 @@ Example.Circle = function() {
         vertices.push(point.x);
         vertices.push(point.y);
     }
-
     utils.dataToBuffer(gl, a_position, 2, new Float32Array(vertices), 0, 0);
 
+    var indices = [];
+    for(var j = 1; j < CIRCLE_DIV; j++) {
+        indices.push(0);
+        indices.push(j);
+        indices.push(j + 1);
+    }
+    indices.push(0);
+    indices.push(CIRCLE_DIV);
+    indices.push(1);
+    var indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW);
+
+    
     //将颜色数据传递给a_color变量
     gl.vertexAttrib4fv(a_color, new Float32Array([1.0, 1.0, 1.0, 1.0]));
 
@@ -80,7 +95,8 @@ Example.Circle = function() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     //绘制图形
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, CIRCLE_DIV);
+    gl.drawElements(gl.TRIANGLES, 3 * CIRCLE_DIV, gl.UNSIGNED_BYTE, 0);
+    // gl.drawArrays(gl.TRIANGLE_FAN, 1, CIRCLE_DIV);
 }
 
 if(typeof module !== 'undefined') {

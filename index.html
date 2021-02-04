@@ -98,6 +98,7 @@
                 <a onclick="onClickWebGLResp('DrawCube')"> DrawCube </a>
                 <a onclick="onClickWebGLResp('LightedCube')"> LightedCube </a>
                 <a onclick="onClickWebGLResp('Circle')"> Circle </a>
+                <a onclick="onClickWebGLResp('LightedTranslatedRotatedCube')"> LightedTRdCube </a>
             </div>
         </div>
     </div>
@@ -460,6 +461,9 @@
                 case "Circle":
                     window.localStorage.setItem("exampleName", "Circle");
                     break;
+                case "LightedTranslatedRotatedCube":
+                    window.localStorage.setItem("exampleName", "LightedTranslatedRotatedCube");
+                    break;
                 default: 
                     break;
             }
@@ -746,8 +750,6 @@
             }
             window.location.href = "/javaScript/index.html";
         }
-
-    
     </script>
 </body>
 

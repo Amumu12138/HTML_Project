@@ -6,7 +6,6 @@
     javaScript          --- js学习教程
     matter              --- matter.js物理引擎项目
     platfrom-web-sdk3-h5-engine --- 基于泡椒-h5-sdk2.0的更新版本项目
-    platfrom-web-sdk3-h5-engine-copy --- 基于泡椒-h5-sdk2.0的IDEA项目
     test                --- 练手实操文件
     threeJs             --- three.js 3d引擎项目
     typeScript          --- ts教程学习
