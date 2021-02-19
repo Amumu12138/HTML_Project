@@ -28,7 +28,7 @@ Example.Circle = function() {
     //片元着色器程序
     const FSAHDER_SOURCE = `
         #ifdef GL_ES
-        #ifdef GL_FRAGMENT_PReCISION_HIGH
+        #ifdef GL_FRAGMENT_PRECISION_HIGH
             precision highp float;
         #else 
             precision mediump float;

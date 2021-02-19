@@ -34,7 +34,7 @@ Example.LightedTranslatedRotatedCube = function() {
             vec3 ambient = u_ambientLight * vec3(a_color);
             //将漫反射和环境光共同作用的颜色赋值给v_color
             v_color = vec4(diffuse + ambient, a_color.a);
-             //v_color = a_color;
+            //v_color = a_color;
         }
     `;
 

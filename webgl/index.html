@@ -78,6 +78,7 @@
     <script type="text/javascript" src="example/client/LightedCube.js"></script>
     <script type="text/javascript" src="example/client/Circle.js"></script>
     <script type="text/javascript" src="example/client/LightedTranslatedRotatedCube.js"></script>
+    <script type="text/javascript" src="example/client/JointModel.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -245,6 +246,9 @@
                 break;
             case "LightedTranslatedRotatedCube": 
                 Example.LightedTranslatedRotatedCube();
+                break;
+            case "JointModel": 
+                Example.JointModel();
                 break;
             default: 
                 break;
