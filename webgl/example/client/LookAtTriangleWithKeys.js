@@ -95,8 +95,7 @@ Example.LookAtTriangleWithKeys = function() {
              eyeX +=  0.01;
         } else if (37 == ev.keyCode) {  //右方向键
             eyeX -= 0.01;
-        }
-        else if (38 == ev.keyCode) {    //上方向键
+        } else if (38 == ev.keyCode) {    //上方向键
             eyeY += 0.01;   
         } else if (40 == ev.keyCode) {  //下方向键
             eyeY -= 0.01;
