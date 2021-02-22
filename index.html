@@ -100,6 +100,7 @@
                 <a onclick="onClickWebGLResp('Circle')"> Circle </a>
                 <a onclick="onClickWebGLResp('LightedTranslatedRotatedCube')"> LightedTRdCube </a>
                 <a onclick="onClickWebGLResp('JointModel')"> JointModel </a>
+                <a onclick="onClickWebGLResp('MultiJointModel')"> MulJModel </a>
             </div>
         </div>
     </div>
@@ -467,6 +468,9 @@
                     break;
                 case "JointModel":
                     window.localStorage.setItem("exampleName", "JointModel");
+                    break;
+                case "MultiJointModel":
+                    window.localStorage.setItem("exampleName", "MultiJointModel");
                     break;
                 default: 
                     break;
