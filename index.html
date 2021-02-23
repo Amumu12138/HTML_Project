@@ -70,6 +70,12 @@
             </div>
         </div>
         <div class="dropdown">
+            <button class="common-btn"> TEST </button>
+            <div class="dropdown-content">
+                <a onclick="onClickWebGLResp('RotateObject')"> RotateObject </a>
+            </div>
+        </div>
+        <div class="dropdown">
             <button class="common-btn"> Client </button>
             <div class="dropdown-content">
                 <a onclick="onClickWebGLResp('ClientTest')"> ClientTest </a>
@@ -471,6 +477,9 @@
                     break;
                 case "MultiJointModel":
                     window.localStorage.setItem("exampleName", "MultiJointModel");
+                    break;
+                case "RotateObject":
+                    window.localStorage.setItem("exampleName", "RotateObject");
                     break;
                 default: 
                     break;

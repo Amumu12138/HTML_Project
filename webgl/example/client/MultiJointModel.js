@@ -110,8 +110,8 @@ Example.MultiJointModel = function() {
         gl.enable(gl.DEPTH_TEST);
         //绘制图形
         g_modelMatrix.setTranslate(0.0, 0.0, 0.0);
-        // g_modelMatrix.rotate(g_armAngle, 0.0, 1.0, 0.0);
-        g_modelMatrix.translate(newPosX, 0.0, 0.0);
+        g_modelMatrix.rotate(g_armAngle, 0.0, 1.0, 0.0);
+        // g_modelMatrix.rotate(g_armAngle, 0.0, 0.0);
         drawBox(location, mat1);
 
         g_modelMatrix.translate(0.0, ARM_LENGTH, 0.0);
@@ -139,16 +139,16 @@ Example.MultiJointModel = function() {
         switch(ev.keyCode) {
             case 38:    //上方向键
             //  if (g_armAngle < 135.0) g_armAngle += 1.0;   
-                newPosX +=  0.1;   
+                g_armAngle += 3.0;
              break;
             case 40:    //下方向键
-               
+                g_armAngle -= 3.0;
                 break;
             case 37:    //右方向键 
-              
+                g_jointAngle += 3.0;
                 break;
             case 39:    //左方向键 
-              
+                g_jointAngle -= 3.0;
                 break;
             default:
                 break;

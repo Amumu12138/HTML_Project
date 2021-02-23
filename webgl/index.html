@@ -80,6 +80,8 @@
     <script type="text/javascript" src="example/client/LightedTranslatedRotatedCube.js"></script>
     <script type="text/javascript" src="example/client/JointModel.js"></script>
     <script type="text/javascript" src="example/client/MultiJointModel.js"></script>
+    <!-- client/test -->
+    <script type="text/javascript" src="example/client/test/RotateObject.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -253,6 +255,9 @@
                 break;
             case "MultiJointModel": 
                 Example.MultiJointModel();
+                break;
+            case "RotateObject": 
+                Example.RotateObject();
                 break;
             default: 
                 break;
