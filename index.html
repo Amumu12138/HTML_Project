@@ -107,6 +107,7 @@
                 <a onclick="onClickWebGLResp('LightedTranslatedRotatedCube')"> LightedTRdCube </a>
                 <a onclick="onClickWebGLResp('JointModel')"> JointModel </a>
                 <a onclick="onClickWebGLResp('MultiJointModel')"> MulJModel </a>
+                <a onclick="onClickWebGLResp('InitShaders')"> InitShaders </a>
             </div>
         </div>
     </div>
@@ -477,6 +478,9 @@
                     break;
                 case "MultiJointModel":
                     window.localStorage.setItem("exampleName", "MultiJointModel");
+                    break;
+                case "InitShaders":
+                    window.localStorage.setItem("exampleName", "InitShaders");
                     break;
                 case "RotateObject":
                     window.localStorage.setItem("exampleName", "RotateObject");

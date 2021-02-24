@@ -31,8 +31,10 @@ Example.RotateObject = function() {
             float nDotL = max(dot(u_lightDirection, normal), 0.0);
             //计算反射光的颜色
             vec3 diffuse = u_lightColor * vec3(a_color) * nDotL;
+            //设置漫反射光
+            vec3 ambientColor = vec3(0.2, 0.2, 0.2);
             //将反射光的颜色值赋值给v_color变量
-            v_color = vec4(diffuse, a_color.a);
+            v_color = vec4(diffuse + ambientColor, a_color.a);
         }
     `;
 
@@ -72,7 +74,7 @@ Example.RotateObject = function() {
 
     proMat.setPerspective(50.0, canvas.width / canvas.height, 1, 100);
     viewMat.setLookAt(0, 0, 2, 0, 0, -1, 0, 1, 0);
-    modelMat.setRotate(45, 0, 1, 0);
+    modelMat.setRotate(0, 0, 1, 0);
     modelMat.scale(0.5, 0.5, 0.5);
     mvpMat.set(proMat).multiply(viewMat).multiply(modelMat);    //注意顺序不能弄混
     gl.uniformMatrix4fv(u_mvpMat, false, mvpMat.elements);
@@ -154,7 +156,7 @@ Example.RotateObject = function() {
         gl.drawArrays(model, start, count);
     }
 
-    const ANGLE_STEP = 3.0;
+    const ANGLE_STEP = 10.0;
     var curAngle = 0.0;
     var curMouseX = 0.0;
     var curMouseY = 0.0;
@@ -170,12 +172,21 @@ Example.RotateObject = function() {
     canvas.onmouseup = (ev) => {
         console.log("Amumu onmouseup ev = ", ev);
 
-        var offsetX = ev.clientX  - curMouseX;
+        var offsetX = ev.clientX - curMouseX;
         var offsetY = ev.clientY - curMouseY;
 
-        if(offsetX > offsetY && offsetX > 0) {
-            curAngle  = (curAngle + ANGLE_STEP) % 360.0;
-            modelMat.rotate(curAngle, 0, 1, 0);
+        //判断鼠标滑动距离和位置,控制物体绕Y轴旋转
+        if(Math.abs(offsetX) > Math.abs(offsetY) && offsetX > 0) {
+            // curAngle = (curAngle + ANGLE_STEP) % 360.0;
+            modelMat.rotate(ANGLE_STEP, 0, 1, 0);
+            mvpMat.set(proMat).multiply(viewMat).multiply(modelMat);  
+            gl.uniformMatrix4fv(u_mvpMat, false, mvpMat.elements);
+
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            gl.drawArrays(gl.TRIANGLES, 0, 18);
+        } else if(Math.abs(offsetX) > Math.abs(offsetY) && offsetX < 0) {
+            // curAngle = (curAngle - ANGLE_STEP) % 360.0;
+            modelMat.rotate(-ANGLE_STEP, 0, 1, 0);
             mvpMat.set(proMat).multiply(viewMat).multiply(modelMat);  
             gl.uniformMatrix4fv(u_mvpMat, false, mvpMat.elements);
 
