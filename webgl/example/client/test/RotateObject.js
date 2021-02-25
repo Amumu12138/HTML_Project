@@ -32,9 +32,9 @@ Example.RotateObject = function() {
             //计算反射光的颜色
             vec3 diffuse = u_lightColor * vec3(a_color) * nDotL;
             //设置漫反射光
-            vec3 ambientColor = vec3(0.2, 0.2, 0.2);
+            vec3 ambient = vec3(0.2, 0.2, 0.2) * vec3(a_color);
             //将反射光的颜色值赋值给v_color变量
-            v_color = vec4(diffuse + ambientColor, a_color.a);
+            v_color = vec4(diffuse + ambient, a_color.a);
         }
     `;
 

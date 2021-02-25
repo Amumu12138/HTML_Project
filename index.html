@@ -73,6 +73,7 @@
             <button class="common-btn"> TEST </button>
             <div class="dropdown-content">
                 <a onclick="onClickWebGLResp('RotateObject')"> RotateObject </a>
+                <a onclick="onClickWebGLResp('PickObject')"> PickObject </a>
             </div>
         </div>
         <div class="dropdown">
@@ -484,6 +485,9 @@
                     break;
                 case "RotateObject":
                     window.localStorage.setItem("exampleName", "RotateObject");
+                    break;
+                case "PickObject":
+                    window.localStorage.setItem("exampleName", "PickObject");
                     break;
                 default: 
                     break;

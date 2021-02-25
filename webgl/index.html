@@ -83,6 +83,7 @@
     <script type="text/javascript" src="example/client/InitShaders.js"></script>
     <!-- client/test -->
     <script type="text/javascript" src="example/client/test/RotateObject.js"></script>
+    <script type="text/javascript" src="example/client/test/PickObject.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -262,6 +263,9 @@
                 break;
             case "InitShaders": 
                 Example.InitShaders();
+                break;
+            case "PickObject": 
+                Example.PickObject();
                 break;
             default: 
                 break;
