@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HUD</title>
+    <style>
+        body {
+            margin: 0;
+            /* //隐藏body窗口区域滚动条 */
+            overflow: hidden;
+        }
+    </style>
+    <link href="../../../css/common.css" rel="stylesheet">
+</head>
+
+<body>
+    <button class="common-btn" style="position: absolute;" onclick='window.history.back();'>Back</button>
+    <canvas id="webgl" width="400" height="400" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0;"></canvas>
+    <canvas id="hud" width="400" height="400" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;"></canvas>
+
+    <!-- libs -->
+    <script type="text/javascript" src="../../../libs/cuon-matrix.js"></script>
+    <script type="text/javascript" src="../../../libs/cuon-utils.js"></script>
+    <script type="text/javascript" src="../../../libs/webgl-debug.js"></script>
+    <script type="text/javascript" src="../../../libs/webgl-utils.js"></script>
+    <script type="text/javascript" src="../../../libs/utils.js"></script>
+
+    <script type="text/javascript" src="HUD.js"></script>
+    <script>
+        document.write(`<p style="position: absolute; left: 50%; transform: translate(-50%, 10px); font-weight: bold;">This Is HUD!</p>`);
+        Example.HUD();
+    </script>
+</body>
+</html>

@@ -143,7 +143,7 @@ Example.LightedTranslatedRotatedCube = function() {
     var mvpMat = new Matrix4();
     gl.uniformMatrix4fv(u_modelMat, false, modelMat.elements);
 
-    mvpMat.setPerspective(30, canvas.width / canvas.clientHeight, 1, 100);
+    mvpMat.setPerspective(30, canvas.width / canvas.height, 1, 100);
     mvpMat.lookAt(0, 0, 6, 0, 0, 0, 0, 1, 0);
     mvpMat.multiply(modelMat);
     gl.uniformMatrix4fv(u_mvpMat, false, mvpMat.elements);
