@@ -76,6 +76,7 @@
                 <a onclick="onClickWebGLResp('PickObject')"> PickObject </a>
                 <a onclick="onClickWebGLResp('PickFace')"> PickFace </a>
                 <a onclick="onClickWebGLResp('HUD')"> HUD </a>
+                <a onclick="onClickWebGLResp('Fog')"> Fog </a>
             </div>
         </div>
         <div class="dropdown">
@@ -497,6 +498,9 @@
                 case "HUD":
                     window.location.href = "/webgl/example/client/test/HUD.html";
                     return;
+                case "Fog":
+                    window.localStorage.setItem("exampleName", "Fog");
+                    break;
                 default: 
                     break;
             }

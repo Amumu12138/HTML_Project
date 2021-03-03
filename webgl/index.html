@@ -85,6 +85,7 @@
     <script type="text/javascript" src="example/client/test/RotateObject.js"></script>
     <script type="text/javascript" src="example/client/test/PickObject.js"></script>
     <script type="text/javascript" src="example/client/test/PickFace.js"></script>
+    <script type="text/javascript" src="example/client/test/Fog.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -270,6 +271,9 @@
                 break;
             case "PickFace": 
                 Example.PickFace();
+                break;
+            case "Fog": 
+                Example.Fog();
                 break;
             default: 
                 break;
