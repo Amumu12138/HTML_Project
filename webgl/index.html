@@ -86,6 +86,7 @@
     <script type="text/javascript" src="example/client/test/PickObject.js"></script>
     <script type="text/javascript" src="example/client/test/PickFace.js"></script>
     <script type="text/javascript" src="example/client/test/Fog.js"></script>
+    <script type="text/javascript" src="example/client/test/Discard.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -274,6 +275,9 @@
                 break;
             case "Fog": 
                 Example.Fog();
+                break;
+            case "Discard": 
+                Example.Discard();
                 break;
             default: 
                 break;

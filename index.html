@@ -77,6 +77,7 @@
                 <a onclick="onClickWebGLResp('PickFace')"> PickFace </a>
                 <a onclick="onClickWebGLResp('HUD')"> HUD </a>
                 <a onclick="onClickWebGLResp('Fog')"> Fog </a>
+                <a onclick="onClickWebGLResp('Discard')"> Discard </a>
             </div>
         </div>
         <div class="dropdown">
@@ -500,6 +501,9 @@
                     return;
                 case "Fog":
                     window.localStorage.setItem("exampleName", "Fog");
+                    break;
+                case "Discard":
+                    window.localStorage.setItem("exampleName", "Discard");
                     break;
                 default: 
                     break;
