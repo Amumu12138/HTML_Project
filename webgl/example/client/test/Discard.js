@@ -10,7 +10,7 @@ Example.Discard = function() {
     const VSHADER_SOURCE = `
         attribute vec4 a_position;
         void main() {
-            gl_Position = a_position;
+            gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
             gl_PointSize = 10.0;
         }
     `;
@@ -36,12 +36,12 @@ Example.Discard = function() {
 
     initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE);
 
-    var a_position = gl.getAttribLocation(gl.program, "a_position");
-    gl.vertexAttrib4fv(a_position, new Float32Array([0.0, 0.0, 0.0, 1.0]));
+    // var a_position = gl.getAttribLocation(gl.program, "a_position");
+    // gl.vertexAttrib4fv(a_position, new Float32Array([0.0, 0.0, 0.0, 1.0]));
 
     utils.draw(gl, gl.POINTS, 0, 1);
 }
 
 if(typeof module !== "undefined") {
-    module.export  = Example[Object.keys(Example)[0]];
+    module.export = Example[Object.keys(Example)[0]];
 }

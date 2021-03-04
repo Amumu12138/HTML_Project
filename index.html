@@ -78,6 +78,7 @@
                 <a onclick="onClickWebGLResp('HUD')"> HUD </a>
                 <a onclick="onClickWebGLResp('Fog')"> Fog </a>
                 <a onclick="onClickWebGLResp('Discard')"> Discard </a>
+                <a onclick="onClickWebGLResp('BlendSphere')"> BlendSphere </a>
             </div>
         </div>
         <div class="dropdown">
@@ -504,6 +505,9 @@
                     break;
                 case "Discard":
                     window.localStorage.setItem("exampleName", "Discard");
+                    break;
+                case "BlendSphere":
+                    window.localStorage.setItem("exampleName", "BlendSphere");
                     break;
                 default: 
                     break;
