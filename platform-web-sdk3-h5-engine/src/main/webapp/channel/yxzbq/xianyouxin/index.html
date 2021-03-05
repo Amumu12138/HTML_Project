@@ -222,16 +222,17 @@
                 var level = params["roleType"] == 0 ? 1 * 10000 + params["roleLever"] : params["roleLever"];
 
                 var roleUrl = "https://h5.paojiao.cn/roleReport/xayxRoleReport";
-                var roleParams = {};
-                roleParams["user_id"] = pjChannelSdk.channelUserId;
-                roleParams["game_appid"] = "DFD8D5DFA081F20CA";
-                roleParams["server_id"] = params["serverid"];
-                roleParams["server_name"] = params["servername"];
-                roleParams["role_id"] = params["roleid"];
-                roleParams["role_name"] = params["roleName"];
-                roleParams["level"] = level;
-                roleParams["power"] = params["fightvalue"];
-
+                var roleParams = {
+                    "user_id": pjChannelSdk.channelUserId, //运营方登陆时传递的user_id
+                    "game_appid": "DFD8D5DFA081F20CA", //游戏编号:运营方为游戏分配的唯一编号
+                    "server_id": params["serverid"], //区服id
+                    "server_name": params["servername"], //区服名称
+                    "role_id": params["roleid"], //角色id
+                    "role_name": params["roleName"], //角色名称
+                    "level": level, //角色等级(若有转生即: 转生 * 10000 + 角色等级)
+                    "power": params["fightvalue"], //角色战力
+                    "channelGameId": pjChannelSdk.initData.channelGameId
+                };
                 pjapi.httpPost(roleUrl, roleParams, function (data) {
                     console.log("Amumu xianyouxin data = ", data.sign);
                     var roleInfo = {
@@ -248,6 +249,8 @@
                     console.log("Amumu xianyouxin jointCreateRole roleInfo = ", roleInfo);
                     xgGame.jointCreateRole(roleInfo);
                 });
+
+
             }
         }
     </script>

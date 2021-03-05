@@ -16,21 +16,14 @@
 	<title>游戏</title>
 
 	<link href="/css/common.css?20171011" rel="stylesheet">
-	<link href="/css/common_v2.css?20171011" rel="stylesheet">
+    <link href="/css/common_v2.1.css?20171011" rel="stylesheet">
 	<link href="/css/layout.css?20171011" rel="stylesheet">
 
 	<script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
-	<!--<script type="text/javascript" src="/js/pj_sdk_host.js"></script>-->
-	<script type="text/javascript" src="/js/pj_sdk_host_v1.js"></script>
+	<script src="/js/pj_sdk_host_v1.js" type="text/javascript"></script>
 	<script type="text/javascript" src="/js/pj_api.js"></script>
-<!--    <script tyepe="text/javascript" src="/js/jq6.js"></script>-->
 
-	<!--<link rel="stylesheet" type="text/css" href="/sdk2/css/sdk_themes.css?v=vs">
-	<script type="text/javascript" src="/sdk2/js/jq4.js?v=d"></script>
-	<script type="text/javascript" src="/sdk2/js/sdk_common.js?v=a1"></script>
-	<script type="text/javascript" src="/sdk2/js/home_js.js"></script>
-	<script type="text/javascript" src="/sdk2/js/pj.androidutil.js"></script>-->
 
 	<style type="text/css">
 		.icon-pjpay:before {
@@ -44,7 +37,6 @@
 			position: relative;
 			top: 10px;
 		}
-
 		body {
 			margin: 0px;
 		}
@@ -182,22 +174,22 @@
 			function receiveMessage(event) {
 				sdk.log("host receive data", event.data);
 				switch (event.data.method) {
-					case "PJ_loadPayBox": //拉起支付框
+                    case "PJ_loadPayBox": //拉起支付框
 						sdk.loadPayBox02(event.data.param);
 						break;
-					case "PJ_reportRoleInfo":  //上报玩家信息
+                    case "PJ_reportRoleInfo":  //上报玩家信息
 						sdk.reportRoleInfo(event.data.param);
 						break;
-					case "closePayBox": //关闭支付框页面
+                    case "closePayBox": //关闭支付框页面
 						sdk.closePayBox02();
 						break;
-					case "logout":  //退出登录
+                    case "logout":  //退出登录
 						sdk.logout();
 						break;
-					case "loadPubPay":  //拉起公众号支付
+                    case "loadPubPay":  //拉起公众号支付
 						sdk.loadPubPay(event.data.param);
 						break;
-					case "openUc":  //打开用户中心菜单
+                    case "openUc":  //打开用户中心菜单
 						sdk.loadOpenUc(event.data.param);
 						break;
                     default:
@@ -278,26 +270,25 @@
         }
 
 		//注册退游弹出事件
-		function callHistory() {
-			pushHistory();
-			window.addEventListener("popstate", function (e) {
+        function callHistory() {
+            pushHistory();
+            window.addEventListener("popstate", function (e) {
                 sdk.showOutGameBox();
-                pushHistory();
-			}, false);
+            }, false);
 
-			function pushHistory() {
-				var state = {
-					title: "title",
-					url: "#"
-				};
-				window.history.pushState(state, "title", "#");
-			}
-		};
+            function pushHistory() {
+                var state = {
+                    title: "title",
+                    url: "#"
+                };
+                window.history.pushState(state, "title", "");
+            }
+        }
 
-		function closeRealNameBox(){
+        function closeRealNameBox() {
 			$("#showRealNameBox").remove();
-		};
-	</script>
+        }
+    </script>
 </body>
 
 </html>

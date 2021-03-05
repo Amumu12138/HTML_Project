@@ -30,6 +30,9 @@
 
 		<ul style="list-style: none">
 			<li style="margin-top: 20px;">
+				<input type="button" onclick="showOpenH5()" value="打开新连接">
+			</li>
+			<li style="margin-top: 20px;">
 				<input type="button" onclick="test_pay()" value="支付">
 			</li>
 			<li style="margin-top: 20px;">
@@ -125,7 +128,7 @@
                 "exts": "eyJpdGVtX2lkIjoiMTkwNjE4Mzc1NjI3NzQyMTc5MCIsImFtb3VudCI6IjYiLCJzaWduIjoiNzRmMjY5ZTRhNWM1YWYwNzI0ZjU5OGNkMjdmNTE4MDcifQ_c_c" // 验证串，这个字段不能太长，小于 130 个字符
             }
         }
-        h5Game.emit(CONST.EVENT.BUY.START, params);
+        // h5Game.emit(CONST.EVENT.BUY.START, params);
 
 
         var pjsdk = window.YH_PJ_SDK_CLIENT;//获取sdk实例
@@ -414,6 +417,11 @@
 	}
 	function loadOpen() {
 		window.open("https://pay.paojiao.cn/pay/createGoldOrder?gameId=3096&orderType=1&timestamps=1604477658774&ip=127.0.0.1&sign=06977900438a19cfdfd0cf9be007cb27&serverName=%E8%83%B8%E6%80%80%E5%A4%A7%E5%BF%97&serverId=1200006&platform=1&productName=%E5%85%85%E5%80%BC50%E5%85%83&uid=24530735&userVoucherId=&payType=1&puid=3018439&money=50.0&deduction=0.0&price=50.0&busOrder=H5_16044776551515006&cpOrder=pjyx20201104161413939574541&roleName=%E9%A9%AC%E5%BC%98%E9%9B%85&notifyUrl=http%3A%2F%2Flocalhost%3A8080%2Fpay%2Fpaojiao%2FpayCallBack&sdkVersion=SDK2_2.0.0&cid=pj001");
+	}
+
+	function showOpenH5() {
+		console.log("Amumu showOpenH5");
+		window.open("https://sdk2.paojiao.cn/gamelobby/");
 	}
 	</script>
 

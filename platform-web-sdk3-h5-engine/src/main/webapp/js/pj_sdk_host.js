@@ -13,7 +13,6 @@ sdk.host = "https://h5.paojiao.cn";
 sdk.apiUrl = sdk.host + "/api/";
 sdk.payUrl = sdk.host + "/pay/";
 sdk.mainUrl = sdk.host + '/main3.html';
-// sdk.mainUrl = sdk.host + '/main.html';
 sdk.loginUrl = sdk.host + '/login3.html';
 sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
 sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
@@ -1469,7 +1468,6 @@ sdk.is_safari = function () {
         return false;
     }
 };
-
 //查询渠道是否是提审状态
 sdk.getIsAudit = function (channelGameId, callback) {
     var params = {};
@@ -1483,6 +1481,7 @@ sdk.getIsAudit = function (channelGameId, callback) {
             callback(data);
         }
     });
+
 };
 
 /************************************************** 泡椒-SDK-H5 2.0需求实现 **************************************************/
@@ -2110,8 +2109,8 @@ sdk.autoLogin02 = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     }
@@ -2296,8 +2295,8 @@ sdk.showAccountLoginBox = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     });
@@ -2337,8 +2336,8 @@ sdk.showAccountLoginBox = function () {
                 window.location.href = sdk.mainUrl;
             }
             //保存最新的登录账号,密码
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
 
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
@@ -2413,8 +2412,8 @@ sdk.showMobileLoginBox = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     });

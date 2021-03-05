@@ -16,21 +16,14 @@
 	<title>游戏</title>
 
 	<link href="/css/common.css?20171011" rel="stylesheet">
-	<link href="/css/common_v2.css?20171011" rel="stylesheet">
+    <link href="/css/common_v2.1.css?20171011" rel="stylesheet">
 	<link href="/css/layout.css?20171011" rel="stylesheet">
 
 	<script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
-	<!--<script type="text/javascript" src="/js/pj_sdk_host.js"></script>-->
-	<script type="text/javascript" src="/js/pj_sdk_host_v1.js"></script>
+	<script src="/js/pj_sdk_host_v1.js" type="text/javascript"></script>
 	<script type="text/javascript" src="/js/pj_api.js"></script>
-<!--    <script tyepe="text/javascript" src="/js/jq6.js"></script>-->
 
-	<!--<link rel="stylesheet" type="text/css" href="/sdk2/css/sdk_themes.css?v=vs">
-	<script type="text/javascript" src="/sdk2/js/jq4.js?v=d"></script>
-	<script type="text/javascript" src="/sdk2/js/sdk_common.js?v=a1"></script>
-	<script type="text/javascript" src="/sdk2/js/home_js.js"></script>
-	<script type="text/javascript" src="/sdk2/js/pj.androidutil.js"></script>-->
 
 	<style type="text/css">
 		.icon-pjpay:before {
@@ -44,7 +37,6 @@
 			position: relative;
 			top: 10px;
 		}
-
 		body {
 			margin: 0px;
 		}
@@ -277,56 +269,21 @@
             }
         }
 
-
-		window.addEventListener("popstate", function (e) {
-			sdk.showOutGameBox();
-		}, false);
-
-
-		function callHistory() {
-				var state = {
-					title: "title",
-					url: "#"
-				};
-				window.history.pushState(state, "title", "");
-		}
-
 		//注册退游弹出事件
-		// function callHistory() {
-        //     pushHistory();
-        //     window.addEventListener("popstate", function (e) {
-        //         sdk.showOutGameBox();
-        //     }, false);
-		//
-        //     function pushHistory() {
-        //         var state = {
-        //             title: "title",
-        //             url: "#"
-        //         };
-        //         window.history.pushState(state, "title", "");
-        //     }
-		//
-        //     /**
-        //      * 监听手机右滑后退返回游戏大厅功能实现
-        //      **/
-        //     let startX = 0, startY = 0;
-        //     document.body.addEventListener("touchstart", function (e) {
-        //         startX = e.changedTouches[0].pageX;
-        //         startY = e.changedTouches[0].pageY;
-        //     });
-		//
-        //     document.body.addEventListener("touchmove", function (e) {
-		//
-        //         let moveEndX = e.changedTouches[0].pageX;
-        //         let moveEndY = e.changedTouches[0].pageY;
-        //         let X = moveEndX - startX;
-        //         let Y = moveEndY - startY;
-		//
-        //         if ((Math.abs(X) > Math.abs(Y)) && (startX >= 0 && startX <= 50) && X > 50) {
-        //             // window.location.replace("https://sdk2.paojiao.cn/gamelobby/");
-        //         }
-        //     });
-        // }
+        function callHistory() {
+            pushHistory();
+            window.addEventListener("popstate", function (e) {
+                sdk.showOutGameBox();
+            }, false);
+
+            function pushHistory() {
+                var state = {
+                    title: "title",
+                    url: "#"
+                };
+                window.history.pushState(state, "title", "");
+            }
+        }
 
         function closeRealNameBox() {
 			$("#showRealNameBox").remove();

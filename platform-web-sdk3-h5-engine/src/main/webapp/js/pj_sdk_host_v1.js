@@ -30,7 +30,7 @@ sdk.ERROR = 0;
 
 sdk.appVersion = "1.0";
 sdk.sdkVersion = "1.0.0";
-sdk.sdkVersion_v2 = "SDK2_2.0.0";
+sdk.sdkVersion_v2 = "SDK2.1_2.1.0";
 
 sdk.shortcut = {};
 sdk.oW = 0;
@@ -219,6 +219,7 @@ sdk.getGameInfo = function (isLogin, callback) {
     params["udid"] = sdk.getUdid();
     params["isLogin"] = isLogin;
     sdk.api(params, "getGameInfo", function (data) {
+        sdk.setItem("status", data.data.status); //渠道状态
         callback(data);
     });
 };
@@ -1563,16 +1564,15 @@ sdk.getIsAudit = function (channelGameId, callback) {
  */
 sdk.showOpenScreen = function () {
     sdk.initOpenScreen(function (data) {
-        if (!data.popupList || data.popupList.length <= 0) return;
+        if (!data || !data.popupList || data.popupList.length <= 0) return;
 
         for (var i = 0; i < data.popupList.length; i++) {
             if (data.popupList[i].type == 1) {
                 sdk.showOpenScreenTextBox(data.popupList[i].title, data.popupList[i].content);
             } else if (data.popupList[i].type == 2) {
-                sdk.showOpenScreenImage(data.popupList[i].url, data.popupList[i].imgUrl);
+                sdk.showOpenScreenImage(data.popupList[i].id, data.popupList[i].url, data.popupList[i].imgUrl);
             } else if (data.popupList[i].type == 3) {
-                sdk.showOpenScreenCoupon(data.popupList[i].url, data.popupList[i].voucher.rule,
-                    data.popupList[i].voucher.deduct, data.popupList[i].voucher.achieveMoney);
+                sdk.showOpenScreenCoupon(data.popupList[i].voucherList);
             }
         }
     });
@@ -1596,7 +1596,7 @@ sdk.showOpenScreenTextBox = function (title, content) {
         '<div class="flex">' +
         // '<div class="icon-float-logo"></div>' +
         '<p>' + title + '</p>' +
-        '<div id="open-screen-text-close-img" class="icon-jurisdiction-dee"></div>' +
+        '<div id="open-screen-text-close-img" class="icon-jurisdiction-delete"></div>' +
         '</div>' +
         '</div>' +
         '<h5 class="open-screen-text">' + content + '</h5>' +
@@ -1651,22 +1651,21 @@ sdk.closeOpenScreenTextBox = function () {
 
 /**
  * @desc 显示开屏图片
+ * @param {Number} id 图片ID
  * @param {string} url 跳转路径
  * @param {string} imgUrl 图片路径
  */
-sdk.showOpenScreenImage = function (url, imgUrl) {
+sdk.showOpenScreenImage = function (id, url, imgUrl) {
     var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
     var date = sdk.getItem("open_image_date");
     if (newDate == date) return;
-    //开屏文字框和图片不能同时展示,按后台配置的按顺序展示
-    if (sdk.hasOpenScreenText) return;
 
-    const openScreenImageHtml = '<div id="open-screen-image-box" class="open-screen-mask">' +
+    const openScreenImageHtml = '<div id="open-screen-image-box-' + id + '" class="open-screen-mask" style="z-index: 1;">' +
         '<div class="open-screen" style="background: rgba(0,0,0,0);">' +
-        '<img id="open-screen-image-img" style="width: 280px; height: 280px;" src=' + imgUrl + '></img>' +
-        '<div id="open-screen-image-close-img" class="icon-ad-close"></div>' +
-        '<div class="open-sreen-bottom-flex">' +
-        '<div id="open-screen-image-loginCheck" class="icon-check-box"></div>' +
+        '<img id="open-screen-image-img-' + id + '"  class="open-screen-image" src=' + imgUrl + '>' +
+        '<div id="open-screen-image-close-img-' + id + '" class="icon-ad-close"></div>' +
+        '<div class="open-screen-bottom-flex">' +
+        '<div id="open-screen-image-loginCheck-' + id + '" class="icon-check-box"></div>' +
         '<div class="open-screen-bottom-text">今日不再提示</div>' +
         '</div>' +
         '</div>' +
@@ -1675,27 +1674,26 @@ sdk.showOpenScreenImage = function (url, imgUrl) {
     $("body").append(openScreenImageHtml);
 
     //注册监听事件
-    $("#open-screen-image-close-img").click(function () {
-        sdk.closeOpenScreenImage();
-        $("#open-screen-coupon-box").css("visibility", "visible");
+    $("#open-screen-image-close-img-" + id).click(function () {
+        sdk.closeOpenScreenImage(id);
     });
 
-    $("#open-screen-image-img").click(function () {
-        sdk.closeOpenScreenImage();
+    $("#open-screen-image-img-" + id).click(function () {
+        sdk.closeOpenScreenImage(id);
         var jumpUrl = sdk.concatJumpUrl(url);
         sdk.showHomeViewHtml(jumpUrl);
     });
 
-    $("#open-screen-image-loginCheck").click(function () {
-        sdk.updateCheckUrl("open-screen-image-loginCheck");
+    $("#open-screen-image-loginCheck-" + id).click(function () {
+        sdk.updateCheckUrl("open-screen-image-loginCheck-" + id);
     });
 };
 
 /**
  * @desc 关闭开屏图片
  */
-sdk.closeOpenScreenImage = function () {
-    $("#open-screen-image-box").remove();
+sdk.closeOpenScreenImage = function (id) {
+    $("#open-screen-image-box-" + id).remove();
 
     //判断是否勾选今日不再提示,若已勾选,则保存今日日期
     if (isOpenScreenFlag) {
@@ -1705,46 +1703,60 @@ sdk.closeOpenScreenImage = function () {
 
 /**
  * @desc 显示开屏代金券
- * @param {string} receiveUrl 跳转链接
- * @param {rule} number 门槛规则
- * @param {number} deduct 减免金额
- * @param {string} achieveMoney 门槛最低金额
+ * @param {Array} voucherList 代金券数组
  */
-sdk.showOpenScreenCoupon = function (receiveUrl, rule, deduct, achieveMoney) {
-    if (!deduct) return;
+sdk.showOpenScreenCoupon = function (voucherList) {
+    if (!voucherList || voucherList.length <= 0) return;
     var newDate = (new Date().getMonth() + 1) + "-" + new Date().getDate();
     var date = sdk.getItem("open_coupon_date");
     if (newDate == date) return;
 
-    var text = "";
-    //满减规则；1有门槛，2无门槛
-    if (rule == 2) {
-        text = "无门槛代金券"
-    } else {
-        text = "满" + achieveMoney + "元可用";
-    }
-
-    const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="open-screen-mask" style="visibility: hidden">' +
-        '<div class="open-screen">' +
-        '<img style="width: 280p; height: 280px;" src="images/sdk2.0/pj_dialog_voucher.png"></img>' +
-        '<img style="position: relative; float: right; right: -25px; top: -300px; width: 20px; height: 20px;" onclick="sdk.closeOpenScreenCoupon()" src="/images/sdk2.0/pj_ad_close.png"></img>' +
-        '<div class="flex" style="position:  absolute; top: 70px; height: 80px; width: 100%; height: 80px;">' +
-        '<h5 style="margin: 30px 0 0 50px; font-size: 24px; font-weight: bold; color: #EEC900;">￥' + deduct + '</h5>' +
-        '<div style="margin: 10px 0 0 10px; border: 1px solid; float: left; height: 70px; color: #BBBBBB;"></div>' +
-        '<h5 style="margin: 30px 0 0 20px; font-size: 20px; font-weight: normal;">' + text + '</h5>' +
+    const openScreenCouponHtml = '<div id="open-screen-coupon-box" class="open-screen-mask" style="z-index: 3;">' +
+        '<img class="open-screen-coupon-image" src="images/sdk2.0/pj_dialog_vouch_2.1.png">' +
+        '<div id="open-screen-coupon-scroll" class="scroll" style="background: none; top: -10%; width: 84%;">' +
         '</div>' +
-        '<div id="coupon-receive-button" style="position: absolute; top: 220px; left: 30px; width: 80%; height: 40px;">' +
-        '</div>' +
-        '</div>' +
+        '<div id="open-screen-coupon-close-img" class="coupon-icon-ad-close"></div>' +
         '</div>';
 
     $("body").append(openScreenCouponHtml);
 
+    //添加代金券滑动列表
+    for (var i = 0; i < voucherList.length; i++) {
+        var coupon_text = "";
+        var coupon_desc = "";
+        var coupon_expiredEnd_text = voucherList[i].expiredEndDesc + "日前有效";
+        var coupon_applicablRangeDesc_text = "适用范围:" + voucherList[i].expiredEndDesc;
+        //满减规则；1有门槛，2无门槛
+        if (voucherList[i].rule == 2) {
+            coupon_text = "无门槛代金券";
+            coupon_desc = "无门槛代金券";
+        } else {
+            coupon_text = "满" + voucherList[i].achieveMoney + "元可用";
+            coupon_desc = "满" + voucherList[i].achieveMoney + "减" + voucherList[i].deduct + "代金券";
+        }
+
+        $("#open-screen-coupon-scroll").append(
+            '<div class="scroll-open-screen-coupon-item">' +
+            '<img src="images/sdk2.0/open_screen_coupon_bgImg.png">' +
+            '<div class="open-screen-coupon-item-left-column">' +
+            '<div class="flex-02">' +
+            '<p>￥</p>' +
+            '<p style="position: relative; top: -10px; left: -5px; font-size: 30px; font-weight: bold;">' + voucherList[i].deduct + '</p>' +
+            ' </div>' +
+            '<p>' + coupon_text + '</p>' +
+            '</div>' +
+            '<div class="open-screen-coupon-item-right-column">' +
+            '<p style="font-size: 16px; font-weight: bold; color: #000000;">' + coupon_desc + '</p>' +
+            '<p>' + coupon_expiredEnd_text + '</p>' +
+            '<p>' + coupon_applicablRangeDesc_text + '</p>' +
+            '</div>' +
+            '</div>'
+        );
+    }
+
     //注册监听事件
-    $("#coupon-receive-button").click(function () {
+    $("#open-screen-coupon-close-img").click(function () {
         sdk.closeOpenScreenCoupon();
-        var jumpUrl = sdk.concatJumpUrl(receiveUrl);
-        sdk.showHomeViewHtml(jumpUrl);
     });
 };
 
@@ -2059,9 +2071,15 @@ sdk.loadPayBox02 = function (params) {
     params["wxOpenId"] = sdk.getItem("wxOpenId");  //微信openid
     params["platformId"] = sdk.platformId;
     params["sdkVersion"] = sdk.sdkVersion_v2;
+    var status = sdk.getItem("status");
+    console.info("---禁用---"+status);
+    if (status == 11){//支付是否已禁用
+        sdk.confirmDialog("支付入口已关闭");
+        return;
+    }
     if (sdk.isMobile()) {//移动端打开
         $("#payBox-02-div").load(sdk.payUrl + "payGameOrder", params, function () {
-            $("#isLoadShow").css("display", "block");
+           $("#isLoadShow").css("display", "block");
         });
     } else {
         sdk.confirmDialog("请使用手机浏览器打开游戏");
@@ -2121,8 +2139,8 @@ sdk.autoLogin02 = function () {
             var password = "r" + Math.floor(Math.random() * 1000000);
 
             sdk.userNameReg02(userName, password, function (data) {
-                sdk.setItem("userName", userName);
-                sdk.setItem("password", password);
+                // sdk.setItem("userName", userName);
+                // sdk.setItem("password", password);
                 sdk.showQuickLoginBox(userName, password);
             });
         } else {
@@ -2138,37 +2156,39 @@ sdk.autoLogin02 = function () {
  */
 sdk.showQuickLoginBox = function (userName, password) {
     const quickLoginHtml = '<div id="quick-login-box" class="mask-02 login-box-02">' +
-        '<div class="r5">' +
+        '<div class="r5-02">' +
         '<div class="login-head-02">' +
-        '<p>一键注册</p>' +
+        '<img src="/images/sdk2.0/pj_logo.png" class="title-login-box">' +
         '</div>' +
         '<div class="login-body-02">' +
         '<div>' +
         '<div id="quick-login-userBox" class="flex">' +
-        '<img src="/images/sdk2.0/user2.png"></img>' +
+        '<img src="/images/sdk2.0/user2.png">' +
         '<input id="quick-login-userName-input" class="flex-list"  type="text" value=' + userName + ' disabled="disabled">' +
         '</div>' +
         '<div id="quick-login-pwdBox" class="flex">' +
         '<img src="/images/sdk2.0/password2.png"></img>' +
         '<input id="quick-login-pwd-input" class="flex-list" type="text" value=' + password + ' disabled="disabled">' +
-        '<img id="quick-login-pwd-eye" style="left: 0px; right: 5px;" src="/images/sdk2.0/pj_pw_visible.png"></img>' +
         '</div>' +
         '</div>' +
-        '<div class="flex">' +
-        '<img id="quick-login-selected" style="width: 15px; height: 15px;" src="/images/sdk2.0/1.png" value="true" onclick="sdk.updateQuickLoginSelected()">' +
-        '<p style="margin: 0 0 0 5px; color: #B4B4B4; font-size: 12px;">我已阅读并接受' +
-        '<p style="margin: 0 0 0 0; font-size: 12px; color: #BA494B;" onclick="sdk.showXieYi()"><<用户服务协议>></p>' +
+        '<div class="flex" style="padding-bottom: 5px;">' +
+        '<img id="quick-login-selected" style="width: 20px; height: 20px;" src="/images/sdk2.0/g1.png" value="true" onclick="sdk.updateQuickLoginSelected()">' +
+        '<p style="margin: 0 0 0 5px; color: #D0D0D0; font-size: 12px;">我已阅读并接受' +
+        '<p style="margin: 0 0 0 0; font-size: 12px; color: #717171;" onclick="sdk.showXieYi()">《用户服务协议》</p>' +
         '</p>' +
         '</div>' +
-        '<a href="javascript:;" id="quick-login-loading-button" class="btn">注册并登录</a>' +
+        '<a href="javascript:;" id="quick-login-loading-button" class="btn">一键登录</a>' +
         '</div>' +
         '<div class="flex">' +
+        '<a id="quick-login-quick-button" class="flex-02" >' +
+        '<img src="/images/sdk2.0/quick_login.png" >' +
+        '<p style="font-weight: bold;">一键登录</p>' +
         '<a id="quick-login-account-button" class="flex-02" >' +
-        '<img src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
+        '<img src="/images/sdk2.0/pj_user.png">' +
         '<p>已有账户</p>' +
         '</a>' +
         '<a id="quick-login-mobile-button" class="flex-02">' +
-        '<img src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
+        '<img src="/images/sdk2.0/pj_mobile.png">' +
         '<p>手机登录</p>' +
         '</a>' +
         '</div>' +
@@ -2178,15 +2198,23 @@ sdk.showQuickLoginBox = function (userName, password) {
 
     $("body").append(quickLoginHtml);
 
-
+//注册监听事件
     $("#quick-login-account-button").click(function () {
         sdk.closeQuickLoginBox();
+        sdk.showLoading();
+        setTimeout(function () {
+            sdk.closeLoading();
         sdk.showAccountLoginBox();
+        }, 500);
     });
 
     $("#quick-login-mobile-button").click(function () {
         sdk.closeQuickLoginBox();
+        sdk.showLoading();
+        setTimeout(function () {
+            sdk.closeLoading();
         sdk.showMobileLoginBox();
+        }, 500);
     });
 
     $("#quick-login-loading-button").click(function () {
@@ -2195,9 +2223,16 @@ sdk.showQuickLoginBox = function (userName, password) {
             return;
         }
 
+        var user = $("#quick-login-userName-input").val();
+        var pwd = $("#quick-login-pwd-input").val();
         sdk.closeQuickLoginBox();
-        sdk.weChatCode(userName, password); //泡椒微信公众号二维码
-        sdk.showRegisterSuccBox(userName, password);
+        sdk.showLoading();
+        setTimeout(function () {
+
+            sdk.closeLoading();
+            sdk.showRegisterSuccBox(user, pwd);
+        }, 500);
+
     });
 
     $("#quick-login-pwd-eye").click(function () {
@@ -2233,9 +2268,9 @@ sdk.showAccountLoginBox = function () {
     var userName = sdk.getItem("userName") || "";
 
     const accountLoginHtml = '<div id="account-login-box" class="mask-02 login-box-02">' +
-        '<div class="r5">' +
+        '<div class="r5-02">' +
         '<div class="login-head-02">' +
-        '<p ">账号登录</p>' +
+        '<img src="/images/sdk2.0/pj_logo.png" class="title-login-box">' +
         '</div>' +
         '<div class="login-body-02">' +
         '<div>' +
@@ -2248,22 +2283,27 @@ sdk.showAccountLoginBox = function () {
         '<div id="accoutn-login-pwdBox-flex" class="flex">' +
         '<img  src="/images/sdk2.0/password2.png"></img>' +
         '<input id="account-login-password-input"  class="flex-list"  type="password" placeholder="请输入密码" value="">' +
-        '<img id="account-login-eye" style="left: 0px; right: 5px;" src="/images/sdk2.0/pj_pw_invisible.png"></img>' +
         '</div>' +
         '</div>' +
-        '<div class="flex" style="margin: 5% 0 0 68%;">' +
-        '<img style="width: 15px; height: 15px; color: #BA494B;" src="/images/sdk2.0/password2.png"></img>' +
-        '<h5 style="padding-left: 5px; color: #BA494B;" onclick="sdk.showFotPwdBox()">忘记密码</h5>' +
+        '<div class="flex" style="padding-bottom: 5px;">' +
+        '<img id="quick-login-selected" style="width: 20px; height: 20px;" src="/images/sdk2.0/g1.png" value="true" onclick="sdk.updateQuickLoginSelected()">' +
+        '<p style="margin: 0 0 0 5px; color: #D0D0D0; font-size: 12px;">我已阅读并接受' +
+        '<p style="margin: 0 0 0 0; font-size: 12px; color: #717171;" onclick="sdk.showXieYi()">《用户服务协议》</p>' +
+        '<h5 style="padding-left: 5px; color: #469CF9;" onclick="sdk.showFotPwdBox()">忘记密码？  </h5>' +
+        '</p>' +
         '</div>' +
         '<a href="javascript:;" id="account-login-button" class="btn">登录</a> ' +
         '</div>' +
         '<div class="flex">' +
-        '<a id="account-login-quick-button" class="flex-02" >' +
-        '<img  src="/images/sdk2.0/pj_main_dialog_register.png"></img>' +
-        '<p>一键注册</p>' +
+        '<a id="account-login-quick-button" class="flex-02">' +
+        '<img src="/images/sdk2.0/quick_login.png">' +
+        '<p>一键登录</p>' +
+        '<a id="account-login-account-button" class="flex-02">' +
+        '<img src="/images/sdk2.0/pj_user.png">' +
+        '<p style="font-weight: bold;">已有账户</p>' +
         '</a>' +
-        '<a id="account-login-mobile-button" class="flex-02" >' +
-        '<img src="/images/sdk2.0/pj_onkey_tel.png"></img>' +
+        '<a id="account-login-mobile-button" class="flex-02">' +
+        '<img src="/images/sdk2.0/pj_mobile.png">' +
         '<p>手机登录</p>' +
         '</a>' +
         '</div>' +
@@ -2273,7 +2313,6 @@ sdk.showAccountLoginBox = function () {
 
     $("body").append(accountLoginHtml);
 
-
     var userNameArray = JSON.parse(sdk.getItem("username_array"));
     if (userNameArray && userNameArray.length > 0) {
         for (var i = 0; i < userNameArray.length; i++) {
@@ -2281,6 +2320,7 @@ sdk.showAccountLoginBox = function () {
         }
     }
 
+    //注册监听事件
     $("#account-login-quick-button").click(function () {
         sdk.closeAccountLoginBox();
 
@@ -2288,18 +2328,27 @@ sdk.showAccountLoginBox = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     });
 
     $("#account-login-mobile-button").click(function () {
         sdk.closeAccountLoginBox();
-        sdk.showMobileLoginBox();
+        sdk.showLoading();
+        setTimeout(function () {
+            sdk.closeLoading();
+            sdk.showMobileLoginBox();
+        }, 500);
     });
 
     $("#account-login-button").click(function () {
+        if (!isFlag) {
+            sdk.confirmDialog("必须接受用户服务协议");
+            return;
+        }
+
         var userName = $("#account-login-account-input").val();
         var password = $("#account-login-password-input").val();
 
@@ -2320,8 +2369,8 @@ sdk.showAccountLoginBox = function () {
                 window.location.href = sdk.mainUrl;
             }
             //保存最新的登录账号,密码
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
 
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
@@ -2345,10 +2394,13 @@ sdk.closeAccountLoginBox = function () {
  * @desc 打开手机登录弹框
  */
 sdk.showMobileLoginBox = function () {
+    var smsCodeTime = 60;
 
     const mobileLoginHtml = '<div id="mobile-login-box" class="mask-02 login-box-02">' +
-        '<div class="r5">' +
-        '<div class="login-head-02"><p>手机登录</p></div>' +
+        '<div class="r5-02">' +
+        '<div class="login-head-02">' +
+        '<img src="/images/sdk2.0/pj_logo.png" class="title-login-box">' +
+        '</div>' +
         '<div class="login-body-02">' +
         '<div>' +
         '<div id="mobile-login-flex-mobile" class="flex">' +
@@ -2356,14 +2408,30 @@ sdk.showMobileLoginBox = function () {
         '</div>' +
         '<div id="mobile-login-flex-smsCode" class="flex">' +
         '<input id="mobile-login-smsCode-input" class="flex-list"  type="text" value="" placeholder="请输入验证码">' +
-        '<button id="mobile-login-getSmsCode-button" class="smsCode-button">获取验证码</button>' +
+        '<p id="mobile-login-smsCode-text" class="smsCode-text">获取验证码</p>' +
         '</div>' +
         '</div>' +
+        '<div class="flex" style="padding-bottom: 5px;">' +
+        '<img id="quick-login-selected" style="width: 20px; height: 20px;" src="/images/sdk2.0/g1.png" value="true" onclick="sdk.updateQuickLoginSelected()">' +
+        '<p style="margin: 0 0 0 5px; color: #D0D0D0; font-size: 12px;">我已阅读并接受' +
+        '<p style="margin: 0 0 0 0; font-size: 12px; color: #717171;" onclick="sdk.showXieYi()">《用户服务协议》</p>' +
+        '</p>' +
         '</div>' +
-        '<div style="height: 30px;"></div>' +
-        '<div class="flex-02">' +
-        '<div id="mobile-login-quick-button" class="btn">一键注册</div>' +
-        '<div id="mobile-login-loading-button" style="position: absolute; right: 30px;" class="btn">立即登录</button>' +
+        '<a href="javascript:;" id="mobile-login-loading-button" class="btn">登录</a> ' +
+        '</div>' +
+        '<div class="flex">' +
+        '<a id="mobile-login-quick-button" class="flex-02">' +
+        '<img src="/images/sdk2.0/quick_login.png">' +
+        '<p>一键登录</p>' +
+        '<a id="mobile-login-account-button" class="flex-02">' +
+        '<img src="/images/sdk2.0/pj_user.png">' +
+        '<p >已有账户</p>' +
+        '</a>' +
+        '<a id="mobile-login-mobile-button" class="flex-02">' +
+        '<img src="/images/sdk2.0/pj_mobile.png">' +
+        '<p style="font-weight: bold;">手机登录</p>' +
+        '</a>' +
+        '</div>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -2377,13 +2445,27 @@ sdk.showMobileLoginBox = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     });
 
+    $("#mobile-login-account-button").click(function () {
+        sdk.closeMobileLoginBox();
+        sdk.showLoading();
+        setTimeout(function () {
+            sdk.closeLoading();
+            sdk.showAccountLoginBox();
+        }, 500);
+    });
+
     $("#mobile-login-loading-button").click(function () {
+        if (!isFlag) {
+            sdk.confirmDialog("必须接受用户服务协议");
+            return;
+        }
+
         var mobile = $("#mobile-login-mobile-input").val();
         var smsCode = $("#mobile-login-smsCode-input").val();
         sdk.mobileLogin(mobile, smsCode, function (data) {
@@ -2413,23 +2495,21 @@ sdk.showMobileLoginBox = function () {
         });
     });
 
-    var cutDownTime = 60;
-    $("#mobile-login-getSmsCode-button").click(function () {
+    $("#mobile-login-smsCode-text").click(function () {
         var mobile = $("#mobile-login-mobile-input").val();
         sdk.getMobileCode(mobile, 1, function (data) {
             //点击后禁用60s
-            $("#mobile-login-getSmsCode-button").attr('disabled', true);
-            $("#mobile-login-getSmsCode-button").css("background-color", "#BABABA");
-            var cutDownFun = setInterval(function () {
-                cutDownTime--;
-                $("#mobile-login-getSmsCode-button").text('获取验证码(' + cutDownTime + 's)');
-
-                if (cutDownTime <= 0) {
-                    clearInterval(cutDownFun);
-                    cutDownTime = 60;
-                    $("#mobile-login-getSmsCode-button").text("获取验证码");
-                    $("#mobile-login-getSmsCode-button").attr('disabled', false);
-                    $("#mobile-login-getSmsCode-button").css("background-color", "#BA494B");
+            $("#mobile-login-smsCode-text").attr('disabled', true);
+            $("#mobile-login-smsCode-text").css("color", "#BABABA");
+            var cutDownSmsCodeFun = setInterval(function () {
+                smsCodeTime--;
+                $("#mobile-login-smsCode-text").text('获取验证码(' + smsCodeTime + 's)');
+                if (smsCodeTime <= 0) {
+                    clearInterval(cutDownSmsCodeFun);
+                    smsCodeTime = 60;
+                    $("#mobile-login-smsCode-text").text('获取验证码');
+                    $("#mobile-login-smsCode-text").attr('disabled', false);
+                    $("#mobile-login-smsCode-text").css("color", "#FD073C");
                 }
             }, 1000);
         });
@@ -2449,9 +2529,9 @@ sdk.closeMobileLoginBox = function () {
  */
 sdk.showMobileLoginVeriPwdBox = function (userName) {
     const mobileLoginVeriPwdHtml = '<div id="mobile-login-veri-pwd-box" class="mask-02 login-box-02">' +
-        '<div class="r5">' +
+        '<div class="r5-02">' +
         '<div class="login-head-02">' +
-        '<p>手机登录</p>' +
+        '<img src="/images/sdk2.0/pj_logo.png" class="title-login-box">' +
         '</div>' +
         '<div class="login-body-02">' +
         '<div>' +
@@ -2510,9 +2590,9 @@ sdk.closeMobileLoginVeriPwdBox = function () {
  */
 sdk.showMobileLoginVeriUserNameBox = function (mobile) {
     const mobileLoginVeriUserNameHtml = '<div id="mobile-login-veri-username-box" class="mask-02 login-box-02">' +
-        '<div class="r5">' +
+        '<div class="r5-02">' +
         '<div class="login-head-02">' +
-        '<p>手机登录</p>' +
+        '<img src="/images/sdk2.0/pj_logo.png" class="title-login-box">' +
         '</div>' +
         '<div class="login-body-02">' +
         '<div>' +
@@ -2569,36 +2649,47 @@ sdk.closeMobileLoginVeriUserNameBox = function () {
  */
 sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
     const mobileLogSelectedUserNameHtml = '<div id="mobile-login-selected-username-box" class="mask-02 login-box-02">' +
-        '<div class="r5">' +
+        '<div class="r5-02">' +
         '<div class="login-head-02">' +
-        '<p>手机登录</p>' +
+        '<p>选择一个账号进行登录</p>' +
         '</div>' +
         '<div class="login-body-02">' +
         '<div>' +
-        '<h5 style="color: #BABABA; text-align: left;">你的手机绑定多个账号,请选择您要登录的账号,如果没有您要绑定的账号请与人工客服联系解绑手机号/找回账号(找回请提供所玩的游戏及角色名)</h5>' +
-        '<div id="mobile-login-selected-username-flex" class="flex">' +
-        '<img  src="/images/sdk2.0/user2.png"></img>' +
-        '<input id="mobile-login-selected-username-input" class="flex-list"  type="text" list="fruit" placeholder="请选择游戏账号">' +
-        '<datalist id="fruit">' +
-        '</datalist>' +
+        '<div id="mobile-login-selected-userName-scroll" class="scroll">' +
         '</div>' +
         '</div>' +
         '<a href="javascript:;" id="mobile-login-selected-username-button" class="btn">登录</a>' +
+        '<p style="color: #9F9F9F; font-size: 16px; margin-top: 0px;">该手机当前关联多个账号</p>' +
         '</div>' +
         '</div>' +
         '</div>';
 
     $("body").append(mobileLogSelectedUserNameHtml);
 
-    if (data.userList && data.userList.length > 0) {
+    //添加选择账号列表
+    if (data && data.userList && data.userList.length > 0) {
+        sdk.mobLogSelUserName = data.userList[0].userName;
         for (var i = 0; i < data.userList.length; i++) {
-            $("#fruit").append('<option>' + data.userList[i].userName + '</option>');
+            if (0 == i) {
+                $("#mobile-login-selected-userName-scroll").append(
+                    '<div class="scroll-item flex" onclick="sdk.clickScrollItemResp(\'' + data.userList[i].userName + '\')">' +
+                    '<p>' + data.userList[i].userName + '</p>' +
+                    '<p style="position: absolute; right: -130px; color: #FD0238; ">最近登录</p>' +
+                    '</div>'
+                );
+            } else {
+                $("#mobile-login-selected-userName-scroll").append(
+                    '<div class="scroll-item flex" onclick="sdk.clickScrollItemResp(\'' + data.userList[i].userName + '\')">' +
+                    '<p >' + data.userList[i].userName + '</p>' +
+                    '</div>'
+                );
+            }
         }
     }
+
     //注册监听事件
     $("#mobile-login-selected-username-button").click(function () {
-        var userName = $("#mobile-login-selected-username-input").val();
-        sdk.selectedLogin(mobile, userName, function (data) {
+        sdk.selectedLogin(mobile, sdk.mobLogSelUserName, function (data) {
             sdk.closeMobileLoginVeriUserNameBox();
 
             var uid = data.uid;
@@ -2627,6 +2718,16 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
  */
 sdk.closeMobileLoginSelectedUserNameBox = function () {
     $("#mobile-login-selected-username-box").remove();
+};
+
+//手机登录选择账号
+sdk.mobLogSelUserName = "";
+/**
+ * @desc 点击滑动条组件响应
+ * @param {string} userName 用户账号
+ */
+sdk.clickScrollItemResp = function (userName) {
+    sdk.mobLogSelUserName = userName;
 };
 
 var isEye = true;
@@ -2720,8 +2821,6 @@ sdk.showLoadingLoginBox = function (userName, params) {
     });
 };
 
-
-
 /**
  * @desc 关闭加载登录框
  */
@@ -2735,22 +2834,63 @@ sdk.closeLoadingLoginBox = function () {
  * @param {string} password 密码
  */
 sdk.showRegisterSuccBox = function (userName, password) {
+    var cutDownTime = 3;
+
     const registerSuccHtml = '<div id="register-succ-box" class="mask-02 login-box-02">' +
-        '<div class="r5" style="padding-bottom: 0px;">' +
+        '<div class="r5-02">' +
         '<div class="login-head-02">' +
-        '<p>注册成功</p>' +
+        '<img src="/images/sdk2.0/pj_logo.png" class="title-login-box">' +
         '</div>' +
         '<div class="login-body-02">' +
         '<div class="register-succ">' +
-        '<p id="register-succ-userName">账号: ' + userName + '</p>' +
-        '<p id="register-succ-password">密码: ' + password + '</p>' +
+        '<div class="flex">' +
+        '<p id="register-succ-userName">账号:</p>' +
+        '<p style="color: #FD3963;">' + userName + '</p> ' +
+        '</p>' +
+        '</div>' +
+        '<div class="flex">' +
+        '<p id="register-succ-password">密码: </p>' +
+        '<p style="color: #FD3963;">' + password + '</p> ' +
         '</div>' +
         '</div>' +
-        '<button id="register-succ-button" class="register-btn">进入游戏</button>' +
+        '<a href="javascript:;" id="register-succ-button" class="btn">进入游戏(' + cutDownTime + ')</a> ' +
+        '<p style="color: #9F9F9F; font-size: 16px;">为了您的账号安全,请尽快绑定手机</p>' +
+        '</div>' +
         '</div>' +
         '</div>';
 
     $("body").append(registerSuccHtml);
+
+    //倒计时
+    var cutDownFun = setInterval(function () {
+        cutDownTime--;
+        document.getElementById("register-succ-button").innerText = '进入游戏(' + cutDownTime + ')';
+        if (cutDownTime <= 0) {
+            clearInterval(cutDownFun);
+            document.getElementById("register-succ-button").innerText = '进入游戏';
+            sdk.login02(userName, password, function (data) {
+                sdk.closeRegisterSuccBox();
+
+                var uid = data.uid;
+                var token = data.token;
+
+                var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
+                var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
+                if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
+                    sdk.showRealNameAuth(openRealNameAuth, uid, token);
+                } else {
+                    sdk.setItem("uid", uid);
+                    sdk.setItem("sdkToken", token);
+                    sdk.setItem("realNameAuthStatus", realNameAuthStatus);
+                    window.location.href = sdk.mainUrl;
+                }
+
+                var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
+                userNameArray.push(userName);
+                sdk.distinct(userNameArray);
+            });
+        }
+    }, 1000);
 
     //注册监听事件
     $("#register-succ-button").click(function () {
@@ -2784,6 +2924,7 @@ sdk.showRegisterSuccBox = function (userName, password) {
 sdk.closeRegisterSuccBox = function () {
     $("#register-succ-box").remove();
 };
+
 
 /**
  * @desc 数组去重
@@ -3369,7 +3510,37 @@ sdk.loadOpenUc = function (params) {
  * Safari 浏览器打开展示引导图
  */
 sdk.guidanceDown = function () {
+    var channelGameId = sdk.getItem("channelGameId");
+    var iconImgUrl = "";
+    //苹果Safari浏览器
     if (sdk.is_safari()) {
+    //屠龙霸业
+    if (channelGameId == 11283 || channelGameId == 11280 || channelGameId == 11277){
+          iconImgUrl = "/images/iosicon/90_tlby.png";
+    //热血单机
+    }else if (channelGameId == 11282 || channelGameId == 11279 || channelGameId == 11285){
+         iconImgUrl = "/images/iosicon/90_rxdj.png";
+    //沙皇传奇
+    }else if (channelGameId == 11284 || channelGameId == 11281 || channelGameId == 11278){
+         iconImgUrl = "/images/iosicon/90_shcq.png";
+    }else if (channelGameId == 11267 || channelGameId == 11268 || channelGameId ==  11269 || channelGameId ==  11270 || channelGameId ==  11272){
+        iconImgUrl = "/images/iosicon/90_bdsc.png";
+    }
+    //苹果不同设备，不同尺寸ICON
+    var headHTML = document.getElementsByTagName('head')[0].innerHTML;
+    headHTML +=  '<link rel="apple-touch-icon-precomposed" sizes="57x57" href="' + iconImgUrl + '">';
+    headHTML +=  '<link rel="apple-touch-icon-precomposed" sizes="72x72" href="' + iconImgUrl + '">';
+    headHTML +=  '<link rel="apple-touch-icon-precomposed" sizes="114x114" href="' + iconImgUrl + '">';
+    headHTML +=  '<link rel="apple-touch-icon-precomposed" sizes="144x144" href="' + iconImgUrl + '">';
+
+    headHTML +=  '<link rel="apple-touch-startup-image" sizes="2048x1496" href="' + iconImgUrl + '" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) and (-webkit-min-device-pixel-ratio: 2)">';
+    headHTML +=  '<link rel="apple-touch-startup-image" sizes="1536x2008" href="' + iconImgUrl + '" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) and (-webkit-min-device-pixel-ratio: 2)">';
+    headHTML +=  '<link rel="apple-touch-startup-image" sizes="1024x748" href="' + iconImgUrl + '" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">';
+    headHTML +=  '<link rel="apple-touch-startup-image" sizes="768x1004" href="' + iconImgUrl + '" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">';
+    headHTML +=  '<link rel="apple-touch-startup-image" sizes="640x920" href="' + iconImgUrl + '" media="screen and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)">';
+    headHTML +=  '<link rel="apple-touch-startup-image" sizes="320x460" href="' + iconImgUrl + '" media="screen and (max-device-width: 320)">';
+    document.getElementsByTagName('head')[0].innerHTML = headHTML;
+
         console.info("引导图");
         $("#guideFigure").css("display", "block");
         $("#guideFigure").css("z-index", "999999");

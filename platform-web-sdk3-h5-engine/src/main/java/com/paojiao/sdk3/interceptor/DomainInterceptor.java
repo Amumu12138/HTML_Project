@@ -25,11 +25,9 @@ public class DomainInterceptor implements Interceptor {
             "127.0.0.1",
             "192.168.1.171",
             "10.11.181.200",
+            "10.11.181.44",
             "h5.infoxgame.com",
              "h5.paojiao.cn");
-
-
-
 
 
     @Override

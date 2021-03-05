@@ -50,7 +50,8 @@ public enum StatusType {
 	USER_REAL_NAME_AUTH_NONE(40, "未实名认证,请前往设置进行实名认证"),
 	NO_AGE_NO_PAY(41, "未成年不允许充值"),
 	PAY_MONEY_EXCESS(42, "充值金额过大"),
-	MONTH_PAY_MONEY_EXCESS(43, "当月累计充值已达到上线");
+	MONTH_PAY_MONEY_EXCESS(43, "当月累计充值已达到上线"),
+	PAY_FORBIDDEN_ERROR(44, "支付入口已关闭");
 
 
 	public int id;

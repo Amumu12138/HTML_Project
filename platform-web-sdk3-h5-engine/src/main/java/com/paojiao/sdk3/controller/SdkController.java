@@ -114,6 +114,7 @@ public class SdkController extends BaseController {
             gameInfo.put("gameId", channelGame.getGameId() + "");// 游戏id
             gameInfo.put("channelGameId", channelGame.getId() + "");// 游戏id
             gameInfo.put("orientation", channelGame.getOrientation() + "");// 游戏方向
+            gameInfo.put("status", channelGame.getStatus() + "");// 状态
 
 
             // 统计新增游戏设备或活跃设备
@@ -1573,6 +1574,8 @@ public class SdkController extends BaseController {
             sdkRequestMap.put("sdkVersion", param.get("sdkVersion"));
             sdkRequestMap.put("token", param.get("token"));
             sdkRequestMap.put("appVersion", param.get("appVersion"));
+            sdkRequestMap.put("platformType","h5");
+
             String result = HttpsUtil.post(GETSDKCONFIGURL, sdkRequestMap, null);
             log.info("==========>>获取SDK配置返回结果：" + result);
             JSONObject jsonObject = JSONObject.parseObject(result);
@@ -1614,6 +1617,8 @@ public class SdkController extends BaseController {
             sdkRequestMap.put("sdkVersion", param.get("sdkVersion"));
             sdkRequestMap.put("token", param.get("token"));
             sdkRequestMap.put("appVersion", param.get("appVersion"));
+            sdkRequestMap.put("platformType","h5");
+
             String result = HttpsUtil.post(GETSDKCONFIGURL, sdkRequestMap, null);
             log.info("==========>>获取SDK配置返回结果：" + result);
             JSONObject jsonObject = JSONObject.parseObject(result);
@@ -1655,6 +1660,8 @@ public class SdkController extends BaseController {
             sdkRequestMap.put("sdkVersion", param.get("sdkVersion"));
             sdkRequestMap.put("token", param.get("token"));
             sdkRequestMap.put("appVersion", param.get("appVersion"));
+            sdkRequestMap.put("platformType","h5");
+
             String result = HttpsUtil.post(GETSDKCONFIGURL, sdkRequestMap, null);
             log.info("==========>>获取SDK配置返回结果：" + result);
             JSONObject jsonObject = JSONObject.parseObject(result);
@@ -1695,6 +1702,8 @@ public class SdkController extends BaseController {
             sdkRequestMap.put("sdkVersion", param.get("sdkVersion"));
             sdkRequestMap.put("token", param.get("token"));
             sdkRequestMap.put("appVersion", param.get("appVersion"));
+            sdkRequestMap.put("platformType","h5");
+
             String result = HttpsUtil.post(GETSDKCONFIGURL, sdkRequestMap, null);
             log.info("==========>>获取SDK配置返回结果：" + result);
             JSONObject jsonObject = JSONObject.parseObject(result);

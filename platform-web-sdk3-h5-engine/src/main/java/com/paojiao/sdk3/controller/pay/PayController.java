@@ -79,6 +79,10 @@ public class PayController extends BaseController {
                 requestFailure("暂时无法使用支付功能！");
                 return;
             }
+            if (channelGame.getStatus() == 11) {//11：支付被禁用
+                requestFailure(StatusType.PAY_FORBIDDEN_ERROR);
+                return;
+            }
 
             Float money = getParaToFloat("money");
             if (money == null || money.floatValue() <= 0) {

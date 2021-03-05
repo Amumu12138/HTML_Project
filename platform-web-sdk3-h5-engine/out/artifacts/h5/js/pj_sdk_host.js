@@ -6,14 +6,13 @@ sdk.platformId = 4;
 sdk.channelId = -1;
 sdk.platformType = "h5";
 
-// sdk.host = "https://h5.paojiao.cn";
+sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8080";
-sdk.host = "http://10.11.181.44:8080";
+// sdk.host = "http://10.11.181.44:8080";
 
 sdk.apiUrl = sdk.host + "/api/";
 sdk.payUrl = sdk.host + "/pay/";
 sdk.mainUrl = sdk.host + '/main3.html';
-// sdk.mainUrl = sdk.host + '/main.html';
 sdk.loginUrl = sdk.host + '/login3.html';
 sdk.thirdLoginUrl = sdk.host + "/thirdLogin/login/";
 sdk.thirdLoginToOpenIdUrl = sdk.host + "/thirdLogin/loginByOpenId/";
@@ -2110,8 +2109,8 @@ sdk.autoLogin02 = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     }
@@ -2296,8 +2295,8 @@ sdk.showAccountLoginBox = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     });
@@ -2337,8 +2336,8 @@ sdk.showAccountLoginBox = function () {
                 window.location.href = sdk.mainUrl;
             }
             //保存最新的登录账号,密码
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
 
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
@@ -2362,6 +2361,8 @@ sdk.closeAccountLoginBox = function () {
  * @desc 打开手机登录弹框
  */
 sdk.showMobileLoginBox = function () {
+    var smsCodeTime = 60;
+
     const mobileLoginHtml = '<div id="mobile-login-box" class="mask-02 login-box-02">' +
         '<div class="r5-02">' +
         '<div class="login-head-02">' +
@@ -2411,8 +2412,8 @@ sdk.showMobileLoginBox = function () {
         var password = "r" + Math.floor(Math.random() * 1000000);
 
         sdk.userNameReg02(userName, password, function (data) {
-            sdk.setItem("userName", userName);
-            sdk.setItem("password", password);
+            // sdk.setItem("userName", userName);
+            // sdk.setItem("password", password);
             sdk.showQuickLoginBox(userName, password);
         });
     });
@@ -2461,17 +2462,25 @@ sdk.showMobileLoginBox = function () {
         });
     });
 
+
     $("#mobile-login-smsCode-text").click(function () {
         var mobile = $("#mobile-login-mobile-input").val();
-        //点击后禁用60s
-        $("#mobile-login-smsCode-text").attr('disabled', true);
-        $("#mobile-login-smsCode-text").css("color", "#BABABA");
-        setTimeout(function () {
-            $("#mobile-login-smsCode-text").attr('disabled', false);
-            $("#mobile-login-smsCode-text").css(" color", "#FD073C");
-        }, 60 * 1000);
-
-        sdk.getMobileCode(mobile, 1, null);
+        sdk.getMobileCode(mobile, 1, function (data) {
+            //点击后禁用60s
+            $("#mobile-login-smsCode-text").attr('disabled', true);
+            $("#mobile-login-smsCode-text").css("color", "#BABABA");
+            var cutDownSmsCodeFun = setInterval(function () {
+                smsCodeTime--;
+                $("#mobile-login-smsCode-text").text('获取验证码(' + smsCodeTime + 's)');
+                if (smsCodeTime <= 0) {
+                    clearInterval(cutDownSmsCodeFun);
+                    smsCodeTime = 60;
+                    $("#mobile-login-smsCode-text").text('获取验证码');
+                    $("#mobile-login-smsCode-text").attr('disabled', false);
+                    $("#mobile-login-smsCode-text").css("color", "#FD073C");
+                }
+            }, 1000);
+        });
     });
 };
 
@@ -2819,11 +2828,11 @@ sdk.showRegisterSuccBox = function (userName, password) {
     $("body").append(registerSuccHtml);
 
     //倒计时
-    var cutDowmFun = setInterval(function () {
+    var cutDownFun = setInterval(function () {
         cutDownTime--;
         document.getElementById("register-succ-button").innerText = '进入游戏(' + cutDownTime + ')';
         if (cutDownTime <= 0) {
-            clearInterval(cutDowmFun);
+            clearInterval(cutDownFun);
             document.getElementById("register-succ-button").innerText = '进入游戏';
             sdk.login02(userName, password, function (data) {
                 sdk.closeRegisterSuccBox();
@@ -3062,7 +3071,7 @@ sdk.getMobileCode = function (mobile, type, callback) {
 
     sdk.api(params, "getMobileCode", function (retData) {
         if (retData.code == sdk.SUCCESS) {
-            if (callback) callback();
+            if (callback) callback(retData);
         } else {
             sdk.confirmDialog(retData.msg);
         }

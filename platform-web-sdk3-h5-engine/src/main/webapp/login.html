@@ -16,35 +16,20 @@
     <meta http-equiv="cache" content="no-cache" />
     <meta http-equiv="expires" content="0" />
 
-
+   <!-- Web App运行起来要像Native App，那么就要去掉Safari的一些默认控件，比如地址栏、状态栏之类的。-->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
 
-
-
     <title>游戏登录</title>
 
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../images/game_bdsc.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../images/game_bdsc.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../images/game_bdsc.png">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../images/game_bdsc.png">
-
-    <link rel="apple-touch-startup-image" sizes="2048x1496" href="../../images/game_bdsc.png" media="screen and (min-device-width: 1025px) and (max-device-width: 2048px) and (orientation:landscape) and (-webkit-min-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" sizes="1536x2008" href="../../images/game_bdsc.png" media="screen and (min-device-width: 1025px) and (max-device-width: 2048px) and (orientation:portrait) and (-webkit-min-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" sizes="1024x748" href="../../images/game_bdsc.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
-    <link rel="apple-touch-startup-image" sizes="768x1004" href="../../images/game_bdsc.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
-    <link rel="apple-touch-startup-image" sizes="640x920" href="../../images/game_bdsc.png" media="screen and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" sizes="320x460" href="../../images/game_bdsc.png" media="screen and (max-device-width: 320)">
-
-
     <link href="/css/common.css?20171011" rel="stylesheet">
-    <link href="/css/common_v2.css?20171011" rel="stylesheet">
+    <link href="/css/common_v2.1.css?20171011" rel="stylesheet">
     <link href="/css/layout.css?20171011" rel="stylesheet">
     <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/js/pj_api.js"></script>
-    <script type="text/javascript" src="/js/pj_sdk_host_v1.js"></script>
+    <script src="/js/pj_sdk_host_v1.js" type="text/javascript"></script>
 
 </head>
 <style>
@@ -70,7 +55,7 @@
         <div class="closeCode" id="closeCode-btn"><button>关闭</button></div>
     </div>
 </div>
-
+<!--引导图展示-->
 <div id="guideFigure">
     <div id="guideFigureImgBack">
         <div class="closeCode" id="guideFigure-btn"><button>关闭</button></div>
@@ -82,8 +67,8 @@
 
 
     <script type="text/javascript">
-        sdk.guidanceDown();
         sdk.init();
+        /*sdk.guidanceDown(); //引导图方法*/
         var channelGameId = sdk.getItem("channelGameId");
         var channel = sdk.getItem("channel");
         var isEdition = sdk.getURLVar("isEdition");//IOS匹配IDFA专属字段
