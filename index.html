@@ -79,6 +79,7 @@
                 <a onclick="onClickWebGLResp('Fog')"> Fog </a>
                 <a onclick="onClickWebGLResp('Discard')"> Discard </a>
                 <a onclick="onClickWebGLResp('BlendSphere')"> BlendSphere </a>
+                <a onclick="onClickWebGLResp('ProgramObject')"> ProgramObject </a>
             </div>
         </div>
         <div class="dropdown">
@@ -508,6 +509,9 @@
                     break;
                 case "BlendSphere":
                     window.localStorage.setItem("exampleName", "BlendSphere");
+                    break;
+                case "ProgramObject":
+                    window.localStorage.setItem("exampleName", "ProgramObject");
                     break;
                 default: 
                     break;

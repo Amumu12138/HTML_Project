@@ -62,7 +62,7 @@ Example.MultiTexture = function() {
     image1.onload = () => loadTexture(gl.TEXTURE1, u_sampler1, 1, image1);
     image1.src = "res/client/circle.gif";
 
-    var activeTexture0 = false, activeTexture1 =false;
+    var activeTexture0 = false, activeTexture1 = false;
     //加载纹理数据
     function loadTexture(texTureObj, location, texUnit, image) {
         //出啊关键纹理对象
