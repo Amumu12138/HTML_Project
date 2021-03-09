@@ -9,6 +9,7 @@ sdk.platformType = "h5";
 sdk.host = "https://h5.paojiao.cn";
 //sdk.host = "http://localhost:8080";
 // sdk.host = "http://10.11.181.44:8080";
+//sdk.host = "http://10.11.181.200:8080";
 
 sdk.apiUrl = sdk.host + "/api/";
 sdk.payUrl = sdk.host + "/pay/";

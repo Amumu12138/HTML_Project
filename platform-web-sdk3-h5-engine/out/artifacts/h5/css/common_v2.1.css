@@ -493,6 +493,7 @@
 
 /* 加载页 */
 .loading-body {
+    top: 20%;
     margin-top: -100px;
     width: 280px;
     height: 50px;
@@ -645,7 +646,7 @@
 @media screen and (orientation: portrait) {
     .iframe-css {
         width: 100%;
-        height: 74%;
+        height: 76%;
         background: #f2f2f2;
         z-index: 4;
         bottom: 0px;

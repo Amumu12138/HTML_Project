@@ -8,10 +8,13 @@ import com.paojiao.sdk3.common.util.SDKUtil;
 import com.paojiao.sdk3.model.PjThirdSdkOrder;
 import com.paojiao.sdk3.model.PpOrder;
 import com.paojiao.sdk3.model.PpUserVoucher;
+import com.paojiao.sdk3.model.PpVoucher;
 import com.paojiao.sdk3.service.VoucherService;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -43,10 +46,12 @@ public class VoucherServiceImpl implements VoucherService {
 
         for (PpUserVoucher ppUserVoucher : userVoucherList) {
             Boolean canUse = true;//默认可用
+            int canUseType = 0;
             //适用范围判断 适用范围；1指定游戏，2全平台
             if (ppUserVoucher.getApplicableRange() == 1 && StrKit.notBlank(ppUserVoucher.getGameIds())) {
                 if (!SDKUtil.containGameId(gameId, ppUserVoucher.getGameIds())) {
                     canUse = false;
+                    canUseType = 1;
                 }
             }
 
@@ -56,13 +61,31 @@ public class VoucherServiceImpl implements VoucherService {
                 if (rule == 1) {
                     if (order.getMoney().doubleValue() < ppUserVoucher.getAchieveMoney().doubleValue()) {
                         canUse = false;
+                        canUseType = 2;
                     }
                 }
             }
             ppUserVoucher.put("canUse", canUse);
+            ppUserVoucher.put("canUseType", canUseType);
             newVoucherList.add(ppUserVoucher);
         }
 
+        //代金券排序
+        //减免金额展示，可减免金额越小，越优先展示
+        Collections.sort(newVoucherList, new Comparator<PpUserVoucher>() {
+            @Override
+            public int compare(PpUserVoucher o1, PpUserVoucher o2) {
+                return o1.getDeduct() - o2.getDeduct();
+            }
+        });
+
+        //不可用代金券放在最后
+        Collections.sort(newVoucherList, new Comparator<PpUserVoucher>() {
+            @Override
+            public int compare(PpUserVoucher o1, PpUserVoucher o2) {
+                return o2.getBoolean("canUse").compareTo(o1.getBoolean("canUse"));
+            }
+        });
         return newVoucherList;
     }
 
@@ -135,5 +158,45 @@ public class VoucherServiceImpl implements VoucherService {
         String sql = "update pp_user_voucher set use_date = now(),use_order=?,use_status = 3 where id = ?";
         int rows = Db.use(DS.pubMaster).update(sql, orderNumber, userVoucherId);
         return rows;
+    }
+
+
+    @Override
+    public int countCanReceiveVoucher(int puid, PjThirdSdkOrder order) {
+        int gameId = order.getGameId();
+
+        //查询用户未领取过的代金券（排除游戏大厅专属代金券send_object!=3）
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from pp_voucher a where a.status = 1 and if(a.expired_type = 0, CURDATE() >=  a.expired_start and CURDATE()  <=  a.expired_end,1=1) and send_object!=3");
+        sql.append(" and NOT EXISTS(");
+        sql.append(" select id from pp_user_voucher b  where b.puid =? and b.voucher_id is not null and b.voucher_id=a.id");
+        sql.append(")");
+
+        List<PpVoucher> voucherList = PpVoucher.dao.use(DS.pubMaster).find(sql.toString(), puid);
+        if (voucherList == null || voucherList.size() == 0) {
+            return 0;
+        }
+
+        List<PpVoucher> newVoucherList = new ArrayList<PpVoucher>();
+
+        for (PpVoucher voucher : voucherList) {
+            //适用范围判断 适用范围；1指定游戏，2全平台
+            if (voucher.getApplicableRange() == 1 && StrKit.notBlank(voucher.getGameIds())) {
+                if (!SDKUtil.containGameId(gameId, voucher.getGameIds())) {
+                    continue;
+                }
+            }
+
+            //当前订单金额是否符合代金券使用条件
+            int rule = voucher.getRule();//满减规则；1有门槛，2无门槛
+            if (rule == 1) {
+                if (order.getMoney().doubleValue() < voucher.getAchieveMoney()) {
+                    continue;
+                }
+            }
+            newVoucherList.add(voucher);
+        }
+        return newVoucherList.size();
+
     }
 }

@@ -286,7 +286,7 @@ public class AppJfinalConfig extends JFinalConfig {
 						baseModelPkg, baseModelDir, modelPkg, "4");
 			}
 			if ("5".equals(read)) {
-				String[] inc = {"pp_game_flash_screen"};
+				String[] inc = {"pp_pay_cid_discount"};
 				mappingKitClassName = "_pubMasterMappingKit";
 				GeneratorModel.generatorModel(mappingKitClassName, inc,
 						baseModelPkg, baseModelDir, modelPkg, "5");

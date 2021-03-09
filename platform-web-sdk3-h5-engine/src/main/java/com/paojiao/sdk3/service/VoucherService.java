@@ -59,4 +59,12 @@ public interface VoucherService {
      * @return
      */
     int updateVoucherStatus(Integer userVoucherId,String orderNumber);
+
+    /**
+     * 查询用户当前订单，能够领取的代金券
+     *
+     * @param order 订单信息
+     * @return
+     */
+     int countCanReceiveVoucher(int puid, PjThirdSdkOrder order);
 }

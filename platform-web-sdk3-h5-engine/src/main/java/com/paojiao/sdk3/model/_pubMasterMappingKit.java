@@ -17,6 +17,8 @@ public class _pubMasterMappingKit {
 	
 	public static void mapping(ActiveRecordPlugin arp) {
 		arp.addMapping("pp_game_flash_screen", "id", PpGameFlashScreen.class);
+		arp.addMapping("pp_voucher", "id", PpVoucher.class);
+		arp.addMapping("pp_pay_cid_discount", "id", PpVoucher.class);
 	}
 }
 

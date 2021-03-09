@@ -7,7 +7,7 @@ sdk.channelId = -1;
 sdk.platformType = "h5";
 
  sdk.host = "https://h5.paojiao.cn";
-//sdk.host = "http://localhost:8096";
+// sdk.host = "http://localhost:8096";
 // sdk.host = "http://10.11.181.44:8080";
 //sdk.host = "http://10.11.181.200:8080";
 
@@ -2357,21 +2357,14 @@ sdk.showAccountLoginBox = function () {
 
             var uid = data.uid;
             var token = data.token;
+            var params = {};
+            params["sdkToken"] = token;
+            params["token"] = token;
 
-            var openRealNameAuth = data.openRealNameAuth; //0:关闭 1：开启 2：强制开启
-            var realNameAuthStatus = data.realNameAuthStatus; //0:未实名
-            if ((openRealNameAuth == 1 || openRealNameAuth == 2) && realNameAuthStatus == 0) { //尚未实名认证
-                sdk.showRealNameAuth(openRealNameAuth, uid, token);
-            } else {
-                sdk.setItem("uid", uid);
-                sdk.setItem("sdkToken", token);
-                sdk.setItem("realNameAuthStatus", realNameAuthStatus);
-                window.location.href = sdk.mainUrl;
-            }
+            sdk.showLoadingLoginBox(userName, params);
+
             //保存最新的登录账号,密码
-            // sdk.setItem("userName", userName);
-            // sdk.setItem("password", password);
-
+            sdk.setItem("userName", userName);
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
             sdk.distinct(userNameArray);
@@ -2628,6 +2621,7 @@ sdk.showMobileLoginVeriUserNameBox = function (mobile) {
                 window.location.href = sdk.mainUrl;
             }
 
+            sdk.setItem("userName", userName);
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
             sdk.distinct(userNameArray);
@@ -2706,6 +2700,7 @@ sdk.showMobileLoginSelectedUserNameBox = function (mobile, data) {
                 window.location.href = sdk.mainUrl;
             }
 
+            sdk.setItem("userName", userName);
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
             sdk.distinct(userNameArray);
@@ -2807,6 +2802,7 @@ sdk.showLoadingLoginBox = function (userName, params) {
                     }
                 }
 
+                sdk.setItem("userName", userName);
                 var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
                 userNameArray.push(userName);
                 sdk.distinct(userNameArray);
@@ -2885,6 +2881,7 @@ sdk.showRegisterSuccBox = function (userName, password) {
                     window.location.href = sdk.mainUrl;
                 }
 
+                sdk.setItem("userName", userName);
                 var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
                 userNameArray.push(userName);
                 sdk.distinct(userNameArray);
@@ -2911,6 +2908,7 @@ sdk.showRegisterSuccBox = function (userName, password) {
                 window.location.href = sdk.mainUrl;
             }
 
+            sdk.setItem("userName", userName);
             var userNameArray = JSON.parse(sdk.getItem("username_array")) || [];
             userNameArray.push(userName);
             sdk.distinct(userNameArray);
@@ -3502,8 +3500,8 @@ sdk.weChatCode = function (userName, password) {
  * 打开用户中心
  * @param sourceUrl
  */
-sdk.loadOpenUc = function (params) {
-    var url = sdk.concatJumpUrl(params.url); //获取用户中心Url
+sdk.loadOpenUc = function (url) {
+    var url = sdk.concatJumpUrl(url); //获取用户中心Url
     sdk.showHomeViewHtml(url); //打开用户中心菜单
 };
 /**

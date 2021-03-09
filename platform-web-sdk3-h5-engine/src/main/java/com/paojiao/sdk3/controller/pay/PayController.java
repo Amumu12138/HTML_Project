@@ -36,6 +36,7 @@ public class PayController extends BaseController {
     private VoucherService voucherService = new VoucherServiceImpl();
     private GameService ppGameService = new GameServiceImpl();
     private PayConfigService payConfigService = new PayConfigServiceImpl();
+    private PayService payService = new PayServiceImpl();
     private PpUserRealNameAuthService ppUserRealNameAuthService = new PpUserRealNameAuthServiceImpl();
 
     @Inject
@@ -89,7 +90,8 @@ public class PayController extends BaseController {
                 requestFailure(StatusType.ORDER_MONEY_INVALID);
                 return;
             }
-
+            //游戏名称
+            setAttr("gameName",channelGame.getGameName());
             //泡椒平台生成订单
             PjThirdSdkOrder order = orderService.generatePayOrder(sdkChannel, channelGame, game, getParaMap1(), money, buser, 2, PayStyle.PAY_CENTER.id);
             if (order == null) {
@@ -145,6 +147,8 @@ public class PayController extends BaseController {
             //查询用户钱包
             PpWallet wallet = walletService.findUserWallet(ppUser.getId());
             setAttr("wallet", wallet); //钱包信息
+            setAttr("wxOpenId", getPara("wxOpenId"));//微信openid
+            //=============================新sdk2处理===========================================
 
             //查询用户优惠券
             List<PpUserVoucher> userVoucherList = voucherService.findUserVoucherList(ppUser.getId(), order);
@@ -158,8 +162,7 @@ public class PayController extends BaseController {
             setAttr("maxDeductVoucher", SDKUtil.getMaxDeductVoucher(userVoucherList));
 
             //不可用代金券数量
-            setAttr("canNotUseSize", userVoucherList.size() - canUseSize);
-
+            //setAttr("canNotUseSize", userVoucherList.size() - canUseSize);
             //用户游币数量
             Double userGold = 0.0;
             if (wallet != null) {
@@ -167,9 +170,47 @@ public class PayController extends BaseController {
             }
             setAttr("userGold", userGold.intValue());//用户游币数量(包含免费的)
 
-            setAttr("wxOpenId", getPara("wxOpenId"));//微信openid
+            //是否显示充值按钮  //是否显示领券按钮
+            setAttr("showRechargeBtn", true);
+            setAttr("showVoucherBtn", true);
+            //sdk2.0 支付页面
+          /*  if (sdkInfo.getMainSdkVersion().equals(SDKUtil.SDK2)) {
+                setAttr("showRechargeBtn", false);
+                setAttr("showVoucherBtn", false);
+                this.renderJsp(ViewConstant.PAY_GAME_SDK2_VIEW);
+                return;
+            }*/
+            //没有可以使用的代金券，查询可领取的代金券数量
+            if (canUseSize == 0) {
+                int canReceiveSize = voucherService.countCanReceiveVoucher(ppUser.getId(),order);
+                setAttr("canReceiveSize", canReceiveSize);
+            }
 
-            this.render("/sdk2/sdk2_pay.html");
+            //生成游币充值sdk跳转url
+            setAttr("goldRechargeUrl", SDKUtil.createSdkUrl("/pay"));
+            //生成代金券sdk跳转url
+            setAttr("voucherUrl", SDKUtil.createSdkUrl("/voucher"));
+            //查询cid充值折扣
+            PpPayCidDiscount cidDiscount = payService.findCidDiscount(game, order.getCid());
+            double cidDiscountRate = (cidDiscount == null ? 0 : cidDiscount.getRate());
+            setAttr("cidDiscountRate", cidDiscountRate);
+            setAttr("cidDiscountMoney", 0);
+            double cidDiscountMoney = 0;
+            //查询cid充值折扣金额
+            if (cidDiscountRate > 0) {
+                 cidDiscountMoney = SDKUtil.doubleFormat((1 - cidDiscountRate) * order.getMoney());
+                setAttr("cidDiscountMoney", cidDiscountMoney);
+            }
+
+            //查询游币充值折扣
+            setAttr("goldDiscount", payService.findGoldDiscount());
+            //充值获得积分
+            Integer credits =(int) Math.floor(order.getMoney() - cidDiscountMoney);
+            setAttr("credits", credits);
+
+            //sdk2.1及以后的支付页面
+
+            this.render(ViewConstant.PAY_GAME_SDK21_VIEW);
         }
     }
 
@@ -231,6 +272,7 @@ public class PayController extends BaseController {
             PjMap<String, String> map = getParaMap1();
             System.out.println("----------------" + map.toString());
             Double money = Double.parseDouble(map.get("orderPirce"));  //订单金额
+            Double cidDiscountMoney = Double.parseDouble(map.get("cidDiscountMoney"));  //cid折扣金额
             Integer voucherId = map.getToInt("voucherId"); //优惠券Id
             Integer uid = map.getToInt("uid"); //泡椒平台用户Id
             Integer puid = map.getToInt("puid"); //泡椒平台用户Id
@@ -318,8 +360,12 @@ public class PayController extends BaseController {
                     deduction = price;
                 }
             }
+            if (cidDiscountMoney == null){
+                cidDiscountMoney = 0.0;
+            }
+
             //实际支付金额
-            double practicalMoney = SDKUtil.doubleFormat(price - deduction);
+            double practicalMoney = SDKUtil.doubleFormat(price - deduction - cidDiscountMoney);
 
             //请求参数
             Map<String, Object> param = new HashMap<String, Object>();
@@ -342,6 +388,8 @@ public class PayController extends BaseController {
             param.put("roleName", sdkOrder.getRoleName() == null ? "" : sdkOrder.getRoleName());//角色名称
             param.put("cpOrder", sdkOrder.getCpOrderNumber()); //cp订单号
             param.put("notifyUrl", PjConstants.sconfig.getSdkHost() + PayConfig.notifyUrl);//支付，异步通知地址async
+            param.put("cidDiscountMoney", cidDiscountMoney);//cid 折扣金额
+
             if (voucherId != null) {
                 param.put("userVoucherId", voucherId);//用户代金券id
             }
@@ -389,4 +437,5 @@ public class PayController extends BaseController {
             super.requestFailure(ErrorMsg.PAY_EXCEPTION.msg);
         }
     }
+
 }

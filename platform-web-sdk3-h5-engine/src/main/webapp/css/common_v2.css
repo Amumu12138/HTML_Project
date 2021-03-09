@@ -417,6 +417,7 @@
 
 /* 加载页 */
 .loading-body {
+    top: 20%;
     margin-top: -100px;
     width: 280px;
     height: 50px;

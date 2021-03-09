@@ -5,10 +5,16 @@ import com.jfinal.kit.StrKit;
 import com.paojiao.sdk3.common.PayStyle;
 import com.paojiao.sdk3.model.PpPayConfig;
 import com.paojiao.sdk3.model.PpUserVoucher;
+import com.paojiao.sdk3.service.impl.VoucherServiceImpl;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Description
@@ -16,6 +22,67 @@ import java.util.*;
  * @Date 2020/8/19
  **/
 public class SDKUtil {
+    private final Logger log = Logger.getLogger(SDKUtil.class);
+
+    private static final String sdkHost = "https://sdk2.paojiao.cn/sdk/toUc";
+
+
+    /**
+     * sdk2.0编号
+     **/
+    public static final String SDK2 = "SDK2";
+    public static final double SDK2_VALUE = 2;
+
+    public static final String SDK2_1 = "SDK2.1";
+    public static final double SDK2_1_VALUE = 2.1;
+
+    /**
+     * sdk匹配正则
+     **/
+    public static final String REGEX = "SDK(.*)_(.*)";
+
+
+    /**
+     * 获取sdk版本信息，获取不到代表是旧sdk
+     * 例子：SDK2_v2.1.3 SDK2.1_v2.10.1
+     *
+     * @param version
+     * @return
+     */
+    /*public static SdkVersionEntity getNewSdkVersion(String version) {
+        try {
+            if (StringUtils.isEmpty(version)) {
+                return null;
+            }
+            Pattern pattern = Pattern.compile(REGEX);
+            Matcher m = pattern.matcher(version);
+            if (m.matches()) {
+                String mainSdkVersionValue = m.group(1);
+                String mainSdkVersion = "SDK" + mainSdkVersionValue;
+                String sdkVersion = m.group(2);
+
+                SdkVersionEntity v = new SdkVersionEntity();
+                v.setMainSdkVersion(mainSdkVersion);
+                v.setMainSdkVersionValue(Double.parseDouble(mainSdkVersionValue));
+                v.setSdkVersion(sdkVersion);
+                return v;
+            }
+        } catch (Exception e) {
+            log.error("sdk版本号解析异常", e);
+        }
+        return null;
+    }*/
+    public static String createSdkUrl(String url) {
+        try {
+            String jumpUrl = sdkHost + "?callback=" + URLEncoder.encode(url, "UTF-8");
+            return jumpUrl;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+
+
 
     /**
      * 判断是否是sdk2.0版本及以后的版本
