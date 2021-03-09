@@ -79,7 +79,6 @@ Example.InitShaders = function() {
         gl.program = program;
 
         return true;
-
     }
 }
 
