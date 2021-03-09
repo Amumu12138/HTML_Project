@@ -119,6 +119,7 @@ Example.ProgramObject = function() {
     var image = new Image();
     image.onload = () => {
         utils.loadTexture(gl, texProgram.u_sampler, gl.TEXTURE0, image, 0, function() {
+            //清理画布
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         

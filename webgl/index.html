@@ -89,6 +89,7 @@
     <script type="text/javascript" src="example/client/test/Discard.js"></script>
     <script type="text/javascript" src="example/client/test/BlendSphere.js"></script>
     <script type="text/javascript" src="example/client/test/ProgramObject.js"></script>
+    <script type="text/javascript" src="example/client/test/FramebufferObject.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -286,6 +287,9 @@
                 break;
             case "ProgramObject": 
                 Example.ProgramObject();
+                break;
+            case "FramebufferObject": 
+                Example.FramebufferObject();
                 break;
             default: 
                 break;
