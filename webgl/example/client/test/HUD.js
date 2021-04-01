@@ -209,10 +209,8 @@ Example.HUD = function() {
         ctx.fillText("HUD: Head Up Diplay", 150, 50);
         ctx.fillText('newAngle: ' + Math.floor(newAngle), 160, 75);
     }
-
-   
 }
 
 if(typeof module !== "undefined") {
-    Example = Example[Object.keys(Example)[0]];
+    module.export = Example[Object.keys(Example)[0]];
 }

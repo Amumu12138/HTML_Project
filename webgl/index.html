@@ -91,6 +91,7 @@
     <script type="text/javascript" src="example/client/test/ProgramObject.js"></script>
     <script type="text/javascript" src="example/client/test/FramebufferObject.js"></script>
     <script type="text/javascript" src="example/client/test/Shadow.js"></script>
+    <script type="text/javascript" src="example/client/test/OBJViewer.js"></script>
     <script>
         var exampleName = window.localStorage.getItem("exampleName");
         switch(exampleName) {
@@ -294,6 +295,9 @@
                 break;
             case "Shadow": 
                 Example.Shadow();
+                break;
+            case "OBJViewer": 
+                Example.OBJViewer();
                 break;
             default: 
                 break;

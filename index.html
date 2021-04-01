@@ -82,6 +82,7 @@
                 <a onclick="onClickWebGLResp('ProgramObject')"> ProgramObject </a>
                 <a onclick="onClickWebGLResp('FramebufferObject')"> FbObject </a>
                 <a onclick="onClickWebGLResp('Shadow')"> Shadow </a>
+                <a onclick="onClickWebGLResp('OBJViewer')"> OBJViewer </a>
             </div>
         </div>
         <div class="dropdown">
@@ -520,6 +521,9 @@
                     break;
                 case "Shadow":
                     window.localStorage.setItem("exampleName", "Shadow");
+                    break;
+                case "OBJViewer":
+                    window.localStorage.setItem("exampleName", "OBJViewer");
                     break;
                 default: 
                     break;
