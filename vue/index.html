@@ -3,34 +3,35 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
-    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <title>Vue</title>
+    <script src="./libs/vue.js"></script>
 </head>
 
 <body>
     <div id="app">
-        <div class="block" style="display:inline;width:500px">
-            <el-slider v-model="time" show-input :max=20 :step=0.01></el-slider>
-        </div>
+        {{ message }}
+        <h2> {{study.name}} {{study.sex}} </h2>
+    <ul>
+        <li>{{ array[0] }}</li>
+        <li>{{ array[1] }}</li>
+        <li>{{ array[2] }}</li>
+        <li>{{ array[3] }}</li>
+    </ul>
     </div>
 
     <script>
         //实例化vue
-        new Vue({
-            el: "#app",
-            data: {
-                time: 0,
+       var app = new Vue({
+        el: "#app",
+        data: {
+            message: "Hello World!",
+            study: {
+                name: "Amumu",
+                sex: "Man"
             },
-            watch: {
-                time: function (value) {
-                    console.log("Amumu 12138");
-                    // 开始结束时间设置为一样，相当于播放时间为0，直接跳转到时间点对应的状态
-                    //AnimationAction.time = value; //操作对象设置开始播放时间
-                    // clip.duration = AnimationAction.time; //剪辑对象设置播放结束时间
-                    // AnimationAction.play(); //开始播放
-                }
-            },
-        });
+            array: ["1", "2", "3", "4"]
+        }
+       });
     </script>
 </body>
 
