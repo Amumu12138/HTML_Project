@@ -108,7 +108,7 @@ Example.Test = function () {
                                 texture: fruitData.render.sprite.texture
                             }
                         }
-                      });
+                    });
                 }
                 else {
                     fruit = Bodies.circle(bodyB.position.x, bodyB.position.y, fruitData.circleRadius, {
@@ -119,7 +119,7 @@ Example.Test = function () {
                                 texture: fruitData.render.sprite.texture
                             }
                         }
-                      });
+                    });
                 }
 
                 fruit.fruitTag = fruitData.fruitTag;
@@ -152,7 +152,6 @@ Example.Test = function () {
                 }
             });
         }
-        console.log("Amumu MatterJs Test fruitDatas= ", fruitDatas);
     }
 
     //随机水果(0-3编号)
