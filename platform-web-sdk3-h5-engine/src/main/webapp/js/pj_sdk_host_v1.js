@@ -212,7 +212,6 @@ sdk.initLoading = function (callback) {
 
 //获取游戏详细
 sdk.getGameInfo = function (isLogin, callback) {
-
     var params = {};
     params["channelGameId"] = sdk.getItem("channelGameId");
     params["channel"] = sdk.getItem("channel");
