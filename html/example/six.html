@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>综合案例</title>
+</head>
+<body>
+    <h4>青春不常在,抓紧谈恋爱</h4>
+    <table>
+        <tr id="sex">
+            <td>   性别 </td>
+            <td>
+                <input id="man" type="radio" name="sex" checked="checked"> <label for="man"> 男 </label> 
+                <input id="women" type="radio" name="sex"> <label for="women"> 女 </label> 
+            </td>
+        </tr>
+        <tr id="birth">
+            <td>   生日 </td>
+            <td>
+               <select name="year" id="year" aria-valuetext="123">
+                    <option value="default" selected="selected"> --请选择年--</option>
+                    <option value="">2021</option>
+                    <option value="">2020</option>
+                    <option value="">2019</option>
+                    <option value="">2018</option>
+                    <option value="">2017</option>
+                    <option value="">2016</option>
+                    <option value="">2015</option>
+               </select>
+               <select name="month" id="month" aria-valuetext="123">
+                    <option value="default" selected="selected"> --请选择月--</option>
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                    <option value="">5</option>
+                    <option value="">6</option>
+                    <option value="">7</option>
+                    <option value="">8</option>
+                    <option value="">9</option>
+                    <option value="">10</option>
+                    <option value="">11</option>
+                    <option value="">12</option>
+                </select>
+                <select name="date" id="date" aria-valuetext="123">
+                    <option value="default" selected="selected"> --请选择日--</option>
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                    <option value="">5</option>
+                    <option value="">6</option>
+                    <option value="">7</option>
+                    <option value="">8</option>
+                    <option value="">9</option>
+                    <option value="">10</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="address">
+            <td> <label for="text-add"> 所在地区 </label></td>
+            <td>
+                <input type="text" placeholder="请输入所在地区">
+            </td>
+        </tr>
+        <tr id="marital">
+            <td>婚姻状态</td>
+            <td>
+                <input type="radio" id="input-spinster" checked="checked" name="input-mari"> <label for="input-spinster"> 未婚 </label>
+                <input type="radio" id="input-married" name="input-mari"> <label for="input-married"> 已婚 </label>
+                <input type="radio" id="input-divorce" name="input-mari"> <label for="input-divorce"> 离婚 </label>
+            </td>
+        </tr>
+        <tr id="academic">
+            <td>学历程度</td>
+            <td>
+                <select id="select-acad" name="select-acad" >
+                    <option value="" selected="selected"> --请选择对应学历--</option>
+                    <option value="">博士及以上</option>
+                    <option value="">硕士</option>
+                    <option value="">本科</option>
+                    <option value="">本科及以下</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="like-type">
+            <td>喜欢的类型</td>
+            <td>
+                <input id="input-fm" type="checkbox"><label for="input-fm"> 妩媚 </label>
+                <input id="input-ka" type="checkbox"><label for="input-ka"> 可爱 </label>
+                <input id="input-xxr" type="checkbox"><label for="input-xxr"> 小鲜肉 </label>
+                <input id="input-llr" type="checkbox"><label for="input-llr"> 老腊肉 </label>
+                <input id="input-dxh" type="checkbox"><label for="input-dxh"> 都喜欢 </label>
+            </td>
+        </tr>
+        <tr id="self-introduce">
+            <td>自我介绍</td>
+            <td>
+                <textarea name="textarea-intr" id="textarea-intr" cols="30" rows="3"></textarea>
+            </td>
+        </tr>
+        <tr id="register">
+            <td></td>
+            <td>
+                <input type="button" value="免费注册">
+            </td>
+        </tr>
+        <tr id="agree">
+            <td></td>
+            <td>
+                <input id="input-agree" type="checkbox" checked="checked">
+                <label for="input-agree"> 我同意注册条款和会员加入标准</label>
+            </td>
+        </tr>
+        <tr id="login">
+            <td></td>
+            <td>
+                <a href="#"><ins> 我是会员,立即登录 </ins></a>
+            </td>
+        </tr>
+        <tr id="bottom">
+            <td></td>
+            <td>
+                <h4>我承诺</h4>
+                <ul>
+                    <li>年满18岁、单身</li>
+                    <li>抱着严肃的态度</li>
+                    <li>真诚寻找另一半</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
