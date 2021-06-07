@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css 测试3</title>
+    <style>
+        /* 后代选择器 */
+        .nav ul li a {
+            color: red;
+        }
+
+        /* div>ul {
+            color: green;
+            font-weight: bold;
+            font-size: 20px;
+        } */
+
+        /* 子选择器 */
+        .hot>a {
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <ul>
+            我是ul
+            <li><a href="#">AAA</a></li>
+            <li><a href="#">BBB</a></li>
+        </ul>
+    </div>
+
+    <div class="hot">
+        <a href="#">大肘子</a>
+        <ul>
+            <li><a href="#">猪头</a></li>
+            <li><a href="#">猪尾巴</a></li>
+        </ul>
+    </div>
+</body>
+
+</html>
