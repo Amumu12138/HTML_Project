@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆角边框、盒子阴影、文字阴影</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 盒子圆角边框 */
+        .box-radius {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            border-radius: 25px;
+        }
+
+        /* 盒子阴影 */
+        .box-shadow {
+            width: 200px;
+            height: 200px;
+            background: pink;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .box-shadow:hover {
+            box-shadow: 10px 10px 10px 10px rgba(1, 1, 1, 0.3);
+        }
+
+        /* 文字阴影 */
+        .text-shadow {
+            text-shadow: 5px 5px 5px #ccc;
+        }
+    </style>
+</head>
+<h3>圆角边框</h3>
+<div class="box-radius"></div>
+
+<h3>盒子阴影</h3>
+<div class="box-shadow">
+    鼠标触发阴影
+</div>
+
+<h3>文字阴影</h3>
+<p class="text-shadow">我是文字阴影</p>
+
+<body>
+
+</body>
+
+</html>
