@@ -1,10 +1,12 @@
+import userChildren from "./index02-children";
 // User 组件
 const User = {
     template: `
     <div>
         <h1> User </h1>
-        <router-link to="/user/1001"> 1001 </router-link>
+        <router-link to="/user/userDetail"> 1001 </router-link>
         <router-link to="/user/1002"> 1002 </router-link>
+        <router-link to="/user/profile-01"> profile-01 </router-link>
         <router-view></router-view>
      </div>
     `
@@ -49,19 +51,10 @@ const router = new VueRouter({
             path: '/user',
             component: User,
             children: [
+                userChildren,
                 {
-                    path: ':id',
-                    component: UserDetail,
-                    children: [
-                        {
-                            path: 'profile',
-                            component: UserProfile
-                        },
-                        {
-                            path: 'posts',
-                            component: UserPosts
-                        }
-                    ]
+                    path: 'profile-01',
+                    component: UserProfile
                 }
             ]
         }
