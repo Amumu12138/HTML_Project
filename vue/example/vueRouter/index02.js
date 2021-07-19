@@ -45,7 +45,6 @@ const UserPosts = {
 
 // 生成路由
 const router = new VueRouter({
-    history: 'history',
     routes: [
         {
             path: '/user',
