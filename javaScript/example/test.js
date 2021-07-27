@@ -267,11 +267,11 @@ Example.Test = function () {
 
     // 日期时间检查 ( 格式为：YYYY-MM-DD HH:MM:SS  ) -逻辑有问题
     function CheckDateTime(str) {
-        var reg = /^(\d+)-(\d{ 1,2 })-(\d{ 1,2 }) (\d{ 1,2 }):(\d{ 1,2 }):(\d{ 1,2 })$/;
+        var reg = /\d+/g;
         var r = str.match(reg);
         if (r == null) return false;
         r[2] = r[2] - 1;
-        var d = new Date(r[1], r[2], r[3], r[4], r[5], r[6]);
+        var d = new Date(r[0], r[1], r[2], r[3], r[4], r[5]);
         if (d.getFullYear() != r[1]) return false;
         if (d.getMonth() != r[2]) return false;
         if (d.getDate() != r[3]) return false;
