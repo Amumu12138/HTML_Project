@@ -17,24 +17,46 @@
         <p>Computed reversed message: "{{ reversedMessage }}"</p>
         <p>NOW: {{now}}</p>
         <p>nowMethods: {{nowMethods()}}</p>
+        <p>NOW 02: {{now}}</p>
+        <p>nowMethods 02: {{nowMethods()}}</p>
+
+        <!-- 显示fullName -->
+        <p>{{ FullName }}</p>
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                message: 'HEELO VUE'
+                message: 'HEELO VUE',
+                firstName: 'Foo',
+                lastName: 'Bar'
             },
             // 计算属性
             computed: {
                 reversedMessage() {
                     return this.message.split('').reverse().join('')
                 },
+                //计算属性是基于它们的响应式依赖进行缓存的
                 now: function () {
+                    // 在重复调用now的值时，只会调用一次计算属性，其它的是缓存
+                    console.log('Amumu now --->')
                     return Date.now()
+                },
+                FullName: {
+                    get: function () {
+                        return this.firstName + ' ' + this.lastName
+                    },
+                    set: function (newValue) {
+                        var names = newValue.split(' ')
+                        this.firstName = names[0]
+                        this.lastName = names[names.length - 1]
+                    }
                 }
             },
             methods: {
                 nowMethods() {
+                    // 在重复调用nowMethods的值时，每次都会调用这个方法
+                    console.log('Amumu nowMethods --->')
                     return Date.now()
                 }
             }
