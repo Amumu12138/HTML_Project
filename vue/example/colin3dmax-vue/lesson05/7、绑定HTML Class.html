@@ -13,21 +13,61 @@
         .active {
             width: 200px;
             height: 200px;
-            background: rebeccapurple;
+            border-radius: 25px;
+            background-color: rebeccapurple;
+        }
+
+        .static {
+            background-color: black;
+            /* width: 200px;
+            height: 200px; */
+        }
+
+        .text-danger {
+            color: red;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        /* 自定义组件 */
+        .foo {
+            background-color: gray;
+        }
+
+        .bar {
+            color: white;
+            padding: 10px;
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <div v-bind:class="{ active: isActive }"></div>
+        <div class="static" v-bind:class="{ active: isActive }"></div>
+        <div v-bind:class="classObject">HELLO</div>
+
+        <div v-bind:class="[activeClass, errorClass]">WORLD</div>
+        <!-- 自定义组件 -->
+        <p>自定义组件</p>
+        <my-component></my-component>
     </div>
     <script>
+
+        Vue.component('my-component', {
+            template: '<p class="foo bar">Hi</p>'
+        })
+
         var vm = new Vue({
             el: "#app",
             data: {
                 message: "HELLO VUE",
-                isActive: true
+                isActive: true,
+                classObject: {
+                    active: true,
+                    'text-danger': true
+                },
+                activeClass: 'active',
+                errorClass: 'text-danger'
             },
             computed: {
 
