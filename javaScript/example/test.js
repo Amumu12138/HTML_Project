@@ -270,14 +270,15 @@ Example.Test = function () {
         var reg = /\d+/g;
         var r = str.match(reg);
         if (r == null) return false;
-        r[2] = r[2] - 1;
+        r[1] = r[1] - 1;
         var d = new Date(r[0], r[1], r[2], r[3], r[4], r[5]);
-        if (d.getFullYear() != r[1]) return false;
-        if (d.getMonth() != r[2]) return false;
-        if (d.getDate() != r[3]) return false;
-        if (d.getHours() != r[4]) return false;
-        if (d.getMinutes() != r[5]) return false;
-        if (d.getSeconds() != r[6]) return false;
+        console.log('Amumu d.getFullYear() ---> ', d.getFullYear())
+        if (d.getFullYear() != r[0]) return false;
+        if (d.getMonth() != r[1]) return false;
+        if (d.getDate() != r[2]) return false;
+        if (d.getHours() != r[3]) return false;
+        if (d.getMinutes() != r[4]) return false;
+        if (d.getSeconds() != r[5]) return false;
         return true;
     }
     document.write(`<p> 日期时间检查 --> ${CheckDateTime('2021-07-26 14:40:40')}</p> `);
