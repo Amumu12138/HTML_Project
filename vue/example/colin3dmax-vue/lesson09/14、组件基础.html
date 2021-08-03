@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13、表单输入绑定</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+        li {
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>基本示例</p>
+        <button-counter></button-counter>
+        <p>通过prop向子组件传递数据</p>
+        <blog-post title="这是单个组件"></blog-post>
+        <p>利用v-for渲染组件</p>
+        <blog-post v-for="item in posts" :title="item.title" :key="item.id"></blog-post>
+        <p>实现单个根元素</p>
+        <blog-post-02 v-for="item in posts" :post="item" :key="item.id + '02'"></blog-post-02>
+    </div>
+    <script>
+
+        // 定义一个名为 button-counter 的新组件
+        Vue.component('button-counter', {
+            data: function () {
+                return {
+                    count: 0
+                }
+            },
+            template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+        })
+
+        Vue.component('blog-post', {
+            props: ['title'],
+            template: '<h3>{{ title }}</h3>'
+        })
+
+        // 重构blog-post组件
+        Vue.component('blog-post-02', {
+            props: ['post'],
+            template: `
+                <div class="blog-post">
+                    <h3>{{ post.title }}</h3>
+                    <div v-html="post.content"></div>
+                </div>
+                `
+        })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                posts: [
+                    { id: 1, title: 'My journey with Vue', content: '<p> hello Amumu <p>' },
+                    { id: 2, title: 'Blogging with Vue', content: '<p> hello Amumu <p>' },
+                    { id: 3, title: 'Why Vue is so fun', content: '<p> hello Amumu <p>' }
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>
