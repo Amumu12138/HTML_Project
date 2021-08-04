@@ -13,11 +13,16 @@
         li {
             list-style: none;
         }
+
+        .red {
+            color: red;
+        }
     </style>
 </head>
 
 <body>
     <div id="app">
+        <p class="red">注意: 你可以用 v-model 指令在表单 input、textarea 及 select 元素上创建双向数据绑定</p>
         <p>文本</p>
         <input v-model="message" placeholder="edit me">
         <p>Message is: {{ message }}</p>
