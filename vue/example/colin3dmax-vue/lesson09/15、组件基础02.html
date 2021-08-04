@@ -17,6 +17,30 @@
         .demo-alert-box {
             background-color: red;
         }
+
+        .tab-button {
+            padding: 6px 10px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            background: #f0f0f0;
+            margin-bottom: -1px;
+            margin-right: -1px;
+        }
+
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-button.active {
+            background: #e0e0e0;
+        }
+
+        .tab {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
     </style>
 </head>
 
@@ -41,6 +65,14 @@
         <alert-box>
             Warning Amumu12138!
         </alert-box>
+
+        <p> --- 动态组件 ---</p>
+        <button v-for="tab in tabs" v-bind:key="tab" v-bind:class="['tab-button', { active: currentTab === tab }]"
+            v-on:click="currentTab = tab">
+            {{ tab }}
+        </button>
+
+        <component v-bind:is="currentTabComponent" class="tab"></component>
     </div>
     <script>
         Vue.component('blog-post', {
@@ -75,6 +107,16 @@
                 </div>
             `
         })
+
+        Vue.component("tab-home", {
+            template: "<div>Home component</div>"
+        });
+        Vue.component("tab-posts", {
+            template: "<div>Posts component</div>"
+        });
+        Vue.component("tab-archive", {
+            template: "<div>Archive component</div>"
+        });
         var vm = new Vue({
             el: "#app",
             data: {
@@ -86,7 +128,14 @@
                 postFontSize: 1,
                 searchText: '',
                 searchText02: '',
-                searchText03: ''
+                searchText03: '',
+                currentTab: "Home",
+                tabs: ["Home", "Posts", "Archive"]
+            },
+            computed: {
+                currentTabComponent: function () {
+                    return "tab-" + this.currentTab.toLowerCase();
+                }
             },
             methods: {
                 onEnlargeText: function (enlargeAmount) {
