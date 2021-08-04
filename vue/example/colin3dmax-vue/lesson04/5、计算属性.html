@@ -21,7 +21,11 @@
         <p>nowMethods 02: {{nowMethods()}}</p>
 
         <!-- 显示fullName -->
-        <p>{{ FullName }}</p>
+        <p>FullName: {{ FullName }}</p>
+        <button @click="FullName = 'Amumu 12138'">修改FullName</button>
+        <!-- <p>{{ FullName = 'Amumu 12138' }}</p> -->
+        <P>firstName: {{firstName}}</P>
+        <P>lastName: {{lastName}}</P>
     </div>
     <script>
         var vm = new Vue({
