@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>16、组件注册</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>使用 kabab-case 构造组件</p>
+        <my-component-name title="kabab-case">
+        </my-component-name>
+        <My-Component-Name title="kabab-case-02">
+        </My-Component-Name>
+        <p>使用 PascalCase 构造组件</p>
+        <MyComponentName title02="PascalCase"></MyComponentName>
+        <mycomponentname title02="PascalCase02"></mycomponentname>
+
+        <p>局部构造组件</p>
+        <ComponentA> </ComponentA>
+        <ComponentB> </ComponentB>
+        <ComponentC> </ComponentC>
+    </div>
+    <script>
+        Vue.component('my-component-name', {
+            template: `
+                <p>my-component-name title: {{title}}</p>
+            `,
+            props: ['title']
+        })
+
+        Vue.component('mycomponentname', {
+            template: `
+                <p>mycomponentname title02: {{title02}}</p>
+            `,
+            props: ['title02']
+        })
+        //局部注册
+
+        var ComponentA = { template: `<h3>ComponentA</h3>` }
+        var ComponentB = { template: `<h3>ComponentB</h3>` }
+        var ComponentC = { template: `<h3>ComponentC</h3>` }
+        var vm = new Vue({
+            el: "#app",
+            components: {
+                componenta: ComponentA,
+                componentb: ComponentB,
+                componentc: ComponentC
+            }
+        })
+    </script>
+</body>
+
+</html>
