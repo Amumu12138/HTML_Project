@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24、深入了解Vue的处理边界-监听-循环引用和模版</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>程序化的事件侦听器</p>
+        <div>count: {{count}}</div>
+        <div>message: {{message}}</div>
+        <button @click="onClickResp"> Add </button>
+        <br>
+        <button @click="onPressOn"> on </button>
+        <button @click="onPressOff"> off </button>
+        <p>循环引用</p>
+        <test-com></test-com>
+        <p>内联模版</p>
+        <my-component inline-template>
+            <div>
+                <p>These are compiled as the component's own template.</p>
+                <p>Not parent's transclusion content.</p>
+            </div>
+        </my-component>
+        <p>X-Template</p>
+        <my-component-02></my-component-02>
+    </div>
+    <script type="text/x-template" id="hello-world-template">
+        <p>this is x-template</p>
+      </script>
+    <script>
+        Vue.component('test-com', {
+            template: `
+                <div>
+                     test-com {{count}}
+                    <test-com v-if="count < maxCount" :count="count+1"></test-com>
+                </div>
+            `,
+            props: {
+                count: {
+                    type: Number,
+                    default: 1
+                },
+                maxCount: {
+                    type: Number,
+                    default: 5
+                }
+            }
+        })
+
+        Vue.component('my-component', {
+            template: "#hello-world-template"
+        })
+
+        Vue.component('my-component-02', {
+            template: `
+                <div>
+                    this is my-component-02
+                </div>
+            `
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                count: 0,
+                message: ''
+            },
+            mounted() {
+                // this.$on('add-event', () => {
+                //     console.log('add-event response');
+                //     this.message = 'add-event-visible' + ' count = ' + this.count;
+                // })
+            },
+            methods: {
+                onClickResp() {
+                    this.count++;
+                    this.$emit('add-event', this.count);
+                },
+                printCount() {
+                    this.message = 'add-event-visible' + ' count = ' + this.count;
+                },
+                onPressOn() {
+                    this.$on('add-event', this.printCount)
+                },
+                onPressOff() {
+                    this.$off('add-event', this.printCount)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
