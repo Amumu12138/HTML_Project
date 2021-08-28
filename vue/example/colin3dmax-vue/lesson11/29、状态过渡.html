@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>29、状态过渡</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.4/gsap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/color-js@1.0.3"></script>
+    <style>
+        .example-7-color-preview {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>状态动画与侦听器</p>
+        <input v-model.number="number" type="number" step="20">
+        <p>{{ animatedNumber }}</p>
+        <p>修改颜色值</p>
+        <input v-model="colorQuery" v-on:keyup.enter="updateColor" placeholder="Enter a color">
+        <button v-on:click="updateColor">Update</button>
+        <p>Preview:</p>
+        <span v-bind:style="{ backgroundColor: tweenedCSSColor }" class="example-7-color-preview"></span>
+        <p>{{ tweenedCSSColor }}</p>
+    </div>
+    <script>
+        var Color = net.brehaut.Color
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                number: 0,
+                tweenedNumber: 0,
+                colorQuery: '',
+                color: {
+                    red: 0,
+                    green: 0,
+                    blue: 0,
+                    alpha: 1
+                },
+                tweenedColor: {}
+            },
+            computed: {
+                animatedNumber: function () {
+                    return this.tweenedNumber.toFixed(0);
+                },
+                tweenedCSSColor: function () {
+                    return new Color({
+                        red: this.tweenedColor.red,
+                        green: this.tweenedColor.green,
+                        blue: this.tweenedColor.blue,
+                        alpha: this.tweenedColor.alpha
+                    }).toCSS()
+                }
+            },
+            watch: {
+                number: function (newValue) {
+                    gsap.to(this.$data, { duration: 0.5, tweenedNumber: newValue });
+                },
+                color: function () {
+                    function animate() {
+                        if (TWEEN.update()) {
+                            requestAnimationFrame(animate)
+                        }
+                    }
+
+                    new TWEEN.Tween(this.tweenedColor)
+                        .to(this.color, 750)
+                        .start()
+
+                    animate()
+                }
+            },
+            created: function () {
+                this.tweenedColor = Object.assign({}, this.color)
+            },
+            methods: {
+                updateColor: function () {
+                    this.color = new Color(this.colorQuery).toRGB()
+                    this.colorQuery = ''
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
