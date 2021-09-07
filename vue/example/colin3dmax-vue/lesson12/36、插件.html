@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>36、插件</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app" v-my-directive>
+        <button @click="onClickResp"> Click </button>
+        <button @click="onClickPluginResp"> ClickPlugin </button>
+    </div>
+    <script>
+        var Myplugin = {};
+        // 自定义插件
+        Myplugin.install = function (Vue, options) {
+            // 添加全局方法或property
+            Vue.myGlobalMethod = function () {
+                console.log('this is myGlobalMethod');
+            }
+            // 添加全局资源
+            Vue.directive('my-directive', {
+                bind(el, binding, vnode, oldVnode) {
+                    console.log('my-directive called');
+                }
+            })
+
+            // 注入组件选项
+            Vue.mixin({
+                created: function () {
+                    console.log('Vue.mixin created called');
+                }
+            })
+
+            // 添加实例方法
+            Vue.prototype.myMethod = function () {
+                console.log(' Vue.prototype.myMethod');
+            }
+        }
+
+        // 调用myPlugin 
+        Vue.use(Myplugin);
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                show: true
+            },
+            methods: {
+                onClickResp() {
+                    Vue.myGlobalMethod();
+                },
+                onClickPluginResp() {
+                    this.myMethod();
+                }
+            },
+            created() {
+                console.log('AMumu created called')
+            },
+        })
+    </script>
+</body>
+
+</html>
