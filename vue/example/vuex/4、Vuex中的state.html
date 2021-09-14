@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4、Vuex中的state</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- vuex -->
+    <script src="https://unpkg.com/vuex@2.0.0"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <script>
+        const store = new Vuex.Store({
+            state: {
+                count: 2
+            },
+            mutations: {
+                increment(state) {
+                    state.count++
+                }
+            }
+        })
+
+        // 创建一个Counter组件
+        const Counter = {
+            template: `
+                <div>
+                    count: {{count}} 
+                    <br>
+                    localComputed: {{localComputed}}
+                </div>`,
+            data() {
+                return {
+                    localCount: 1
+                }
+            },
+            // computed: {
+            //     count() {
+            //         return store.state.count
+            //     }
+            // }
+            // mapState辅助函数
+            // computed: Vuex.mapState(['count'])
+            // mapState辅助参数2
+            // computed: Vuex.mapState({
+            //     count: state => state.count,
+            //     countAlias: 'count',
+            //     countPlusLocalState(state) {
+            //         return state.count + this.localCount
+            //     }
+            // })
+            // 对象展开运算符
+            computed: {
+                localComputed() {
+                    return 'HELLO VUE'
+                },
+                ...Vuex.mapState(['count'])
+            }
+        }
+
+        // 创建Vue实例
+        const app = new Vue({
+            el: '#app',
+            store,
+            components: {
+                Counter
+            },
+            template: `
+            <div id="app">
+                <counter></counter>
+            </div>
+            `
+        })
+    </script>
+</body>
+
+</html>
