@@ -31,6 +31,7 @@ export default {
     }),
   },
   methods: {
+    // 清空购物车
     checkout(products) {
       this.$store.dispatch("cart/checkout", products);
     },

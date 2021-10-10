@@ -1,6 +1,8 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
+// 内置Logger插件
+import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex)
 
@@ -12,7 +14,8 @@ const store = new Vuex.Store({
         increment(state) {
             state.count++
         }
-    }
+    },
+    plugins: [createLogger]
 })
 
 console.log('store -->', store.state.count) // --> 0
