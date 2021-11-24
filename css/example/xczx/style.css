@@ -282,17 +282,36 @@ a {
 }
 
 .box-bd ul li{
+    position: relative;
     float: left;
     width: 228px;
     height: 270px;
     margin: 0 15px 15px 0;
     background-color: #fff;
 }
+
+.box ul li .left-tip {
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    z-index: 1;
+    width: 60px;
+    height: 20px;
+    color: white;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: red;
+}
+
 .box ul li .image-box {
+    position: relative;
     width: 100%;
     height: 150px;
     overflow: hidden;
 }
+
+
 
 .box-bd ul li img {
     width: 100%;
