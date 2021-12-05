@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结构伪类选择器</title>
+    <style>
+        /* 选择ul下的第一个子元素 */
+        ul :first-child {
+            background-color: red;
+        }
+
+        /* 选择ul下的第一个li子元素 -- 未生效*/
+        ul li:first-child {
+            background-color: greenyellow;
+        }
+
+        /* 选择ul中的第一个li元素 -- 生效 */
+        ul li:nth-of-type(1) {
+            background-color: greenyellow;
+        }
+
+        /* 选择ul下的最后一个li子元素 */
+        ul li:last-child {
+            background-color: pink;
+        }
+
+        /* 选择ul下第三个子元素 */
+        ul li:nth-child(3) {
+            font-size: 18px;
+            background-color: grey;
+        }
+
+        /* 令div中的li元素根据奇偶变换背景色 */
+        div li:nth-child(even) {
+            background-color: greenyellow;
+        }
+
+        div li:nth-child(odd) {
+            background-color: gray;
+        }
+
+        /* 选择可以被3整除的元素 */
+        div span {
+            display: inline-block;
+            height: 20px;
+            width: 50px;
+            background-color: gray;
+        }
+
+        div span:nth-child(3n) {
+            background-color: hotpink;
+        }
+    </style>
+</head>
+
+<body>
+    <p>结构伪类选择器</p>
+    <ul>
+        <div>dfsfs</div>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+        <li>fajkfajklajkfaklfaj</li>
+    </ul>
+    <p>nth-child</p>
+    <div>
+        <li>1</li>
+        <li>asa2</li>
+        <li>asa3</li>
+        <li>asa</li>
+        <li>asa</li>
+        <li>asa5</li>
+        <li>asa6</li>
+    </div>
+
+    <ol>
+        <li>i</li>
+        <li>i</li>
+        <li>i</li>
+        <li>i</li>
+        <li>i</li>
+        <li>i</li>
+        <li>i</li>
+        <li>i</li>
+    </ol>
+
+    <div>
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+</body>
+
+</html>

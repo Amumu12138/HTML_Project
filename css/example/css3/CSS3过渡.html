@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS3 过渡</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .transition-box {
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+            transition: all 1s;
+        }
+
+        .transition-box:hover {
+            width: 4000px;
+            height: 400px;
+            background-color: red;
+        }
+
+        /* 进度条实现 */
+        .progress {
+            width: 200px;
+            height: 20px;
+            padding: 1px;
+            border-radius: 10px;
+            border: 1px solid red;
+        }
+
+        .bar-in {
+            width: 20%;
+            height: 100%;
+            border-radius: 10px;
+            background-color: red;
+            transition: all 1s;
+        }
+
+        .progress:hover .bar-in {
+            width: 100%;
+        }
+
+        .change-icon {
+            position: relative;
+            height: 100px;
+            /* width: 100px; */
+            overflow: hidden;
+        }
+
+        /* .change-icon:hover {
+            display: none;
+        } */
+
+        .change-icon:hover div[class*="test"] {
+            display: none;
+        }
+
+        .mask-box {
+            position: absolute;
+            left: 100px;
+            height: 100px;
+            width: 100px;
+            background-color: white;
+        }
+
+        .icon-box {
+            display: block;
+            float: left;
+            height: 100px;
+            width: 100px;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 1s;
+        }
+
+        .icon {
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="transition-box"></div>
+    <p>触碰实现进度条伸缩</p>
+    <div class="progress">
+        <div class="bar-in"></div>
+    </div>
+
+    <p>触碰实现切换图标</p>
+    <div class="change-icon">
+        <div class="mask-box"></div>
+        <div class="icon-box test"> <img class="icon" src="../../res/images/texture1.png" alt=""></div>
+        <div class="icon-box"> <img class="icon" src="../../res/images/texture2.png" alt=""></div>
+    </div>
+
+</body>
+
+</html>

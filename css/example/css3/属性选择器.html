@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>属性选择器</title>
+    <style>
+        /* 选择具有id属性的input元素 */
+        input[id] {
+            color: red;
+        }
+
+        /* 选择具有type属性且属性等于password的input元素 */
+        input[type=password] {
+            color: skyblue;
+        }
+
+        /* 匹配具有class属性且值以icon开头的div元素 */
+        div[class^=icon] {
+            color: fuchsia;
+        }
+
+        /* 匹配具有class属性且值以box结尾的div元素 */
+        div[class$=box] {
+            height: 200px;
+            width: 200px;
+            background-color: gold;
+        }
+
+        /* 匹配具有class属性且值中含有data的div元素 */
+        div[class*=data] {
+            height: 20px;
+            width: 200px;
+            background-color: gray;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 属性选择器 -->
+    <p>E[att]</p>
+    <input type="text" id="test">
+    <br>
+    <input type="text">
+    <br>
+    <!--  -->
+    <p>E[att="val"]</p>
+    <input type="text">
+    <br>
+    <input type="password">
+    <br>
+    <p>E[att^=val]</p>
+    <div class="icon-01">E[att^=val]</div>
+    <div class="icon-02">E[att^=val]</div>
+    <div class="ico-02">E[att^=val]</div>
+    <p>E[att$=val]</p>
+    <div class="01-box">01-box</div>
+    <div class="02-box">02-box</div>
+    <div class="03-bx" style="background-color: black; height: 200px; width: 200px;"></div>
+    <p>E[att*=val]</p>
+    <div class="data-0011">data-0011</div>
+    <div class="11kwo1k-data-ldpd">11kwo1k-data-ldpd</div>
+    <div class="fjaofkao-data">fjaofkao-data</div>
+    <div class="dta" style="background-color: greenyellow; height: 20px; width: 200px;;">dta</div>
+</body>
+
+</html>
