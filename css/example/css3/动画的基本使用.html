@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动画的基本使用</title>
+    <style>
+        @keyframes moveRotate {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(500px, 500px) scale(1.5);
+            }
+        }
+
+        .ani-box {
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+            animation-name: moveRotate;
+            animation-duration: 2s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ani-box"></div>
+</body>
+
+</html>
