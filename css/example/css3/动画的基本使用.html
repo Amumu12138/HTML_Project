@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>动画的基本使用</title>
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+            /* text-align: center; */
+        }
+
         @keyframes moveRotate {
             0% {
                 transform: translate(0, 0) scale(1);
@@ -24,11 +30,100 @@
             animation-name: moveRotate;
             animation-duration: 2s;
         }
+
+        /* 热点数据图 */
+        .map {
+            position: relative;
+            width: 1000px;
+            height: 1000px;
+            margin: 20px auto;
+            background: #333 url('../../res/images/chinaMap.jpeg') no-repeat;
+            background-size: 1000px;
+        }
+
+        .city {
+            position: absolute;
+            top: 258px;
+            right: 365px;
+        }
+
+        .city .dotted {
+            width: 8px;
+            height: 8px;
+            background: #00d9d9;
+            border-radius: 50%;
+        }
+
+        .city div[class^="pulse"] {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #00d9d9;
+            animation: pulse 2s linear infinite;
+        }
+
+        .pulse2 {
+            animation-delay: .4s !important;
+        }
+
+        .pulse3 {
+            animation-delay: 0.8s !important;
+        }
+
+        @keyframes pulse {
+            0% {}
+
+            70% {
+                width: 40px;
+                height: 40px;
+                opacity: 1;
+            }
+
+            100% {
+                width: 70px;
+                height: 70px;
+                opacity: 0;
+            }
+        }
+
+        .type-write {
+            width: 20px;
+            height: 20px;
+            font-size: 20px;
+            overflow: hidden;
+            animation: write 4s steps(10) infinite;
+        }
+
+        @keyframes write {
+            0% {
+                width: 20px;
+            }
+
+            100% {
+                width: 200px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="ani-box"></div>
+    <!-- 制作中国热点数据图 -->
+    <div class="map">
+        <div class="city">
+            <span>北京</span>
+            <div class="dotted"></div>
+            <div class="pulse1"></div>
+            <div class="pulse2"></div>
+            <div class="pulse3"></div>
+        </div>
+    </div>
+    <!-- 打字机效果 -->
+    <div class="type-write">打字机效果</div>
 </body>
 
 </html>
