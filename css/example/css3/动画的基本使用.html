@@ -24,11 +24,47 @@
             animation-name: moveRotate;
             animation-duration: 2s;
         }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0) rotate(0);
+            }
+
+            25% {
+                transform: translate(500px, 0) rotate(90deg);
+            }
+
+            50% {
+                transform: translate(500px, 500px) rotate(180deg);
+            }
+
+            75% {
+                transform: translate(0, 500px) rotate(270deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        .ani-move {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            animation-name: move;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+        }
+
+        .ani-move:hover {
+            animation-play-state: paused;
+        }
     </style>
 </head>
 
 <body>
     <div class="ani-box"></div>
+    <div class="ani-move"></div>
 </body>
 
 </html>
