@@ -6,6 +6,9 @@ import WatchEffect from "@/views/WatchEffect";
 import LifeCycle from '@/views/LifeCycle';
 import HookTest from '@/views/HookTest';
 import ToRef from '@/views/ToRef';
+import Shallow from '@/views/ShallowReactiveAndShallowRef';
+import Readonly from '@/views/ReadonlyAndShallowReadonly';
+import Raw from '@/views/ToRawAndMarkRaw';
 
 const routerHistory = createWebHistory();
 const router = createRouter({
@@ -45,6 +48,21 @@ const router = createRouter({
             path: '/to-ref',
             name: 'to-ref',
             component: ToRef
+        },
+        {
+            path: '/shallow',
+            name: 'shallow',
+            component: Shallow
+        },
+        {
+            path: '/readonly',
+            name: 'readonly',
+            component: Readonly
+        },
+        {
+            path: '/raw',
+            name: 'raw',
+            component: Raw
         }
     ]
 })
