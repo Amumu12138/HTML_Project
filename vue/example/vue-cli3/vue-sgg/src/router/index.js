@@ -9,6 +9,10 @@ import ToRef from '@/views/ToRef';
 import Shallow from '@/views/ShallowReactiveAndShallowRef';
 import Readonly from '@/views/ReadonlyAndShallowReadonly';
 import Raw from '@/views/ToRawAndMarkRaw';
+import CustomRef from '@/views/CustomRef';
+import ProvideAndInject from '@/views/ProvideAndInject';
+import Teleport from '@/views/TelePort';
+import Suspense from '@/views/Suspense';
 
 const routerHistory = createWebHistory();
 const router = createRouter({
@@ -63,6 +67,26 @@ const router = createRouter({
             path: '/raw',
             name: 'raw',
             component: Raw
+        },
+        {
+            path: '/custom-ref',
+            name: 'custom-ref',
+            component: CustomRef
+        },
+        {
+            path: '/provide-inject',
+            name: 'provide-inject',
+            component: ProvideAndInject
+        },
+        {
+            path: '/teleport',
+            name: 'teleport',
+            component: Teleport
+        },
+        {
+            path: '/suspense',
+            name: 'suspense',
+            component: Suspense
         }
     ]
 })
