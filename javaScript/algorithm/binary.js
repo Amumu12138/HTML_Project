@@ -58,11 +58,14 @@ function areaMinNum (arr) {
     let start = 0, end = arr.length - 1;
     while (start <= end) {
         let mid = Math.floor((start + end) / 2);
+        // 中位数大于左侧的值,则结尾索引左移为mid-1
         if (arr[mid] > arr[mid - 1]) {
             end = mid - 1;
         } else if (arr[mid] > arr[mid + 1]) {
+            // 若中位数大于右侧的值,则开始索引右移为mid+1
             start = mid + 1;
         } else {
+            // 两侧都大于中位数，则输出该值索引
             return mid;
         }
     }
