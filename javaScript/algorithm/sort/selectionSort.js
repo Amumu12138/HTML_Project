@@ -49,11 +49,18 @@ function compare (argA, argB, maxSize, maxValue) {
     let randomArrCopy = JSON.parse(JSON.stringify(randomArr));
     console.log('before randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
 
+    let now = Date.now();
     argA(randomArr);
+    let duration = Date.now() - now;
+    console.log('duration -->', duration);
+
+    let now02 = Date.now();
     argB(randomArrCopy);
+    let duration02 = Date.now() - now02;
+    console.log('duration02 -->', duration02);
     console.log('after randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
     return JSON.stringify(randomArr) === JSON.stringify(randomArrCopy) ? 'true' : 'error';
 }
 
-let res = compare(selectionSort, defaultSort, 100, 500);
+let res = compare(selectionSort, defaultSort, 10000, 50000);
 console.log('compare res -->', res);

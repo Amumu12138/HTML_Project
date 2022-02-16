@@ -32,7 +32,7 @@ console.log('insertionSort a-->', a);
 function defaultSort (arr) {
     if (arr === null || arr.length < 2) return;
 
-    arr.sort((a, b) => a - b);
+
 }
 
 // 获取随机不超过maxSize数量且最大值不超过maxValue的数组
@@ -53,11 +53,19 @@ function compare (argA, argB, maxSize, maxValue) {
     let randomArrCopy = JSON.parse(JSON.stringify(randomArr));
     console.log('before randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
 
+    let now = Date.now();
     argA(randomArr);
+    let duration = Date.now() - now;
+    console.log('duration -->', duration);
+
+    let now02 = Date.now();
     argB(randomArrCopy);
+    let duration02 = Date.now() - now02;
+    console.log('duration02 -->', duration02);
+
     console.log('after randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
     return JSON.stringify(randomArr) === JSON.stringify(randomArrCopy) ? 'true' : 'error';
 }
 
-let res = compare(insertionSort, defaultSort, 100, 100);
+let res = compare(insertionSort, defaultSort, 10000, 10000);
 console.log('compare res -->', res);

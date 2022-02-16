@@ -24,8 +24,11 @@ console.log('max -->', max);
 function mergeSort (arr) {
     if (arr === null || arr.length < 2) return;
 
-    // 算法解析: https://www.runoob.com/w3cnote/merge-sort.html
+    // 算法解析: https://www.runoob.com/w3cnote/merge-sort.html、
+    let now = Date.now();
     mergeProcess(arr, 0, arr.length - 1);
+    let duration = Date.now() - now;
+    console.log('duration -->', duration);
 }
 
 // 递归查找最大值
@@ -65,7 +68,11 @@ console.log('mergeSort arr->', arr);
 function defaultSort (arr) {
     if (arr === null || arr.length < 2) return;
 
+    let now = Date.now();
     arr.sort((a, b) => a - b);
+    let duration = Date.now() - now;
+    console.log('duration 02 -->', duration);
+
 }
 // 获取随机不超过maxSize数量且最大值不超过maxValue的数组
 function getRandomArray (maxSize, maxValue) {
@@ -91,5 +98,5 @@ function compare (argA, argB, maxSize, maxValue) {
     return JSON.stringify(randomArr) === JSON.stringify(randomArrCopy) ? 'true' : 'error';
 }
 
-let res = compare(mergeSort, defaultSort, 100, 100);
+let res = compare(mergeSort, defaultSort, 10000, 10000);
 console.log('compare res -->', res);

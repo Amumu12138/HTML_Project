@@ -20,7 +20,11 @@ function swap (arr, i, j) {
 }
 
 var a = [7, 6, 5, 4, 3, 2, 1];
+let now = Date.now();
 bubbleSort(a);
+let duration = Date.now() - now;
+console.log('duration 01 -->', duration);
+
 
 console.log('bubbleSort a -->', a);
 
@@ -36,12 +40,15 @@ function getRandomArray (maxSize, maxValue) {
 }
 
 // 对数器实现
-var maxSize = 100, maxValue = 100;
+var maxSize = 10000, maxValue = 10000;
 var randomArr = getRandomArray(maxSize, maxValue);
 var randomArrCopy = JSON.parse(JSON.stringify(randomArr));
 console.log('randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
 
+let now02 = Date.now();
 randomArr.sort((a, b) => a - b);
+let duration02 = Date.now() - now;
+console.log('duration02 -->', duration02);
 console.log('randomArr.sort -->', randomArr);
 
 bubbleSort(randomArrCopy);
