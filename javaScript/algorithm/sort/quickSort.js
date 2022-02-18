@@ -2,6 +2,7 @@
 function quickSort (arr) {
     if (arr === null || arr.length < 2) return;
 
+    // 算法原理(菜鸟教程)：https://www.runoob.com/w3cnote/quick-sort-2.html
     quickSortFun(arr, 0, arr.length - 1);
 }
 
