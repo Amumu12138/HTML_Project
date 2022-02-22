@@ -5,7 +5,7 @@ function buildMaxHeap (arr) {
     // for (let i = 0; i < heapSize; i++) {
     //     heapInsert(arr, i);
     // }
-    // 算法优化
+    // 算法优化: 只需遍历0~N/2个数据,N/2~N之间的数据无子节点
     for (let i = Math.floor(heapSize / 2); i >= 0; i--) {
         heapify(arr, i, heapSize);
     }
@@ -87,13 +87,15 @@ class MinHeap {
     _shiftDown (index) {
         const leftIndex = this.getLeftIndex(index);
         const rightIndex = this.getRightIndex(index);
-        if (this.heap[leftIndex] < this.heap[index]) {
-            this.swap(index, leftIndex);
-            this._shiftDown(leftIndex);
-        }
-        if (this.heap[rightIndex] < this.heap[index]) {
-            this.swap(index, rightIndex);
-            this._shiftDown(rightIndex);
+        if (leftIndex < this.size && rightIndex > this.size) {
+            if (this.heap[leftIndex] < this.heap[index]) {
+                this.swap(index, leftIndex);
+                this._shiftDown(leftIndex);
+            }
+            if (this.heap[rightIndex] < this.heap[index]) {
+                this.swap(index, rightIndex);
+                this._shiftDown(rightIndex);
+            }
         }
     }
     //  插入元素
@@ -144,10 +146,11 @@ function sortedArrDistanceLessK (arr, k) {
     console.log('minHeap -->', minHeap);
     let i = 0;
     for (; index < arr.length; i++, index++) {
+        console.log('arr[index]-->', arr[index], ' index -->', index);
         minHeap.insert(arr[index]);
         arr[i] = minHeap.pop();
         console.log('minHeap 111-->', minHeap);
-        console.log('arr[i] 111-->', arr[i]);
+        console.log('arr[i] 111-->', arr[i], ' i-->', i);
     }
     console.log('minHeap 02-->', minHeap);
     while (!minHeap.size) {

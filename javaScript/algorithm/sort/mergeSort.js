@@ -47,15 +47,19 @@ function mergeProcess (arr, left, right) {
 function merge (arr, left, mid, right) {
     let help = [];
     let i = 0, p1 = left, p2 = mid + 1;
+    // 判断是否都在两侧边界范围内
     while (p1 <= mid && p2 <= right) {
         help[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
     }
+    // 左侧数据还未到达边界
     while (p1 <= mid) {
         help[i++] = arr[p1++];
     }
+    // 右侧数据还未到达边界
     while (p2 <= right) {
         help[i++] = arr[p2++];
     }
+    // 将排序好的数据倒入数组中
     for (let j = 0; j < help.length; j++) {
         arr[left + j] = help[j];
     }
