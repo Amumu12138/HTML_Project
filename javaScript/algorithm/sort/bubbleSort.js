@@ -19,40 +19,42 @@ function swap (arr, i, j) {
     arr[j] = temp;
 }
 
-var a = [7, 6, 5, 4, 3, 2, 1];
-let now = Date.now();
-bubbleSort(a);
-let duration = Date.now() - now;
-console.log('duration 01 -->', duration);
+function defaultSort (arr) {
+    if (arr === null || arr.length < 2) return;
 
+    arr.sort((a, b) => a - b);
+}
 
-console.log('bubbleSort a -->', a);
-
-// 生成随机最大数量maxSize且最大值不超过maxValue的数组
+// 获取随机不超过maxSize数量且最大值不超过maxValue的数组
 function getRandomArray (maxSize, maxValue) {
     let arr = [];
     let radomSize = Math.floor(Math.random() * (maxSize + 1));
     for (let i = 0; i < radomSize; i++) {
-        arr.push(Math.floor((maxValue + 1) * Math.random() - Math.floor(maxSize * Math.random())));
+        arr.push(Math.abs(Math.floor((maxValue + 1) * Math.random() - Math.floor(maxSize * Math.random()))));
     }
 
     return arr;
 }
 
-// 对数器实现
-var maxSize = 10000, maxValue = 10000;
-var randomArr = getRandomArray(maxSize, maxValue);
-var randomArrCopy = JSON.parse(JSON.stringify(randomArr));
-console.log('randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
+// 算法比较
+function compare (argA, argB, maxSize, maxValue) {
+    let randomArr = getRandomArray(maxSize, maxValue);
+    // 获取复制randomArr的数组
+    let randomArrCopy = JSON.parse(JSON.stringify(randomArr));
+    console.log('before randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
 
-let now02 = Date.now();
-randomArr.sort((a, b) => a - b);
-let duration02 = Date.now() - now;
-console.log('duration02 -->', duration02);
-console.log('randomArr.sort -->', randomArr);
+    let now = Date.now();
+    argA(randomArr);
+    let duration = Date.now() - now;
+    console.log('duration -->', duration);
 
-bubbleSort(randomArrCopy);
-console.log('bubbleSort  -->', randomArrCopy);
+    let now02 = Date.now();
+    argB(randomArrCopy);
+    let duration02 = Date.now() - now02;
+    console.log('duration02 -->', duration02);
+    console.log('after randomArr -->', randomArr, ' randomArrCopy -->', randomArrCopy);
+    return JSON.stringify(randomArr) === JSON.stringify(randomArrCopy) ? 'true' : 'error';
+}
 
-console.log('randomArr === randomArrCopy -->', randomArr.toString() === randomArrCopy.toString());
-console.log('randomArr === randomArrCopy 02-->', JSON.stringify(randomArr) === JSON.stringify(randomArrCopy));
+let res = compare(bubbleSort, defaultSort, 10000, 10000);
+console.log('compare res -->', res);

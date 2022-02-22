@@ -1,4 +1,4 @@
-// 比较稳定排序和不稳定排序 时间复杂度
+// 比较排序: 比较稳定排序和不稳定排序 时间复杂度
 // 冒泡排序-稳定排序-时间复杂度O(N^2)
 function bubbleSort (arr, compare) {
     if (arr === null || arr.length < 2) return;
@@ -42,7 +42,6 @@ function selectionSort (arr, compare) {
 // 归并排序-稳定排序-时间复杂度O(N*logN)
 function mergeSort (arr, compare) {
     if (arr === null || arr.length < 2) return;
-
 
     mergeProcess(arr, 0, arr.length - 1, compare);
 }
@@ -89,8 +88,11 @@ function quickSortFun (arr, left, right, compare) {
     if (left < right) {
         // 将末尾的数据跟数组中的任意一个数据交换
         swap(arr, Math.floor(Math.random() * (right - left + 1)), right);
+        // 得到基准值下标
         let partitionIndex = paration(arr, left, right, compare);
+        // 左侧小于基准值区域
         quickSortFun(arr, left, partitionIndex - 1, compare);
+        // 右侧大于等于基准值区域
         quickSortFun(arr, partitionIndex + 1, right, compare);
     }
 }
@@ -114,10 +116,12 @@ function heapSort (arr, compare) {
     if (arr === null || arr.length < 2) return;
 
     let heapSize = arr.length;
+    // 构造一个小根堆
     for (let i = Math.floor(heapSize / 2); i >= 0; i--) {
         heapify(arr, i, heapSize, compare);
     }
     swap(arr, 0, --heapSize);
+    // 依次遍历堆中未排序的数据,并根据heapify操作排序
     while (heapSize > 0) {
         heapify(arr, 0, heapSize, compare);
         swap(arr, 0, --heapSize);
@@ -137,12 +141,16 @@ function heapInsert (arr, index) {
 // 堆下移操作
 function heapify (arr, index, heapSize, compare) {
     let left = index * 2 + 1; //左孩子节点下标
+    // 判断左孩子未越界
     while (left < heapSize) {
+        // 得到较大值的左孩子/右孩子下标
         let largest = (left + 1 < heapSize) && compare(arr[left + 1], arr[left]) ? left + 1 : left;
+        // 得到父节点和较大值孩子节点中较大值的下标
         largest = compare(arr[largest], arr[index]) ? largest : index;
         if (largest === index) {
             break;
         }
+        // 交换父子节点,并向下传递判断
         swap(arr, index, largest);
         index = largest;
         left = largest * 2 + 1;
@@ -182,8 +190,8 @@ for (let i = 0; i < MAX_VALUE; i++) {
 
 let arrCopy = JSON.parse(JSON.stringify(arr));
 console.log('arr before-->', arr);
-bubbleSort(arr, compA);
-console.log('bubbleSort after -->', arr);
+arr.sort((a, b) => a.id - b.id);
+console.log('default sort after -->', arr);
 heapSort(arrCopy, compA);
 console.log('heapSort arrCopy -->', arrCopy);
 console.log('arr === arrCopy', JSON.stringify(arr) === JSON.stringify(arrCopy));
