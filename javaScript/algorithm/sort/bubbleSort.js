@@ -56,5 +56,6 @@ function compare (argA, argB, maxSize, maxValue) {
     return JSON.stringify(randomArr) === JSON.stringify(randomArrCopy) ? 'true' : 'error';
 }
 
-let res = compare(bubbleSort, defaultSort, 10000, 10000);
+let res = compare(bubbleSort
+    , defaultSort, 10000, 10000);
 console.log('compare res -->', res);
