@@ -25,6 +25,7 @@
         </div>
         <!-- 事件的默认行为立即执行,无需等待事件回调执行完毕(.passive) -->
         <ul class="list" @wheel.passive="wheel" @scroll="scroll">
+            <!-- wheel: 监听鼠标滚轮行为 scroll: 监听页面滑动事件 -->
             <li>2</li>
             <li>1</li>
             <li>3</li>
