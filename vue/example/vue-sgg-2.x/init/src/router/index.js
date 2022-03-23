@@ -16,6 +16,11 @@ const router = createRouter({
             component: () => import('@/views/home')
         },
         {
+            path: '/event',
+            name: 'event',
+            component: () => import('@/views/event')
+        },
+        {
             path: '/computed',
             name: 'computed',
             component: () => import('@/views/computed')

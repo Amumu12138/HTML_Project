@@ -1,16 +1,17 @@
 <template>
-  <div class="watch-root">
-    <p>{{ this.$route.name }}</p>
-  </div>
+    <div class="watch-root">
+        <top-com></top-com>
+    </div>
 </template>
 
 <script>
+
 export default {
-  name: "watch",
-  data() {
-    return {};
-  },
-  watch: {},
+    name: "watch",
+    data () {
+        return {};
+    },
+    watch: {},
 };
 </script>
 

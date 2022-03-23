@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>script标签</title>
+    <script defer src="test01.js"></script>
+    <script async src="test02.js"></script>
+</head>
+
+<body>
+    <!-- 动态加载脚本 -->
+    <script>
+        let script = document.createElement('script');
+        script.src = 'test02.js';
+        script.async = true; // 设置为异步加载
+        script.defer = true; // 设置为推迟到文档解析和显示完成后再执行
+        document.head.appendChild(script);
+    </script>
+</body>
+
+</html>
