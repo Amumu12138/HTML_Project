@@ -18,6 +18,10 @@
         {{ item.name }}-{{ item.age }}-{{ item.sex }}
       </li>
     </ul>
+    <h3>输出对象数据(key--value)</h3>
+    <ul>
+      <li v-for="(value, k) in obj" :key="k">{{ k }} -- {{ value }}</li>
+    </ul>
   </div>
 </template>
 
@@ -68,6 +72,11 @@ export default {
         },
       ],
       filterWatchPersonList: [],
+      obj: {
+        name: "Amumu12138",
+        age: 25,
+        sex: "男",
+      },
     };
   },
   watch: {

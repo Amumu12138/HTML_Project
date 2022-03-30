@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var name = 'Amumu'; // var在全局作用域中声明的变量会成为window对象的属性
+        console.log('widnow.name -->', window.name); // Amumu
+        console.log(window.name === name); // true
+
+        let age = 26; // let在全局作用域中声明的变量不会成为window对象的属性
+        console.log('window.age -->', window.age); // undefined
+    </script>
+</body>
+
+</html>

@@ -16,7 +16,7 @@ var Example = Example || {};
  * 二、使用JavaScript创建cookie
  * JavaScript可以使用document.cookie属性来创建、读取以及删除cookie
  * JavaScript中,创建cookie如下所示: document.cookie = "username=Jhon Doe";
- * 你还可以为cookie添加一个过期时间,默认情况下,cookie在浏览器关闭时山粗
+ * 你还可以为cookie添加一个过期时间,默认情况下,cookie在浏览器关闭时删除
  * 示例: document.cookie = "Jhon Doe; expires=Thu, 18 Dec 2043 12:00:00 GMT";
  * 你可以使用path参数告诉浏览器cookie的路径,默认情况下,cookie属于当前页面
  * 示例： document.cookie="username=John Doe; expires=Thu, 18 Dec 2043 12:00:00 GMT; path=/";
@@ -84,34 +84,34 @@ var Example = Example || {};
  *      }
  * }
  */
-Example.WindowCookie = function() {
+Example.WindowCookie = function () {
     console.log("Amumu WindowCookie");
 
     //注意:必须当web服务器向浏览器发送web页面时才有效果,本地调用无效果
-    function setCookie(cname,cvalue,exdays){
+    function setCookie(cname, cvalue, exdays) {
         var d = new Date();
-        d.setTime(d.getTime()+(exdays*24*60*60*1000));
-        var expires = "expires="+d.toGMTString();
-        document.cookie = cname+"="+cvalue+"; "+expires;
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toGMTString();
+        document.cookie = cname + "=" + cvalue + "; " + expires;
     }
-    function getCookie(cname){
+    function getCookie(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
+        for (var i = 0; i < ca.length; i++) {
             var c = ca[i].trim();
-            if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+            if (c.indexOf(name) == 0) { return c.substring(name.length, c.length); }
         }
         return "";
     }
-    function checkCookie(){
-        var user=getCookie("username");
-        if (user!=""){
+    function checkCookie() {
+        var user = getCookie("username");
+        if (user != "") {
             alert("欢迎 " + user + " 再次访问");
         }
         else {
-            user = prompt("请输入你的名字:","");
-              if (user!="" && user!=null){
-                setCookie("username",user,30);
+            user = prompt("请输入你的名字:", "");
+            if (user != "" && user != null) {
+                setCookie("username", user, 30);
             }
         }
     }
@@ -124,40 +124,40 @@ Example.WindowCookie = function() {
 //      * @param {String} value 
 //      * @param {number} day 
 //      */
-//     setCookie = function (name, value, day) {
-//         var date = new Date();
-//         date.setDate(date.getDate() + day);
-//         document.cookie = name + '=' + value + ';expires=' + date;
-//     }
+    //     setCookie = function (name, value, day) {
+    //         var date = new Date();
+    //         date.setDate(date.getDate() + day);
+    //         document.cookie = name + '=' + value + ';expires=' + date;
+    //     }
 
-//     /**
-//      * @desc 获取cookie
-//      * @param {String} name 
-//      */
-//     getCookie = function (name) {
-//         var reg = RegExp(name + '=([^;]+)');
-//         var arr = document.cookie.match(reg);
-//         if (arr) {
-//             return arr[1];
-//         } else {
-//             return '';
-//         }
-//     }
+    //     /**
+    //      * @desc 获取cookie
+    //      * @param {String} name 
+    //      */
+    //     getCookie = function (name) {
+    //         var reg = RegExp(name + '=([^;]+)');
+    //         var arr = document.cookie.match(reg);
+    //         if (arr) {
+    //             return arr[1];
+    //         } else {
+    //             return '';
+    //         }
+    //     }
 
-//     /**
-//      * @desc 删除cookie
-//      * @param {*} name 
-//      */
-//    delCookoe = function (name) {
-//         setCookie(name, null, -1);
-//     }
+    //     /**
+    //      * @desc 删除cookie
+    //      * @param {*} name 
+    //      */
+    //    delCookoe = function (name) {
+    //         setCookie(name, null, -1);
+    //     }
 
-//     setCookie("user", "ASDFGH", 7);
-//     setCookie("pswd", "123456", 7);
-//     console.log("Amumu user = " + getCookie("user") + " pswd = " + getCookie("pswd"));
-}   
+    //     setCookie("user", "ASDFGH", 7);
+    //     setCookie("pswd", "123456", 7);
+    //     console.log("Amumu user = " + getCookie("user") + " pswd = " + getCookie("pswd"));
+}
 
-if(typeof module !== "undefined") {
+if (typeof module !== "undefined") {
     module.export = Example[Object.keys(Example)[0]];
 }
 
