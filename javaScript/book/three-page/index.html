@@ -16,6 +16,202 @@
 
         let age = 26; // let在全局作用域中声明的变量不会成为window对象的属性
         console.log('window.age -->', window.age); // undefined
+
+        // 六大数据类型“: Undefined、Null、Boolean、Number、String、Symbol
+        let message = "some string";
+        console.log(typeof message); // string
+        console.log(typeof (message)); // string
+        console.log(typeof 95); // number
+
+        // Undefined类型
+        let message02;
+        console.log(typeof message02); //message02声明但未初始化 undefined
+        console.log(typeof age02); //age02既未声明,且未初始化 undefined
+        console.log(message02 === undefined); // true
+        let message03 = undefined;
+        console.log(message03 === undefined); // true
+
+        // Null类型
+        let car = null;
+        console.log(typeof car); // object--> null值表示一个空对象指针
+        console.log(null == undefined); // true 值相等
+        console.log(null === undefined); // false 值相等但类型不同
+
+        // Boolean类型
+        console.log('', Boolean(""), ' dfadf', Boolean('faadf')); // false true
+        console.log('0 -->', Boolean(0), 'NaN -->', Boolean(NaN), '12 -->', Boolean(12)); // false false true
+        console.log('null', Boolean(null), '{} -->', Boolean({})); // false true
+        console.log(Boolean(undefined)); // false
+
+        // Number类型
+        console.log(0.1 + 0.2); // 0.30000000000000004 原因: js浮点数是用来IEEE754数值
+        console.log(Number.MIN_VALUE, Number.MAX_VALUE); // 5e-324 1.7976931348623157e+308
+        let result = Number.MAX_VALUE * 2;
+        console.log(result, isFinite(result), isFinite(0)); //Infinity false true
+        console.log((Number.MAX_VALUE + Number.MIN_VALUE) === Number.MAX_VALUE); // true
+
+        console.log(0 / 0); // NaN
+        console.log(0 / 1); // 0
+        console.log(1 / 0); // Infinity
+        console.log(-1 / 0); // -Infinity
+        console.log(NaN == NaN, NaN === NaN); // false false
+        console.log(isNaN(NaN), isNaN(1), isNaN('ada'), isNaN(true), isNaN('1')); // true false true false false
+
+        // Number 浮点值
+        let floatNum = 3.125e7; // 科学计数法
+        console.log(floatNum); // 31250000
+        console.log(Number(null), Number(undefined)); // 0 NaN
+        console.log(Number("Hello world"), Number(""), Number(''), Number("0000111"), Number(true)); // NaN 0 0  111 1
+        // 转换为整数
+        console.log(parseInt('1234blue'), parseInt(""), parseInt("0xA"), parseInt(22.5), parseInt("70"), parseInt('0xf')); // 1234 NaN 10 22 70 15
+        // parseInt 实现进制转换
+        console.log(parseInt('10', 2)); // 2
+        console.log(parseInt('10', 8)); // 8
+        console.log(parseInt('10', 10)); // 10
+        console.log(parseInt('10', 16)); // 16
+
+        // 转换为浮点数
+        // 0.1 0.2 1234 0 22.5 22.34 908.5 31250000
+        console.log(parseFloat(.1), parseFloat('.2'), parseFloat("1234blue"), parseFloat("0xA"), parseFloat("22.5"), parseFloat("22.34.5"), parseFloat("0908.5"), parseFloat("3.125e7"));
+
+        // String 类型
+        let text = "This is the letter sigma: \u03a3.";
+        console.log(text, text.length); //This is the letter sigma: Σ. 28
+
+        let lang = 'Java';
+        lang[0] = 'H';
+        console.log(lang); // Java 原因: 字符串是不可变的
+        console.log(lang + 'Script'); // JavaScript --> 重新销毁创建
+
+        // 转换为字符串 toString函数
+        let num = 10;
+        // 10 1010 12 10 a toString第二个参数代表转换的进制
+        console.log(num.toString(), num.toString(2), num.toString(8), num.toString(10), num.toString(16));
+        console.log(String(null), String(undefined), String(true)); // null undefined true
+        // null.toString() // 报错 null 和 undefined不存在toString()函数
+        // undefined.toString()
+
+        //模板字面量
+        let myMultiLineString = 'first line\nsecond line'; // \n 换行
+        // first line
+        // second line
+        console.log(myMultiLineString, myMultiLineString.length); // 22
+        let myMultiLineTemplateLiteral = `first line
+        second line`;
+        console.log(myMultiLineTemplateLiteral.length, myMultiLineString === myMultiLineTemplateLiteral); //30  false
+
+        let myTemplateLiteral = `first line
+                                second line`;
+        console.log(myTemplateLiteral.length); // 54
+        let secondTemplateliteral = `
+            first line
+            second line
+        `;
+        console.log(secondTemplateliteral[0] === '\n'); // true
+        let thirdTemplateLateral = `first line
+        second line`;
+        console.log(thirdTemplateLateral[0]);
+        // 模板字面量-字符串插值
+        let value = 5, exponent = 'second';
+        let interpolatedTemplateLiteral = `${value} to the ${exponent} power is ${value * value}`;
+        console.log(interpolatedTemplateLiteral); // 5 to the second power is 25
+        console.log(`Hello ${'World'}`); // Hello World
+        let foo = { toString: () => 'Amumu12138' };
+        console.log(`Hello ${foo}`); // Hello Amumu12138
+        let value02 = '';
+        function append() {
+            value02 = `${value02}abc`;
+            console.log(value02);
+        }
+        append();// abc
+        append();// abcabc
+        append();// abcabcabc
+
+        // 模板字面量-标签函数
+        let a = 5, b = 9;
+        function simpleTag(string, aValExpression, bValExpression, sumValExpresion) {
+            console.log(string); // ['', ' + ', ' = ', '']
+            console.log(aValExpression); // 5
+            console.log(bValExpression); // 9
+            console.log(sumValExpresion); // 14
+
+            return 'Amumu';
+        }
+
+        let untaggedResult = `${a}  + ${b} = ${a + b}`;
+        let taggedResult = simpleTag`${a} + ${b} = ${a + b}`;
+        console.log(untaggedResult); // 5 + 9 = 14
+        console.log(taggedResult); // Amumu 
+
+        // 剩余操作符(...)
+        function simpleTag02(strings, ...expressions) {
+            console.log('simpleTag02', strings); // ['', ' + ', ' = ', '']
+            for (const expression of expressions) {
+                // 5 9 14
+                console.log('simpleTag02 -->', expression);
+            }
+        }
+
+        let taggedResult02 = simpleTag02`${a} + ${b} = ${a + b}`;
+
+        // 字符串拼接
+        function zipTag(strings, ...expressions) {
+            console.log(expressions.map((e, i) => console.log(`${e}`, i)));
+            return strings[0] + expressions.map((e, i) => `${e}${strings[i + 1]}`).join('');
+        }
+        let taggedResult03 = zipTag`${a} + ${b} = ${a + b}`;
+        console.log(taggedResult03); // 5 + 9 = 14
+
+        // 原始字符串
+        console.log(`\u00A9`); // ©
+        console.log(String.raw`\u00A9`); // u00A9
+        console.log(String.raw`first line\nsecond line`); // first line\nsecond line
+        // console.log(String.raw('first line\nsecond line')); // 报错 对象方法不存在 Cannot convert undefined or null to object
+
+        function printRaw(strings) {
+            console.log('Actual characters:');
+            for (const string of strings) {
+                console.log(string);
+            }
+
+            console.log('Escaped characters');
+            for (const rawString of strings.raw) {
+                console.log(rawString);
+            }
+        }
+
+        printRaw`\u00A9${''}\n`;
+        // Actual characters:
+        //  ©
+
+        //  Escaped characters
+        //  \u00A9
+        //  \n
+
+        // Symbol 类型
+        let sym = Symbol();
+        console.log(typeof sym); // symbol
+
+        let genericSymbol = Symbol();
+        let otherGenericSymbol = Symbol();
+        console.log(genericSymbol === otherGenericSymbol); // false
+
+        let fooSymbol = Symbol('foo');
+        let otherFooSymbol = Symbol('foo');
+        console.log(fooSymbol === otherFooSymbol); // false
+
+        let myBoolean = new Boolean();
+        console.log(myBoolean, typeof myBoolean); // 'object'
+
+        console.log(genericSymbol, typeof genericSymbol); // Symbol() 'symbol'
+        // let mySymbol = new Symbol(); //报错 symbol 不存在构造函数
+        // console.log(typeof mySymbol);
+
+        // object 类型
+        let o = new Object();
+        console.log('object -->', o, typeof o); // object --> {} object
+        //{} false false false '[object Object]' '[object Object]' {}
+        console.log(o.constructor(), o.hasOwnProperty("name"), o.isPrototypeOf(), o.propertyIsEnumerable("age"), o.toLocaleString(), o.toString(), o.valueOf());
     </script>
 </body>
 

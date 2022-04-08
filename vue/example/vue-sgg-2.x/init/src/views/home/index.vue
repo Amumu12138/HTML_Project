@@ -8,6 +8,13 @@
     <button @click="handleLinkRouter('vShowAndvIf')">vShowAndvIf</button>
     <button @click="handleLinkRouter('vFor')">vFor</button>
     <button @click="handleLinkRouter('dataWatch')">dataWatch</button>
+    <button @click="handleLinkRouter('form')">form</button>
+    <button @click="handleLinkRouter('customDirectives')">
+      customDirectives
+    </button>
+    <button @click="handleLinkRouter('lifeCycle')">lifeCycle</button>
+    <button @click="handleLinkRouter('ref')">ref</button>
+    <button @click="handleLinkRouter('mixin')">mixin</button>
   </div>
 </template>
 

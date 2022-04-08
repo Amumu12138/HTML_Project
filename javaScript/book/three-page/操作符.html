@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.5操作符</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>3.5操作符</h1>
+    <script>
+        // 一元操作符
+        let num1 = 2, num2 = 20;
+        let num3 = --num1 + num2;
+        let num4 = num1 + num2;
+        console.log(num3, num4); // 21 21
+
+        let num11 = 2, num21 = 20;
+        let num31 = num11-- + num21;
+        let num41 = num11 + num21;
+        console.log(num31, num41); // 22 21
+
+        let s1 = "2", s2 = "x", b = false, f = 1.1, o = { valueOf() { return -1; } };
+        s1++, b++, f--, o--;
+        console.log(s1, s2++, b, f--, o--)// 3 NaN 1 0.10000000000000009 -2
+
+        // 位操作符
+        let num01 = 25;
+        let num02 = ~num01; // 按位非
+        console.log(num02); //-26
+
+        let result = 25 & 3; // 按位与
+        console.log(result); // 1
+
+        let result02 = 25 | 3; // 按位或
+        console.log(result02); // 27
+
+        let result03 = 25 ^ 3; // 按位异或
+        console.log(result03); // 26
+
+        let oldVal = 2;
+        console.log(oldVal << 5, 128 >> 5); // 2左移5位: 64  128右移5位: 4
+        console.log(64 >>> 5, -64 >>> 5); // 64无符号右移5位: 2 -64无符号右移5位: 134217726
+    </script>
+</body>
+
+</html>

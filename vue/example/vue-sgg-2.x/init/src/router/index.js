@@ -49,6 +49,31 @@ const router = createRouter({
             path: '/data-watch',
             name: 'dataWatch',
             component: () => import('@/views/dataWatch')
+        },
+        {
+            path: '/form',
+            name: 'form',
+            component: () => import('@/views/form')
+        },
+        {
+            path: '/custom-directives',
+            name: 'customDirectives',
+            component: () => import('@/views/customDirectives')
+        },
+        {
+            path: '/life-cycle',
+            name: 'lifeCycle',
+            component: () => import('@/views/lifeCycle')
+        },
+        {
+            path: '/ref',
+            name: 'ref',
+            component: () => import('@/views/ref')
+        },
+        {
+            path: '/mixin',
+            name: 'mixin',
+            component: () => import('@/views/mixin')
         }
     ]
 })
