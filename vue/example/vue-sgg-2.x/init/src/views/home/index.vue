@@ -15,6 +15,7 @@
     <button @click="handleLinkRouter('lifeCycle')">lifeCycle</button>
     <button @click="handleLinkRouter('ref')">ref</button>
     <button @click="handleLinkRouter('mixin')">mixin</button>
+    <button @click="handleLinkRouter('TodoList')">TodoList</button>
   </div>
 </template>
 

@@ -74,6 +74,11 @@ const router = createRouter({
             path: '/mixin',
             name: 'mixin',
             component: () => import('@/views/mixin')
+        },
+        {
+            path: '/todo-list',
+            name: 'TodoList',
+            component: () => import('@/views/TodoList')
         }
     ]
 })
