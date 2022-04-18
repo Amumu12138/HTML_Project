@@ -79,6 +79,11 @@ const router = createRouter({
             path: '/todo-list',
             name: 'TodoList',
             component: () => import('@/views/TodoList')
+        },
+        {
+            path: '/animation',
+            name: 'animation',
+            component: () => import('@/views/animation')
         }
     ]
 })

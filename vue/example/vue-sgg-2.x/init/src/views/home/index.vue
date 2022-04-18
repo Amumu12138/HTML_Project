@@ -16,6 +16,7 @@
     <button @click="handleLinkRouter('ref')">ref</button>
     <button @click="handleLinkRouter('mixin')">mixin</button>
     <button @click="handleLinkRouter('TodoList')">TodoList</button>
+    <button @click="handleLinkRouter('animation')">animation</button>
   </div>
 </template>
 

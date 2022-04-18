@@ -7,6 +7,9 @@
 </template>
 
 <script>
+import pubsub from "pubsub-js";
+import config from "@/utils/config";
+
 export default {
   name: "MyFooter",
   props: ["todoList", "deleteAllDone", "allDoneTodo"],
@@ -20,7 +23,8 @@ export default {
       },
       set(value) {
         console.log(value);
-        this.allDoneTodo(value);
+        pubsub.publish(config.SET_ALL_TODO, value);
+        // this.allDoneTodo(value);
       },
     },
     doneTotal() {
@@ -35,7 +39,8 @@ export default {
   },
   methods: {
     handleDeleteDone() {
-      this.deleteAllDone();
+      pubsub.publish(config.DELETE_ALL_DONE);
+      //   this.deleteAllDone();
     },
   },
 };
