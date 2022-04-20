@@ -84,6 +84,11 @@ const router = createRouter({
             path: '/animation',
             name: 'animation',
             component: () => import('@/views/animation')
+        },
+        {
+            path: '/slot',
+            name: 'slot',
+            component: () => import('@/views/slot')
         }
     ]
 })

@@ -17,6 +17,7 @@
     <button @click="handleLinkRouter('mixin')">mixin</button>
     <button @click="handleLinkRouter('TodoList')">TodoList</button>
     <button @click="handleLinkRouter('animation')">animation</button>
+    <button @click="handleLinkRouter('slot')">slot</button>
   </div>
 </template>
 
