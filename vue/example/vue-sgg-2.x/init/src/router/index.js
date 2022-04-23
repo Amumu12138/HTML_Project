@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import Vue from "vue";
+import VueRouter from "vue-router";
 
-const routerHistory = createWebHistory();
-const router = createRouter({
-    history: routerHistory,
+Vue.use(VueRouter);
+const router = new VueRouter({
+    history: 'hash',
     routes: [
         {
             path: '/',
@@ -89,8 +90,30 @@ const router = createRouter({
             path: '/slot',
             name: 'slot',
             component: () => import('@/views/slot')
+        },
+        {
+            path: '/vuex',
+            name: 'vuex',
+            component: () => import('@/views/vuex')
+        },
+        {
+            path: '/vue-router',
+            name: 'vueRouter',
+            component: () => import('@/views/vueRouter')
         }
     ]
+})
+
+// 全局前置路由守卫
+router.beforeEach((to, from, next) => {
+    console.log('router beforeEach');
+    next();
+})
+
+// 全局后置路由守卫
+router.afterEach((to, from) => {
+    console.log('router afterEach');
+    document.title = to.name;
 })
 
 export default router;

@@ -1,12 +1,20 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import Vue from 'vue'
+import App from './App'
 import router from './router'
 import store from './store'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+// 关闭Vue的生产提示
+Vue.config.productionTip = false;
 
-// 创建应用实例对象-app(类似于之前Vuu2中的vm,但app比vm更‘轻’)
-const app = createApp(App)
+// 创建app实例对象
+new Vue({
+    el: "#app",
+    store,
+    router,
+    render: h => h(App)
+})
+
 // 将应用实例app挂载在元素app上
 const requireComponent = require.context('./components', false, /[A-Z]\w+\.(vue|js)$/)
 requireComponent.keys().forEach(fileName => {
@@ -21,12 +29,10 @@ requireComponent.keys().forEach(fileName => {
             .replace(/\.\w+$/, '')))
 
     // 全局注册组件
-    app.component(componentName,
+    Vue.component(componentName,
         // 如果这个组件选项是通过 `export default` 导出的，
         // 那么就会优先使用 `.default`，
         // 否则回退到使用模块的根。
         componentConfig.default || componentConfig
     )
 })
-
-app.use(store).use(router).mount('#app')

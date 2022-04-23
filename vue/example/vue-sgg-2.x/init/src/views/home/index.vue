@@ -18,12 +18,12 @@
     <button @click="handleLinkRouter('TodoList')">TodoList</button>
     <button @click="handleLinkRouter('animation')">animation</button>
     <button @click="handleLinkRouter('slot')">slot</button>
+    <button @click="handleLinkRouter('vuex')">vuex</button>
+    <button @click="handleLinkRouter('vueRouter')">vueRouter</button>
   </div>
 </template>
 
 <script>
-import { useRouter } from "vue-router";
-
 export default {
   name: "home",
   data() {
@@ -34,17 +34,6 @@ export default {
       this.$router.push({ name: routeName });
     },
   },
-  //   setup() {
-  //     const router = useRouter();
-
-  //     function handleLinkRouter(routeName) {
-  //       router.push({ name: routeName });
-  //     }
-
-  //     return {
-  //       handleLinkRouter,
-  //     };
-  //   },
 };
 </script>
 

@@ -19,6 +19,10 @@ export default {
   margin-top: 60px;
 }
 
+div[class*="-root"] {
+  text-align: center;
+}
+
 button {
   margin: 10px;
 }
