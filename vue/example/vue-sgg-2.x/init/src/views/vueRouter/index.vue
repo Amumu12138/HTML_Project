@@ -1,6 +1,24 @@
 <template>
   <div class="vue-router-root">
     <top-com></top-com>
+    <h1>Vue Router</h1>
+    <div class="nav">
+      <router-link
+        class="nav-item"
+        active-class="nav-item-active"
+        to="/vue-router/about"
+        >About</router-link
+      >
+      <router-link
+        class="nav-item"
+        active-class="nav-item-active"
+        to="/vue-router/home"
+        >Home</router-link
+      >
+    </div>
+    <div class="views">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -26,5 +44,22 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" scoped>
+.vue-router-root {
+  .nav {
+    display: flex;
+    flex-direction: column;
+    .nav-item {
+      margin: 0 auto;
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      padding: 4px;
+      border: 1px solid #ccc;
+    }
+    .nav-item-active {
+      background: skyblue;
+    }
+  }
+}
 </style>

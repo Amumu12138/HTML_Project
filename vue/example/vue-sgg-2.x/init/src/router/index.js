@@ -99,7 +99,27 @@ const router = new VueRouter({
         {
             path: '/vue-router',
             name: 'vueRouter',
-            component: () => import('@/views/vueRouter')
+            component: () => import('@/views/vueRouter'),
+            children: [
+                {
+                    path: 'home',
+                    name: 'vueRouterHome',
+                    meta: {
+                        title: '路由主页Home',
+                        isFlag: true
+                    },
+                    component: () => import('@/views/vueRouter/childrens/Home')
+                },
+                {
+                    path: 'about',
+                    name: 'vueRouterAbout',
+                    meta: {
+                        title: '路由相关About',
+                        isFlag: true
+                    },
+                    component: () => import('@/views/vueRouter/childrens/About')
+                }
+            ]
         }
     ]
 })
