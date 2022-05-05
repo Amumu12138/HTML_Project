@@ -20,9 +20,17 @@
     <!-- 使用jsx语法需使用text/babel类型 -->
     <script type="text/babel">
         // 1、创建虚拟DOM
-        const VDOM = <h1>hello world</h1>
+        const VDOM = (
+            <h1>
+                <p>this is h1</p>
+                <span>hello world</span>
+            </h1>
+        )
+
         // 2、渲染虚拟DOM
         ReactDOM.render(VDOM, document.getElementById('test'))
+        console.log(VDOM); // Object类型
+        console.log(ReactDOM.render(VDOM, document.getElementById('test'))); // <h1>...</h1> 
     </script>
 </body>
 

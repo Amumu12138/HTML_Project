@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冒泡排序实现</title>
+</head>
+
+<body>
+    <script>
+        let arr = [];
+        const NUM = 100;
+        // 随机生成NUM个数据
+        for (let i = 0; i < NUM; i++) {
+            arr[arr.length] = Math.floor(Math.random() * NUM);
+        }
+        console.log('before arr -->', arr);
+        //冒泡排序实现倒序
+        for (let i = 0; i < NUM; i++) {
+            for (let j = 0; j < NUM - i; j++) {
+                if (arr[j] < arr[j + 1]) {
+                    swap(arr, j, j + 1);
+                }
+            }
+        }
+
+        console.log('after arr -->', arr);
+
+        function swap(arr, i, j) {
+            let temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    </script>
+</body>
+
+</html>

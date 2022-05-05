@@ -10,10 +10,28 @@
 
 <body>
     <script>
-        var myAge = prompt('请输入你的年龄');
-        alert(`Amumu今年${myAge}岁`);
+        // var myAge = prompt('请输入你的年龄');
+        // alert(`Amumu今年${myAge}岁`);
 
-        console.log('Amumu console');
+        // console.log('Amumu console');
+
+        var num = 10;
+        fun();
+        function fun() {
+            console.log(num); // undefined
+            var num = 20;
+            console.log(num); // 20
+        }
+
+        // test
+        f1();
+        console.log(c); // 9
+        console.log(b); // 9
+        console.log(a); // 报错 a未定义
+        function f1() {
+            var a = b = c = 9;
+            console.log(a, b, c); // 9 9 9 
+        }
     </script>
 </body>
 
