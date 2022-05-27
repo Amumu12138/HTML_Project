@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>继承</title>
+</head>
+
+<body>
+    <script>
+        // 借用父构造函数继承属性
+        // 父构造函数
+        function Father(uname, age) {
+            this.uname = uname;
+            this.age = age;
+        }
+
+        Father.prototype.money = function () {
+            console.log('Father money called');
+        }
+
+        // 子构造函数
+        function Son(uname, age, score) {
+            Father.call(this, uname, age);
+            this.score = score;
+        }
+        // 利用对象的形式修改了原形对象
+        Son.prototype = new Father();
+        // 利用constructor指回原来的构造函数
+        Son.prototype.constructor = Son;
+        Son.prototype.exam = function() {
+            console.log('Son exam called');
+        }
+        // 实例化Son对象
+        let son = new Son('Amumu', 18, 0);
+        console.log(son); // Son {uname: 'Amumu', age: 18, score: 0}
+        console.log(Father.prototype, Son.prototype); //{constructor: ƒ}constructor: ƒ Father(uname, age)[[Prototype]]: Object Father {uname: undefined, age: undefined, constructor: ƒ}
+    </script>
+</body>
+
+</html>
