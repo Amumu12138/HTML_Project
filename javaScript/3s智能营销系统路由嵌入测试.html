@@ -29,18 +29,18 @@
         <iframe :src="currentRoute" frameborder="0" width="100%" height="1000px"></iframe>
     </div>
     <script>
-        let swicth = false;
+        let testSwitch = false;
 
         const vm = new Vue({
             el: "#app",
             data: {
                 currentRoute: '',
-                singlePage: swicth ? 'https://ssst.nsw99.com/singlePage' : 'http://localhost/singlePage',
-                customMgr: swicth ? 'https://ssst.nsw99.com/custom-mgr-page' : 'http://localhost/custom-mgr-page',
-                service: swicth ? 'https://ssst.nsw99.com/inquiry-page' : 'http://localhost/inquiry-page',
-                clueMgr: swicth ? 'https://ssst.nsw99.com/clue-mgr-page' : 'http://localhost/clue-mgr-page',
-                dataShow: swicth ? 'https://ssst.nsw99.com/data-show-page' : 'http://localhost/data-show-page',
-                systemSetting: swicth ? 'https://ssst.nsw99.com/system-setting-page' : 'http://localhost/system-setting-page'
+                singlePage: testSwitch ? 'https://ssst.nsw99.com/singlePage' : 'http://localhost/singlePage',
+                customMgr: testSwitch ? 'https://ssst.nsw99.com/custom-mgr-page' : 'http://localhost/custom-mgr-page',
+                service: testSwitch ? 'https://ssst.nsw99.com/inquiry-page' : 'http://localhost/inquiry-page',
+                clueMgr: testSwitch ? 'https://ssst.nsw99.com/clue-mgr-page' : 'http://localhost/clue-mgr-page',
+                dataShow: testSwitch ? 'https://ssst.nsw99.com/data-show-page' : 'http://localhost/data-show-page',
+                systemSetting: testSwitch ? 'https://ssst.nsw99.com/system-setting-page' : 'http://localhost/system-setting-page'
             },
             methods: {
                 onChangeRoute(value) {
