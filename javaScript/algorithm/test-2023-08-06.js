@@ -245,6 +245,37 @@ var repeatedSubstringPattern = function (s) {
     return newStr.substring(1, newStr.length - 1).includes(s);
 };
 
-const s = "abcabcabcabc";
-// const s = "abs";
-console.log(repeatedSubstringPattern(s));
+// const s = "abcabcabcabc";
+// // const s = "abs";
+// console.log(repeatedSubstringPattern(s));
+
+/**
+ * 134. 加油站
+ * @param {number[]} gas
+ * @param {number[]} cost
+ * @return {number}
+ */
+var canCompleteCircuit = function (gas, cost) {
+    // 贪心策略
+    // 局部最优：当前累加rest[i]的和curSum一旦小于0，起始位置至少要是i+1，
+    // 因为从i之前开始一定不行。全局最优：找到可以跑一圈的起始位置
+    let start = 0, curSum = 0; totalSum = 0;
+
+    for (let i = 0; i < gas.length; i++) {
+        curSum += gas[i] - cost[i];
+        totalSum += gas[i] - cost[i];
+        // 当前剩余油量小于0
+        if (curSum < 0) {
+            // 当前油量清零,开始下标指向下一位置
+            curSum = 0;
+            start = i + 1;
+        }
+    }
+
+    if (totalSum < 0) return -1;
+
+    return start;
+};
+
+const gas = [1, 2, 3, 4, 5], cost = [3, 4, 5, 1, 2];
+console.log(canCompleteCircuit(gas, cost));

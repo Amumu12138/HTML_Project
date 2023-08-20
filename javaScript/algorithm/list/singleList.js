@@ -1,6 +1,6 @@
 // 节点
 class Node {
-    constructor (data) {
+    constructor(data) {
         this.data = data;
         this.next = null;
     }
@@ -9,14 +9,14 @@ class Node {
 // 单链表实现
 class SingleList {
     // 构造函数
-    constructor () {
+    constructor() {
         this.size = 0;                  // 单链表的长度
         this.head = new Node('head');   // 表头节点
         this.currNode = '';             // 当前节点的指向
     }
 
     // 在单链表中寻找item元素
-    find (item) {
+    find(item) {
         let currNode = this.head;
         while (currNode && (currNode.data !== item)) {
             currNode = currNode.next;
@@ -26,7 +26,7 @@ class SingleList {
     }
 
     // 向单链表中插入元素
-    insert (item, element) {
+    insert(item, element) {
         let itemNode = this.find(item);
         if (!itemNode) {
             return;
@@ -39,7 +39,7 @@ class SingleList {
     }
 
     // 在单链表中删除一个节点
-    remove (item) {
+    remove(item) {
         if (!this.find(item)) return;
 
         if (item === 'head') {
@@ -66,7 +66,7 @@ class SingleList {
     }
 
     // 在单链表的尾部添加元素
-    append (element) {
+    append(element) {
         let currNode = this.findLast();
         let newNode = new Node(element);
 
@@ -75,7 +75,7 @@ class SingleList {
     }
 
     // 获取单链表的最后一个节点
-    findLast () {
+    findLast() {
         let currNode = this.head;
         while (currNode.next) {
             currNode = currNode.next;
@@ -85,22 +85,22 @@ class SingleList {
     }
 
     // 判断单链表是否为空
-    isEmpty () {
+    isEmpty() {
         return this.size === 0;
     }
 
     // 显示当前节点
-    show () {
+    show() {
         console.log(this.currNode.data);
     }
 
     // 获取单链表的长度
-    getLength () {
+    getLength() {
         return this.size;
     }
 
     // 从当前节点向前移动n个位置
-    advance (n, currNode) {
+    advance(n, currNode) {
         this.currNode = currNode;
 
         while ((n--) && this.currNode.next) {
@@ -111,7 +111,7 @@ class SingleList {
     }
 
     // 单链表的遍历显示
-    display () {
+    display() {
         let result = '';
         let currNode = this.head;
 
@@ -126,7 +126,7 @@ class SingleList {
     }
 
     // 清空单链表
-    clear () {
+    clear() {
         this.head.next = null;
         this.size = 0;
     }
@@ -141,3 +141,5 @@ for (let i = 0; i < arr.length; i++) {
 }
 
 myList.display();  // head->3->4->5->6->7->8->9
+
+module.exports.SingleList = SingleList;
