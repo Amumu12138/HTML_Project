@@ -191,5 +191,110 @@ const isValid = (s, start, end) => {
     return true;
 }
 
-const s = "25525511135";
-console.log(restoreIpAddresses(s));
+// const s = "25525511135";
+// console.log(restoreIpAddresses(s));
+
+/**
+ * 90. 子集 II
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsetsWithDup = function (nums) {
+    let path = [], result = [], size = nums.length;
+    let used = new Array(size).fill(false);
+    nums.sort((a, b) => a - b);
+    console.log(used);
+
+    // 回溯算法
+    function backtracking(nums, startIndex) {
+        result.push([...path]);
+        if (startIndex >= size) {
+            return;
+        }
+
+        for (let i = startIndex; i < size; i++) {
+            // 树层去重
+            if (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]) {
+                continue;
+            }
+            path.push(nums[i]);
+            used[i] = true;
+            backtracking(nums, i + 1);
+            path.pop();
+            used[i] = false;
+        }
+    }
+
+    backtracking(nums, 0);
+    return result;
+};
+
+// const nums = [1, 2, 2];
+// console.log(subsetsWithDup(nums));
+
+/**
+ * 491. 递增子序列
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var findSubsequences = function (nums) {
+    const result = [], path = [];
+    // 回溯算法
+    function backtracking(nums, startIndex) {
+        if (path.length > 1) {
+            result.push([...path]);
+        }
+
+        let used = new Array(200).fill(false);
+        for (let i = startIndex; i < nums.length; i++) {
+            if (i > 0 && nums[i] < path[path.length - 1] || used[nums[i] + 100]) {
+                continue;
+            }
+            used[nums[i] + 100] = true;
+            path.push(nums[i]);
+            backtracking(nums, i + 1);
+            path.pop();
+        }
+    }
+    backtracking(nums, 0);
+    return result;
+};
+
+// const nums = [4, 6, 7, 7];
+// console.log(findSubsequences(nums));
+
+
+/**
+ * 46. 全排列
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function (nums) {
+    let path = [], result = [];
+    const used = new Array(nums.length).fill(false);
+
+    // 回溯算法+排列
+    function backtracking(nums, used) {
+        if (path.length >= nums.length) {
+            result.push([...path]);
+            return;
+        }
+
+        for (let i = 0; i < nums.length; i++) {
+            if (used[i]) {
+                continue;
+            }
+            used[i] = true;
+            path.push(nums[i]);
+            backtracking(nums, used);
+            path.pop();
+            used[i] = false;
+        }
+    }
+
+    backtracking(nums, used);
+    return result;
+};
+
+const nums = [0, 1];
+console.log(permute(nums));
