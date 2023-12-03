@@ -116,5 +116,14 @@ var countWays = function (nums) {
     return count;
 };
 
-const nums = [6, 0, 3, 3, 6, 7, 2, 7];
-console.log(countWays(nums));
+// const nums = [6, 0, 3, 3, 6, 7, 2, 7];
+// console.log(countWays(nums));
+
+// 100033. 最大合金数
+var maxNumberOfAlloys = function (n, k, budget, composition, stock, cost) {
+    let maxCount = 0;
+
+};
+
+const n = 3, k = 2, budget = 15, composition = [[1, 1, 1], [1, 1, 10]], stock = [0, 0, 0], cost = [1, 2, 3];
+console.log(maxNumberOfAlloys(n, k, budget, composition, stock, cost));
