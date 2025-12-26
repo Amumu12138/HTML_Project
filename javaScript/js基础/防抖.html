@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖</title>
+</head>
+
+<body>
+    <input id="input" />
+    <script>
+        function debounce(func, wait = 500, immediate = false) {
+            let timer = null
+
+            return function () {
+                console.log('arguments', arguments);
+
+                if (immediate) {
+                    func(arguments);
+                    immediate = false;
+                    return;
+                }
+
+                if (timer) {
+                    clearTimeout(timer);
+                }
+
+                timer = setTimeout(func, wait)
+            }
+        }
+
+        const inputDom = document.getElementById('input');
+        const debounceFn = debounce(function () {
+            console.log(inputDom.value);
+        }, 1000, true)
+        inputDom.addEventListener('input', debounceFn)
+    </script>
+</body>
+
+</html>

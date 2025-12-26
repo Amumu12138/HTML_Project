@@ -10,13 +10,31 @@ function arrRotate90(arr, n) {
     for (let i = 0; i < n; i++) {
         newArr[i] = [];
         for (let j = 0; j < n; j++) {
+            console.log(n - j - 1, i, arr[n - j - 1])
             newArr[i][j] = arr[n - j - 1][i];
         }
     }
     return newArr;
 }
 
+function rotateMatrix(matrix, n) {
+    // 第一步：转置矩阵（行变列，列变行）
+    for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+            // 交换matrix[i][j]和matrix[j][i]
+            [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+        }
+    }
+    console.log(matrix)
+    // 第二步：反转每一行
+    for (let i = 0; i < n; i++) {
+        matrix[i].reverse();
+    }
+
+    return matrix;
+}
+
 // let arr = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 let arr = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]];
-let newArr = arrRotate90(arr, 4);
+let newArr = rotateMatrix(arr, 4);
 console.log(newArr);

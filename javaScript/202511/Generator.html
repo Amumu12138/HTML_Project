@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator</title>
+</head>
+
+<body>
+    <h1>Generator-生成器</h1>
+    <script>
+        function* funGenerator() {
+            yield '123';
+            yield '456';
+        }
+
+        func = funGenerator();
+        console.log('func -->', func);
+
+        // const res = func.next();
+        // console.log('res', res) // res {value: '123', done: false}
+        // const res2 = func.next()
+        // console.log('res2', res2) // res2 {value: '456', done: false}
+        // const res3 = func.next()
+        // console.log('res3', res3) // res3 {value: undefined, done: true}
+
+        // 迭代器循环执行
+        for (const it of func) {
+            console.log(it); // 123 456
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数柯里化</title>
+</head>
+
+<body>
+    <h1>函数柯里化</h1>
+    <script>
+        let nums = []
+        // 改写函数sum实现: 参数传递到5个即可实现加
+        function sum(...args) {
+            nums.push(...args)
+            if (nums.length >= 5) {
+                // 长度到5累加,累加后清空数组
+                const result = nums.slice(0, 5).reduce((a, b) => a + b, 0);
+                nums = []
+                return result;
+            } else {
+                // 长度没到5, 返回函数接受剩余参数
+                console.log(sum, nums);
+                return sum;
+            }
+        }
+
+        console.log(sum(1, 2, 3)(4, 5)) // 15
+
+        // 实现函数sumMaker: 参数个数可以自定义
+        function sumMaker(length) {
+            let nums = []
+            // 闭包实现
+            function sum(...args) {
+                nums.push(...args)
+                if (nums.length >= length) {
+                    // 长度到length累加,累加后清空数组
+                    const result = nums.slice(0, length).reduce((a, b) => a + b, 0);
+                    nums = []
+                    return result;
+                } else {
+                    // 长度没到length, 返回函数接受剩余参数
+                    console.log(sum, nums);
+                    return sum;
+                }
+            }
+
+            return sum;
+        }
+
+        const sum4 = sumMaker(4);
+        console.log(sum4(1, 2, 3, 4)); // 10
+
+        // 动态传入判断类型
+        const typeOfTest = function (type) {
+            return thing => typeof thing === type;
+        }
+
+        const isString = typeOfTest('string')
+        console.log(isString(123)) // false
+        console.log(isString("123")) // true
+
+        const isFunction = typeOfTest('function')
+        console.log(isFunction(typeOfTest)) // true
+        console.log(isFunction(undefined)) // false
+    </script>
+</body>
+
+</html>

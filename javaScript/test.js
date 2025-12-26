@@ -36,6 +36,7 @@ function getMoreArr(arr) {
     return newArr;
 }
 
-const arr = [1, 1, 1, 3, 3, 2, 2, 2];
+// const arr = [1, 1, 1, 3, 3, 2, 2, 2];
+const arr = [3, 2, 3]
 const newArr = getMoreArr(arr);
 console.log('newArr -->', newArr);

@@ -45,10 +45,11 @@
         const Animation = {
             left: {
                 forward(ele) {
-                    console.log("left forward called");
+                    console.log("forward forward called");
                     ele.style.left = '100px';
                 },
                 back(ele) {
+                    console.log("back forward called");
                     ele.style.left = "-100px";
                 }
             },
@@ -89,7 +90,7 @@
         }, 1000);
         setTimeout(() => {
             leftDiv1.back();
-        }, 1000);
+        }, 2000);
 
 
         const leftDiv2 = new Div(document.querySelector(".div2"), Animation.right);
@@ -98,7 +99,7 @@
         }, 2000);
         setTimeout(() => {
             leftDiv2.back();
-        }, 2000);
+        }, 4000);
 
         const leftDiv3 = new Div(document.querySelector(".div3"), Animation.top);
         setTimeout(() => {
@@ -106,7 +107,7 @@
         }, 3000);
         setTimeout(() => {
             leftDiv3.back();
-        }, 3000);
+        }, 6000);
     </script>
 </body>
 

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise</title>
+</head>
+
+<body>
+    <h1>promise</h1>
+    <script>
+        // 思考题：在不使用Promise的情况下，如果实现一个计数器将输入的2个数字相加，
+        // 在间隔1s后，将所得结果再进行下一次计算
+        // 回调函数实现
+        // function counterCb(a, b, cb) {
+        //     setTimeout(function () {
+        //         cb(a + b)
+        //     }, 1000)
+        // }
+
+        // // promise实现
+        // function counterPromise(a, b) {
+        //     return new Promise((resolve, reject) => {
+        //         setTimeout(function () {
+        //             resolve(a + b)
+        //         }, 1000)
+        //     })
+        // }
+
+        // counterCb(1, 2, function (val) {
+        //     console.log('counterCb val', val);
+        //     counterCb(val, 1, function (newVal) {
+        //         console.log('counterCb newVal', newVal);
+        //     })
+        // })
+
+        // counterPromise(1, 2).then(val => {
+        //     console.log('counterPromise val', val);
+        //     return counterPromise(val, 1);
+        // }).then(function (newVal) {
+        //     console.log('counterPromise newVal', newVal);
+        // })
+
+        // 定义三种状态
+        const PromistState = {
+            // 等待
+            PENDING: 'pending',
+            // 完成
+            FULFILLED: 'fulfilled',
+            // 失败
+            REJECTED: 'rejected',
+        }
+        // 手写Promise
+        class MyPromise {
+            // 定义promise状态
+            state = PromistState.PENDING;
+            // 定义结果
+            result = undefined;
+            // 失败原因
+            reason = undefined;
+            // 定义一个数组，存放异步任务
+            onResolveCallback = [];
+            onRejectedCallback = [];
+            constructor(callback) {
+                // 成功回调
+                const resolve = (val) => {
+                    if (this.state !== PromistState.PENDING) {
+                        return;
+                    }
+                    this.state = PromistState.FULFILLED
+                    this.result = val;
+                    this.onResolveCallback.forEach(fn => fn())
+                }
+
+                // 失败回调
+                const reject = (val) => {
+                    if (this.state !== PromistState.PENDING) {
+                        return;
+                    }
+                    this.state = PromistState.REJECTED
+                    this.reason = val;
+                    this.onRejectedCallback.forEach(fn => fn())
+                }
+
+                callback(resolve, reject)
+            }
+
+            then(onFulfilled, onRejected) {
+                console.log('then called');
+
+                // 返回new promise,支持链式调用
+                return new MyPromise((resolve, reject) => {
+                    console.log('then state', this.state);
+                    // 成功回调,继续执行resolve方法
+                    if (this.state === PromistState.FULFILLED) {
+                        resolve(onFulfilled(this.result))
+                    }
+
+                    // 失败回调,继续执行reject方法
+                    if (this.state === PromistState.REJECTED) {
+                        if (!onRejected) {
+                            reject(onFulfilled(this.reason))
+                        } else {
+                            reject(onRejected(this.reason))
+                        }
+                    }
+
+                    // 等待状态,将回调方法保存在数组中
+                    if (this.state === PromistState.PENDING) {
+                        this.onResolveCallback.push(() => {
+                            resolve(onFulfilled(this.result))
+                        })
+
+                        this.onRejectedCallback.push(() => {
+                            if (!onRejected) {
+                                reject(onFulfilled(this.reason))
+                            } else {
+                                reject(onRejected(this.reason))
+                            }
+                        })
+                    }
+                })
+
+            }
+
+            static all(promises) {
+                console.log('all called');
+
+                return new MyPromise((resolve, reject) => {
+                    console.log(promises);
+                    // 存储promise结果
+                    const results = [];
+                    let count = 0;
+                    promises.forEach((item, index) => {
+                        // 获取到每个promise然后执行
+                        item.then(val => {
+                            results[index] = val;
+                            count++;
+                            console.log(count, results);
+
+                            if (count === promises.length) {
+                                resolve(results)
+                            }
+                        }, err => {
+                            reject(err)
+                        })
+                    })
+                })
+            }
+
+            // 静态方法resolve
+            static resolve(val) {
+                return new MyPromise(resolve => resolve(val))
+            }
+
+            // 静态方法reject
+            static reject(val) {
+                return new MyPromise((resolve, reject) => reject(val))
+            }
+        }
+
+        const myPromise = new MyPromise((resolve, reject) => {
+            // resolve('success');
+            // reject('failed')
+            setTimeout(function () {
+                // resolve('setTimeout success')
+                reject('setTimeout fail')
+            }, 1000)
+        });
+        myPromise.then(val => {
+            console.log('第一次调用 val', val);
+            return val;
+        }, err => {
+            console.log('调用失败', err);
+            return err;
+        }).then(val2 => {
+            console.log('第二次调用 val2', val2);
+        })
+
+        const p1 = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                resolve('111')
+            }, 1000)
+        })
+
+        const p2 = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                // resolve('222')
+                reject('fail')
+            }, 2000)
+        })
+        // MyPromise.all([p1, p2]).then(result => {
+        //     console.log('MyPromise all result', result);
+
+        // })
+
+        // MyPromise.resolve(1).then(val => {
+        //     console.log('MyPromise.resolve', val);
+        // })
+
+        // MyPromise.reject('fail').then(val => {
+        //     console.log('MyPromise.reject', val);
+        // })
+
+        async function fn(params) {
+            return '123' // 隐式转换为promise
+        }
+        // async fn Promise {<fulfilled>: '123'}
+        // console.log('async fn', fn()); 
+    </script>
+</body>
+
+</html>

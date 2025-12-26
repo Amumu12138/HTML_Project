@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import HelloWorld from './components/HelloWorld.vue';
 
-const a: string = "1asa";
+const msg = ref('Hello Vue3')
 </script>
 
 <template>
-  <div>{{ a }}</div>
+ <HelloWorld :msg="msg" />
 </template>
 
 <style scoped>

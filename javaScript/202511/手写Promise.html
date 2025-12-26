@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写Promise</title>
+</head>
+
+<body>
+    <h1>手写Promise-构造函数</h1>
+    <!-- 字符转大写快捷键: ctrl+shift+p -> 查询“转为大写”-->
+    <script>
+        const PENDING = 'pending';
+        const FULFILLED = 'fulfilled';
+        const REJECTED = 'rejected';
+        // 定义异步函数
+        const runAsyncTask = (callback) => {
+            if (typeof queueMicrotask === 'function') {
+                queueMicrotask(() => {
+                    callback()
+                });
+            } else {
+                setTimeout(callback, 0)
+            }
+        }
+
+        // 抽取处理返回值函数
+        const handleReturnValFun = (retData, newPromise, { resolve, reject }) => {
+
+            console.log('retData', retData);
+
+            // 处理重复引用
+            if (retData === newPromise) {
+                throw new TypeError('Chaining cycle detected for promise #<HMPromise>')
+            }
+            // 处理Promise返回
+            if (retData instanceof HMPromise) {
+                retData.then(res => resolve(res), err => reject(err))
+            } else {
+                resolve(retData)
+            }
+
+        }
+        // 定义类
+        class HMPromise {
+            // 添加状态
+            state = PENDING
+            // 添加原因
+            result = undefined
+            // 定义私有实例属性
+            #handlres = []
+            // 添加构造函数
+            constructor(func) {
+                // 定义resolve/reject
+                const resolve = (result) => {
+                    // 实现状态不可逆
+                    if (this.state !== PENDING) {
+                        return
+                    }
+                    // 修改状态、原因
+                    this.state = FULFILLED
+                    this.result = result
+                    console.log('RESOLVE called', result);
+                    // 调用成功回调方法
+                    this.#handlres.forEach(({ successBack }) => {
+                        successBack(this.result)
+                    })
+                }
+
+
+                const reject = (result) => {
+                    if (this.state !== PENDING) {
+                        return
+                    }
+
+                    this.state = REJECTED
+                    this.result = result
+                    console.log('REJECT called', result);
+
+                    this.#handlres.forEach(({ failedBack }) => {
+                        failedBack(this.result)
+                    })
+                }
+
+                try {
+                    // 传入resolve、reject函数
+                    func(resolve, reject)
+                } catch (err) {
+                    reject(err)
+                }
+
+            }
+
+            // 执行成功/失败回调
+            then(onFulfilled, onRejected) {
+                const funStr = 'function';
+                onFulfilled = typeof onFulfilled === funStr ? onFulfilled : x => x;
+                onRejected = typeof onRejected === funStr ? onRejected : x => { throw x };
+
+                // 返回新的Promise实例
+                const newPromise = new HMPromise((resolve, reject) => {
+                    // 参数判断 
+                    if (this.state === FULFILLED) {
+                        // 执行成功回调方法
+                        runAsyncTask(() => {
+                            // try {
+                            //     const fulfilledData = onFulfilled(this.result);
+                            //     console.log('fulfilledData', typeof fulfilledData, fulfilledData);
+
+                            //     // 处理重复引用
+                            //     if (fulfilledData === newPromise) {
+                            //         throw new TypeError('Chaining cycle detected for promise #<HMPromise>')
+                            //     }
+                            //     if (fulfilledData instanceof HMPromise) {
+                            //         fulfilledData.then(res => resolve(res), err => reject(err))
+                            //     } else {
+                            //         resolve(fulfilledData)
+
+                            //     }
+                            // } catch (error) {
+                            //     reject(error)
+                            // }
+                            try {
+                                const fulfilledData = onFulfilled(this.result);
+                                handleReturnValFun(fulfilledData, newPromise, { resolve, reject })
+
+                            } catch (err) {
+                                reject(err)
+                            }
+                        });
+                    } else if (this.state === REJECTED) {
+                        // 执行失败回调方法
+                        runAsyncTask(() => {
+                            try {
+                                const rejectData = onRejected(this.result)
+                                console.log('rejectData', rejectData);
+
+                                handleReturnValFun(rejectData, newPromise, { resolve, reject })
+
+                            } catch (err) {
+                                reject(err)
+                            }
+
+                        })
+                    } else {
+                        // 保存回调函数
+                        const handlerObj = {
+                            successBack: () => {
+                                runAsyncTask(() => {
+                                    try {
+                                        const rejectData = onFulfilled(this.result)
+                                        console.log('rejectData', rejectData);
+                                        handleReturnValFun(rejectData, newPromise, { resolve, reject })
+                                    } catch (err) {
+                                        reject(err)
+                                    }
+                                })
+                            },
+                            failedBack: () => {
+                                runAsyncTask(() => {
+                                    try {
+                                        const rejectData = onRejected(this.result)
+                                        console.log('rejectData', rejectData);
+
+                                        handleReturnValFun(rejectData, newPromise, { resolve, reject })
+
+                                    } catch (err) {
+                                        reject(err)
+                                    }
+                                })
+                            }
+                        }
+                        this.#handlres.push(handlerObj)
+                    }
+                })
+
+                return newPromise;
+            }
+
+
+            // 捕获异常
+            catch(onRejected) {
+                // 内部调用then方法
+                this.then(undefined, onRejected)
+            }
+
+            // 最终兜底
+            finally(onFinally) {
+                console.log('finally', onFinally);
+
+                return this.then(onFinally, onFinally)
+            }
+
+            // 静态方法-resolve
+            static resolve(value) {
+                // 1、判断传入值 如果是Promise直接返回,若不是则转为Promise并返回
+                if (value instanceof HMPromise) {
+                    return value
+                }
+
+                return new HMPromise((resolve) => {
+                    resolve(value);
+                })
+            }
+
+            // 静态方法-reject
+            static reject(value) {
+                // 1、判断传入值 如果是Promise直接返回,若不是则转为Promise并返回
+                if (value instanceof HMPromise) {
+                    return value
+                }
+
+                return new HMPromise((undefined, reject) => {
+                    reject(value);
+                })
+            }
+
+            // race 返回最先完成（无论成功或失败）的 Promise 的结果
+            static race(promises) {
+                return new HMPromise((resolve, reject) => {
+                    if (!Array.isArray(promises)) {
+                        return reject(new TypeError('promises not is array'))
+                    }
+
+                    promises.forEach(p => {
+                        HMPromise.resolve(p).then(res => resolve(res), err => reject(err))
+                    })
+                })
+            }
+
+            // 等待所有 Promise 完成，或任意一个 Promise 失败
+            static all(promises) {
+                return new HMPromise((resolve, reject) => {
+                    if (!Array.isArray(promises)) {
+                        return reject(new TypeError('promises not is array'))
+                    }
+
+                    // 空数组直接兑现
+                    promises.length === 0 && resolve(promises)
+
+                    const results = [];
+                    let count = 0;
+                    promises.forEach((p, index) => {
+                        console.log(p);
+
+                        HMPromise.resolve(p).then(res => {
+                            console.log('res result', results, index, res);
+
+                            // 记录结果,判断全部兑现,抛出结果,通过索引来记录,保证结果的顺序和Promise数组顺序一致
+                            results[index] = res;
+                            count++
+                            // 通过兑现的次数进行判断,保证可以获取到所有的结果
+                            count === promises.length && resolve(results)
+                        }, err => {
+                            // 处理第一个拒绝
+                            reject(err)
+                        })
+                    })
+                })
+            }
+
+
+            //将一个 Promise 可迭代对象作为输入，并返回一个单独的 Promise。当所有输入的 Promise 都已敲定时（包括传入空的可迭代对象时），返回的 Promise 将被兑现，并带有描述每个 Promise 结果的对象数组。
+            static allSettled(promises) {
+                return new HMPromise((resolve, reject) => {
+                    if (!Array.isArray(promises)) {
+                        return reject(new TypeError('promises not is array'))
+                    }
+
+                    // 空数组直接兑现
+                    promises.length === 0 && resolve(promises)
+
+                    const results = [];
+                    let count = 0;
+                    promises.forEach((p, index) => {
+                        HMPromise.resolve(p).then(res => {
+                            console.log('res result', results, index, res);
+
+                            // 保证结果的顺序和Promise数组顺序一致 处理兑现{status: 'fulfilled', value: ''}
+                            results[index] = { status: FULFILLED, value: res };
+                            count++
+                            // 通过兑现的次数进行判断,保证可以获取到所有的结果
+                            count === promises.length && resolve(results)
+                        }, err => {
+                            // 处理拒绝 {status: 'rejected', reason: ''}
+                            results[index] = { status: REJECTED, reason: err };
+                            count++
+                            count === promises.length && resolve(results)
+                        })
+                    })
+                })
+            }
+
+            //将一个 Promise 可迭代对象作为输入，并返回一个 Promise。当输入的任何一个 Promise 兑现时，这个返回的 Promise 将会兑现，并返回第一个兑现的值。当所有输入 Promise 都被拒绝（包括传递了空的可迭代对象）时，它会以一个包含拒绝原因数组的 AggregateError 拒绝
+            static any(promises) {
+                const ERROR_MESSAGE = 'ALL promises were rejected'
+                return new HMPromise((resolve, reject) => {
+                    if (!Array.isArray(promises)) {
+                        return reject(new TypeError('promises not is array'))
+                    }
+
+                    // 空数组直接拒绝
+                    promises.length === 0 && reject(new AggregateError(promises, ERROR_MESSAGE))
+
+                    const errors = [];
+                    let count = 0;
+                    promises.forEach((p, index) => {
+
+                        HMPromise.resolve(p).then(res => {
+
+                            // 第一个兑现
+                            resolve(res)
+                        }, err => {
+                            // 处理全部拒绝
+                            errors[index] = err;
+                            count++
+                            count === promises.length && reject(new AggregateError(errors, ERROR_MESSAGE))
+
+                        })
+                    })
+                })
+            }
+        }
+
+        console.log('start');
+
+        // 创建HMPromise类
+        const p = new HMPromise((resolve, reject) => {
+            console.log('HMPromise called');
+            // 执行成功回调函数
+            // resolve('success')
+            // reject('error') // 不执行
+            // 异步调用
+            // setTimeout(() => {
+            //     // resolve('setTimeout resolve success')
+            //     reject('setTimeout throw error')
+            // }, 1000)
+            throw 'error'
+        })
+
+        // p.then((res) => {
+        //     console.log('执行成功回调', res);
+        //     // return 'return success'
+        //     // throw 'return error'
+        //     return new HMPromise((resolve, reject) => {
+        //         resolve('返回新的Promise resolve')
+        //     })
+        // }, err => {
+        //     console.log('执行失败回调', err);
+        //     throw 'error'
+        //     // return 'error'
+        //     // return new HMPromise((resolve, reject) => {
+        //     //     reject('返回新的Promise reject')
+        //     // })
+        // }).then(res => {
+        //     console.log('再次执行成功回调', res);
+        //     return '再次执行回调的返回'
+        // }, err => {
+        //     console.log('再次执行失败,捕获异常', err);
+        // }).catch((err) => {
+        //     console.log('catch方法执行', err);
+        // })
+
+        console.log('end');
+        // 手写HMPromise触发重复引用
+        // const promise = new HMPromise((resolve, reject) => {
+        //     resolve(1)
+        // })
+
+        // const p2 = p.then(res => {
+        //     return p2;
+        // })
+
+        // p2.then(res => {
+
+        // }, err => {
+        //     console.log('err', err); // err TypeError: Chaining cycle detected for promise #<HMPromise>
+
+        // })
+
+        // 原生Promise 触发重复引用
+        // const promise = new Promise((resolve, reject) => {
+        //     resolve(1)
+        // })
+
+        // const p2 = p.then(res => {
+        //     return p2;
+        // })
+
+        // p2.then(res => {
+
+        // })
+        // 重复引用 Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
+
+        // 调用catch方法捕获异常
+        // const pCatch = new HMPromise((resolve, reject) => {
+        //     throw 'error'
+        // })
+
+        // pCatch.then(res => {
+
+        // }).catch(err => {
+        //     console.log('catch执行了', err);
+        // })
+
+        // finall方法测试
+        // const pFinally = new HMPromise((resolve, reject) => {
+        //     reject('error')
+        //     resolve('success')
+        // })
+
+        // pFinally.then(res => {
+        //     console.log('res', res);
+
+        //     return res
+        // }).finally(() => {
+        //     console.log('finally执行了');
+        // })
+
+        // 验证静态方法resolve
+        // HMPromise.resolve('静态方法resolve执行').then(res => {
+        //     console.log('res', res);
+        // })
+
+        // 验证静态方法reject
+        // HMPromise.reject('静态方法reject执行').then(res => {
+        //     console.log('res', res);
+        // })
+
+        // HMPromise.reject(new HMPromise((resolve, reject) => {
+        //     reject('reject called')
+        //     // throw 'error'
+        // })).then(res => {
+        //     console.log('res', res);
+        // }, err => {
+        //     console.log('err', err);
+
+        // })
+
+        // 验证静态方法race
+        const p1 = new HMPromise((resolve, reject) => {
+            setTimeout(() => {
+                resolve('123')
+            }, 1000)
+        })
+
+        const p2 = new HMPromise((resolve, reject) => {
+            setTimeout(() => {
+                reject('456')
+            }, 2000)
+        })
+        // HMPromise.race([p1, p2, '789']).then(res => {
+        //     console.log(res);
+
+        // })
+
+        // 验证静态方法all
+        // HMPromise.all([p1, p2, '789']).then(res => {
+        //     console.log('all res', res);
+        // }, err => {
+        //     console.log('all err', err);
+        // })
+
+        // 验证静态方法allSettled
+        // HMPromise.allSettled([p1, p2, '789']).then(res => {
+        //     console.log('all res', res);
+        // }, err => {
+        //     console.log('all err', err);
+        // })
+
+        // 验证静态方法any
+        // HMPromise.any([]).then(res => {
+        //     console.log('any res', res);
+        // }, err => {
+        //     console.dir('any err', err);
+        // })
+
+    </script>
+</body>
+
+</html>
