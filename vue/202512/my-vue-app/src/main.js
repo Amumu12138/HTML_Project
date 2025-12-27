@@ -13,6 +13,7 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import { useAllDataStore } from '@/store';
 import "@/mock/mock.js";
 
+
 const app = createApp(App);
 const pinia = createPinia();
 app.use(pinia);

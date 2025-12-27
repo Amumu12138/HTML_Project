@@ -48,20 +48,17 @@ export const useAllDataStore = defineStore("allData", () => {
     }
     function addMenu(router, type) {
         if (type === "refresh") {
-            const cached = localStorage.getItem("store");
-            if (cached) {
-                try {
-                    state.value = JSON.parse(cached);
-                    state.value.routerList = [];
-                } catch (err) {
-                    // 缓存格式异常，忽略并继续
-                    console.error('store, 缓存格式异常', err);
-                }
+            const cached = JSON.parse(localStorage.getItem("store"));
+            if (!cached) {
+                return;
             }
-            return;
+
+            state.value = cached;
+            state.value.routerList = [];
         }
         const menu = state.value.menuList;
         const module = import.meta.glob("../views/**/*.vue");
+        console.log('module', module);
         // 定义菜单格式化后的路由数组
         const routeArr = [];
         // 格式化菜单路由
