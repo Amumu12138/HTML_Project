@@ -28,7 +28,10 @@ export default class App extends Component {
     console.log('checkAllTodos', todos, isCheck);
 
     todos.forEach((todo) => (todo.complete = isCheck))
-    this.setState({ todos: [...todos] })
+    this.setState({ todos: [...todos] }, () => {
+      console.log("checkAllTodos setState called", this); // App组件对象
+
+    })
   }
   // 清除已完成的todo
   clearCompleteTodos() {
@@ -60,10 +63,13 @@ export default class App extends Component {
           <List
             todos={todos}
             deleteTodo={(e) => this.deleteTodo(e)}
-            updateTodo={(todo, isCheck) => this.updateTodo(todo, isCheck)}></List>
-          <Footer todos={todos}
+            updateTodo={(todo, isCheck) => this.updateTodo(todo, isCheck)}>
+          </List>
+          <Footer
+            todos={todos}
             checkAllTodos={(e) => this.checkAllTodos(e)}
-            clearCompleteTodos={() => this.clearCompleteTodos()}></Footer >
+            clearCompleteTodos={() => this.clearCompleteTodos()}>
+          </Footer >
         </div >
       </div>
     )

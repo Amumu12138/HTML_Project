@@ -44,16 +44,17 @@ export default class Footer extends Component {
         console.log('Footer props', this.props);
 
         const { todos = [] } = this.props;
+        const todoLen = todos.length;
         const completeSize = todos.reduce(
             (pre, todo) => pre + (todo.complete ? 1 : 0),
             0);
         return (
             <div className="todo-footer">
                 <label>
-                    <input ref={this.inputRef} type="checkbox" onChange={(e) => this.handleChange(e)} />
+                    <input ref={this.inputRef} type="checkbox" checked={todoLen > 0 && completeSize === todoLen} onChange={(e) => this.handleChange(e)} />
                 </label>
                 <span>
-                    <span>已完成 {completeSize} </span> / 全部 {todos.length}
+                    <span>已完成 {completeSize} </span> / 全部 {todoLen}
                 </span>
                 <button
                     style={{ display: completeSize > 0 ? 'block' : 'none' }}

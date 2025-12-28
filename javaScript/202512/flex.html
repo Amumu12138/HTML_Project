@@ -13,6 +13,11 @@
         }
 
         .flex-item {
+            /* 
+                flex-grow: 1;
+                flex-shrink: 1;
+                flex-basis: 0%
+            */
             flex: 1;
             background-color: lightgreen;
         }
@@ -24,6 +29,14 @@
         <div class="fixed-width">固定宽度</div>
         <div class="flex-item">自适应填充剩余空间</div>
     </div>
+    <script>
+        const arr = [1, 2, 3];
+        // console.log(arr.unshift(0)); // 4 返回新数据长度
+        // console.log(arr.shift()); // 1 删除的头节点数据
+
+        // console.log(arr.push(4));// 4 返回新数据长度
+        // console.log(arr.pop()); // 3 删除的尾节点数据
+    </script>
 </body>
 
 </html>
