@@ -39,7 +39,6 @@ export default class List extends Component {
     listRef = React.createRef()
     handleDelete() {
         // console.log('handleDelete', this.listRef.current);
-
         // ReactDOM.unmountComponentAtNode(this.listRef.current);
     }
     render() {
