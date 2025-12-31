@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20251230</title>
+</head>
+
+<body>
+    <input id="input" type="text" placeholder="enter input" />
+    <button id="btn">点击禁用</button>
+    <script>
+        // 防抖函数实现
+        function debounce(func, wait = 500, immediate = false) {
+            let timer;
+            return function () {
+                console.log('debounce', this, arguments);
+
+                // 刚进入就触发
+                if (immediate) {
+                    func.apply(this, arguments)
+                    return
+                }
+
+                // 定时器存在,清除定时器
+                if (timer) {
+                    clearTimeout(timer);
+                }
+
+                // 重新创建定时器事件,执行func方法
+                timer = setTimeout(() => {
+                    func.apply(this, arguments)
+                }, wait)
+            }
+        }
+
+        const inputDom = document.getElementById('input')
+        const debounceFunc = debounce(function (e) {
+            console.log(e.target.value, 'debounceFunc');
+        }, 500)
+        inputDom.addEventListener('input', debounceFunc)
+
+        // 节流函数实现
+        function throttle(func, wait = 500, immediate = false) {
+            let timer;
+            return function () {
+                // 立即就触发
+                if (immediate) {
+                    func.apply(this, arguments)
+                    return
+                }
+
+                // 定时器存在,不再继续执行
+                if (timer) {
+                    return
+                }
+
+                // 等待时机继续执行func方法,然后清空定时器
+                timer = setTimeout(() => {
+                    func.apply(this, arguments)
+                    clearTimeout(timer)
+                    timer = null
+                }, wait)
+            }
+        }
+
+        const btnDom = document.getElementById('btn');
+        const throttleFunc = throttle(function (e) {
+            e.target.disabled = true;
+            // 3秒后释放按钮禁用状态
+            setTimeout(() => {
+                e.target.disabled = false;
+            }, 5000)
+        }, 500, true)
+        btnDom.addEventListener('click', throttleFunc)
+    </script>
+</body>
+
+</html>

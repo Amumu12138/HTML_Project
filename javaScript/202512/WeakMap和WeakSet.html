@@ -10,6 +10,7 @@
 <body>
     <h1>WeakMap和WeakSet</h1>
     <script>
+        // WeakMap、WeakSet都是弱引用类型
         const weakMap = new WeakMap();
         console.log(weakMap);
         // weakMap.set('123', '123')// 键不可以设置普通类型,只可以设置为对象
@@ -33,7 +34,7 @@
         console.log(set);
 
         const objArr = [{ a: 1 }, { a: 2 }, { a: 3 }]
-        // weakSet必须使用作为键元素
+        // weakSet必须使用对象作为键元素
         const weakSet = new WeakSet(objArr);
         console.log(weakSet);
 
