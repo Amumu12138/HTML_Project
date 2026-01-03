@@ -5,11 +5,11 @@ export default function Message() {
   return (
     <div>
       <ul>
-        <Link to="/home/message/detail/01">message01</Link>
+        <Link to="/home/message/detail/01">params参数</Link>
         <br />
-        <Link to="/home/message/detail/02">message02</Link>
+        <Link to="/home/message/search">search参数</Link>
         <br />
-        <Link to="/home/message/detail/03">message03</Link>
+        <Link to="/home/message/state">state参数</Link>
       </ul>
       {/* 指定路由展示的位置 */}
       <Outlet />

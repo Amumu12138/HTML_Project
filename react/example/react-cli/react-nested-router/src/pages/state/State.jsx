@@ -1,11 +1,10 @@
-import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 export default function State() {
     return (
         <div>
             <Link
-                to={`/home/state/stateDetail`}
+                to={`/home/message/state/detail`}
                 state={{
                     id: 'id',
                     title: 'title',

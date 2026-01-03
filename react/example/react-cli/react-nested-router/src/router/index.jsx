@@ -4,6 +4,10 @@ import About from '../pages/About'
 import Message from '../pages/Message'
 import News from '../pages/News'
 import Detail from '../pages/Detail'
+import Search from '../pages/search/Search'
+import SearchDetail from '../pages/search/SearchDetail'
+import State from '../pages/state/State'
+import StateDetail from '../pages/state/StateDetail'
 
 const routes = [
     {
@@ -25,6 +29,26 @@ const routes = [
                     {
                         path: 'detail/:id',
                         element: <Detail />
+                    },
+                    {
+                        path: 'search',
+                        element: <Search />,
+                        children: [
+                            {
+                                path: 'searchDetail',
+                                element: <SearchDetail />,
+                            }
+                        ]
+                    },
+                    {
+                        path: 'state',
+                        element: <State />,
+                        children: [
+                            {
+                                path: 'detail',
+                                element: <StateDetail />,
+                            }
+                        ]
                     }
                 ]
             }
