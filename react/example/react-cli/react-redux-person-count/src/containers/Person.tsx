@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { Component } from 'react'
+import { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { addPersonAction } from '../redux/actions/person';
 // Person容器
@@ -15,7 +15,7 @@ class Person extends Component {
     render() {
         const { persons } = this.props;
         return (
-            <>
+            <Fragment key={'key'}>
                 <div>Person</div>
                 <br />
                 <button onClick={() => this.addPersonFun()}>addPerson</button>
@@ -25,7 +25,8 @@ class Person extends Component {
                             return <li key={item.id}>name:{item.name} -- age: {item.age}</li>
                         })
                     }
-                </ul></>
+                </ul>
+            </Fragment>
 
         )
     }

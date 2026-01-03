@@ -19,12 +19,12 @@ class Count extends Component {
 
 
         return (
-            <div>
+            <>
                 <div>Count: {count} Person: {persons.length}</div>
                 <button onClick={() => this.addFun()}>add</button>
                 <button style={{ marginLeft: '20px' }} onClick={() => this.reduceFun()}>reduce</button>
 
-            </div>
+            </>
         )
     }
 }
