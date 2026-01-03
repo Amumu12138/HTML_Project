@@ -22,10 +22,18 @@
 ## 二、详情介绍
 ```
     matter和threeJs目录下入口文件都为index.html,引入第三方库文件为js,案例文件为example,example/client目录下文件为《WebGL编程指南》部分示例文件
+
     vue目录下入口文件为index.html,包含vue2.x和vue3.0相关学习项目
+
+    react目录下入口文件为index.html,包含react、react-router、redux相关学习项目
+
     webgl目录下入口文件为index.html,res目录为资源目录,案例文件为example,shader.html为标签化添加着色器语言示例
+
     javaScript目录文件入口为index.html,JavaScript是Web的编程语言,所有现代的HTML页面都使用JavaScript. 
     案例文件为example,css存放为样式文件,images存放为项目所用到的图片/动画文件
+
     platfrom-web-sdk3-h5-engine目录入口文件/demo/h5/index.html,css目录为引入样式库,js为引入js文件库,node_modules为npm引入的第三方库,整个项目是基于泡椒-h5-sdk2.0的更新版本
+
     infox_h5_sdk目录入口文件/WebRoot/demo/h5/game.html, 整个项目是基于银狐H5项目的开发
+
 ```
