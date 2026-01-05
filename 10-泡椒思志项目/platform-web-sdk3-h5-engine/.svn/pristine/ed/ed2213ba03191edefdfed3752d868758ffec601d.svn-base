@@ -1,0 +1,214 @@
+package com.paojiao.sdk3.common.util;
+
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import com.paojiao.sdk3.model.PjThirdSdkChannelGame;
+import com.paojiao.sdk3.service.PjThirdSdkChannelGameService;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author wangdeyu
+ *
+ */
+public class SignUtil {
+	public static final Logger log = Logger.getLogger(SignUtil.class);
+	public PjThirdSdkChannelGameService channelGameService = new PjThirdSdkChannelGameService();
+	public static String md5before;
+	public String mySign;
+
+	/***
+	 * 生成sign
+	 */
+	public static String generateSign(Map<String, String> prarms, String key) {
+		md5before = sortParam(prarms);
+		if (!UrlEncoderUtils.hasUrlEncoded(md5before))
+			try {
+				md5before = URLEncoder.encode(md5before, "UTF-8");
+			} catch (Exception e) {
+				log.error("签名字符串进行URLEncoder.encode时出现错误：" + e.getMessage());
+				return null;
+			}
+		// log.info("md5before=====[" + md5before + "]");
+		return md5(md5before.toString() + key);
+
+	}
+
+	/**
+	 * 不自动encode
+	 * @param prarms
+	 * @param key
+	 * @return
+	 */
+	public static String generateSign2(Map<String, String> prarms, String key) {
+		md5before = sortParam(prarms);
+		return md5(md5before.toString() + key);
+
+	}
+
+	/***
+	 * 生成sign
+	 */
+	public String generateSign(String key) {
+		if (!UrlEncoderUtils.hasUrlEncoded(md5before))
+			try {
+				md5before = URLEncoder.encode(md5before, "UTF-8");
+			} catch (Exception e) {
+				log.error("签名字符串进行URLEncoder.encode时出现错误：" + e.getMessage());
+				return null;
+			}
+		return md5(md5before.toString() + key);
+
+	}
+
+	public static boolean isSignOK(String signStr, String sign) {
+
+		String newSign = md5(signStr);
+
+		return newSign.toLowerCase().equals(sign.toLowerCase());
+
+	}
+
+	public boolean isSignOK(Map<String, String> params, String sign, String key) {
+		this.mySign = generateSign(params, key);
+		if (mySign == null || sign == null) {
+			return false;
+		}
+		return mySign.toLowerCase().equals(sign.toLowerCase());
+	}
+
+	public static String md5(String txt) {
+
+		if (txt == null || txt.trim().length() == 0) {
+			return null;
+		}
+
+		String algorithName = "MD5";
+
+		try {
+			MessageDigest m = MessageDigest.getInstance(algorithName);
+			m.reset();
+			m.update(txt.getBytes(Charset.forName("UTF-8")));
+			byte[] bts = m.digest();
+
+			return hex(bts);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private static String hex(byte[] bts) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < bts.length; i++) {
+			sb.append(Integer.toHexString((bts[i] & 0xFF) | 0x100).substring(1,
+					3));
+		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * 对请求参数按照一定的规则排序，默认使用Collections.sort
+	 *
+	 * @param params
+	 *            请求中获取的键值
+	 * @return
+	 */
+	public static String sortParam(Map<String, String> params) {
+		StringBuffer content = new StringBuffer();
+		// 按照key做排序
+		List<String> keys = new ArrayList<String>(params.keySet());
+		Collections.sort(keys);
+		for (int i = 0; i < keys.size(); i++) {
+			String key = (String) keys.get(i);
+			// sign参数不参与加密
+			if ("sign".equals(key)) {
+				continue;
+			}
+			String value = (String) params.get(key);
+			content.append(key).append("=").append(value);
+		}
+		return content.toString();
+	}
+
+
+	public static String sortParam2(Map<String, String> params) {
+		StringBuffer content = new StringBuffer();
+		// 按照key做排序
+		List<String> keys = new ArrayList<String>(params.keySet());
+		Collections.sort(keys);
+		for (int i = 0; i < keys.size(); i++) {
+			String key = keys.get(i);
+			if (i > 0) {
+				content.append("&");
+			}
+			String _value = params.get(key);
+			String value ="";
+			if(null != _value){
+				value = _value;
+			}
+			content.append(key).append("=").append(value);
+		}
+		return content.toString();
+	}
+
+
+	/**
+	 * 对请求参数按照一定的规则排序，默认使用Collections.sort
+	 *
+	 * @param params
+	 *            请求中获取的键值
+	 * @return
+	 */
+	public static String sortParam3(Map<String, String> params) {
+		// 去掉清源签名未用到的参数
+		params.remove("channelGameId");
+		params.remove("ip2");
+		StringBuffer content = new StringBuffer();
+		// 按照key做排序
+		List<String> keys = new ArrayList<String>(params.keySet());
+		Collections.sort(keys);
+		for (int i = 0; i < keys.size(); i++) {
+			String key =  keys.get(i);
+			// sign参数不参与加密
+			if ("sign".equals(key) || key.startsWith("ip")
+					|| "channelGameId".equals(key)) {
+				continue;
+			}
+			String value =  params.get(key);
+			content.append("&").append(key).append("=").append(value);
+		}
+		return content.toString().substring(1);
+	}
+	/**
+	 * 对请求参数按照一定的规则排序，默认使用Collections.sort
+	 *
+	 * @param params
+	 *            请求中获取的键值
+	 * @return
+	 */
+	public static String sortParam4(Map<String, String> params) {
+		StringBuffer content = new StringBuffer();
+		// 按照key做排序
+		List<String> keys = new ArrayList<String>(params.keySet());
+		Collections.reverse(keys);
+		for (int i = 0; i < keys.size(); i++) {
+			String key = (String) keys.get(i);
+			// sign参数不参与加密
+			if ("sign".equals(key)) {
+				continue;
+			}
+			String value = (String) params.get(key);
+			content.append(key).append("=").append(value);
+		}
+		return content.toString();
+	}
+}

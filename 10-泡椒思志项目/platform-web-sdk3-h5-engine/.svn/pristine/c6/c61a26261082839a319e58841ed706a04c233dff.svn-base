@@ -1,0 +1,87 @@
+devMode=true
+
+jdbcUrl1 = jdbc:mysql://rm-bp12h7zkfi409dog1.mysql.rds.aliyuncs.com:3306/pj13_ng_sdk?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user1 = paojiao97
+password1 = 2gC6UZOs%24GdrX#
+devMode1=true
+
+jdbcUrl2 = jdbc:mysql://rm-bp12h7zkfi409dog1.mysql.rds.aliyuncs.com:3306/pj13_ng_sdk?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user2 =  paojiao97
+password2 = 2gC6UZOs%24GdrX#
+devMode2 =true
+
+jdbcUrl3 = jdbc:mysql://rm-bp12h7zkfi409dog1.mysql.rds.aliyuncs.com:3306/pj13_ucenter?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user3 = paojiao97
+password3 =2gC6UZOs%24GdrX#
+devMode3 =true
+
+jdbcUrl4 = jdbc:mysql://rm-bp12h7zkfi409dog1.mysql.rds.aliyuncs.com:3306/pj13_ucenter?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user4 = paojiao97
+password4 = 2gC6UZOs%24GdrX#
+devMode4 =true
+
+#=======================线上配置==========================
+
+#公共管理主库
+jdbcUrl5 = jdbc:mysql://rm-bp1ju0p1tupijlrzp.mysql.rds.aliyuncs.com:3306/public_db?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user5 = pp_app
+password5 = ^ODBJW#34w1ijM&4bVB$S3hP
+devMode5 =true
+
+
+#h5 SDK host
+sdkHost=https://h5.paojiao.cn
+
+#uc
+userCenterHost=https://uc.paojiao.cn
+#发送注册信息短信
+sendUserInfoToMobileUrl=/sms/sendUserInfo.do
+#忘记密码第一步，校验用户名
+findpwdFirstUrl= /sms/findpwdFirst.do
+
+
+#泡椒sdk
+ngSdkHost=https://ng.sdk.paojiao.cn
+
+#泡椒登录接口
+ngLoginUrl=/api/user/login4.do
+
+#泡椒一键注册接口
+ngRandomUserUrl=/api/user/random4.do
+
+#泡椒注册接口
+ngRegUrl=/api/user/reg4.do
+
+#泡椒token验证接口
+ngTokenUrl=/api/user/token4.do
+
+#泡椒sdk菜单
+ngOpenGameUrl=/api/sdk4/openGame.do
+
+
+#角色上报
+ngReportRoleInfoUrl=/stat/exit.do
+
+
+#泡椒获取验证码接口
+ngPhoneCodeUrl=/api2/user/getSmsCode.do
+
+#绑定手机号接口
+ngBindMobileUrl=/api2/user/bindMobile.do
+
+#手机号登录
+ngMobileLoginUrl=/api2/user/mobileLogin.do
+
+#选择账户/输入账户登录接口
+ngSelectLoginUrl=/api2/user/selectLogin.do
+
+
+
+#泡椒支付中心接口
+payUrl=https://pay.paojiao.cn/pay/payGameOrder
+
+#泡椒用户中心
+ucUrl=https://member.paojiao.cn
+
+
+
