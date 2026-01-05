@@ -1,0 +1,271 @@
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    font: normal 16px/1.5 PingFangSC-regular,Tahoma,Lucida Grande,Verdana,Microsoft Yahei,STXihei,hei;
+}
+
+body {
+    cursor: pointer;
+    color: #000;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-text-size-adjust: none;
+    /* -moz-user-select: none; */
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 0;
+    background: #f4f4f4;
+}
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('../../../res/iconfont/flexfont/iconfont.woff2?t=1641900830911') format('woff2'),
+         url('../../../res/iconfont/flexfont/iconfont.woff?t=1641900830911') format('woff'),
+         url('../../../res/iconfont/flexfont/iconfont.ttf?t=1641900830911') format('truetype');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* 搜索模块 */
+.search-index {
+    /* 固定定位下，margin: 0 auto布局会失效 */
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);  
+    -webkit-transform: translateX(-50%);  
+    width: 100%;
+    height: 44px;
+    min-width: 320px;
+    max-width: 540px;   
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+}
+
+.user {
+    width: 44px;
+    height: 44px;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    font-size: 12px;
+}
+
+.search {
+    flex: 1;
+    height: 26px;
+    margin: 7px 10px;
+    padding: 4px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search::before {
+    content: "\e60c";
+    margin-right: 4px;
+    color: #aaa;
+}
+
+.user::before  {
+    content: '';
+    display: block;
+    margin: 5px 10px 0 10px;
+    width: 20px;
+    height: 20px;
+    background: url(../../../res/images/tabbar.png) no-repeat 0px -72px;
+    background-size: 24px 120px;
+}
+
+/* 内容区域 */
+.focus {
+    padding-top: 44px;
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+}
+
+.focus img {
+    width: 100%;
+}
+
+.nav-top   {
+    display: flex;
+    margin: 5px;
+    border-radius: 12px;
+    background-color: white;
+}
+
+.nav-top span{
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+}
+.nav-top span::before {
+    display: block;
+    height: 20px;
+    margin-top: 10px;
+}
+
+.nav-top span:nth-child(1):before {
+    content: '\e601';
+}
+.nav-top span:nth-child(2):before {
+    content: '\e602';
+}
+.nav-top span:nth-child(3):before {
+    content: '\e603';
+}
+.nav-top span:nth-child(4):before {
+    content: '\e604';
+}
+.nav-top span:nth-child(5):before {
+    content: '\e605';
+}
+/* 主导航栏 */
+nav {
+    margin: 0 4px 3px;
+}
+
+.nav-common {
+    display: flex;
+    height: 80px;
+    line-height: 80px;
+    background: pink;
+    overflow: hidden;
+}
+
+.nav-common:nth-child(1) {
+    background: -webkit-linear-gradient(left, pink, skyblue);
+    border-radius: 8px 8px 0 0 ;
+}
+
+.nav-common:nth-child(3) {
+    background: -webkit-linear-gradient(left, skyblue, pink);
+    border-radius: 0px 0px 8px 8px ;
+}
+
+.nav-common .nav-items {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+}
+/* 给前两个nav-items盒子添加样式 */
+.nav-items:nth-child(-n+2) {
+    border-right: 1px solid white;
+}
+
+.nav-common:nth-child(2) {
+    margin: 4px 0;
+}
+
+.nav-items a {
+    flex: 1;
+    height: 50%;
+    line-height: 40px;
+    font-size: 12px;
+    color: white;
+    text-shadow: 1px 1px rgba(0 ,0, 0, 0.2);
+}
+
+.nav-items a:nth-child(1) {
+    border-bottom: 1px solid white;
+}
+
+.nav-bottom {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    width: 100%;
+    /* 弹性布局(space-around、space-between)实现需要设置父级高度 */
+    /* height: 300px; */
+    margin: 5px 0;
+}
+
+.nav-bottom span {
+    display: block;
+    width: 20%;
+    height: 40px;
+    text-align: center;
+    font-size: 12px;
+    background-color: #ccc;
+    border: 1px dotted white;
+}
+
+.nav-bottom span::before {
+    display: block;
+    width: 20px;
+    height: 20px;
+    color:#101;
+    margin: 0 auto;
+}
+
+.nav-bottom span:nth-child(1):before {
+    content: '\e669';
+}
+.nav-bottom span:nth-child(2):before {
+    content: '\e66a';
+}
+.nav-bottom span:nth-child(3):before {
+    content: '\e66b';
+}
+.nav-bottom span:nth-child(4):before {
+    content: '\e66c';
+}
+.nav-bottom span:nth-child(5):before {
+    content: '\e66d';
+}
+.nav-bottom span:nth-child(6):before {
+    content: '\e66e';
+}
+.nav-bottom span:nth-child(7):before {
+    content: '\e66f';
+}
+.nav-bottom span:nth-child(8):before {
+    content: '\e670';
+}
+.nav-bottom span:nth-child(9):before {
+    content: '\e671';
+}
+.nav-bottom span:nth-child(10):before {
+    content: '\e672';
+}
+
+/* 底部导航栏 */
+.bottom {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.bottom span {
+    display: inline-block;
+    flex: 1;
+    height: 20px; 
+    text-align: center;
+    background:pink;
+    border-right: 1px solid #ccc;
+}
+
+.bottom span::before {
+    display: block;
+}

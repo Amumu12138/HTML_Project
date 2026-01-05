@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生命周期钩子-旧版</title>
+    <!-- 引入react核心库 -->
+    <script src="../../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持react操作DOM -->
+    <script src="../../js/react-dom.development.js"></script>
+    <!-- 引入babel, 用于将jsx转换成js -->
+    <script src="../../js/babel.min.js"></script>
+
+</head>
+
+<body>
+    <h1>生命周期钩子-旧版</h1>
+    <div id="app"></div>
+    <script type="text/babel">
+
+
+        class Life extends React.Component {
+            state = {
+                count: 0
+            }
+
+            constructor(props) {
+                super(props);
+                console.log('Life constructor called');
+            }
+
+            // 组件将要接受父组件props属性,只有props属性修改时才会调用,初次接收不会调用 
+            componentWillReceiveProps() {
+                console.log('componentWillReceiveProps called');
+
+            }
+
+            // 控制组件更新的阀门,需要返回true/false
+            shouldComponentUpdate() {
+                console.log('shouldComponentUpdate called');
+                return true;
+            }
+            // 组件将要挂载
+            componentWillMount() {
+                console.log('componentWillMount called');
+            }
+
+            // 组件将要更新
+            componentWillUpdate() {
+                console.log('compoentWillUpdate called');
+            }
+
+            // 组件已更新
+            componentDidUpdate() {
+                console.log('componentDidUpdate called');
+            }
+
+            // 组件已挂载 生命周期钩子
+            componentDidMount() {
+                console.log('componentDidMount called');
+            }
+            // 组件将要卸载 生命周期钩子
+            componentWillUnmount() {
+                console.log('componentWillUnmount called');
+            }
+
+            unmounted() {
+                const appDom = document.getElementById('app')
+                ReactDOM.unmountComponentAtNode(appDom);
+            }
+            add() {
+                const { count } = this.state;
+                this.setState({ count: count + 1 })
+            }
+
+            force() {
+                console.log('forceUpdate called');
+                this.forceUpdate();
+            }
+            // render调用时机: 初始化渲染、状态更新之后
+            render() {
+                console.log('List render called', this);
+
+                const { count } = this.state;
+                const { name } = this.props;
+                return (
+                    <div>
+                        <h2 >{count}-{name}</h2>
+                        <button onClick={() => { this.add() }}>增加</button>
+                        <button style={{ 'margin': '0 10px' }} onClick={() => { this.unmounted() }}>卸载组件</button>
+                        <button onClick={() => { this.force() }}>强制更新</button>
+                    </div>
+                )
+            }
+        }
+
+        // 父组件 
+        class Parent extends React.Component {
+            state = {
+                name: 'parent'
+            }
+            constructor(props) {
+                super(props);
+                console.log('Parent called');
+
+            }
+
+
+            change() {
+                this.setState({ name: 'change' })
+            }
+            render() {
+                const { name } = this.state;
+                return (
+                    <div>
+                        <Life name={name}></Life>
+                        <br />
+                        <button onClick={() => this.change()}>修改name</button>
+                    </div>
+                )
+            }
+        }
+        // 渲染虚拟DOM
+        ReactDOM.render(<Parent name="parent" />, document.getElementById('app'))
+    </script>
+</body>
+
+</html>

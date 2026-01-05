@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32、自定义指令</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>简介</p>
+        首次聚焦： <input v-focus />
+        <p>钩子函数参数</p>
+        <div v-demo:foo.a.b="message"></div>
+        <p>函数简写</p>
+        <div v-color-swatch="bgColor">函数简写</div>
+        <p>对象字面量</p>
+        <div v-demo-aaa="{ bgColor: 'red', color: 'white' }"> Amumu </div>
+    </div>
+    <script>
+        // 注册一个全局自定义指令
+        Vue.directive('focus', {
+            inserted(el) {
+                el.focus();
+            }
+        })
+
+        // 钩子函数参数
+        Vue.directive('demo', {
+            bind: function (el, binding, vnode) {
+                var s = JSON.stringify
+                el.innerHTML =
+                    'name: ' + s(binding.name) + '<br>' +
+                    'value: ' + s(binding.value) + '<br>' +
+                    'expression: ' + s(binding.expression) + '<br>' +
+                    'argument: ' + s(binding.arg) + '<br>' +
+                    'modifiers: ' + s(binding.modifiers) + '<br>' +
+                    'vnode keys: ' + Object.keys(vnode).join(', ')
+            }
+        })
+
+        //函数简写
+        Vue.directive('color-swatch', function (el, binding) {
+            el.style.backgroundColor = binding.value
+        })
+
+        Vue.directive('demo-aaa', function (el, binding) {
+            el.style.backgroundColor = binding.value.bgColor
+            el.style.color = binding.value.color
+        })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                message: "Amumu",
+                bgColor: 'red'
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

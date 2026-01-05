@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 三角实现</title>
+    <style>
+        .border-box {
+            height: 0;
+            width: 0;
+            border: 50px solid transparent;
+            border-top-color: red;
+            border-bottom-color: green;
+            border-left-color: yellow;
+            border-right-color: pink;
+        }
+
+        .trangle-right {
+            height: 0;
+            width: 0;
+            margin-top: 10px;
+            border: 10px solid transparent;
+            border-left-color: red;
+        }
+
+        .trangle-right-box {
+            position: relative;
+            height: 100px;
+            width: 100px;
+            background-color: red;
+            border-radius: 4px;
+        }
+
+        .trangle-right-box span {
+            position: absolute;
+            right: -20px;
+            top: 35px;
+            width: 0;
+            height: 0;
+            line-height: 0;
+            font-size: 0;
+            border: 10px solid transparent;
+            border-left-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <p style="text-align: left;">CSS 三角实现</p>
+    <div class="border-box"></div>
+    <div class="trangle-right"></div>
+    <!-- 指向右侧盒子 -->
+    <div class="trangle-right-box">
+        <span></span>
+    </div>
+</body>
+
+</html>

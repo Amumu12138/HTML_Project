@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport"  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+   	<meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+	
+
+   <!--  <meta name="full-screen" content="yes">
+	<meta name="x5-fullscreen" content="true"> -->
+	<title>一刀屠龙</title>
+
+	<link href="../../../css/common.css?20171011" rel="stylesheet">
+	<link href="../../../css/layout.css?20171011" rel="stylesheet">
+
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../../../js/jquery/jquery.md5.js"></script>
+	<script type="text/javascript" src="../../../js/channel.js"></script>
+	<script type="text/javascript" src="https://play.5337wan.com/xykj/resource/sdk.min.js"></script>
+
+	
+	<style type="text/css">
+		body {
+			background: url(https://h5.infoxgame.com/images/ydtl_loading.png) no-repeat center top;
+			background-size: auto 100%;
+		}
+	</style>
+	
+</head>
+	 
+	<body>
+	 	 
+		<script type="text/javascript">
+            // 查看手机型号
+            function showMobileModel_test() {
+                //判断数组中是否包含某字符串
+                Array.prototype.contains = function (needle) {
+                    for (i in this) {
+                        if (this[i].indexOf(needle) > 0)
+                            return i;
+                    }
+                    return -1;
+                }
+                var deviceType = navigator.userAgent;//获取userAgent信息
+                var md = new MobileDetect(deviceType);//初始化mobile-detect
+                var os = md.os();//获取系统
+                //手机型号(厂商)
+                var model = "";
+                //系统的版本号
+                var version = "";
+                if (os == "iOS") {//ios系统的处理
+                    version = md.version("iPhone");
+                    os = md.os();
+                    model = md.mobile();
+                } else if (os == "AndroidOS") {//Android系统的处理
+                    os = md.os();
+                    version = md.version("Android");
+                    var sss = deviceType.split(";");
+                    var i = sss.contains("Build/");
+                    if (i > -1) {
+                        model = sss[i].substring(0, sss[i].indexOf("Build/"));
+                    }
+                }
+                if (model.trim() === 'PACM00' || model.trim() === 'PAAT00' || model.trim() === 'PAAM00' || model.trim() === 'PACT00' || model.trim() === 'CPH1831' || model.trim() === 'CPH1833') {
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
+
+		$(function(){
+				var cs = "http://localhost/infox_h5_sdk/api/";
+				var zs = "https://h5.infoxgame.com/api/";
+				channelSDK.init(false,zs,'10877125','76464923');
+				var _params = channelSDK.getURLParams();
+				var extension = JSON.stringify({"pid":_params.pid,"uid":_params.uid,
+					"time":_params.time,"fcm":_params.fcm,"sid":_params.sid,"gid":_params.gid,
+					"client":_params.client,"type":_params.type,
+					"sign":_params.sign});
+				console.info("----参数extension为："+extension);
+				var encodeData = _params.pid+"#10039tulong12345weiyou"+"#"+_params.time;
+            	console.info("-----加密参数为："+encodeData);
+            	var md5sign = $.md5(encodeData);
+				console.info("-----加密字符串："+md5sign);
+            	channelSDK["pid"] =_params.pid;
+				var initdata={
+					pid:_params.pid,
+					time:_params.time,
+					sign:md5sign
+				};
+            	console.info("-----请求初始化参数："+JSON.stringify(initdata));
+                	play.sdk.init(initdata,function (data) {
+                	    console.info("----初始化返回参数："+data);
+                	    var resultData = JSON.parse(data);
+                    channelSDK["uname"] =resultData.data.uname;
+                    channelSDK["uid"] = resultData.data.uid;
+                    channelSDK["gid"] = resultData.data.gid;
+                    channelSDK["sid"] = resultData.data.sid;
+                });
+				channelSDK.getCpToken(extension,function(data){
+					var gameUrl =  data.gameUrl + '?uid='+data.userID+'&sdkToken='+data.token;
+					channelSDK["userID"] = data.userID;
+					if(data.type == 0){//横屏游戏    
+			             $("body").append('<div id="gameFrameDiv" style=" display:none;  width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+					     	window.onorientationchange = function () { 
+			                   if (window.orientation == 90 || window.orientation == -90) {
+			                       $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});  
+			                   }    
+			               }
+						}else{
+					    //竖屏游戏
+                           console.info("++++++++进入竖屏");
+                            $("body").append('<div id="gameFrameDiv" style="display:none;' +
+                                ' width: ' + 600 + 'px;' +
+                                '  height: ' + 1020 + 'px;' +
+                                ' position: relative; top: 30px; left: 0px;">' +
+                                '<iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + 600 + 'px;' +
+                                ' height: ' + 1020 + 'px;"></iframe></div>');
+							//$("body").append('<div id="gameFrameDiv" style="display:none; width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+						}
+					setTimeout(function(){
+						$("#gameFrameDiv").fadeIn(1000);
+						$("#gameFrame").attr("src",gameUrl);
+					},500);
+				});
+				channelSDK.startEventListener(); 
+	    });
+		
+		//支付
+		function  receiveMessage(event){
+			if(event.data.method == 'loadPayBox'){
+				var params = event.data.param;
+				params["userID"] = channelSDK.userID;
+				params["appID"]= channelSDK.gameId;
+				params["isTest"]= channelSDK.isTest;
+				httpPost(channelSDK.host + "getOrderID",params,function(data,params){
+					if(data.state == channelSDK.SUCCESS){
+						var paydata = {
+                            pid:channelSDK.pid,
+							gid:channelSDK.gid,
+							sid:channelSDK.sid,
+							uid:channelSDK.uid,
+							uname:channelSDK.uname,
+							money:params.money,
+                            //money:"0.01",
+							other:data.data.orderID
+						};
+                        play.sdk.pay(paydata);
+					}	
+				});
+			}
+		}
+		 
+	</script> 
+	</body>
+</html>

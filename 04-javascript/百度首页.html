@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度一下，你就知道</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'baidu-blue': '#1677ff',
+                        'baidu-gray': '#f5f5f5',
+                        'baidu-light-gray': '#e5e5e5',
+                        'baidu-text': '#333333',
+                        'baidu-footer': '#9195a3'
+                    },
+                    fontFamily: {
+                        sans: ['Arial', 'Helvetica', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .search-input-focus {
+                @apply border-baidu-blue shadow-md;
+            }
+            .nav-link-hover {
+                @apply text-baidu-blue underline;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white text-baidu-text min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="flex justify-end p-4">
+        <div class="flex items-center space-x-6">
+            <a href="#" class="text-sm hover:nav-link-hover transition-all duration-200">新闻</a>
+            <a href="#" class="text-sm hover:nav-link-hover transition-all duration-200">hao123</a>
+            <a href="#" class="text-sm hover:nav-link-hover transition-all duration-200">地图</a>
+            <a href="#" class="text-sm hover:nav-link-hover transition-all duration-200">视频</a>
+            <a href="#" class="text-sm hover:nav-link-hover transition-all duration-200">贴吧</a>
+
+            <!-- 更多产品按钮 -->
+            <div class="relative group">
+                <button
+                    class="bg-baidu-gray px-3 py-1.5 text-sm rounded hover:bg-baidu-light-gray transition-colors duration-200">
+                    更多产品
+                </button>
+                <!-- 下拉菜单 -->
+                <div
+                    class="absolute right-0 mt-2 w-36 bg-white shadow-lg rounded-md overflow-hidden hidden group-hover:block transition-all duration-300 z-10">
+                    <div class="grid grid-cols-2 gap-2 p-2">
+                        <a href="#"
+                            class="flex flex-col items-center p-2 hover:bg-baidu-gray rounded transition-colors">
+                            <i class="fa fa-image text-xl mb-1"></i>
+                            <span class="text-xs">图片</span>
+                        </a>
+                        <a href="#"
+                            class="flex flex-col items-center p-2 hover:bg-baidu-gray rounded transition-colors">
+                            <i class="fa fa-music text-xl mb-1"></i>
+                            <span class="text-xs">音乐</span>
+                        </a>
+                        <a href="#"
+                            class="flex flex-col items-center p-2 hover:bg-baidu-gray rounded transition-colors">
+                            <i class="fa fa-shopping-bag text-xl mb-1"></i>
+                            <span class="text-xs">购物</span>
+                        </a>
+                        <a href="#"
+                            class="flex flex-col items-center p-2 hover:bg-baidu-gray rounded transition-colors">
+                            <i class="fa fa-book text-xl mb-1"></i>
+                            <span class="text-xs">文库</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 登录/注册按钮 -->
+            <a href="#"
+                class="bg-baidu-blue text-white px-4 py-1.5 rounded-md text-sm hover:bg-blue-600 transition-colors duration-200">
+                登录
+            </a>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-12">
+        <!-- 百度Logo -->
+        <div class="mb-8">
+            <img src="https://www.baidu.com/img/flexible/logo/pc/index.png" alt="百度"
+                class="h-20 md:h-24 object-contain">
+        </div>
+
+        <!-- 搜索框和按钮 -->
+        <div class="w-full max-w-2xl">
+            <!-- 搜索框容器 -->
+            <div class="relative mb-6">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <i class="fa fa-search text-gray-400"></i>
+                </div>
+                <input type="text" placeholder="百度一下，你就知道"
+                    class="w-full pl-12 pr-12 py-3 rounded-full border border-gray-300 focus:outline-none focus:search-input-focus transition-all duration-200"
+                    id="searchInput">
+                <div class="absolute inset-y-0 right-0 flex items-center pr-4">
+                    <i
+                        class="fa fa-microphone text-gray-500 cursor-pointer hover:text-baidu-blue transition-colors duration-200"></i>
+                </div>
+            </div>
+
+            <!-- 搜索按钮 -->
+            <div class="flex justify-center space-x-4">
+                <button
+                    class="px-6 py-2 bg-baidu-gray text-gray-700 rounded-md hover:bg-gray-200 transition-colors duration-200">
+                    百度一下
+                </button>
+                <button
+                    class="px-6 py-2 bg-baidu-gray text-gray-700 rounded-md hover:bg-gray-200 transition-colors duration-200">
+                    我 Feeling Lucky
+                </button>
+            </div>
+
+            <!-- 热门搜索 -->
+            <div class="mt-8">
+                <p class="text-sm text-gray-500 mb-3">热门搜索：</p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="#" class="text-sm hover:text-baidu-blue transition-colors duration-200">百度AI</a>
+                    <a href="#" class="text-sm hover:text-baidu-blue transition-colors duration-200">天气预报</a>
+                    <a href="#" class="text-sm hover:text-baidu-blue transition-colors duration-200">新闻</a>
+                    <a href="#" class="text-sm hover:text-baidu-blue transition-colors duration-200">地图</a>
+                    <a href="#" class="text-sm hover:text-baidu-blue transition-colors duration-200">视频</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部信息 -->
+    <footer class="bg-baidu-gray py-6 mt-auto">
+        <div class="container mx-auto px-4">
+            <!-- 底部导航 -->
+            <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 mb-4">
+                <a href="#"
+                    class="text-baidu-footer text-sm hover:text-baidu-blue transition-colors duration-200">关于百度</a>
+                <a href="#" class="text-baidu-footer text-sm hover:text-baidu-blue transition-colors duration-200">About
+                    Baidu</a>
+                <a href="#"
+                    class="text-baidu-footer text-sm hover:text-baidu-blue transition-colors duration-200">使用百度前必读</a>
+                <a href="#"
+                    class="text-baidu-footer text-sm hover:text-baidu-blue transition-colors duration-200">帮助中心</a>
+                <a href="#"
+                    class="text-baidu-footer text-sm hover:text-baidu-blue transition-colors duration-200">隐私政策</a>
+                <a href="#"
+                    class="text-baidu-footer text-sm hover:text-baidu-blue transition-colors duration-200">百度推广</a>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="text-center text-baidu-footer text-xs">
+                <p>©2023 Baidu 百度一下，你就知道</p>
+                <p class="mt-1">京ICP证030173号 京公网安备11000002000001号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 搜索框交互效果
+        const searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('shadow-lg');
+        });
+
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('shadow-lg');
+        });
+
+        // 实现搜索功能
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                alert(`搜索内容: ${searchInput.value}`);
+            }
+        });
+
+        // 百度一下按钮功能
+        document.querySelector('button:first-of-type').addEventListener('click', () => {
+            alert(`搜索内容: ${searchInput.value}`);
+        });
+
+        // 我Feeling Lucky按钮功能
+        document.querySelector('button:last-of-type').addEventListener('click', () => {
+            alert(`直接访问与"${searchInput.value}"最相关的结果`);
+        });
+    </script>
+</body>
+
+</html>

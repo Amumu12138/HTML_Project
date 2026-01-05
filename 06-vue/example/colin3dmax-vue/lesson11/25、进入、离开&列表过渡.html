@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25、进入、离开和列表过渡</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+
+    <style>
+        /* 可以设置不同的进入和离开动画 */
+        /* 设置持续时间和动画函数 */
+        .slide-fade-enter-active {
+            transition: all .3s ease;
+        }
+
+        .slide-fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+
+        .slide-fade-enter,
+        .slide-fade-leave-to
+
+        /* .slide-fade-leave-active for below version 2.1.8 */
+            {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+
+        @keyframes bounce-in {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.5);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p> 单元素/组件的过渡 </p>
+        <button v-on:click="show = !show">
+            Toggle
+        </button>
+        <transition name="fade" :duration="5000">
+            <p v-if="show">hello</p>
+        </transition>
+        <p> CSS过渡 </p>
+        <div id="example-1">
+            <button @click="show02 = !show02">
+                Toggle render
+            </button>
+            <transition name="slide-fade">
+                <p v-if="show02">hello</p>
+            </transition>
+        </div>
+        <p> CSS动画 </p>
+        <div id="example-2">
+            <button @click="show03 = !show03">Toggle show</button>
+            <transition name="bounce">
+                <p v-if="show03">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero,
+                    at
+                    lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
+            </transition>
+        </div>
+        <p>自定义过渡的类名</p>
+        <button @click="show04 = !show04">
+            Toggle render
+        </button>
+        <transition name="custom-classes-transition" enter-active-class="animated tada"
+            leave-active-class="animated bounceOutRight">
+            <p v-if="show04">hello</p>
+        </transition>
+
+        <p>JavaScript钩子</p>
+        <button @click="show05 = !show05">
+            click
+        </button>
+        <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter"
+            v-on:enter-cancelled="enterCancelled" v-on:before-leave="beforeLeave" v-on:leave="leave"
+            v-on:after-leave="afterLeave" v-on:leave-cancelled="leaveCancelled" :duration="3000">
+            <p v-if="show05"> this is JavaScript钩子 </p>
+        </transition>
+    </div>
+    <script>
+
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                show: true,
+                show02: true,
+                show03: true,
+                show04: true,
+                show05: true
+            },
+            methods: {
+                beforeEnter() {
+                    console.log('beforeEnter')
+                },
+                enter() {
+                    console.log('enter')
+                },
+
+                afterEnter() {
+                    console.log('afterEnter')
+                },
+                enterCancelled() {
+                    console.log('enterCancelled')
+                },
+
+                beforeLeave() {
+                    console.log('beforeLeave')
+                },
+                leave() {
+                    console.log('leave')
+                },
+                afterLeave() {
+                    console.log('afterLeave')
+                },
+                leaveCancelled() {
+                    console.log('leaveCancelled')
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

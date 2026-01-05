@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <link href="https://h5.infoxgame.com/css/common.css?20171011" rel="stylesheet">
+	<link href="https://h5.infoxgame.com/css/layout.css?20171011" rel="stylesheet">
+	<script type="text/javascript" src="https://h5.infoxgame.com/js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="https://sdk.921.com/html/h5/client.js"></script>
+	
+	<style type="text/css">
+		body {
+		
+			background: url(https://res.yh.zyqgame.com/loadPage/loginres/Bm_Back2.jpg) no-repeat center top;
+			background-size: auto 100%;
+		}
+	</style>
+	
+</head>
+	 
+	<body>
+	 	 
+		<script type="text/javascript">
+		
+		$("body").css({
+			"width" : $(window).width() +'px',
+			 "height": $(window).height() + 'px'
+		});
+		
+		var host = "https://h5.infoxgame.com/api/";
+		var isTest = false;
+		var url = "https://res.djxh5.ios.youqugame.cn/";
+		var gameId = "10876676";
+		var channelID = "76020659";	
+		
+		 if (! /ipad|iphone|mac/i.test(navigator.userAgent)) {//是ios
+			gameId = "10876653";
+			channelID = "75998659";	
+			url = "https://yh.test.youqugame.cn/";
+		 }
+		
+
+		
+		var userID = "";
+		$(function(){
+
+			//登录
+	    	ShSdk.login(function(data){
+				var params={};
+				params["extension"]= data.tokenid;
+				params["channelSYID"]="";
+				params["gameVersionCode"]="1";
+				params["appID"]= gameId;
+				params["imei"]="";
+				params["checkUpdate"]=0;
+				params["model"] = "h5";
+				params["udid"]="";
+				params["mac"]="";
+				params["channelID"]= channelID;
+				params["sdkVersionCode"] = 1;
+				params["isTest"] = isTest;
+
+				httpGet(host + "getCptoKen",params,function(data,params){
+					/* var gameUrl = data.gameUrl + '?uid='+data.userID+'&sdkToken='+data.token; */
+					var gameUrl = url + '?uid='+data.userID+'&sdkToken='+data.token;
+		        	  userID = data.userID;
+						if(data.type == 0){//横屏游戏    
+			                $("body").append('<div id="gameFrameDiv" style=" display:none;  width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+			                
+					     	window.onorientationchange = function () { 
+			                    if (window.orientation == 90 || window.orientation == -90) {
+			                        $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});  
+			                    }    
+			                }
+						}else{//竖屏游戏 
+							$("body").append('<div id="gameFrameDiv" style="display:none; width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+						}	
+						setTimeout(function(){
+							$("#gameFrameDiv").fadeIn(1000);
+							$("#gameFrame").attr("src",gameUrl);
+						},500);
+						
+				});
+
+	    	});
+	    	startEventListener();
+	    });
+		
+	
+		
+		
+		//支付
+		function  receiveMessage(event){
+			if(event.data.method == 'loadPayBox'){
+				var params = event.data.param;
+				params["userID"] = userID;
+				params["appID"]= gameId;
+				params["isTest"] = isTest;
+				
+				httpGet(host + "getOrderID",params,function(data,params){
+					if(data.state == 1){
+						var p={};
+						p["game_no"]= data.data.orderID;
+						p["order_money"]= parseFloat(params.money) * 100 ;
+						p["order_name"]=params.productName;
+						p["role_name"]= params.roleName;
+						p["ext"]="";
+						
+						ShSdk.pay(p,function(data){}); 
+					}	
+				});
+			}
+		}
+			
+		//开始消息监听
+		function startEventListener(){
+			window.addEventListener("message", receiveMessage, false);
+		}
+		
+		function httpGet(url,params,callback) {
+			
+			var hosturl = buildURL(url,params);
+			  $.ajax({
+		          type: "GET",
+		          url: hosturl,
+		          dataType: "json",
+		          success: function(data){  
+		        	  callback(data,params);
+		           }
+		      });
+		 };
+		
+		function buildURL(url, args) {
+			if(url) {
+				var urlList = url.split("#");
+				var params = {};
+				var query = urlList[0].split("?")[1];
+				var result = urlList[0].split("?")[0] + "?";
+				if(query || query === "") {
+					query = query.split("&");
+					for(var i in query) {
+						var vars = query[i].split("=");
+						params[vars[0]] = vars[1];
+					}
+				}
+				for(var i in args) {
+					if(args[i] !==undefined && args[i] !== null) {
+						params[i] = args[i];
+					}
+				}
+				var first = true;
+				for(var i in params) {
+					result += (first ? "" : "&") + i + "=" + (params[i] !== undefined && params[i] !== null ? params[i] : "");
+					first = false;
+				}
+				return result + (urlList[1] ? "#" + urlList[1] : "");
+			}
+			return "";
+		};
+	</script> 
+	 
+</html>

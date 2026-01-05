@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>31、混入</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script>
+        // 基础
+        var myMixin = {
+            created() {
+                this.hello();
+            },
+            methods: {
+                hello() {
+                    console.log('Amumu hello mixin');
+                }
+            }
+        }
+
+        var Component = Vue.extend({
+            mixins: [myMixin]
+        })
+
+        var component = new Component();
+        // 选项合并
+        var mixin = {
+            data() {
+                return {
+                    message: 'hello',
+                    foo: 'foo'
+                }
+            },
+            created() {
+                console.log('this is mixin created 混入调用');
+            }
+        }
+
+        new Vue({
+            mixins: [mixin],
+            data() {
+                return {
+                    message: 'goodbye',
+                    bar: 'bar'
+                }
+            },
+            created() {
+                console.log('this is vue created 组件钩子调用');
+                console.log(this.$data);
+            }
+        })
+
+        //全局混入
+        Vue.mixin({
+            created() {
+                var myOption = this.$options.myOption;
+                if (myOption) {
+                    console.log("AMumu options -->", myOption);
+                }
+            }
+        })
+
+        new Vue({
+            myOption: 'Amumu'
+        })
+    </script>
+</body>
+
+</html>

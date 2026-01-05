@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清除浮动</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .box {
+            width: 800px;
+            background-color: red;
+            margin: 0 auto;
+            /* 给父级添加overflow属性 */
+            /* overflow: auto; */
+        }
+
+        /* 给父级添加after伪元素 */
+        /* .clearfix:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        } */
+
+        /* 给父级添加双伪元素 */
+        .clearfix:before,
+        .clearfix:after {
+            content: "";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        .clearfix {
+            /* 兼容IE6、7 */
+            *zoom: 1;
+        }
+
+        .box ul li {
+            float: left;
+            width: 160px;
+            height: 160px;
+            background-color: yellow;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        .box-footer {
+            width: 100%;
+            height: 200px;
+            background-color: black;
+        }
+
+        /* 额外标签法: 要求这个新的空标签必须是块级元素 */
+        .clear-box {
+            clear: both;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box clearfix">
+        <ul>
+            <li>1我是盒子</li>
+            <li>1我是盒子</li>
+            <li>1我是盒子</li>
+            <li>1我是盒子</li>
+            <li>1我是盒子</li>
+        </ul>
+    </div>
+    <!-- <div class="clear-box"></div> -->
+    <!-- <br class="clear-box"> -->
+    <!-- 无效 <span class="clear-box"></span> -->
+    <div class="box-footer"></div>
+</body>
+
+</html>

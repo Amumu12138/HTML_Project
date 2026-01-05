@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件处理</title>
+
+    <!-- 引入react核心库 -->
+    <script src="../../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持react操作DOM -->
+    <script src="../../js/react-dom.development.js"></script>
+    <!-- 引入babel, 用于将jsx转换成js -->
+    <script src="../../js/babel.min.js"></script>
+    <style>
+        button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>事件处理</h1>
+    <div id="app"></div>
+    <script type="text/babel">
+        // 创建类式组件 
+        class MyComponent extends React.Component {
+            handleClick(event) {
+                console.log("this ->", this, this.btnRef);
+                console.log('event -> ', event.target);
+                console.log(this.btnRef.current === event.target); // true
+
+            }
+
+            // createRef创建ref容器 React.createRef(); ref={this.myRef} -》官方推荐
+            myRef = React.createRef();
+            btnRef = React.createRef();
+            render() {
+                return (
+                    <div>
+                        <input ref={this.myRef} type="text" placeholder="input" />
+                        <button ref={this.btnRef} onClick={(e) => this.handleClick(e)}>点击</button>
+                    </div>
+                )
+            }
+        }
+
+        // 渲染类组件
+        ReactDOM.render(<MyComponent />, document.getElementById('app'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>indexDB</title>
+    <style>
+        button {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>indexDB</h1>
+    <button onclick="getIndexDB()">查看数据</button>
+    <button onclick="addIndexDB()">新增数据</button>
+
+    <button onclick="putIndexDb()">修改数据</button>
+
+    <button onclick="deleteIndexDb()">删除数据</button>
+
+    <script>
+        console.log('indexDB');
+        // 打开或创建一个数据库
+        var request = indexedDB.open('databaseName', 1);
+
+        // 处理数据库升级
+        request.onupgradeneeded = function (event) {
+            var db = event.target.result;
+
+            // 创建对象存储（表）并设置主键
+            var objectStore = db.createObjectStore('storeName', { keyPath: 'id' });
+
+            // 创建索引
+            objectStore.createIndex('fieldName', 'fieldName', { unique: false });
+        };
+
+        let connection;
+        // 数据库打开成功时的回调
+        request.onsuccess = function (event) {
+            var db = event.target.result;
+            connection = event.target.result;
+
+            // 进行事务操作
+            var transaction = db.transaction('storeName', 'readwrite');
+            var objectStore = transaction.objectStore('storeName');
+
+            // // 插入数据
+            // const addReq = objectStore.add({ id: 1, name: 'John Doe', age: 30 });
+
+            // addReq.onsuccess = () => {
+            //     console.log(' objectStore.onsuccess called 插入数据成功');
+            // }
+
+        };
+
+        // 错误处理
+        request.onerror = function (event) {
+            console.error('Database error:', event.target.error);
+        };
+
+        // 查看数据
+        getIndexDB = function () {
+            var transaction = connection.transaction('storeName', 'readwrite');
+            var store = transaction.objectStore('storeName');
+
+            // 查询数据
+            var query = store.get(1);
+            query.onsuccess = function (event) {
+                console.log('查询数据成功', event.target.result);
+            };
+        }
+
+        // 新增数据
+        addIndexDB = function () {
+            // 进行事务操作
+            var transaction = connection.transaction('storeName', 'readwrite');
+            var store = transaction.objectStore('storeName');
+
+            const addReq = store.put({
+                id: Date.now(),
+                name: 'Amumu',
+                age: 20
+            });
+
+            addReq.onsuccess = () => {
+                console.log('修改数据成功');
+            }
+        }
+
+        // 修改数据
+        putIndexDb = function () {
+            // 进行事务操作
+            var transaction = connection.transaction('storeName', 'readwrite');
+            var store = transaction.objectStore('storeName');
+
+            const putReq = store.put({
+                id: 1,
+                name: 'Amumu',
+                age: 20
+            });
+
+            putReq.onsuccess = () => {
+                console.log('修改数据成功');
+            }
+        }
+
+        // 修改数据
+        deleteIndexDb = function () {
+            // 进行事务操作
+            var transaction = connection.transaction('storeName', 'readwrite');
+            var store = transaction.objectStore('storeName');
+
+            const deleteReq = store.delete(1);
+
+            deleteReq.onsuccess = () => {
+                console.log('删除数据成功');
+            }
+        }
+    </script>
+</body>
+
+</html>

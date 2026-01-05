@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="mobile-web-app-capable" content="yes"/>
+	<meta name="full-screen" content="true"/>
+	<meta name="screen-orientation" content="portrait"/>
+	<title>烈焰一刀流</title>
+	<!--<link href="css/common.css?20171011" rel="stylesheet">
+    <link href="css/layout.css?20171011" rel="stylesheet">-->
+	<link href="../../../css/common.css?20171011" rel="stylesheet">
+	<link href="../../../css/layout.css?20171011" rel="stylesheet">
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../../../js/jquery/jquery.md5.js"></script>
+	<script type="text/javascript" src="../../../js/channel.js?v=20190320"></script>
+	<script type="text/javascript" src="../../../js/jquery/mobile-detect.js"></script>
+	<script type="text/javascript" src="../../../js/rhsdk_az.js"></script>
+	<!--<script type="text/javascript" src="../../../js/api_az.js"></script>-->
+	<style type="text/css">
+		body {
+			background: url(https://h5.infoxgame.com/images/hw_lyydl_loading.png) no-repeat center top;
+			background-size: auto 100%;
+		}
+		#hw_loading_img {
+			position: fixed;
+			z-index: 9999;
+			width: 100%;
+			height: 100%;
+			left: 0;
+			top: 0;
+			/* background: rgba(0, 0, 0, .8); */
+			background: url(https://h5.infoxgame.com/images/hw_lyydl_loading.png) 0 0/100% 100% no-repeat;
+		}
+
+	</style>
+
+</head>
+
+<body>
+<img id="hw_loading_img">
+
+<script type="text/javascript">
+
+
+    $(function(){
+        var cs = "http://localhost/infox_h5_sdk/api/";
+        var zs = "https://h5.infoxgame.com/api/";
+        channelSDK.init(false,zs,'10877125','764641053');
+        setTimeout(function(){//定时器版
+                console.info("四秒后关闭----");
+                $("#hw_loading_img").css("display","none");//将图片的display属性设置为none
+            },
+            4000);//设置四千毫秒权即4秒
+        var params = {"appid":"102072597","forceLogin":1};
+        HwFastappObject.gameLoginWithReal(JSON.stringify(params));
+        HwFastappObject.onGameLoginWithRealResult = function onGameLoginWithRealResult(str) {
+            //console.info("---------Login reusultParams: " + JSON.stringify(str));
+            console.info("---------onGameLoginWithRealResult code----------"+str.code+"---------onGameLoginWithRealResult msg----------"+str.data);
+
+            //如果7004 和 2012 则认为是取消登录
+            if (str.code == 7004 || str.code == 2012) {
+                console.info("onGameLoginResult cancel");
+
+                showDialogBox();
+
+
+                //退出快游戏
+                //system.postMessage("exitapp");
+            }
+            var extension = JSON.stringify({
+                "ts": str.gameUserData.ts,
+                "playerId": str.gameUserData.playerId,
+                "playerLevel": str.gameUserData.playerLevel,
+                "gameAuthSign": str.gameUserData.gameAuthSign,
+            });
+            channelSDK["channelUserID"] = str.playerId;
+            var realNameAuthStatus = "0";
+            //randomNumStr 是不超过64位的随机数字符串
+            var params = {"eventId":randomString(),"eventType":"GAMEBEGIN"}
+            console.info("-------requestParmas-------:"+JSON.stringify(params));
+            HwFastappObject.submitPlayerEvent(JSON.stringify(params));
+
+            HwFastappObject.onSubmitPlayerEventResult = function onSubmitPlayerEventResult(str){
+                console.info('AllDetail:' + JSON.stringify(str));
+                if (str.code == 0){
+                    system.postMessage('AllDetail:' + JSON.stringify(str));
+                    system.postMessage('transactionId:' + str.transactionId);
+                    // transactionId=str.transactionId;
+                    realNameAuthStatus = "1";
+                }
+                if (str.code == 7016){
+                    system.postMessage('AllDetail:' + JSON.stringify(str));
+                    system.postMessage('transactionId:' + str.transactionId);
+                    // transactionId=str.transactionId;
+                    realNameAuthStatus = "1";
+                }
+            }
+
+            console.info('------realNameAuthStatus-------' + realNameAuthStatus);
+            channelSDK.getCpToken(extension, function (data) {
+                var gameUrl = data.gameUrl + '?uid=' + data.paojiaoId + '&sdkToken=' + data.token + '&realNameAuthStatus=' + realNameAuthStatus;
+                channelSDK["userID"] = data.userID;
+                if (data.type == 0) {//横屏游戏
+                    $("body").append('<div id="gameFrameDiv" style=" display:none;  width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+                    window.onorientationchange = function () {
+                        if (window.orientation == 90 || window.orientation == -90) {
+                            $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});
+                        }
+                    }
+                } else {//竖屏游戏
+                    $("body").append('<div id="gameFrameDiv" style="display:none; width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+                }
+                setTimeout(function () {
+                    $("#gameFrameDiv").fadeIn(1000);
+                    $("#gameFrame").attr("src", gameUrl);
+                }, 500);
+            });
+        }
+        channelSDK.startEventListener();
+
+    });
+
+    //支付
+    function  receiveMessage(event){
+        if(event.data.method == 'loadPayBox'){
+            var params = event.data.param;
+            params["userID"] = channelSDK.userID;
+            params["appID"]= channelSDK.gameId;
+            params["isTest"]= channelSDK.isTest;
+            var params1 = params;
+            httpPost(channelSDK.host + "getOrderID",params,function(data,params) {
+            	var _d = data.data.extension;
+                var money = params.money;
+                var orderId = data.data.orderID;
+                var productDesc = params.productDesc;
+                var productName = params.productName;
+            	httpPost(channelSDK.host + "getOrderNo",params1,function(data1,params1) {//首笔之后切支付，需要根据玩家判断是否要切支付
+                    console.log("-------data1----------: "+JSON.stringify(data1));
+                    console.log("-------params1: "+JSON.stringify(params1));
+            	    if(data.state == channelSDK.SUCCESS && data1.state == channelSDK.SUCCESS) {
+                        console.log("-------切支付结果, flag: "+data1.data.flag+", checkY: "+data1.data.checkY);
+                        if (data1.data.flag && data1.data.flag == "r1") {//走银狐自己的支付
+                            var paramsJson = {
+                                money: money, //订单金额（单位：元）
+                                roleID: params1.roleID,//角色id
+                                roleName: params1.roleName,//角色名称
+                                serverID: params1.serverID,//服务器id
+                                serverName: params1.serverName,//服务器名称
+                                productName: productName,//商品描述
+                                extension: params1.extension, //cp订单号
+                                productDesc: productDesc //商品名称
+                            };
+                        	//play.sdk.pay(paydata);
+                            console.log("-------拉起银狐支付请求参数: "+JSON.stringify(paramsJson));
+                            window.PJ_SDK.loadPayBox(paramsJson);
+                        } else {//华为快应用支付方式
+                        	var param1 = {
+                                    "amount": money+".00",    //商品金额
+                                    "applicationID": "102072597",    //应用ID，在华为开发者联盟上获取的APP ID
+                                    "country":"CN",
+                                    "currency":"CNY",
+                                    "url":"https://third.sdk.paojiao.cn/pay/huaweih5/payCallback.html",
+                                    "productDesc": productDesc,    //商品描述，该字段中不能包含特殊字符，包括# " & / ? $ ^ *:) \ < > , | % +
+                                    "productName": productName,    //商品名称，该字段中不能包含特殊字符，包括# " & / ? $ ^ *:) \ < > , | % +
+                                    "requestId": orderId,    //在支付前生成，用于唯一标识一次支付请求。支付平台在服务器回调接口中会原样返回requestId的值。该字段由字母和数字组成，必须在商户内唯一，用于唯一标识一个商户订单。
+                                    "serviceCatalog": "X6",    //游戏设置为"X6"
+                                    "merchantId": "890086000300406589",    //华为开发者联盟上申请支付服务获取的“支付ID”
+                                    "merchantName": "厦门锦汶黎网络科技有限公司",    //商户名称，开发者注册的公司名
+                                    "sign": _d.split("_")[0],    //签名，签名算法务必使用sha256算法。签名方式请参见“orderinfo参数说明”，
+                                    //  示例代码请参见“签名校验示例代码”,网站地址https://developer.huawei.com/consumer/cn/service/hms/catalog/HuaweiJointOperation.html?page=hmssdk_jointOper_payment_sample_code
+                                    //请尽可能使用示例代码源码来进行签名操作，减少因为签名方法不一致导致的调试不通，多谢
+                                    "urlver": "2",    //固定值为2
+                                    "sdkChannel": 3,    //游戏设置为3
+                                    "publicKey": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoXQoIaJoQtWOF0iVo42pnF38UQ66DM97pGF9KY//Njv05mCtNRmELNt+6kPNgyrmcOb9pcg6RJ2WICSORv7N5Iiu+tJg6g8BnSio026N0cv4BD/yG6OWxLNG9Zaw0zY+CLu1C9Kd8OjTR8DX9d1zvJRazlfJJgO5C2QSIZ5CiDUER/5UEStWjlskRMJWdEUgaOlvNeRYWvH71+nz8G+YnBt6nQnZiOg29NaWZ5riI7DNQaqCw964Ko/iv+2yo12OhLg7ITxPlYF3s437Hw+KeFSeoOHbq8ymieHvQiGZIB6ClbCljdIHCvSmk9m9ioD5IOluk6D6hVnIdSTRhnaM2wIDAQAB"    //必须传入，但不参与签名，华为开发者联盟上申请支付服务获取的“支付公钥”
+                                }
+	                        console.info("------this pay parmas:" + JSON.stringify(param1));
+	                        var param2 = {"orderInfo": JSON.stringify(param1)}
+	                        HwFastappObject.pay(JSON.stringify(param2));
+	                        HwFastappObject.onPayResult = function onPayResult(str) {
+	                            console.info("支付结果: " + str.code + ",message: " + str.data);
+	                        };
+                        }	
+            		}
+            	});
+            });
+        }else if (event.data.method == 'reportRoleInfo') {
+            var params = event.data.param;
+            var json = {
+                "rank": params.roleLever,
+                "role": params.roleName,
+                "area": params.roleServerId
+            };
+            console.info("角色上报参数------------->" + JSON.stringify(json));
+            HwFastappObject.savePlayerInfoWithReal(JSON.stringify(json));
+            //json  渠道创角需要参数
+            HwFastappObject.onSavePlayerInfoResult = function onSavePlayerInfoResult(str){
+                /*system.postMessage('AllDetail:' + JSON.stringify(str));
+                system.postMessage('transactionId:' + str.code);*/
+                console.info('---onSavePlayerInfoResult AllDetail:' + JSON.stringify(str));
+                console.info('---Code---' + str.code);
+            }
+        }
+    }
+
+
+    function randomString(len) {
+        len = len || 32;
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+
+    function showDialogBox() {
+        var html = '<div id="confirmDialog" class="mask dialog-box">';
+        html += '<div class="r5">';
+        html += "<div>" + '提示信息'+ "</div>";
+        html += "<div>" + '是否退出游戏' + "</div>";
+        html += '<div class="flex">';
+        html += '<a href="javascript:;"  data-type="conLogin" class="flex-list unselect">' + '继续登录'+ "</a>";
+        html += '<a href="javascript:;" data-type="outGame" class="flex-list unselect">' + '退出游戏' + "</a>";
+        html += "</div></div></div>";
+        $("body").append(html);
+        $("#confirmDialog .flex a").click(function() {
+            var type = $(this).attr("data-type");
+            if (type == "conLogin") {
+                location.reload();
+            } else if (type == "outGame") {
+                system.postMessage("exitapp");
+            }
+            $(this).parents("#confirmDialog").remove()
+        })
+    }
+
+
+</script>
+</body>
+
+</html>

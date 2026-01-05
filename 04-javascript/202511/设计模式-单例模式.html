@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计模式-单例模式</title>
+</head>
+
+<body>
+    <h1>设计模式-单例模式</h1>
+    <script>
+        // 定义类
+        class SingleTon {
+            // 添加静态私有属性
+            static #instance
+            // 添加静态私有方法
+            static getInstance() {
+                if (!this.#instance) {
+                    this.#instance = new SingleTon();
+                }
+
+                return this.#instance;
+            }
+        }
+
+        const s1 = SingleTon.getInstance();
+        const s2 = SingleTon.getInstance();
+        console.log('s1 = s2', s1 === s2); // s1 = s2 true
+
+
+    </script>
+</body>
+
+</html>

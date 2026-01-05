@@ -1,0 +1,10 @@
+//取样器sampler2D
+WebGL在处理图片纹理编写片元着色器的时候，会通过sampler2D关键字声明一个纹理相关的变量，sampler2D和vec2、float表示一种数据类型，只不过sampler2D关键字声明的变量表示一种取样器类型变量，
+简单点说就是该变量对应纹理图片的像素数据。
+
+//声明变量
+uniform sampler2D u_Sampler;
+
+//内置函数texture2D:从纹理图像提取像素值,赋值给内置变量gl_FragColor
+//采集纹理,逐片元赋值像素值
+gl_FragColor = texture2D(u_Sampler, v_TexCoord);

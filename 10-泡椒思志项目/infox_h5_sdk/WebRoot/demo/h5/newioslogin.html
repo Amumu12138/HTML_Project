@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="cache" content="no-cache"/>
+    <meta http-equiv="expires" content="0"/>
+
+    <title>游戏登录</title>
+<!--
+
+    <link href="../../css/common.css?201905081655" rel="stylesheet">
+    <link href="../../css/layout.css?201905081655" rel="stylesheet">
+-->
+
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.md5.js"></script>
+    <script type="text/javascript" src="js/api.js?v=201905081655"></script>
+    <script type="text/javascript" src="js/rhsdk_ios.js?v=201905081655"></script>
+   <!--<style>
+
+        html,body{
+            width:100%;
+            height:100%
+        }
+        body {
+            background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+            background-image:url(https://h5.infoxgame.com/images/loading_yh.png);
+        }
+    </style>-->
+
+<body>
+<div id="flash"></div>
+</body>
+<script>
+
+    //paraName 等找参数的名称
+    function GetUrlParam(paraName) {
+        var url = document.location.toString();
+        var arrObj = url.split("?");
+
+        if (arrObj.length > 1) {
+            var arrPara = arrObj[1].split("&");
+            var arr;
+
+            for (var i = 0; i < arrPara.length; i++) {
+                arr = arrPara[i].split("=");
+
+                if (arr != null && arr[0] == paraName) {
+                    return arr[1];
+                }
+            }
+            return "";
+        }
+        else {
+            return "";
+        }
+    }
+
+    var dynamicLoading = {
+        css: function (path) {
+            if (!path || path.length === 0) {
+                throw new Error('argument "path" is required !');
+            }
+            var head = document.getElementsByTagName('head')[0];
+            var link = document.createElement('link');
+            link.href = path;
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            head.appendChild(link);
+        },
+        js: function (path) {
+            if (!path || path.length === 0) {
+                throw new Error('argument "path" is required !');
+            }
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+            script.src = path;
+            script.type = 'text/javascript';
+            head.appendChild(script);
+        }
+    }
+
+    function isOk() {
+        var userAgent = window.window.navigator.userAgent;
+        var isShow = GetUrlParam("isShow");
+        var edition = GetUrlParam("edition");
+        var gameId = GetUrlParam("gameId");
+        var channelId = GetUrlParam("channelId");
+        var isShow = GetUrlParam("isShow");
+        console.info("+++++++++防止登录开始++++++++");
+        if (gameId == "" || channelId == "" || edition == ""){
+            return;
+        }
+        if (edition == "" && edition.length <=0 ){
+            dynamicLoading.css("css/loading.css");
+            dynamicLoading.css("../../css/layout.css?201905081655");
+            dynamicLoading.css("../../css/common.css?201905081655");
+            isRelease();
+            return;
+        }else{
+            if (isShow != "" && isShow == 0) {
+                dynamicLoading.css("css/loading.css");
+                dynamicLoading.css("../../css/layout.css?201905081655");
+                dynamicLoading.css("../../css/common.css?201905081655");
+                isRelease();
+                return;
+            } else if (userAgent.indexOf('YjH13eA06') != -1 || userAgent.search("YjH13eA06") != -1 || "YjH13eA06".search(userAgent) != -1) {
+                dynamicLoading.css("css/loading.css");
+                dynamicLoading.css("../../css/layout.css?201905081655");
+                dynamicLoading.css("../../css/common.css?201905081655");
+                isRelease();
+                return;
+            } else {
+              //  $("body").removeClass("background-image");
+                return;
+            }
+        }
+    }
+    isOk();
+
+    function isRelease(){
+        sdk.init3();
+        sdkApi.initLoading(function() {
+            console.info("+++++++++++++++++++++++++");
+            sdkApi.getGameInfo("true",function(ret) {
+                if (ret.code == sdk.SUCCESS) {//成功
+                    $(document).attr("title",ret.data.gameName);
+                    sdk.autoLogin();
+                    startEventListener();
+                } else {
+                    sdkApi.confirmDialog("获取游戏信息失败");
+                    return;
+                }
+            });
+        });
+
+    }
+
+    function startEventListener(){
+        sdk.getDeviceMumber();
+        window.addEventListener("message", receiveMessage, false);
+        function receiveMessage(event) {
+            switch (event.data.method) {
+                case "fotPwdCallback": {//关闭忘记密码
+                    sdkApi.closeFotPwdBox();
+                    sdkApi.loadLoginBox();
+
+                    break;
+                }
+            }
+        }
+    }
+    /*window.onload = function(){
+       // alert("++++++进入获取设备号信息++++++");
+        var params = {};
+        params["appID"]=sdkApi.getItem("gameId");
+        params["imei"]=sdkApi.getItem("imei");
+        params["model"] = sdkApi.getItem("model");
+        params["udid"]=sdkApi.getItem("udid");
+        params["mac"]="";
+        params["cid"]=sdkApi.getItem("channelId");
+        params["ip"]=sdkApi.getItem("ip");
+        //sdkApi.showLoading();
+      //  alert("++++++设备号信息++++++："+JSON.stringify(params));
+        console.info("++++++设备号信息++++++："+JSON.stringify(params));
+        /!* sdkApi.api(params,"saveDeviceNumber",function(retData){
+
+         });*!/
+    };*/
+
+</script>
+
+</html>

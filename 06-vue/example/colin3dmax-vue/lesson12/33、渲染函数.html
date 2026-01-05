@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>33、渲染函数</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>基础渲染-render</p>
+        <anchored-heading :level="level"> Hello Amumu </anchored-heading>
+        <p>深入数据对象</p>
+        <anchored-heading-02 :level="3"> Hello Amumu
+            <anchored-heading-02 :level="6"> A B C </anchored-heading-02>
+        </anchored-heading-02>
+        <p>约束</p>
+        <test></test>
+        <p>测试-02： test-02</p>
+        <test-02></test-02>
+    </div>
+    <script>
+        //anchored-heading 组件
+        Vue.component('anchored-heading', {
+            render(createElement) {
+                return createElement(
+                    'h' + this.level,   //标签名称
+                    this.$slots.default //子节点数组
+                )
+            },
+            props: {
+                level: {
+                    type: Number,
+                    required: true
+                }
+            }
+        })
+
+        //深入理解数据对象
+        var getChildrenTextContent = function (children) {
+            return children.map(function (node) {
+                return node.children ? getChildrenTextContent(node.children) : node.text
+            }).join("");
+        }
+
+        Vue.component("anchored-heading-02", {
+            render(createElement) {
+                // 创建kebab-case风格的ID
+                var headingId = getChildrenTextContent(this.$slots.default)
+                    .toLowerCase()
+                    .replace(/\W+/g, '-')
+                    .replace(/(^-|-$)/g, '')
+                return createElement(
+                    'h' + this.level,
+                    [
+                        createElement('a', {
+                            attrs: {
+                                name: headingId,
+                                href: '#' + headingId
+                            }
+                        },
+                            this.$slots.default)
+                    ]
+                )
+            },
+            props: {
+                level: {
+                    type: Number,
+                    required: true
+                }
+            }
+        });
+
+        //测试组件test
+        Vue.component('test', {
+            render: function (createElement) {
+                var myParagraphVNode = createElement('p', 'hi')
+                return createElement('div', [
+                    // 错误 - 重复的 VNode
+                    myParagraphVNode, myParagraphVNode
+                ])
+            }
+        })
+
+        Vue.component('test-02', {
+            render: function (createElement) {
+                return createElement('div',
+                    Array.apply(null, { length: 20 }).map(function () {
+                        return createElement('p', 'hi')
+                    })
+                )
+            }
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                level: 2
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

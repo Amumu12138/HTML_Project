@@ -1,0 +1,33 @@
+//函数
+//有返回值
+把函数计算后需要返回的值通过关键字return返回，
+注意声明函数时候，函数名称前需要声明return返回值的数据类型
+// 声明一个函数
+float add(float x, float y){
+  return x + y;
+}
+
+//无返回值void
+自定义函数无返回值的时候，和主函数main一样，使用关键字void声明函数
+vec3 direc = vec3(1.0,0.0,0.0);
+// 声明一个函数，改变变量direc的x分量
+void fun(){
+  // 通过函数改变参数x分量
+  direc.x = 50.0;
+}
+
+//out
+自定义声明一个函数，传入一个参数，默认情况下，参数被修改了，但是并不影响传入的参数对应变量的值，
+如果使用out关键字声明参数变量，函数内部改变参数，函数外参数对应的变量会改变
+
+// 使用out关键字声明dir参数
+float fun(out vec3 dir){
+  // 如果使用了out关键字，改变dir的值，dir对应的外部变量direc会被修改
+  dir.x = 100.0;
+  return dir.x*dir.x;
+}
+
+in和const in
+自定义函数声明函数参数的时候是用参数和不使用in或out任何关键字是等价的，也就是说函数名(in vec3 dir)和函数名(vec3 dir)是等价的。
+
+函数名(const in vec3 dir)和函数名(in vec3 dir)区别在于使用const in关键字声明参数变量的时候，参数的值不能被修改，(in vec3 dir)或(vec3 dir)的形式变量dir是可以在函数内被修改的。

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迭代与生成器</title>
+</head>
+
+<body>
+    <script>
+        // 7.2.1 可迭代协议
+        let num = 1, obj = {};
+        console.log(num[Symbol.iterator], obj[Symbol.iterator]); // undefined undefined
+
+        let str = 'abc';
+        let arr = ['a', 'b', 'c'];
+        let map = new Map().set('a', 1).set('b', 1).set('c', 1);
+        let set = new Set().add('a').add('b').add('c');
+        let els = document.querySelectorAll('div');
+        console.log(str, arr, map, set, els);
+
+        // ƒ [Symbol.iterator]() { [native code] } StringIterator {}
+        console.log(str[Symbol.iterator], str[Symbol.iterator]());
+
+        let arr2 = ['foo', 'bar', 'baz'];
+        for (let el of arr2) {
+            console.log(el); // foo bar baz
+        }
+        // 数组解构
+        let [a, b, c] = arr2;
+        console.log(a, b, c); // foo bar baz
+        // 扩展运算符
+        let arr3 = [...arr2];
+        console.log(arr3); // ['foo', 'bar', 'baz']
+        //Array.form()
+        let arr4 = Array.from(arr2);
+        console.log(arr4); // ['foo', 'bar', 'baz']
+        // Set构造函数
+        let set2 = new Set(arr2);
+        console.log(set2); //  Set(3) {'foo', 'bar', 'baz'}
+        // Map构造函数
+        let pairs = arr2.map((x, i) => [x, i]);
+        console.log(pairs); // [Array(2), Array(2), Array(2)]
+        let map2 = new Map(pairs);
+        console.log(map2); // Map(3) {'foo' => 0, 'bar' => 1, 'baz' => 2}
+
+        // 自定义迭代器
+        class Counter {
+            constructor(limit) {
+                this.count = 1;
+                this.limit = limit;
+            }
+
+            next() {
+                if (this.count <= this.limit) {
+                    return { done: false, value: this.count++ };
+                } else {
+                    return { done: true, valuie: undefined }
+                }
+            }
+            [Symbol.iterator]() {
+                return this;
+            }
+        }
+
+        let counter = new Counter(3);
+        for (let i of counter) {
+            console.log(i);
+        }
+
+        for (let j of counter) {
+            console.log(j);
+        }
+
+
+    </script>
+</body>
+
+</html>

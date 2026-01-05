@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue-IntroJs新手引导</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.2.2/intro.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/4.2.2/introjs-rtl.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <div data-title="Welcome!" data-intro="Hello World! 👋" class="card-demo">
+            <div class="card shadow--md">
+                <div class="card__image" data-intro="Intro.js can highlight on elements">
+                    <img src="..." alt="Image alt text" title="Logo Title Text 1" />
+                </div>
+                <div class="card__body" data-title="Farewell!" data-intro="And this is the last step!">
+                    <h4>Quaco Lighthouse</h4>
+                    <small>
+                        The Quaco Head Lighthouse is a well maintained lighthouse close to St.
+                        Martins. It is a short, beautiful walk to the lighthouse along the
+                        seashore.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+
+            }
+        })
+
+        introJs().setOptions({
+            steps: [{
+                title: 'Welcome',
+                intro: 'Hello World! 👋'
+            },
+            {
+                element: document.querySelector('.card-demo'),
+                intro: 'This step focuses on an image'
+            },
+            {
+                title: 'Farewell!',
+                element: document.querySelector('.card__image'),
+                intro: 'And this is our final step!'
+            }]
+        }).oncomplete(function () {
+            //点击跳过按钮后执行的事件
+        }).onexit(function () {
+            //点击结束按钮后， 执行的事件
+        }).start();
+    </script>
+</body>
+
+</html>

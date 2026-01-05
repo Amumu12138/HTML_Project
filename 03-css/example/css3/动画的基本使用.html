@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动画的基本使用</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            /* text-align: center; */
+        }
+
+        @keyframes moveRotate {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(500px, 500px) scale(1.5);
+            }
+        }
+
+        .ani-box {
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+            animation-name: moveRotate;
+            animation-duration: 2s;
+        }
+
+        @keyframes move {
+            0% {
+                transform: translate(0, 0) rotate(0);
+            }
+
+            25% {
+                transform: translate(500px, 0) rotate(90deg);
+            }
+
+            50% {
+                transform: translate(500px, 500px) rotate(180deg);
+            }
+
+            75% {
+                transform: translate(0, 500px) rotate(270deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        .ani-move {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            animation-name: move;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+        }
+
+        .ani-move:hover {
+            animation-play-state: paused;
+        }
+
+        .foolish-step {
+            position: absolute;
+            width: 260px;
+            height: 400px;
+            background: url('../../res/images/foolish-step.png') no-repeat;
+            transform: scale(0.5);
+            animation: man-run 0.5s steps(4) infinite, man-move 2s forwards;
+        }
+
+        @keyframes man-run {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: -1040px 0;
+            }
+        }
+
+        @keyframes man-move {
+            from {
+                left: 0;
+                transform: translate(0, 0) scale(0.5);
+            }
+
+            to {
+                left: 50%;
+                transform: translate(-50%, 0) scale(0.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ani-box"></div>
+    <div class="ani-move"></div>
+    <!-- 实现序列帧动画 -->
+    <div class="foolish-step"></div>
+</body>
+
+</html>

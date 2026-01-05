@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写myBind方法</title>
+</head>
+
+<body>
+    <h1>手写myBind方法</h1>
+    <script>
+        Function.prototype.myBind = function (thisArg, ...args) {
+            return (...reArgs) => {
+                return this.call(thisArg, ...args, ...reArgs);
+            }
+        }
+
+        const person = {
+            name: 'person',
+        }
+
+        const add = function (numA, numB) {
+            console.log('add', this, this.name, numA, numB);
+
+            return numA + numB;
+        }
+
+        const bindFunc = add.myBind(person, 1)
+        console.log('bindFunc, person ', bindFunc, person);
+        console.log(bindFunc(12))
+        // const module = {
+        //     x: 81,
+        //     getX() {
+        //         console.log('getX this', this) // window
+        //         return this.x;
+        //     },
+        // };
+        // const retrieveX = module.getX;
+        // console.log(retrieveX()); // undefined
+        // const boundGetX = retrieveX.bind(module);
+        // console.log(boundGetX()); // 81
+    </script>
+</body>
+
+</html>
