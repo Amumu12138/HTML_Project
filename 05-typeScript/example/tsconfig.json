@@ -1,5 +1,9 @@
 {
     "compilerOptions": {
-        "strictNullChecks": false
+        "strictNullChecks": false,
+        "lib": [
+            "ES2016",
+            "DOM"
+        ]
     }
 }
