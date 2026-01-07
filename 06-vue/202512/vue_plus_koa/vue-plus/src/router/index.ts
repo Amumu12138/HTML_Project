@@ -1,9 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import ROUTER from './router-constants'
 
 const routes = [
     {
         path: '/',
-        name: 'home',
+        name: ROUTER.HOME,
         meta: {
             title: '首页'
         },
@@ -12,7 +13,7 @@ const routes = [
         children: [
             {
                 path: '/welcome',
-                name: 'welcome',
+                name: ROUTER.WELCOME,
                 meta: {
                     title: '欢迎页'
                 },
@@ -23,7 +24,7 @@ const routes = [
     },
     {
         path: '/login',
-        name: 'login',
+        name: ROUTER.LOGIN,
         meta: {
             title: '登录页'
         },

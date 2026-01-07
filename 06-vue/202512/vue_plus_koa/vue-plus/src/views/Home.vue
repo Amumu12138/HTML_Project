@@ -15,7 +15,8 @@ const noticeCount = computed(() => store.state.noticeCount)
 
 const handleLogout = (key: string) => {
     if (key === 'email') return;
-    store.commit('');
+    store.commit('saveUsetInfo', '');
+    userInfo.value = null;
     router.push({ name: ROUTER.LOGIN })
 }
 
@@ -55,7 +56,10 @@ onMounted(async () => {
             <div class="nav-top">
                 <div class="nav-left">
                     <div class="menu-fold" @click="toggle">
-                        <i class="el-icon-s-fold"></i>
+                        <!-- <i class="el-icon-s-fold"></i> -->
+                        <el-icon>
+                            <Fold />
+                        </el-icon>
                     </div>
                     <div class="bread">
                         <bread-brumb />
@@ -64,7 +68,7 @@ onMounted(async () => {
                 <div class="user-info">
 
                     <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger"
-                        @click="noticeCount > 0 ? $router.push('/audit/approve') : ''">
+                        @click="noticeCount > 0 ? router.push('/audit/approve') : ''">
                         <i class="el-icon-bell"></i>
                     </el-badge>
 
@@ -157,6 +161,7 @@ onMounted(async () => {
                 align-items: center;
 
                 .menu-fold {
+                    cursor: pointer;
                     margin-right: 15px;
                     font-size: 18px;
                 }
