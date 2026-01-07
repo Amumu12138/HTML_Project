@@ -11,3 +11,4 @@ TODOs.md
 .web-extension-id
 yarn-error.log
 dist
+*.log
