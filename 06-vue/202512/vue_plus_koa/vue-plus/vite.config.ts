@@ -12,6 +12,19 @@ export default defineConfig({
       promiseImportName: i => `${i}`
     })
   ],
+  build: {
+    // target: ['edge90', 'chrome90', 'firefox90', 'safari15']
+    target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // 将第三方依赖包分包加载到vender文件
+          if (id.includes('node_modules') && (id.endsWith('.js') || id.endsWith('ts')))
+            return 'vender'
+        }
+      }
+    }
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL('./src', import.meta.url))

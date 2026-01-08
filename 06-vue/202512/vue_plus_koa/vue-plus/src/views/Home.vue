@@ -47,8 +47,8 @@ onMounted(async () => {
                 <span>后台管理系统</span>
             </div>
             <!-- 导航菜单 -->
-            <el-menu default-active="" class="nav-menu" background-color="#001529" text-color="#fff"
-                :collapse="isCollapse" router>
+            <el-menu default-active class="nav-menu" background-color="#001529" text-color="#fff" :collapse="isCollapse"
+                router>
                 <tree-menu :userMenu="userMenu" />
             </el-menu>
         </div>
@@ -66,7 +66,6 @@ onMounted(async () => {
                     </div>
                 </div>
                 <div class="user-info">
-
                     <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger"
                         @click="noticeCount > 0 ? router.push('/audit/approve') : ''">
                         <i class="el-icon-bell"></i>
