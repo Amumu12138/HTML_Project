@@ -5,11 +5,26 @@ import store from '@/store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import request from '@/utils/request'
+import storage from '@/utils/storage'
 
 import "@/assets/style/index.scss";
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const app = createApp(App);
+
+app.directive('has', {
+    beforeMount: (el, binding) => {
+        let userAction = storage.getItem("actionList")
+        let value = binding.value
+        let hasPermission = userAction.includes(value)
+        if (!hasPermission) {
+            el.style.display = 'none';
+            setTimeout(() => {
+                el.parentNode.removeChild(el)
+            }, 0)
+        }
+    }
+})
 
 app.use(store)
 app.use(router)

@@ -36,7 +36,7 @@ export const menuList = (data: unknown): Promise<Record<string, any>> => {
     })
 }
 
-export const userList = (params) => {
+export const getUserList = (params) => {
     return request({
         url: '/users/list',
         method: 'get',

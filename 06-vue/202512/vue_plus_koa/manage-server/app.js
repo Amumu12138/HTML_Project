@@ -4,17 +4,24 @@ const views = require('koa-views')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
-// const logger = require('koa-logger')
+const logger = require('koa-logger')
+const log4js = require('./utils/log4j')
 
-// 使用log4js替换koa-logger
-const log4js = require("./utils/log4j")
-
-const index = require('./routes/index')
+const router = require('koa-router')()
+const jwt = require('jsonwebtoken')
+const koajwt = require('koa-jwt')
+const util = require('./utils/util')
+const { verToken } = require('./utils/tokenVerify')
 const users = require('./routes/users')
+const menus = require('./routes/menus')
+const roles = require('./routes/roles')
+const depts = require('./routes/depts')
+const leaves = require('./routes/leaves')
+const cors = require('koa2-cors')
 
 // error handler
 onerror(app)
-
+require('./config/db')
 // middlewares
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
@@ -26,20 +33,47 @@ app.use(require('koa-static')(__dirname + '/public'))
 app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
-
+// app.use(() => {
+//   ctx.body = 'hello'
+// })
 // logger
+app.use(cors())
 app.use(async (ctx, next) => {
-  const start = new Date()
+  // const start = new Date()
   log4js.info(`get params:${JSON.stringify(ctx.request.query)} `)
   log4js.info(`post params:${JSON.stringify(ctx.request.body)} `)
-  await next()
-  const ms = new Date() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+  await next().catch((err) => {
+    console.log(err);
+    if (err.status == '401') {
+      ctx.status = 200;
+      ctx.body = util.fail('Token认证失败', util.CODE.AUTH_ERROR)
+    } else {
+      throw err;
+    }
+  })
+  // log4js.info('log output')
+  // const ms = new Date() - start
+  // console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
+// 使用koajwt拦截token,忽略/api/users/login接口
+app.use(koajwt({ secret: 'jason' }).unless({
+  path: [/^\/api\/users\/login/]
+}))
+
+router.prefix("/api")
+// router.get('/leave/count', (ctx) => {
+//   const token = ctx.request.headers.authorization.split(' ')[1]
+//   const payload = jwt.verify(token, 'jason')
+//   ctx.body = payload
+// })
+router.use(users.routes(), users.allowedMethods())
+router.use(menus.routes(), menus.allowedMethods())
+router.use(roles.routes(), menus.allowedMethods())
+router.use(depts.routes(), depts.allowedMethods())
+router.use(leaves.routes(), leaves.allowedMethods())
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+app.use(router.routes(), router.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
