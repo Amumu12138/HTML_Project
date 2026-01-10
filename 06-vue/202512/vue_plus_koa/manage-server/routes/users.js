@@ -3,11 +3,11 @@
  */
 const router = require('koa-router')()
 const util = require('../utils/util')
-const User = require('./../models/userSchema')
-const Menu = require('./../models/menuSchema')
-const Role = require('./../models/roleSchema')
+const User = require('../models/userSchema')
+const Menu = require('../models/menuSchema')
+const Role = require('../models/roleSchema')
 const jwt = require('jsonwebtoken')
-const Counter = require('./../models/counterSchema')
+const Counter = require('../models/counterSchema')
 const md5 = require('md5')
 router.prefix('/users')
 // users/login
@@ -23,11 +23,11 @@ router.post('/login', async (ctx) => {
      */
 
     let res = await User.findOne({ userName, userPwd: md5(userPwd) }, 'userId userName userEmail state role deptId roleList')
-    if(!res){
-    res = await User.findOne({ userName, userPwd: userPwd }, 'userId userName userEmail state role deptId roleList')
+    if (!res) {
+      res = await User.findOne({ userName, userPwd: userPwd }, 'userId userName userEmail state role deptId roleList')
     }
     if (res) {
-      if(res.state===2){
+      if (res.state === 2) {
         ctx.body = util.fail('该员工已离职')
         return
       }
@@ -57,7 +57,7 @@ router.get('/list', async (ctx) => {
   if (userName) params.userName = userName
   if (state && state != '0') params.state = state
   try {
-    const query =  User.find(params, { _id: 0, userPwd: 0 })
+    const query = User.find(params, { _id: 0, userPwd: 0 })
     const list = await query.skip(skipIndex).limit(page.pageSize)
     const total = await User.countDocuments(params)
     ctx.body = util.success({
