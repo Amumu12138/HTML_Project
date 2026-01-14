@@ -1,1 +1,3 @@
-/* pages/recycle/index.wxss */
+.btn {
+  padding: 32rpx;
+}

@@ -38,3 +38,29 @@ var obj2 = {
 // !!obj2 -> true
 // 3 + true -> 3 + 1 = 4
 console.log(obj1 + !!obj2, obj1.valueOf(), obj2.toString(), !!{}); // 4 3 0 true
+
+// promise -事件循环 EventLoop
+const p1 = Promise.resolve(1);
+// const p2 = Promise.resolve(2).then(() => p1) // 4 5 6 1 2 3
+const p2 = new Promise(resolve => resolve(p1)) // 4 5 1 6 2 3
+
+p2.then(() => {
+    console.log(1);
+}).then(() => {
+    console.log(2);
+
+}).then(() => {
+    console.log(3);
+
+})
+
+p1.then(() => {
+    console.log(4);
+
+}).then(() => {
+    console.log(5);
+
+}).then(() => {
+    console.log(6);
+
+})

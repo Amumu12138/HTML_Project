@@ -1,1 +1,3 @@
-/* pages/pwd-pay/reset.wxss */
+.btn {
+  margin-top: 32rpx;
+}

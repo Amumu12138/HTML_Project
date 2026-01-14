@@ -1,66 +1,55 @@
-// pages/wuliu/index.js
+const WXAPI = require('apifm-wxapi')
+const app = getApp()
 Page({
-
-  /**
-   * 页面的初始数据
-   */
-  data: {
-
+  data: {},
+  onLoad: function (e) {
+    this.data.orderId = e.id
+    this.data.trackingNumber = e.trackingNumber
+    this.orderDetail()
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onShow: function () {
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  async orderDetail() {
+    // https://www.yuque.com/apifm/nu0f75/oamel8
+    const res = await WXAPI.orderDetail(wx.getStorageSync('token'), this.data.orderId)
+    if (res.code != 0) {
+      wx.showModal({
+        title: '错误',
+        content: res.msg,
+        showCancel: false,
+        success: () => {
+          wx.navigateBack()
+        }
+      })
+      return;
+    }
+    const orderLogisticsShippers = res.data.orderLogisticsShippers
+    let trackingNumber = this.data.trackingNumber
+    if (!trackingNumber) {
+      trackingNumber = res.data.logistics.trackingNumber
+    }
+    let shipperName = this.data.shipperName
+    if (!shipperName) {
+      shipperName = res.data.logistics.shipperName
+    }
+    let logisticsTraces = null
+    if (this.data.trackingNumber && orderLogisticsShippers) {
+      // 查看子快递单
+      const entity = orderLogisticsShippers.find(ele => { return ele.trackingNumber == this.data.trackingNumber })
+      if (entity.traces) {
+        entity.tracesArray = JSON.parse (entity.traces)
+        logisticsTraces = entity.tracesArray.reverse()
+      }
+    } else {
+      if (res.data.logisticsTraces) {
+        logisticsTraces = res.data.logisticsTraces.reverse()
+      }
+    }
+    this.setData({
+      trackingNumber,
+      shipperName,
+      orderDetail: res.data,
+      logisticsTraces
+    });
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

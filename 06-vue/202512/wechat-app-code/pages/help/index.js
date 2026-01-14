@@ -1,66 +1,49 @@
-// pages/help/index.js
+const WXAPI = require('apifm-wxapi')
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+  onLoad: function (options) {
+    this.category()
+  },
+  onShow: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  async category() {
+    const res = await WXAPI.cmsCategories()
+    if (res.code == 0) {
+      const category = res.data.filter(ele => {
+        return ele.type == 'qa'
+      })
+      this.setData({
+        category: category
+      })
+      if (category && category.length > 0) {
+        this.articles(category[0].id)
+      }
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  async articles(categoryId) {
+    wx.showLoading({
+      title: '',
+    })
+    const res = await WXAPI.cmsArticles({
+      categoryId
+    })
+    wx.hideLoading()
+    if (res.code == 0) {
+      this.setData({
+        cmsArticles: res.data
+      })
+    } else {
+      this.setData({
+        cmsArticles: null
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  categoryChange(e) {
+    const index = e.detail
+    const category = this.data.category[index]
+    this.articles(category.id)
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

@@ -1,66 +1,54 @@
-// pages/idCheck/index.js
+const WXAPI = require('apifm-wxapi')
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+  onLoad: function (options) {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+  onShow: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  async submit() {
+    if (!this.data.name) {
+      wx.showToast({
+        title: '请输入姓名',
+        icon: 'none'
+      })
+      return
+    }
+    if (!this.data.idcard) {
+      wx.showToast({
+        title: '请输入身份证号码',
+        icon: 'none'
+      })
+      return
+    }
+    wx.showLoading({
+      title: '',
+    })
+    this.setData({
+      loading: true
+    })
+    const res = await WXAPI.idcardCheck(wx.getStorageSync('token'), this.data.name, this.data.idcard)
+    wx.hideLoading({
+      success: (res) => {},
+    })
+    this.setData({
+      loading: false
+    })
+    if (res.code != 0) {
+      wx.showToast({
+        title: res.msg,
+        icon: 'none'
+      })
+      return
+    }
+    wx.showToast({
+      title: '认证通过',
+    })
+    setTimeout(() => {
+      wx.navigateBack()
+    }, 1000);
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

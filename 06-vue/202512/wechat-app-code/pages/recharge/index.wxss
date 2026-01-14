@@ -1,1 +1,3 @@
-/* pages/recharge/index.wxss */
+.rechargeSendRules {
+    margin-top: 32rpx;
+}

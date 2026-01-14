@@ -1,66 +1,99 @@
-// pages/peisong/orders.js
+const WXAPI = require('apifm-wxapi')
+const APP = getApp()
+// fixed首次打开不显示标题的bug
+APP.configLoadOK = () => {
+  
+}
+var timer
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onLoad: function (options) {
+    this.data.status = options.status
+    if (this.data.status == -1) {
+      timer =setInterval(() => {
+        this.peisongOrdersGrabbing()
+      }, 1000)
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  onShow: function () {
+    if (this.data.status != -1) {
+      this.orders()
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
   onUnload() {
-
+    if (timer) {
+      clearTimeout(timer)
+    }
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  async orders() {
+    wx.showLoading({
+      title: '',
+    })
+    const _data = {
+      token: wx.getStorageSync('token'),
+    }
+    if(this.data.status) {
+      _data.statusBatch = this.data.status
+      _data.refundStatusBatch = '0,2'
+    } else {
+      _data.uid = wx.getStorageSync('uid')
+    }
+    const res = await WXAPI.peisongOrders(_data)
+    wx.hideLoading({
+      complete: (res) => {},
+    })
+    if (res.code != 0) {
+      wx.showToast({
+        title: res.msg,
+        icon: 'none'
+      })
+      this.setData({
+        orderList: null
+      })
+    } else {
+      res.data.result.forEach(ele => {
+        if (ele.status == 2) {
+          ele.statusStr = '已接单'
+        }
+        if (ele.status == 3) {
+          ele.statusStr = '配送中'
+        }
+      })
+      this.setData({
+        orderList: res.data.result
+      })
+    }
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+  async peisongOrdersGrabbing() {
+    // wx.showLoading({
+    //   title: '',
+    // })    
+    const res = await WXAPI.peisongOrdersGrabbing(wx.getStorageSync('token'))
+    // wx.hideLoading({
+    //   complete: (res) => {},
+    // })
+    if (res.code != 0) {
+      // wx.showToast({
+      //   title: res.msg,
+      //   icon: 'none'
+      // })
+      this.setData({
+        orderList: null
+      })
+    } else {
+      res.data.forEach(ele => {
+        if (ele.status == 2) {
+          ele.statusStr = '已接单'
+        }
+        if (ele.status == 3) {
+          ele.statusStr = '服务中'
+        }
+      })
+      this.setData({
+        orderList: res.data
+      })
+    }    
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

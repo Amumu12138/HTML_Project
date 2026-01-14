@@ -1,66 +1,46 @@
 // pages/my/change-user.js
+import { updateUserInfo } from '../../apis/login'
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    avatarUrl: "",
+    nickname: ""
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-
+    console.log(options)
+    if (options.userInfo) {
+      const { avatarUrl, nick } = JSON.parse(options.userInfo)
+      this.setData({
+        avatarUrl,
+        nickname: nick
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  onChooseAvatar(e) {
+    console.log(e, 'onChooseAvatar')
+    this.setData({
+      avatarUrl: e.detail.avatarUrl
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  handleChange(e) {
+    console.log(e, 'e')
+    this.setData({
+      nickname: e.detail.value
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  submit() {
+    console.log(this.data.nickname)
+    updateUserInfo({ 
+      avatarUrl: this.data.avatarUrl,
+      nickname: this.data.nickname
+     }).then(() => {
+      wx.reLaunch({
+        url: '/pages/my/index'
+        })
+     })
   }
 })

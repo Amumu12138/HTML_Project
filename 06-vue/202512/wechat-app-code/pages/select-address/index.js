@@ -1,66 +1,73 @@
-// pages/select-address/index.js
-Page({
+const WXAPI = require('apifm-wxapi')
+const AUTH = require('../../utils/auth')
 
-  /**
-   * 页面的初始数据
-   */
+const app = getApp()
+Page({
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  selectTap: function(e) {
+    console.log(e);
+    var id = e.currentTarget.dataset.id;
+    WXAPI.updateAddress({
+      token: wx.getStorageSync('token'),
+      id: id,
+      isDefault: 'true'
+    }).then(function(res) {
+      wx.navigateBack({})
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  addAddess: function() {
+    wx.navigateTo({
+      url: "/pages/address-add/index"
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  editAddess: function(e) {
+    console.log(e);
+    
+    wx.navigateTo({
+      url: "/pages/address-add/index?id=" + e.currentTarget.dataset.id
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  onLoad: function() {
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  onShow: function() {
+    AUTH.checkHasLogined().then(isLogined => {
+      if (isLogined) {
+        this.initShippingAddress();
+      } else {
+        AUTH.login(this)
+      }
+    })
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
+  async initShippingAddress() {
+    wx.showLoading({
+      title: '',
+    })
+    const res = await WXAPI.queryAddress(wx.getStorageSync('token'))
+    wx.hideLoading({
+      success: (res) => {},
+    })
+    if (res.code == 0) {
+      this.setData({
+        addressList: res.data
+      });
+    } else if (res.code == 700) {
+      this.setData({
+        addressList: null
+      });
+    } else {
+      wx.showToast({
+        title: res.msg,
+        icon: 'none'
+      })
+    }
+  },
   onPullDownRefresh() {
-
+    this.initShippingAddress()
+    wx.stopPullDownRefresh()
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

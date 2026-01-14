@@ -1,66 +1,63 @@
-// pages/pwd-pay/modify.js
+const WXAPI = require('apifm-wxapi')
+const AUTH = require('../../utils/auth')
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+  onLoad: function (options) {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+  onShow: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  async submit() {
+    if (!this.data.pwdOld) {
+      wx.showToast({
+        title: '请输入原来的交易密码',
+        icon: 'none'
+      })
+      return
+    }
+    if (!this.data.pwd) {
+      wx.showToast({
+        title: '请输入新的交易密码',
+        icon: 'none'
+      })
+      return
+    }
+    if (!this.data.pwd2) {
+      wx.showToast({
+        title: '请再次输入新的交易密码',
+        icon: 'none'
+      })
+      return
+    }
+    if (this.data.pwd != this.data.pwd2) {
+      wx.showToast({
+        title: '两次输入不一致',
+        icon: 'none'
+      })
+      return
+    }
+    const res = await WXAPI.modifyPayPassword(wx.getStorageSync('token'), this.data.pwdOld, this.data.pwd)
+    if (res.code == 2000) {
+      AUTH.login(this)
+      return
+    }
+    if (res.code != 0) {
+      wx.showToast({
+        title: res.msg,
+        icon: 'none'
+      })
+      return
+    }
+    wx.showToast({
+      title: '修改成功'
+    })
+    setTimeout(() => {
+      wx.navigateBack({
+        delta: 0,
+      })
+    }, 1000);
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

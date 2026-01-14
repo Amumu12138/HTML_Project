@@ -1,66 +1,57 @@
-// pages/card/logs.js
+const WXAPI = require('apifm-wxapi')
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    page: 1 // 读取第几页
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-
+  onLoad: function (options) {
+    this.data.cardId = options.id
+    this.cardMyLogs()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  async cardMyLogs(){
+    wx.showLoading({
+      title: '',
+    })
+    const res = await WXAPI.cardMyLogs({
+      token: wx.getStorageSync('token'),
+      cardId: this.data.cardId,
+      page: this.data.page
+    })
+    wx.hideLoading()
+    if (res.code == 0) {
+      if (this.data.page == 1) {
+        this.setData({
+          list: res.data.result,
+        })
+      } else {
+        this.setData({
+          list: this.data.list.concat(res.data.result),
+        })
+      }
+    } else {
+      if (this.data.page == 1) {
+        this.setData({
+          list: null,
+        })
+      } else {
+        wx.showToast({
+          title: '没有更多了',
+          icon: 'none'
+        })
+      }
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  onPullDownRefresh: function () {
+    this.data.page = 1
+    this.cardMyLogs()
+    wx.stopPullDownRefresh()
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
   onReachBottom() {
-
+    this.data.page++
+    this.cardMyLogs()
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

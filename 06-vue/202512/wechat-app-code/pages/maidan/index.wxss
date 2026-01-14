@@ -1,1 +1,3 @@
-/* pages/maidan/index.wxss */
+.btn {
+  margin-top: 32rpx;
+}

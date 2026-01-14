@@ -1,66 +1,60 @@
-// pages/search/index.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+  onLoad: function (options) {
+    this.setData({
+      list: wx.getStorageSync('searchHis')
+    })
+  },
+  onShow: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  search(e) {
+    this.setData({
+      inputVal: e.detail
+    })
+    if (e.detail) {
+      let searchHis = wx.getStorageSync('searchHis')
+      if (!searchHis) {
+        searchHis = [e.detail]
+      }
+      if (!searchHis.includes(e.detail)) {
+        searchHis.push(e.detail)
+      }
+      wx.setStorageSync('searchHis', searchHis)
+      this.setData({
+        list: searchHis
+      })
+    }
+    wx.redirectTo({
+      url: '/pages/goods/list?name=' + this.data.inputVal,
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  onClose(e) {
+    const idx = e.currentTarget.dataset.idx
+    const searchHis = this.data.list
+    searchHis.splice(idx, 1)
+    wx.setStorageSync('searchHis', searchHis)
+    this.setData({
+      list: searchHis
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  go(e) {
+    const idx = e.currentTarget.dataset.idx
+    const keywords = this.data.list[idx]
+    wx.redirectTo({
+      url: '/pages/goods/list?name=' + keywords,
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  searchscan() {
+    wx.scanCode({
+      scanType: ['barCode', 'qrCode', 'datamatrix', 'pdf417'],
+      success: res => {
+        wx.redirectTo({
+          url: '/pages/goods/list?name=' + res.result,
+        })
+      }
+    })
   }
 })

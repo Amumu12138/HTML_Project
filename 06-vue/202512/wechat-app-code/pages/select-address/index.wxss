@@ -1,1 +1,10 @@
-/* pages/select-address/index.wxss */
+.list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 32rpx;
+  border-bottom: solid 2rpx #eeeeee;
+}
+.aaa {
+  flex: 1;
+}

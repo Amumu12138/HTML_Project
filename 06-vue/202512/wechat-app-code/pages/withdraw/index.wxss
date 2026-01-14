@@ -1,1 +1,3 @@
-/* pages/withdraw/index.wxss */
+.btn {
+  margin-top: 32rpx;
+}

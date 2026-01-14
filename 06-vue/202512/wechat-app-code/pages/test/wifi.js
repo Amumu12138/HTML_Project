@@ -1,66 +1,65 @@
-// pages/test/wifi.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-
+    this.startWifi()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
 
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  startWifi() {
+    wx.startWifi({
+      success: res => {
+        console.log(res)
+        if (res.errno != 0) {
+          wx.showToast({
+            title: res.errMsg,
+            icon: 'none'         
+          })
+          return
+        }
+        this.getWifiList()
+      },
+      fail: err => {
+        console.error(err)
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  getWifiList() {
+    wx.getWifiList({
+      success: res => {
+        console.log(res)
+        if (res.errno != 0) {
+          wx.showToast({
+            title: res.errMsg,
+            icon: 'none'         
+          })
+          return
+        }
+        wx.onGetWifiList(res2 => {
+          this.setData({
+            wifiList: res2.wifiList
+          })
+        })
+      },
+      fail: err => {
+        console.error(err)
+      }
+    })
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  connetWifi(e) {
+    const item = e.currentTarget.dataset.d
+    wx.connectWifi({
+      SSID: item.SSID,
+      password: '13858187870',
+      partialInfo: true,
+      success: res => {
+        console.log(res)
+      },
+      fail: err => {
+        console.error(err)
+      }
+    })    
   },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

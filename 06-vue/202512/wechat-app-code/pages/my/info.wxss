@@ -1,1 +1,3 @@
-/* pages/my/info.wxss */
+.btn {
+  margin: 32rpx;
+}

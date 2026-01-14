@@ -1,1 +1,14 @@
-/* pages/help/index.wxss */
+page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+.category {
+  width: 176rpx;
+  height: 100vh;
+  flex-shrink: 0;
+}
+.articles {
+  height: 100vh;
+  flex: 1;
+}

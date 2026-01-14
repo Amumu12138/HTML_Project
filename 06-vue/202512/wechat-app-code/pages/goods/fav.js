@@ -1,66 +1,67 @@
-// pages/goods/fav.js
+const WXAPI = require('apifm-wxapi')
+const AUTH = require('../../utils/auth')
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onLoad: function (options) {
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  onShow: function () {
+    AUTH.checkHasLogined().then(isLogined => {
+      this.setData({
+        wxlogin: isLogined
+      })
+      if (isLogined) {
+        this.goodsFavList()
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  async goodsFavList() {
+    // 搜索商品
+    wx.showLoading({
+      title: '加载中',
+    })
+    const _data = {
+      token: wx.getStorageSync('token'),
+      page: 1,
+      pageSize: 10000,
+    }    
+    const res = await WXAPI.goodsFavList(_data)
+    wx.hideLoading()
+    if (res.code == 0) {
+      res.data.forEach(ele => {
+        if (ele.type == 1 && ele.json) {
+          ele.json = JSON.parse(ele.json)
+        }
+      })
+      this.setData({
+        goods: res.data,
+      })
+    } else {
+      this.setData({
+        goods: null
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  async removeFav(e){
+    const idx = e.currentTarget.dataset.idx
+    const fav = this.data.goods[idx]
+    const res = await WXAPI.goodsFavDeleteV2({
+      token: wx.getStorageSync('token'),
+      goodsId: fav.goodsId,
+      type: fav.type
+    })
+    if (res.code == 0) {
+      wx.showToast({
+        title: '取消收藏',
+        icon: 'success'
+      })
+      this.goodsFavList()
+    } else {
+      wx.showToast({
+        title: res.msg,
+        icon: 'none'
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

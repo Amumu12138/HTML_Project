@@ -1,1 +1,3 @@
-/* pages/my/feedback.wxss */
+.btn {
+  margin-top: 32rpx;
+}

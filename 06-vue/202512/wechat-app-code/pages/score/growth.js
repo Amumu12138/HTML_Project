@@ -1,66 +1,93 @@
-// pages/score/growth.js
+const app = getApp()
+const WXAPI = require('apifm-wxapi')
+const AUTH = require('../../utils/auth')
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    growth: 0.00,
+    cashlogs: undefined
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
+  onLoad: function (options) {
 
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady() {
+  onReady: function () {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow() {
-
+  onShow: function () {
+    AUTH.checkHasLogined().then(isLogined => {
+      if (isLogined) {
+        this.doneShow();
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '本次操作需要您的登录授权',
+          cancelText: '暂不登录',
+          confirmText: '前往登录',
+          success(res) {
+            if (res.confirm) {
+              wx.switchTab({
+                url: "/pages/my/index"
+              })
+            } else {
+              wx.navigateBack()
+            }
+          }
+        })
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  doneShow: function () {
+    const _this = this
+    const token = wx.getStorageSync('token')
+    WXAPI.userAmount(token).then(function (res) {
+      if (res.code == 0) {
+        _this.setData({
+          growth: res.data.growth
+        });
+      } else {
+        wx.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+      }
+    })
+    // 读取积分明细
+    WXAPI.growthLogs({
+      token: token,
+      page: 1,
+      pageSize: 50
+    }).then(res => {
+      if (res.code == 0) {
+        _this.setData({
+          cashlogs: res.data.result
+        })
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  recharge: function (e) {
+    wx.navigateTo({
+      url: "/pages/recharge/index"
+    })
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  withdraw: function (e) {
+    wx.navigateTo({
+      url: "/pages/withdraw/index"
+    })
   }
 })

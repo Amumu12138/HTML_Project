@@ -1,1 +1,4 @@
-/* pages/idCheck/index.wxss */
+.btn {
+  width: 700rpx;
+  margin: 64rpx auto;
+}

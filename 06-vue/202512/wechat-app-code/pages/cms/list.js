@@ -1,66 +1,49 @@
-// pages/cms/list.js
+const WXAPI = require('apifm-wxapi')
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
+    categoryId: undefined, // 分类id
+  },
+  onLoad (options) {
+    this.data.categoryId = options.categoryId
+    this.cmsCategoryDetail()
+    this.articles()
+  },
+  onShow: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  async cmsCategoryDetail() {
+    const res = await WXAPI.cmsCategoryDetail(this.data.categoryId)
+    if (res.code == 0) {
+      this.setData({
+        category: res.data
+      })
+      wx.setNavigationBarTitle({
+        title: res.data.info.name,
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  async articles() {
+    wx.showLoading({
+      title: '',
+    })
+    const res = await WXAPI.cmsArticles({
+      categoryId: this.data.categoryId
+    })
+    wx.hideLoading()
+    if (res.code == 0) {
+      this.setData({
+        cmsArticles: res.data
+      })
+    } else {
+      this.setData({
+        cmsArticles: null
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  onShareAppMessage: function() {    
+    return {
+      title: this.data.category.info.name,
+      path: '/pages/cms/list?categoryId='+ this.data.categoryId +'&inviter_id=' + wx.getStorageSync('uid')
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

@@ -1,66 +1,70 @@
-// pages/deposit/pay.js
+const WXAPI = require('apifm-wxapi')
+const app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
+  onLoad: function (options) {
+    
+  },
+  onShow: function () {
 
   },
+  bindSave: function (e) {
+    const that = this;
+    const amount = e.detail.value.amount;
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+    if (amount == "" || amount * 1 < 0) {
+      wx.showModal({
+        title: '错误',
+        content: '请填写正确的押金金额',
+        showCancel: false
+      })
+      return
+    }
+    WXAPI.payDeposit({
+      token: wx.getStorageSync('token'),
+      amount: amount
+    }, 'post').then(res => {
+      if (res.code == 40000) {
+        wx.showModal({
+          title: '请先充值',
+          content: res.msg,
+          showCancel: false,
+          success(res) {
+            wx.navigateTo({
+              url: "/pages/recharge/index"
+            })
+          }
+        })
+        return
+      }
+      if (res.code != 0) {
+        wx.showModal({
+          title: '错误',
+          content: res.msg,
+          showCancel: false
+        })
+        return
+      }
+      wx.showModal({
+        title: '成功',
+        content: '押金支付成功',
+        showCancel: false,
+        success(res) {
+          wx.navigateTo({
+            url: "/pages/asset/index"
+          })
+        }
+      })
+    })
   }
 })
