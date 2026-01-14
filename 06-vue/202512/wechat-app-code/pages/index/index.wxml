@@ -30,11 +30,13 @@ module.exports = {
 }
 </wxs>
 <view class="swiper-container">
-  <swiper class="swiper1" indicator-dots="true" indicator-active-color="#fff" autoplay circular>
+  <!-- 滚动bannner -->
+  <swiper class="swiper1" indicator-dots indicator-active-color="#fff" autoplay circular>
     <swiper-item wx:for="{{banners}}" wx:key="id">
       <image mode="aspectFill" bindtap="tapBanner" data-url="{{item.linkUrl}}" src="{{item.picUrl}}" />
     </swiper-item>
   </swiper>
+  <!-- banner左侧滚动购买记录信息,纵向滚动 -->
   <view wx:if="{{goodsDynamic}}" class="goodsDynamic">
     <swiper class="swiper2" autoplay circular vertical>
       <navigator wx:for="{{goodsDynamic}}" wx:key="index" url="{{ goodsDetailPage.url(item) }}">
@@ -48,6 +50,7 @@ module.exports = {
     </swiper>
   </view>
 </view>
+ <!-- 金刚区: 页面中头部的重要位置，是页面的核心功能区域，表现形式为多行排列的宫格区图标 -->
 <view class="category-container">
   <view class="category-box">
     <view class="category-list" wx:for="{{categories}}" wx:key="id">
@@ -59,6 +62,7 @@ module.exports = {
     </view>
   </view>
 </view>
+<!-- 优惠资讯公告 -->
 <view class="notice-box" wx:if="{{noticeList}}">
   <swiper class="notice_swiper" vertical autoplay circular interval="8000">
     <swiper-item wx:for="{{noticeList.dataList}}" wx:key="id">
@@ -70,7 +74,7 @@ module.exports = {
   </swiper>
 </view>
 <view class="container">
-  <!-- 秒杀开始 -->
+  <!-- 限时秒杀 -->
   <block wx:if="{{miaoshaGoods && miaoshaGoods.length > 0}}">
     <van-divider custom-class="table-text" contentPosition="center">
       <image class="table-icon-miaosha" src="../../images/home/miaosha.png"></image> 限时秒杀
@@ -103,7 +107,7 @@ module.exports = {
       </view>
     </view>
   </block>
-  <!-- 秒杀结束 -->
+  <!-- 爆品推荐 -->
   <view class="space"></view>
   <van-divider custom-class="table-text" wx:if="{{goodsRecommend.length > 0}}"
     contentPosition="center">
@@ -124,6 +128,7 @@ module.exports = {
     </view>
   </view>
   <view class="space"></view>
+  <!-- 疯狂砍价 -->
   <view wx-if="{{kanjiaList.length > 0}}"
     class="kanjia-container">
     <van-divider custom-class="table-text" contentPosition="center">
@@ -140,6 +145,7 @@ module.exports = {
       </view>
     </van-card>
   </view>
+  <!-- 全民拼团 -->
   <block wx:if="{{pingtuanList.length > 0}}">
     <view class='space'></view>
     <van-divider custom-class="table-text" contentPosition="center">
@@ -163,7 +169,7 @@ module.exports = {
       </view>
     </view>
   </block>
-
+  <!-- 商品列表 -->
   <view class='space'></view>
   <van-divider custom-class="table-text" contentPosition="center">
     <image class="table-icon-goodslist" src="../../images/home/goodslist.png"></image> 商品列表
@@ -187,7 +193,7 @@ module.exports = {
 <view class='coupons-float' bindtap="goCoupons">
   <image src="/images/gift.png"></image>
 </view>
-
+<!-- 弹窗 -->
 <van-overlay show="{{ adPositionIndexPop }}">
   <view class="adPositionIndexPop">
     <image src="{{ adPositionIndexPop.val }}" mode="widthFix" bindtap="clickAdPositionIndexPop"></image>

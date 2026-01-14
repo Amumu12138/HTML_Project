@@ -20,6 +20,7 @@ export class RequestError extends Error {
   }
 }
 
+// 请求拦截
 fly.interceptors.request.use((request) => {
   const uid = wx.getStorageSync('uid')
   const token = wx.getStorageSync('token')
@@ -41,6 +42,7 @@ fly.interceptors.request.use((request) => {
 fly.interceptors.response.use(
   (response) => {
     const { status, data } = response;
+    // 处理请求异常的逻辑
     if (status !== 200) {
       const message = "[Fetch]: 网络开了小差";
       return Promise.reject(new RequestError(message));

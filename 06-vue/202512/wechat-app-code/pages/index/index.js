@@ -35,7 +35,7 @@ Page({
   //     url: '/pages/cms/list?categoryId=' + category.id,
   //   })
   // },
-  toDetailsTap: function(e) {
+  toDetailsTap: function (e) {
     const id = e.currentTarget.dataset.id
     const supplytype = e.currentTarget.dataset.supplytype
     const yyId = e.currentTarget.dataset.yyid
@@ -61,7 +61,7 @@ Page({
       })
     }
   },
-  tapBanner: function(e) {
+  tapBanner: function (e) {
     const url = e.currentTarget.dataset.url
     if (url) {
       wx.navigateTo({
@@ -69,7 +69,7 @@ Page({
       })
     }
   },
-  onLoad: function(e) {
+  onLoad: function (e) {
     wx.showShareMenu({
       withShareTicket: true,
     })
@@ -81,7 +81,7 @@ Page({
     // 读取小程序码中的邀请人编号
     if (e && e.scene) {
       const scene = decodeURIComponent(e.scene)
-      if (scene) {        
+      if (scene) {
         wx.setStorageSync('referrer', scene.substring(11))
       }
     }
@@ -113,31 +113,36 @@ Page({
       mallName: wx.getStorageSync('mallName') ?? 'Amumu'
     })
   },
-  async miaoshaGoods(){
+  async miaoshaGoods() {
     const res = await seckill()
     if (res.code == 10000) {
+      // 处理时间逻辑
       res.data.result.forEach(ele => {
         const _now = new Date().getTime()
+        // 设置的活动开始时间大于当前时间说明活动未开始,反之活动已开始
         if (ele.dateStart) {
           ele.dateStartInt = new Date(ele.dateStart.replace(/-/g, '/')).getTime() - _now
         }
+        // 设置的活动结束时间大于当前时间说明活动未结束,反之活动已结束
         if (ele.dateEnd) {
-          ele.dateEndInt = new Date(ele.dateEnd.replace(/-/g, '/')).getTime() -_now
+          ele.dateEndInt = new Date(ele.dateEnd.replace(/-/g, '/')).getTime() - _now
         }
       })
       this.setData({
         miaoshaGoods: res.data.result
+      }, () => {
+        console.log(this.data.miaoshaGoods, 'miaoshaGoods')
       })
     }
   },
-  async initBanners(){
+  async initBanners() {
     // 读取头部轮播图
     const res = await bannerList()
     this.setData({
       banners: res.data
     })
   },
-  onShow: function(e){
+  onShow: function (e) {
     this.setData({
       navHeight: APP.globalData.navHeight,
       navTop: APP.globalData.navTop,
@@ -149,7 +154,7 @@ Page({
     this.goodsDynamic()
     this.miaoshaGoods()
   },
-  async goodsDynamic(){
+  async goodsDynamic() {
     const res = await goodsDynamic()
     if (res.code == 10000) {
       this.setData({
@@ -157,7 +162,7 @@ Page({
       })
     }
   },
-  async categories(){
+  async categories() {
     const res = await category()
     let categories = [];
     if (res.code == 10000) {
@@ -207,8 +212,8 @@ Page({
       goods: goods,
     });
   },
-  getNotice: async function() {
-    const res = await notice({pageSize: 5})
+  getNotice: async function () {
+    const res = await notice({ pageSize: 5 })
     if (res.code == 10000) {
       this.setData({
         noticeList: res.data
@@ -216,14 +221,14 @@ Page({
     }
   },
   // 上拉触底函数
-  onReachBottom: function() {
+  onReachBottom: function () {
     this.setData({
       curPage: this.data.curPage + 1
     });
     this.getGoodsList(0, true)
   },
   // 获取砍价商品
-  async kanjiaGoods(){
+  async kanjiaGoods() {
     const res = await discount()
     if (res.code == 10000) {
       const kanjiaGoodsIds = []
@@ -240,7 +245,7 @@ Page({
       url: "/pages/coupons/index"
     })
   },
-  async pingtuanGoods(){ // 获取团购商品列表
+  async pingtuanGoods() { // 获取团购商品列表
     const res = await collage()
     if (res.code === 10000) {
       this.setData({
@@ -248,7 +253,7 @@ Page({
       })
     }
   },
-  goSearch(){
+  goSearch() {
     wx.navigateTo({
       url: '/pages/search/index'
     })
