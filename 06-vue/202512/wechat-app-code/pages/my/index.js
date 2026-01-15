@@ -4,12 +4,12 @@ const TOOLS = require('../../utils/tools.js')
 import { getUserInfo, encrypt, getPhone } from '../../apis/login'
 
 Page({
-	data: {
-    balance:0.00,
-    freeze:0,
-    score:0,
-    growth:0,
-    score_sign_continuous:0,
+  data: {
+    balance: 0.00,
+    freeze: 0,
+    score: 0,
+    growth: 0,
+    score_sign_continuous: 0,
     rechargeOpen: false, // 是否开启充值[预存]功能
 
     // 用户订单统计数据
@@ -21,7 +21,7 @@ Page({
     // 判断有没有用户详细资料
     userInfoStatus: 0 // 0 未读取 1 没有详细信息 2 有详细信息
   },
-	onLoad(options) {
+  onLoad(options) {
     const { userInfo } = options
     console.log(options, 'options')
     if (userInfo) {
@@ -39,7 +39,7 @@ Page({
     // getApp().configLoadOK = () => {
     //   this.readConfigVal()
     // }
-	},
+  },
   onShow() {
     const _this = this
     AUTH.checkHasLogined().then(isLogined => {
@@ -71,9 +71,9 @@ Page({
     })
   },
   async getUserApiInfo() {
-    const {avatarUrl, userMobile, userName, id} = await getUserInfo()
+    const { avatarUrl, userMobile, userName, id } = await getUserInfo()
     const _data = {}
-    
+
     if (!avatarUrl && !userMobile) {
       _data.userInfoStatus = 1
     } else {
@@ -146,7 +146,7 @@ Page({
       url: "/pages/order-list/index?type=" + e.currentTarget.dataset.type
     })
   },
-  scanOrderCode(){
+  scanOrderCode() {
     wx.scanCode({
       onlyFromCamera: true,
       success(res) {
@@ -172,6 +172,7 @@ Page({
       desc: '用于完善会员资料',
       success: res => {
         encrypt(res).then(data => {
+          console.log(data, 'data')
           this.setData({
             apiUserInfoMap: {
               avatarUrl: data.avatarUrl,
@@ -197,7 +198,7 @@ Page({
     })
   },
   // 获取用户手机号
-  getPhoneNumber (e) {
+  getPhoneNumber(e) {
     getPhone(e.detail.code).then((res) => {
       this.setData({
         apiUserInfoMap: {

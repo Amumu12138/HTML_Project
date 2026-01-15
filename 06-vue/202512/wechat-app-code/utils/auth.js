@@ -1,8 +1,7 @@
 const WXAPI = require('apifm-wxapi')
-import Dialog from '@vant/weapp/dialog/dialog'
 import { loginApi, checkToken } from '../apis/login'
 
-async function checkSession(){
+async function checkSession() {
   return new Promise((resolve, reject) => {
     wx.checkSession({
       success() {
@@ -43,7 +42,7 @@ async function checkHasLogined() {
     return false
   }
   // const checkTokenRes = await WXAPI.checkToken(token)
-  const checkTokenRes =  await checkToken({ token })
+  const checkTokenRes = await checkToken({ token })
   if (checkTokenRes.code == -1) {
     wx.removeStorageSync('token')
     return false
@@ -51,10 +50,13 @@ async function checkHasLogined() {
   return true
 }
 
-async function wxaCode(){
+// 微信登录
+async function wxaCode() {
   return new Promise((resolve, reject) => {
     wx.login({
       success(res) {
+        console.log(res, 'wxaCode res.code');
+
         return resolve(res.code)
       },
       fail() {
@@ -68,7 +70,7 @@ async function wxaCode(){
   })
 }
 
-async function login(page){
+async function login(page) {
   console.log('登录')
   const _this = this
   wx.login({
@@ -77,7 +79,7 @@ async function login(page){
       if (extConfigSync.subDomain) {
         WXAPI.wxappServiceLogin({
           code: res.code
-        }).then(function (res) {        
+        }).then(function (res) {
           if (res.code == 10000) {
             // 去注册
             return;
@@ -94,12 +96,12 @@ async function login(page){
           wx.setStorageSync('token', res.data.token)
           wx.setStorageSync('uid', res.data.uid)
           _this.bindSeller()
-          if ( page ) {
+          if (page) {
             page.onShow()
           }
         })
       } else {
-        WXAPI.login_wx(res.code).then(function (res) {        
+        WXAPI.login_wx(res.code).then(function (res) {
           if (res.code == 10000) {
             // 去注册
             return;
@@ -116,7 +118,7 @@ async function login(page){
           wx.setStorageSync('token', res.data.token)
           wx.setStorageSync('uid', res.data.uid)
           _this.bindSeller()
-          if ( page ) {
+          if (page) {
             page.onShow()
           }
         })
@@ -125,6 +127,7 @@ async function login(page){
   })
 }
 
+// 静默登录
 async function authorize() {
   return new Promise((resolve, reject) => {
     wx.login({
@@ -186,18 +189,19 @@ async function newAuthorize() {
     const code = await wxaCode()
     const res = await loginApi({ code })
     console.log(res, 'res')
+    // 设置token和uid
     wx.setStorageSync('token', res.token)
     wx.setStorageSync('uid', res.uid)
     resolve()
   })
 }
 
-function loginOut(){
+function loginOut() {
   wx.removeStorageSync('token')
   wx.removeStorageSync('uid')
 }
 
-async function checkAndAuthorize (scope) {
+async function checkAndAuthorize(scope) {
   return new Promise((resolve, reject) => {
     wx.getSetting({
       success(res) {
@@ -207,7 +211,7 @@ async function checkAndAuthorize (scope) {
             success() {
               resolve() // 无返回参数
             },
-            fail(e){
+            fail(e) {
               console.error(e)
               // if (e.errMsg.indexof('auth deny') != -1) {
               //   wx.showToast({
@@ -224,7 +228,7 @@ async function checkAndAuthorize (scope) {
                 success(res) {
                   wx.openSetting();
                 },
-                fail(e){
+                fail(e) {
                   console.error(e)
                   reject(e)
                 },
@@ -235,21 +239,21 @@ async function checkAndAuthorize (scope) {
           resolve() // 无返回参数
         }
       },
-      fail(e){
+      fail(e) {
         console.error(e)
         reject(e)
       }
     })
-  })  
+  })
 }
 
 module.exports = {
-  checkHasLogined: checkHasLogined,
-  wxaCode: wxaCode,
-  login: login,
-  loginOut: loginOut,
-  checkAndAuthorize: checkAndAuthorize,
-  authorize: authorize,
-  bindSeller: bindSeller,
-  newAuthorize: newAuthorize
+  checkHasLogined,
+  wxaCode,
+  login,
+  loginOut,
+  checkAndAuthorize,
+  authorize,
+  bindSeller,
+  newAuthorize
 }

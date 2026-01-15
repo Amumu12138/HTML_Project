@@ -1,0 +1,8 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+    <view class="usermotto">
+      <text class="user-motto">{{motto}}</text>
+    </view>
+    <custom />
+    <button bind:tap="bindViewTap">前往日志</button>
+</scroll-view>

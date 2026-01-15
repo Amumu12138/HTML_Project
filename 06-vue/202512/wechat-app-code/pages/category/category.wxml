@@ -11,6 +11,7 @@
     <van-empty wx:if="{{categoryMod != 2 &&  !currentGoods}}" description="暂无商品" />
     <!-- 显示右侧商品 -->
     <wxs module="goodsDetailPage">
+    // 类似于导出js模块
     module.exports = {
       url : function(item) {
         if (item.supplyType == 'vop_jd') {

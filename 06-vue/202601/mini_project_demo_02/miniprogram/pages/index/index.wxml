@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<view class="container">
+    <view>
+     {{userType ===0 ? '管理员':'普通用户'}}
+    </view>
+    <view hidden="{{userType}}">show</view>
+  <button bind:tap="handleClick">修改用户类型</button>
+  <!-- 内联样式直接书写: style="margin-top: 10px" -->
+  <button style="margin-top: 10px" bind:tap="bindViewLog">前往Log</button>
+  <hr />
+  <!-- input双向绑定 -->
+  <text>页面中input: {{inputValue}}</text> 
+  <input style="border: 1px solid black" type="text" model:value="{{inputValue}}" />
+  <!-- 自定义组件双向绑定 -->
+  <my-component model:input-text="{{inputValue}}"></my-component>
+</view>
