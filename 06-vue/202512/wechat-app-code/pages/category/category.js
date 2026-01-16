@@ -22,7 +22,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     // wx.showShareMenu({
     //   withShareTicket: true
     // })
@@ -142,7 +142,7 @@ Page({
       url: '/pages/goods/list?name=' + this.data.inputVal,
     })
   },
-  onShareAppMessage() {    
+  onShareAppMessage() {
     return {
       title: '"' + wx.getStorageSync('mallName') + '" ' + wx.getStorageSync('share_profile'),
       path: '/pages/index/index?inviter_id=' + wx.getStorageSync('uid')
@@ -187,3 +187,7 @@ Page({
     })
   }
 })
+
+
+
+
