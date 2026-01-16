@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览器的同源策略</title>
+    <!-- 引入react核心库 -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- 引入babel, 用于将jsx转换成js -->
+    <script src="../../../07-react/js/babel.min.js"></script>
+
+</head>
+
+<body>
+    <h1>浏览器的同源策略</h1>
+    <div id="app"></div>
+    <!-- <button id="btn">点击请求</button>
+    <p>王者英雄列表</p> -->
+    <div id="herolist"></div>
+    <script type="text/babel">
+        // const btn = document.getElementById('btn');
+        // const herolistDom = document.getElementById('herolist')
+        // let heroList = []
+        // btn.addEventListener('click', function () {
+        //     fetch('http://localhost:8080/hero')
+        //         .then(res => res.json()).then(resp => {
+
+        //             heroList = [...resp];
+        //             console.log(resp, heroList)
+        //             // herolist.innerText = JSON.stringify(resp)
+        //         })
+        // })
+
+        function MyComponent() {
+            const [herolist, setHerolist] = React.useState([])
+            console.log(herolist, setHerolist, 'herolist');
+
+            function requestHeroList() {
+                // 通过本地代理服务器,请求王者获取英雄列表的接口
+                fetch('http://localhost:8080/hero')
+                    .then(res => res.json()).then(resp => {
+                        setHerolist([...resp])
+                    })
+            }
+
+            return (
+                <div>
+                    <button onClick={() => requestHeroList()}>点击请求</button>
+                    <ul>
+                        {
+                            herolist.map(item => {
+                                return <li key={item.moss_id}>姓名:{item.cname} 皮肤: {item.skin_name}</li>
+                            })
+                        }
+                    </ul>
+                </div>
+            )
+        }
+
+        // 2、渲染虚拟DOM
+        ReactDOM.render(<MyComponent />, document.getElementById('app'))
+    </script>
+</body>
+
+</html>
