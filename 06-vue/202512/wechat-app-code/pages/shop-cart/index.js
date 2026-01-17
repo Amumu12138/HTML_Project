@@ -24,9 +24,8 @@ Page({
     }
   },
   initEleWidth: function () {
-    var delBtnWidth = this.getEleWidth(this.data.delBtnWidth);
     this.setData({
-      delBtnWidth: delBtnWidth
+      delBtnWidth: this.getEleWidth(this.data.delBtnWidth)
     });
   },
   onLoad: function () {
@@ -60,7 +59,7 @@ Page({
       url: "/pages/index/index"
     });
   },
-
+  // 触摸移动开始
   touchS: function (e) {
     if (e.touches.length == 1) {
       this.setData({
@@ -68,6 +67,7 @@ Page({
       });
     }
   },
+  // 触摸移动过程
   touchM: function (e) {
     const index = e.currentTarget.dataset.index;
     if (e.touches.length == 1) {
@@ -80,7 +80,7 @@ Page({
       } else if (disX > 0) { //移动距离大于0，container left值等于手指移动距离
         left = "margin-left:-" + disX + "px";
         if (disX >= delBtnWidth) {
-          left = "left:-" + delBtnWidth + "px";
+          left = "margin-left:-" + delBtnWidth + "px";
         }
       }
       this.data.shippingCarInfo.items[index].left = left
@@ -89,7 +89,7 @@ Page({
       })
     }
   },
-
+  // 触摸移动结束
   touchE: function (e) {
     var index = e.currentTarget.dataset.index;
     if (e.changedTouches.length == 1) {
@@ -97,7 +97,7 @@ Page({
       var disX = this.data.startX - endX;
       var delBtnWidth = this.data.delBtnWidth;
       //如果距离小于删除按钮的1/2，不显示删除按钮
-      var left = disX > delBtnWidth / 2 ? "margin-left:-" + delBtnWidth + "px" : "margin-left:0px";
+      var left = disX > delBtnWidth / 2 ? "margin-left:-" + delBtnWidth + "px" : "margin-left: 0px";
       this.data.shippingCarInfo.items[index].left = left
       this.setData({
         shippingCarInfo: this.data.shippingCarInfo
@@ -119,7 +119,7 @@ Page({
     console.log(index, 'index')
 
     const number = item.number + 1
-    await modifyNumber({ key: item.pid || item.id, number })  
+    await modifyNumber({ key: item.pid || item.id, number })
     this.shippingCarInfo()
   },
   async jianBtnTap(e) {
@@ -142,6 +142,7 @@ Page({
     await modifyNumber({ key: item.pid || item.id, number })
     this.shippingCarInfo()
   },
+
   async radioClick(e) {
     var index = e.currentTarget.dataset.index;
     var item = this.data.shippingCarInfo.items[index]

@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/observer/observer",
+    "pages/movable-area/movable-area"
   ],
   "window": {
     "navigationBarTextStyle": "black",

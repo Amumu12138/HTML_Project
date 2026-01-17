@@ -1,4 +1,5 @@
 {
   "usingComponents": {
+    "my-component": "../../components/my-component"
   }
 }

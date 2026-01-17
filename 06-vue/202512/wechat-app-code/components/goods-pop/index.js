@@ -11,7 +11,7 @@ Component({
   /**
    * 组件的对外属性，是属性名到属性设置的映射表
    */
-  properties: {  
+  properties: {
     skuCurGoodsBaseInfo: null,
   },
 
@@ -24,11 +24,12 @@ Component({
   },
   // 组件数据字段监听器，用于监听 properties 和 data 的变化
   observers: {
-    'skuCurGoodsBaseInfo': function(skuCurGoodsBaseInfo) {
+    'skuCurGoodsBaseInfo': function (skuCurGoodsBaseInfo) {
       // console.log('observers-skuCurGoodsBaseInfo', skuCurGoodsBaseInfo)
       if (!skuCurGoodsBaseInfo) {
         return
       }
+      // 判断当前商品是否能购买
       if (skuCurGoodsBaseInfo.stores <= 0) {
         wx.showToast({
           title: '已售罄~',
@@ -39,20 +40,11 @@ Component({
       this.initGoodsData(skuCurGoodsBaseInfo)
     }
   },
-  lifetimes: {
-    detached: function () {
-      // 在组件实例被从页面节点树移除时执行
-    },
-  },
-  pageLifetimes: {
-    hide: function () { },
-    resize: function () { },
-  },
   /**
    * 组件的方法列表
    */
   methods: {
-    closeSku(){
+    closeSku() {
       // 关闭弹窗
       this.setData({
         skuCurGoodsShow: false
@@ -75,7 +67,7 @@ Component({
         skuCurGoodsShow: true
       })
     },
-    storesJia(){
+    storesJia() {
       const skuCurGoods = JSON.parse(JSON.stringify(this.data.skuCurGoods))
       // 判断当前沟通数量是否小于库存
       if (skuCurGoods.basicInfo.storesBuy < skuCurGoods.basicInfo.stores) {
@@ -85,7 +77,7 @@ Component({
         })
       }
     },
-    storesJian(){
+    storesJian() {
       const skuCurGoods = JSON.parse(JSON.stringify(this.data.skuCurGoods))
       if (skuCurGoods.basicInfo.storesBuy > 1) {
         skuCurGoods.basicInfo.storesBuy--
@@ -94,7 +86,7 @@ Component({
         })
       }
     },
-    skuSelect(e){
+    skuSelect(e) {
       const skuCurGoods = JSON.parse(JSON.stringify(this.data.skuCurGoods))
       const propertyindex = e.currentTarget.dataset.propertyindex
       const propertychildindex = e.currentTarget.dataset.propertychildindex
@@ -130,14 +122,15 @@ Component({
         skuGoodsPic
       })
     },
-    async addCarSku(){
+    // 添加到购物车
+    async addCarSku() {
       // 校验是否有未选中的sku
       if (!this.checkSkuSelect(this.data.skuCurGoods)) {
-          wx.showToast({
-            title: '请选择规格/配件',
-            icon: 'none'
-          })
-          return
+        wx.showToast({
+          title: '请选择规格/配件',
+          icon: 'none'
+        })
+        return
       }
       const res = await goodSelectSku({ goodInfo: this.data.skuCurGoods, pic: this.data.skuGoodsPic })
       wx.showToast({
@@ -151,8 +144,9 @@ Component({
       })
     },
     checkSkuSelect(product) {
+      let flag = true;
       console.log(product, 'product')
-      if (product.properties && product.properties.length) {
+      if (product?.properties?.length) {
         // 记录每次的结果
         const checkResult = []
         product.properties.forEach((item, index) => {
@@ -173,3 +167,4 @@ Component({
     }
   }
 })
+
