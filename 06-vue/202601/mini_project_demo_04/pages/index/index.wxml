@@ -1,0 +1,8 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+    <view class="usermotto">
+      <text class="user-motto">{{motto}}</text>
+    </view>
+    <button bind:tap="toShopList">前往商品列表</button>
+    <button bind:tap="toCanvas">前往小程序画布</button>
+</scroll-view>

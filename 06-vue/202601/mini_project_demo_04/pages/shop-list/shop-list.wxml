@@ -1,0 +1,26 @@
+<!--index.wxml-->
+
+  <view class="goodsList">
+    <view class="a-gooods" wx:for="{{items}}" wx:key="key">
+        <view class="a-goods-conts {{item.active? 'active':''}}" bindtouchstart="touchStart" bindtouchmove="touchMove"
+          bindtouchend="touchEnd" data-index="{{index}}" style="{{item.left}}">
+          <view class="goods-info">
+            <view class="radio-box">
+              <radio checked="{{ item.selected }}" bindtap="radioClick" data-index="{{index}}" />
+            </view>
+            <view class="img-box">
+              <image mode="aspectFill" src="{{item.pic}}" class="img" />
+            </view>
+            <view class="text-box">
+              <view class="goods-title">{{item.name}}</view>
+              <view wx:show="{{item.skuName}}" class="goods-label">
+                {{item.skuName}}
+              </view>
+            </view>
+          </view>
+          <view class="delete-btn" data-key="{{item.pid}}" catchtap="delItem">
+            删除
+          </view>
+        </view>
+      </view>
+  </view>

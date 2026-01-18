@@ -567,6 +567,7 @@ Page({
   async drawSharePic() {
     const _this = this
     const qrcodeRes = await createQRCode({ id: this.data.goodsId })
+    console.log(qrcodeRes,'qrcodeRes');
     const qrcode = qrcodeRes.data
     const pic = _this.data.goodsDetail.basicInfo.pic
 
@@ -584,6 +585,7 @@ Page({
   drawSharePicDone(picHeight, qrcode) {
     const _this = this
     const _baseHeight = 74 + (picHeight + 120)
+    console.log(_this.data.goodsDetail.basicInfo.pic, 'pic')
     this.setData({
       posterConfig: {
         width: 750,
