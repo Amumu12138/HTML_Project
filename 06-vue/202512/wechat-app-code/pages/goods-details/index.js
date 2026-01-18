@@ -29,7 +29,7 @@ Page({
     //计算页面 轮播图、详情、评价(砍价)view 高度
     // this.getTopHeightFunction()
     var tabsHeight = this.data.tabsHeight //顶部距离（tabs高度）
-    if (this.data.tabs[0].topHeight-tabsHeight<=0 && 0 < this.data.tabs[1].topHeight-tabsHeight) { //临界值，根据自己的需求来调整
+    if (this.data.tabs[0].topHeight - tabsHeight <= 0 && 0 < this.data.tabs[1].topHeight - tabsHeight) { //临界值，根据自己的需求来调整
       this.setData({
         active: this.data.tabs[0].tabs_name //设置当前标签栏
       })
@@ -37,11 +37,11 @@ Page({
       this.setData({
         active: this.data.tabs[1].tabs_name
       })
-    } else if (this.data.tabs[1].topHeight-tabsHeight<=0 && 0 < this.data.tabs[2].topHeight-tabsHeight) {
+    } else if (this.data.tabs[1].topHeight - tabsHeight <= 0 && 0 < this.data.tabs[2].topHeight - tabsHeight) {
       this.setData({
         active: this.data.tabs[1].tabs_name
       })
-    } else if (this.data.tabs[2].topHeight-tabsHeight<=0) {
+    } else if (this.data.tabs[2].topHeight - tabsHeight <= 0) {
       this.setData({
         active: this.data.tabs[2].tabs_name
       })
@@ -64,7 +64,7 @@ Page({
     // 静默式授权注册/登陆
     AUTH.checkHasLogined().then(isLogined => {
       if (!isLogined) {
-        AUTH.authorize().then( aaa => {
+        AUTH.authorize().then(aaa => {
           AUTH.bindSeller()
         })
       } else {
@@ -142,7 +142,7 @@ Page({
     query.select('#tabs').boundingClientRect((rect) => {
       var tabsHeight = rect.height
       this.setData({
-        tabsHeight:tabsHeight
+        tabsHeight: tabsHeight
       })
     }).exec()
 
@@ -165,7 +165,6 @@ Page({
     }
   },
   async getGoodsDetailAndKanjieInfo(goodsId) {
-    const that = this;
     const goodsDetailRes = await getGoodDetail(goodsId)
     if (goodsDetailRes.code == 10000) {
       if (!goodsDetailRes.data.pics || goodsDetailRes.data.pics.length == 0) {
@@ -174,7 +173,7 @@ Page({
         }]
       }
       if (goodsDetailRes.data.properties) {
-        that.setData({
+        this.setData({
           hasMoreSelect: true,
           selectSizePrice: goodsDetailRes.data.basicInfo.minPrice,
           selectSizeOPrice: goodsDetailRes.data.basicInfo.originalPrice,
@@ -185,11 +184,11 @@ Page({
         this.shopSubdetail(goodsDetailRes.data.basicInfo.shopId)
       }
       if (goodsDetailRes.data.basicInfo.pingtuan) {
-        that.pingtuanList(goodsId)
+        this.pingtuanList(goodsId)
       }
-      that.data.goodsDetail = goodsDetailRes.data;
+      this.data.goodsDetail = goodsDetailRes.data;
       if (goodsDetailRes.data.basicInfo.videoId) {
-        that.getVideoSrc(goodsDetailRes.data.basicInfo.videoId);
+        this.getVideoSrc(goodsDetailRes.data.basicInfo.videoId);
       }
       let _data = {
         goodsDetail: goodsDetailRes.data,
@@ -199,7 +198,7 @@ Page({
         buyNumMax: goodsDetailRes.data.basicInfo.stores,
         buyNumber: (goodsDetailRes.data.basicInfo.stores > 0) ? 1 : 0
       }
-      that.setData(_data)
+      this.setData(_data)
     }
   },
   async shopSubdetail(shopId) {
@@ -269,7 +268,7 @@ Page({
     })
   },
   // 判断当前商品是否支持某个sku的属性
-  checkHasSkuItems(sk) {    
+  checkHasSkuItems(sk) {
     this.data.goodsDetail.skuList.filter(ele => {
       const a = this.data.goodsDetail.properties.filter(ele => {
         return ele.optionValueId
@@ -277,7 +276,7 @@ Page({
       console.log(a);
       for (let index = 0; index < array.length; index++) {
         const element = array[index];
-        
+
       }
     })
   },
@@ -319,7 +318,7 @@ Page({
           curSelectNum++;
           propertyChildIds = propertyChildIds + p.id + ":" + c.id + ",";
           propertyChildNames = propertyChildNames + p.name + ":" + c.name + "  ";
-        } else if(!p.optionValueId) {
+        } else if (!p.optionValueId) {
           const nextO = _skuList.find(aaa => {
             return aaa.propertyChildIds.indexOf(p.id + ':' + c.id) != -1
           })
@@ -406,7 +405,6 @@ Page({
    * 立即购买
    */
   buyNow: function (e) {
-    let that = this
     let shoptype = e.currentTarget.dataset.shoptype
     if (this.data.goodsDetail.properties && !this.data.canSubmit) {
       wx.showToast({
@@ -499,6 +497,7 @@ Page({
 
     return buyNowInfo;
   },
+  // 微信用户分享固定方法
   onShareAppMessage() {
     let _data = {
       title: this.data.goodsDetail.basicInfo.name,
@@ -513,7 +512,7 @@ Page({
     return _data
   },
   reputation: async function (goodsId) {
-    var that = this;
+
     const res = await reputation(goodsId)
     console.log(res, 'res')
     if (res.code == 10000) {
@@ -526,37 +525,35 @@ Page({
           ele.goods.goodReputation = 5
         }
       })
-      that.setData({
+      this.setData({
         reputation: res.data
       });
     } else {
-      if (that.data.tabs && that.data.tabs.length == 3) {
-        const tabs = that.data.tabs
+      if (this.data.tabs && this.data.tabs.length == 3) {
+        const tabs = this.data.tabs
         tabs.splice(2, 1)
-        that.setData({
+        this.setData({
           tabs
         })
       }
     }
   },
   pingtuanList: function (goodsId) {
-    var that = this;
     WXAPI.pingtuanList({
       goodsId: goodsId,
       status: 0
-    }).then(function (res) {
+    }).then((res) => {
       if (res.code == 0) {
-        that.setData({
+        this.setData({
           pingtuanList: res.data.result
         });
       }
     })
   },
   getVideoSrc: function (videoId) {
-    var that = this;
-    WXAPI.videoDetail(videoId).then(function (res) {
+    WXAPI.videoDetail(videoId).then((res) => {
       if (res.code == 0) {
-        that.setData({
+        this.setData({
           videoMp4Src: res.data.fdMp4
         });
       }
@@ -603,45 +600,45 @@ Page({
           borderRadius: 8
         }],
         images: [{
-            x: 133,
-            y: 133,
-            url: _this.data.goodsDetail.basicInfo.pic, // 商品图片
-            width: 490,
-            height: picHeight
-          },
-          {
-            x: 76,
-            y: _baseHeight + 199,
-            url: qrcode, // 二维码
-            width: 222,
-            height: 222
-          }
+          x: 133,
+          y: 133,
+          url: _this.data.goodsDetail.basicInfo.pic, // 商品图片
+          width: 490,
+          height: picHeight
+        },
+        {
+          x: 76,
+          y: _baseHeight + 199,
+          url: qrcode, // 二维码
+          width: 222,
+          height: 222
+        }
         ],
         texts: [{
-            x: 375,
-            y: _baseHeight + 80,
-            width: 650,
-            lineNum: 2,
-            text: _this.data.goodsDetail.basicInfo.name,
-            textAlign: 'center',
-            fontSize: 40,
-            color: '#333'
-          },
-          {
-            x: 375,
-            y: _baseHeight + 180,
-            text: '￥' + _this.data.goodsDetail.basicInfo.minPrice,
-            textAlign: 'center',
-            fontSize: 50,
-            color: '#e64340'
-          },
-          {
-            x: 352,
-            y: _baseHeight + 320,
-            text: '长按识别小程序码',
-            fontSize: 28,
-            color: '#999'
-          }
+          x: 375,
+          y: _baseHeight + 80,
+          width: 650,
+          lineNum: 2,
+          text: _this.data.goodsDetail.basicInfo.name,
+          textAlign: 'center',
+          fontSize: 40,
+          color: '#333'
+        },
+        {
+          x: 375,
+          y: _baseHeight + 180,
+          text: '￥' + _this.data.goodsDetail.basicInfo.minPrice,
+          textAlign: 'center',
+          fontSize: 50,
+          color: '#e64340'
+        },
+        {
+          x: 352,
+          y: _baseHeight + 320,
+          text: '长按识别小程序码',
+          fontSize: 28,
+          color: '#999'
+        }
         ],
       }
     }, () => {
@@ -658,8 +655,8 @@ Page({
   onPosterFail(e) {
     console.error('fail:', e)
   },
+  // 保存海报图片到相册
   savePosterPic() {
-    const _this = this
     wx.saveImageToPhotosAlbum({
       filePath: this.data.posterImg,
       success: (res) => {
@@ -671,7 +668,7 @@ Page({
         })
       },
       complete: () => {
-        _this.setData({
+        this.setData({
           showposterImg: false
         })
       },

@@ -30,6 +30,7 @@
           <view class='item left'>
             <van-icon name="share-o" size="24px" />
             <view class="icon-title">分享</view>
+            <!-- 页面触发分享按钮 -->
             <button open-type='share'></button>
           </view>
           <view class='item' bindtap="drawSharePic">

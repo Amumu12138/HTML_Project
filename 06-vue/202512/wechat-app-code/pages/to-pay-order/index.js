@@ -10,10 +10,12 @@ Page({
     remark: ''
   },
   onShow() {
+    // 判断用户是否已登录
     AUTH.checkHasLogined().then(isLogined => {
       if (isLogined) {
         this.doneShow()
       } else {
+        // 用户静默登录
         AUTH.newAuthorize().then(res => {
           // AUTH.bindSeller()
           this.doneShow()
@@ -21,6 +23,7 @@ Page({
       }
     })
   },
+  // 订单确认页数据获取
   async doneShow() {
     let goodsList = []
     let shopList = []
@@ -29,9 +32,10 @@ Page({
     if ("buyNow" == this.data.orderType) {
       var buyNowInfoMem = wx.getStorageSync('buyNowInfo');
       this.data.kjId = buyNowInfoMem.kjId;
-      if (buyNowInfoMem && buyNowInfoMem.shopList) {
+      if (buyNowInfoMem?.shopList) {
         goodsList = buyNowInfoMem.shopList
         buyNowInfoMem.shopList.forEach(ele => {
+          // times: bigjs中的乘法
           totalPrice += Bigjs(ele.number).times(ele.price).toNumber()
         })
       }
@@ -77,8 +81,9 @@ Page({
     if ("buyNow" == this.data.orderType) {
       params.goods = this.data.goodsList
     }
-   
+
     const res = await createOrder(params)
+    // 唤起微信收银台
     wx.requestPayment({
       timeStamp: res.timestamp,
       nonceStr: res.nonceStr,
@@ -87,11 +92,11 @@ Page({
       paySign: res.paySign,
       success() {
         console.log('微信支付成功')
-        wx.navigateTo({
+        wx.redirectTo({
           url: '/pages/order-list/index?type=1',
         })
       },
-      fail () {
+      fail() {
         console.log('微信支付失败')
       }
     })
