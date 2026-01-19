@@ -64,9 +64,11 @@ Page({
       let disX = this.data.startX - moveX;
       let delBtnWidth = this.data.delBtnWidth;
       let left = "";
-      if (disX == 0 || disX < 0) { //如果移动距离小于等于0，container位置不变
+      //如果移动距离小于等于0，container位置不变
+      if (disX == 0 || disX < 0) {
         left = "margin-left:0px";
-      } else if (disX > 0) { //移动距离大于0，container left值等于手指移动距离
+      } else if (disX > 0) {
+        //移动距离大于0，container left值等于手指移动距离
         left = "margin-left:-" + disX + "px";
         if (disX >= delBtnWidth) {
           left = "margin-left:-" + delBtnWidth + "px";
