@@ -10,7 +10,7 @@ SaaS
 基建: 组件库、函数库、脚手架、低码
 
 ### mutirepo和monorepo区别
-![mutirepo和monorepo区别](./截图/mutirepo和monorepo区别.png)
+![mutirepo和monorepo区别](./mutirepo和monorepo区别.png)
 
 
 ### ESLint 
