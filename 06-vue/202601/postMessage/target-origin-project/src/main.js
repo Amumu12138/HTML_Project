@@ -1,4 +1,3 @@
-import './style.css'
 import Postmessage from './postMessage'
 
 document.querySelector('#app').innerHTML = `

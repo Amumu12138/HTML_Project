@@ -1,12 +1,11 @@
-import './style.css'
 import { Messager } from './utils/messager'
 
 document.querySelector('#app').innerHTML = `
   <div>
    Hello World
-  <button id="btn" style="background-color: skyblue;" >send</button>
+   <br />
+   <button id="btn" style="background-color: skyblue;" >send</button>
    <iframe id="previewIframe" src="http://localhost:3010" />
-
   </div>
 `
 const decorateOrigin = `http://localhost:3010`;
