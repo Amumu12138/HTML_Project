@@ -1,6 +1,0 @@
-//着色器语言定义一个整型常量
-const int count = 10;
-//定义一个浮点类型常量
-const float countF = 10.0;
-//定义一个三维向量vec3常量,表示方向等量
-const vec3 direction = vec(1.0, 0.5, 0.6);

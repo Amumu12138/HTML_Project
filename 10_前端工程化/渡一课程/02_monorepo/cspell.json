@@ -1,5 +1,0 @@
-{
-    "import": ["@cspell/dict-lorem-ipsum/cspell-ext.json"],
-    "language": "en",
-    "dictionaries": ["lorem-ipsum"]
-}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物360度转动动效</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .person-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 0 auto;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .person {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+        }
+
+        .person-face {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* 为了演示，我们使用不同颜色表示不同角度 */
+        .face-0 { transform: rotateY(0deg) translateZ(150px); background: rgba(255,99,71,0.8); }
+        .face-1 { transform: rotateY(36deg) translateZ(150px); background: rgba(255,165,0,0.8); }
+        .face-2 { transform: rotateY(72deg) translateZ(150px); background: rgba(255,215,0,0.8); }
+        .face-3 { transform: rotateY(108deg) translateZ(150px); background: rgba(144,238,144,0.8); }
+        .face-4 { transform: rotateY(144deg) translateZ(150px); background: rgba(135,206,250,0.8); }
+        .face-5 { transform: rotateY(180deg) translateZ(150px); background: rgba(138,43,226,0.8); }
+        .face-6 { transform: rotateY(216deg) translateZ(150px); background: rgba(221,160,221,0.8); }
+        .face-7 { transform: rotateY(252deg) translateZ(150px); background: rgba(240,128,128,0.8); }
+        .face-8 { transform: rotateY(288deg) translateZ(150px); background: rgba(255,182,193,0.8); }
+        .face-9 { transform: rotateY(324deg) translateZ(150px); background: rgba(220,220,220,0.8); }
+
+        .controls {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .auto-rotate {
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .info {
+            margin-top: 30px;
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>人物360度转动动效</h1>
+        
+        <div class="person-container">
+            <div class="person" id="person">
+                <!-- 10个面，每个面旋转36度 -->
+                <div class="person-face face-0">正面</div>
+                <div class="person-face face-1">36°</div>
+                <div class="person-face face-2">72°</div>
+                <div class="person-face face-3">108°</div>
+                <div class="person-face face-4">144°</div>
+                <div class="person-face face-5">背面</div>
+                <div class="person-face face-6">216°</div>
+                <div class="person-face face-7">252°</div>
+                <div class="person-face face-8">288°</div>
+                <div class="person-face face-9">324°</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="startAutoRotate()">自动旋转</button>
+            <button onclick="stopAutoRotate()">停止旋转</button>
+            <button onclick="rotateLeft()">向左旋转</button>
+            <button onclick="rotateRight()">向右旋转</button>
+        </div>
+
+        <div class="info">
+            <p>提示：你可以使用鼠标拖动来旋转人物，或者点击按钮控制旋转</p>
+        </div>
+    </div>
+
+    <script>
+        const person = document.getElementById('person');
+        let currentRotation = 0;
+        let isAutoRotating = false;
+        let rotationInterval;
+        let isDragging = false;
+        let startX;
+        let startRotation;
+
+        // 开始自动旋转
+        function startAutoRotate() {
+            if (!isAutoRotating) {
+                isAutoRotating = true;
+                person.classList.add('auto-rotate');
+            }
+        }
+
+        // 停止自动旋转
+        function stopAutoRotate() {
+            isAutoRotating = false;
+            person.classList.remove('auto-rotate');
+            // 保存当前旋转角度
+            currentRotation = getComputedStyle(person).getPropertyValue('--rotate-y') || 0;
+        }
+
+        // 向左旋转
+        function rotateLeft() {
+            stopAutoRotate();
+            currentRotation -= 36;
+            updateRotation();
+        }
+
+        // 向右旋转
+        function rotateRight() {
+            stopAutoRotate();
+            currentRotation += 36;
+            updateRotation();
+        }
+
+        // 更新旋转角度
+        function updateRotation() {
+            person.style.transform = `rotateY(${currentRotation}deg)`;
+        }
+
+        // 鼠标拖动事件
+        person.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startRotation = currentRotation;
+            stopAutoRotate();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - startX;
+                currentRotation = startRotation + deltaX * 0.5;
+                updateRotation();
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // 触摸事件支持
+        person.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startRotation = currentRotation;
+            stopAutoRotate();
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const deltaX = e.touches[0].clientX - startX;
+                currentRotation = startRotation + deltaX * 0.5;
+                updateRotation();
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        // 初始化
+        window.onload = function() {
+            // 可以在这里添加加载真实人物图片的逻辑
+            console.log('人物360度转动动效已加载');
+        };
+    </script>
+</body>
+</html>

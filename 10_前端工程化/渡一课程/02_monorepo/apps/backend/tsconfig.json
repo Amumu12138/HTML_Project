@@ -1,9 +1,0 @@
-// 单独为 backend 应用配置 tsconfig.json
-{
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "types": ["node"],
-        "lib": ["ESNext"]
-    },
-    "include": ["src/**/*"]
-}

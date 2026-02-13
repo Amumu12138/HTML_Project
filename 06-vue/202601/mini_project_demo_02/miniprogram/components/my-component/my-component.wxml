@@ -1,5 +1,0 @@
-<!--components/my-component/my-component.wxml-->
-<view>
-  子组件：{{inputText}}
-  <button bind:tap="updateInputText">重置数据</button>
-</view>
