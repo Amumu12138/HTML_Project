@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绝对定位-盒子居中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .centet-box {
+            /* 采用绝对定位的盒子居中显示 */
+            position: absolute;
+            /* 靠左偏移浏览器宽度一半 */
+            left: 50%;
+            /* 靠左偏移盒子宽度一半 */
+            margin-left: -100px;
+            /* 靠上偏移浏览器高度一半 */
+            top: 50%;
+            /* 靠上偏移盒子高度一半 */
+            margin-top: -100px;
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            line-height: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="centet-box">
+        居中盒子
+    </div>
+</body>
+
+</html>

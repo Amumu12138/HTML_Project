@@ -1,0 +1,51 @@
+body,button,input,select,textarea{font:normal 14px/1.5;font-family: "Open Sans", "open_sans", "Lucida Grande", "Verdana", "Pingfang SC", "Pingfang TC", "Hiragino Sans GB", "Microsoft YaHei", Cardo, STSong, "Songti SC", SimSun, "PingFang SC", 微软雅黑, STXihei, 华文细黑, serif;}
+html{-webkit-text-size-adjust:none;}
+li{list-style-type:none;}
+
+@charset "UTF-8";
+
+@font-face {
+font-family: 'din';
+src: url('din.eot'); /* IE9 Compat Modes */
+src: url('din.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('din.woff') format('woff'), /* Modern Browsers */
+         url('din.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('din.svg#YourWebFontName') format('svg'); /* Legacy iOS */
+}
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,iframe,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,img{border:0px;margin:0px;padding:0px;}
+input,button,select,textarea{outline: none;appearance:none;-webkit-appearance:none;}
+body{background:#f2f2f2;}a{color:#BA494B;text-decoration:none}
+a:hover{color:#BA494B;}
+button,input[type="button"]{-webkit-appearance:none;*overflow:visible;}
+*{ 
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+-webkit-tap-highlight-color: transparent; 
+}
+select{
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    border:none;
+    }
+.hide{display: none;}
+.show{display:inline;}
+.button_class {opacity: 0.8 !important;}
+@media screen and (orientation: portrait){
+  #az_js {
+    width:1px;
+    height:1px;
+    overflow: hidden;
+    position:absolute;
+    left:-99px;
+  }
+}
+@media screen and (orientation: landscape){
+  #az_js {
+    width:2px;
+    height:2px;
+    overflow: hidden;
+      position:absolute;
+    left:-99px;
+  }
+}

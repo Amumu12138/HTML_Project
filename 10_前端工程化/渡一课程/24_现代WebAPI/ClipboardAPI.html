@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .editor {
+            height: 400px;
+            width: 400px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>qwqqowjoqjsonaknska
+        qwqjwoqjwdasas
+        sajsoajos
+    </div>
+
+    <div class="editor" contenteditable></div>
+    <script>
+        document.addEventListener('copy', function (e) {
+            // 组织默认事件
+            e.preventDefault();
+            // 生成新的剪切板内容
+            navigator.clipboard.writeText('HELLO WORLD')
+        })
+
+        const editor = document.querySelector('.editor')
+        // 复制图片到 editor 编辑区域
+        document.addEventListener('paste', e => {
+            console.log(e.clipboardData.files, 'paste');
+            if (e.clipboardData.files.length > 0) {
+                e.preventDefault()
+                const file = e.clipboardData.files[0]
+
+                const reader = new FileReader()
+                reader.onload = e => {
+                    const img = document.createElement('img')
+                    img.src = e.target.result
+                    editor.appendChild(img)
+                }
+
+                reader.readAsDataURL(file)
+            }
+        })
+    </script>
+</body>
+
+</html>

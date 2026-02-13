@@ -1,0 +1,107 @@
+/* 公共样式 */
+body {
+    background: #E9E5E2;
+}
+
+.common-btn,
+.common-three-btn,
+.common-matter-btn,
+.common-js-btn {
+    position: relative;
+    width: 100px;
+    margin: 10px;
+    padding: 10px;
+    background: #D82B25;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    /* 默认边框无轮廓*/
+    border: none;
+}
+
+/* 分层 */
+.flex {
+    display: -webkit-box !important;
+    display: -moz-box !important;
+    display: -ms-flexbox !important;
+    display: -webkit-flex !important;
+    display: flex !important;
+    padding: 10px 0 0 10px;
+    width: 50%;
+    text-decoration: none;
+}
+
+/* 标题文字 */
+.title-text {
+    position: relative;
+    left: 20px;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.common-three-btn {
+    background: #2323ff;
+}
+
+.common-matter-btn {
+    background: #1DC64F;
+}
+
+.common-js-btn {
+    background: #D34234;
+}
+
+/* 下拉菜单 */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content,
+.dropdown-three-content,
+.dropdown-matter-content {
+    display: none;
+    position: absolute;
+    left: 10px;
+    margin-top: -10px;
+    background-color: #D82B25;
+    min-width: 100px;
+    max-width: 125px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown-content a,
+.dropdown-three-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content,
+.dropdown:hover .dropdown-three-content {
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: red;
+}
+
+.dropdown-three-content a:hover {
+    background-color: blue;
+}
+
+.dropdown:hover .common-btn {
+    background-color: red;
+}
+
+.dropdown:hover .common-three-btn {
+    background-color: blue;
+}
+
+.dropdown:hover .common-matter-btn {
+    background-color: green;
+}

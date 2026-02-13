@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex测试文件</title>
+    <style>
+        .justify-content {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            /* 设置主轴方向 
+                row: 从左至右
+                row-reverse: 从右至左
+                column: 从上至下
+                column-reverse: 从下至上
+            */
+            flex-direction: row;
+            /* 设置主轴上的子元素排列方式  
+                flex-start: 从头部开始
+                flex-end: 从尾部开始
+                center: 在主轴居中对齐
+                space-around: 平分剩余空间
+                space-between: 先两边贴边 再平分剩余空间
+            */
+            justify-content: space-between;
+            background-color: skyblue;
+        }
+
+        .align-content {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            /* 设置侧轴上的子元素排列方式(多行)
+                flex-start: 从头部开始
+                flex-end: 从尾部开始
+                center: 中间显示
+                space-around: 平分剩余空间
+                space-between: 先分布在两头，再平分剩余空间
+                stretch：设置子项元素高度平分父元素高度
+            */
+            align-content: space-between;
+            background-color: pink;
+        }
+
+        span {
+            width: 50px;
+            height: 20px;
+            margin: 10px;
+            background-color: red;
+        }
+
+        span:nth-child(2) {
+            /* 设置子项自己在侧轴的排列方式
+                flex-start: 从头部开始
+                flex-end: 从尾部开始
+                center: 从中间分布
+            */
+            align-self: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="justify-content">
+        <span>1</span><span>2</span><span>3</span>
+    </div>
+
+    <div class="align-content">
+        <span>1</span><span>2</span><span>3</span>
+        <span>4</span><span>5</span><span>6</span>
+    </div>
+</body>
+
+</html>

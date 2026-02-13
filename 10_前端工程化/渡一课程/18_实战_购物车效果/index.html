@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .goods-list {
+            padding: 0 10px;
+        }
+
+        .goods-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 10px;
+            border-bottom: 1px dotted #666;
+        }
+
+        .goods-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .goods-info {
+            display: block;
+        }
+
+        .goods-sell {
+            display: flex;
+        }
+
+        .goods-confirm {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0 5px;
+            visibility: visible;
+        }
+
+        .decrease {
+            visibility: hidden;
+        }
+
+        .active {
+            visibility: visible;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            background-color: #666;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            height: 50px;
+        }
+
+        @keyframes footer-car-animate {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1.0);
+            }
+        }
+
+        .footer-car {
+            padding: 0 10px;
+            line-height: 50px;
+        }
+
+        .footer-car-animate {
+            animation: footer-car-animate 1.2s ease-in-out;
+        }
+
+        .footer-car-active {
+            background-color: red;
+            color: white;
+        }
+
+
+        .footer-pay {
+            text-align: center;
+            line-height: 50px;
+            padding-right: 5px;
+        }
+
+        .footer-pay-active {
+            background-color: skyblue;
+            color: white;
+        }
+
+        a {
+            display: none;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+
+        .footer-pay-a-show {
+            display: inline-block;
+            color: white;
+        }
+
+        .money {
+            height: 50px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .money-hidden {
+            display: none;
+        }
+
+        .add-to-car {
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: 1s linear;
+        }
+
+        .add-to-car>span {
+            display: inline-block;
+            background-color: skyblue;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            text-align: center;
+            transition: 1s cubic-bezier(0.5, -0.5, 1, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="goods-list"></div>
+    <div class="footer">
+        <div class="footer-car">
+            购物车
+        </div>
+        <div>
+            <div class="footer-car-price">
+                ¥ 0.00
+            </div>
+            <div class="footer-car-tip">
+                配送费 ¥ 5
+            </div>
+        </div>
+        <div class="footer-pay">
+            <a href>去结算</a>
+            <div class="money">还差0元起送</div>
+        </div>
+    </div>
+    <!-- <div class="add-to-car"></div> -->
+    <script src="./data.js"></script>
+    <script src="./index.js"></script>
+</body>
+
+</html>

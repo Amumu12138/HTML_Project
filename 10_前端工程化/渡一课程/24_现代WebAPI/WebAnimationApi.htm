@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAnimationApi</title>
+    <style>
+        body {
+            --size: 100px;
+            padding: 0;
+            margin: 0;
+            background-color: black;
+        }
+
+        .ball {
+
+            position: absolute;
+            top: -var(--size / 2);
+            left: -var(--size / 2);
+            width: var(--size);
+            height: var(--size);
+            background-color: red;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ball"></div>
+    <script>
+        const ball = document.querySelector('.ball')
+
+        function init() {
+            const x = window.innerWidth / 2
+            const y = window.innerHeight / 2
+            ball.style.transform = `translate(${x}px, ${y}px)`
+        }
+
+        init()
+
+        window.addEventListener('click', function (e) {
+            const x = e.clientX
+            const y = e.clientY
+            move(x, y)
+        })
+
+        function move(x, y) {
+            const ballRect = ball.getBoundingClientRect()
+            const initX = ballRect.left + ballRect.width / 2
+            const initY = ballRect.top + ballRect.height / 2
+            const rad = Math.atan2(y - initY, x - initX)
+            const deg = (rad * 180) / Math.PI
+
+            // 取消之前的动画
+            ball.getAnimations().forEach(animation => animation.cancel())
+            ball.animate(
+                [
+                    {
+                        transform: `translate(${initX}px, ${initY}px) rotate(${deg}deg)`,
+                        easing: 'ease-out'
+                    },
+                    {
+                        transform: `translate(${initX}px, ${initY}px) rotate(${deg}deg) scaleX(1.5)`,
+                        offset: 0.6
+                    },
+                    {
+                        transform: `translate(${x}px, ${y}px) rotate(${deg}deg) scaleX(1.5)`,
+                        offset: 0.8
+                    },
+                    {
+                        transform: `translate(${x}px, ${y}px) rotate(${deg}deg)`
+                    }
+                ],
+                {
+                    duration: 1000,
+                    fill: 'forwards',
+                    easing: 'linear'
+                }
+            )
+        }
+    </script>
+</body>
+
+</html>

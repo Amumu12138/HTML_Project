@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <!-- 渠道商: 上海君娱 -->
+    <title>争渡三国</title>
+
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
+    <script type="text/javascript" src="/js/pj_api.js"></script>
+    <script type="text/javascript" src="/js/pj_channel_sdk.js"></script>
+    <script type="text/javascript" src="/js/pj_sdk_host.js"></script>
+    <!-- 引入sdk -->
+    <script src="https://h5.8uyx.com/public/sdk/game8u.js?t=" + new Date().getTime()></script>
+
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%
+        }
+
+        body {
+            /*
+               background: url(https://h5.infoxgame.com/images/duojiao_loading.png) no-repeat center top;
+            */
+            background-size: auto 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+<!--<img id="qqy_loading_img">-->
+
+<script type="text/javascript">
+    $(function () {
+
+        //初始化渠道sdk
+        pjChannelSdk.init("11046", "yxzbqh_shjy_sm_001", "1.0.0");
+        sdk.init3("11046", "yxzbqh_shjy_sm_001");
+        console.info("初始化sdk成功......");
+
+        //获取游戏信息
+        pjChannelSdk.getGameInfo(function (retData) {
+            console.info("getGameInfo return params +++" + JSON.stringify(retData));
+            if (retData.code == 1) {
+                var gameName = retData.data.gameName;
+                $(document).attr("title", gameName);
+                var gameUrl = retData.data.gameUrl;
+                var orientation = retData.data.orientation;
+
+                //模拟渠道登录成功/ 真实的渠道，这里是初始化渠道sdk、获取渠道登录回调信息登录
+                //初始化渠道sdk{
+                var _params = pjapi.getURLParams();
+                console.info("--------_params--------:" + JSON.stringify(_params));
+
+                //不同的渠道使用不同的拼接方式,示例使用泡椒h5sdk
+                var extension = JSON.stringify({
+                    "uid": _params.uid,
+                    "time": _params.time,
+                    "support_share": _params.support_share,
+                    "support_follow": _params.support_follow,
+                    "follow": _params.follow,
+                    "age": _params.age,
+                    "ext": _params.ext,
+                    "sign": _params.sign
+                });
+
+                console.info("--------reuqest params--------:" + extension);
+                //保存一下渠道用户ID
+                pjChannelSdk["channelUserId"] = _params.uid;
+                //校验渠道token
+                pjChannelSdk.getToken(extension, function (retData) {
+                    console.info("getToken return params-------：" + JSON.stringify(
+                        retData));
+                    if (retData.code == 1) {
+                        var gameParam = {};
+                        gameParam["uid"] = retData.data.userInfo.uid;
+                        gameParam["sdkToken"] = retData.data.userInfo.token;
+
+                        gameUrl = pjapi.buildURL(gameUrl, gameParam);
+
+                        console.log("===进入游戏===>>" + gameUrl);
+                        if (orientation == 0) { //横屏游戏
+                            $("body").append(
+                                '<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
+                                gameUrl +
+                                '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>'
+                            );
+                            window.onorientationchange = function () {
+                                if (window.orientation == 90 || window.orientation == -
+                                    90) {
+                                    $("#gameFrameDiv").css({
+                                        "left": $(window).width() - 20,
+                                        "top": "30%"
+                                    });
+                                }
+                            }
+                        } else { //竖屏游戏
+                            $("body").append('<div id="gameFrameDiv" style="width: ' +
+                                $(window).width() + 'px;  height: ' + $(window)
+                                    .height() +
+                                'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
+                                gameUrl +
+                                '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' +
+                                $(window).width() + 'px; height: ' + $(window)
+                                    .height() + 'px;"></iframe></div>');
+                        }
+                    } else {
+                        pjapi.confirmDialog(retData.msg);
+                    }
+                });
+
+                //开启监听事件
+                pjChannelSdk.startEventListener();
+                window.onresize = function () {
+                    resize();
+                }
+            } else {
+                pjapi.confirmDialog(retData.msg);
+                return;
+            }
+
+        });
+
+    });
+
+    function receiveMessage(event) {
+        console.log(event.data);
+        var params = event.data.param;
+
+        if (event.data.method == 'PJ_loadPayBox') { //拉起支付
+            console.log("调用订单获取接口");
+            var payParam = {};
+
+            payParam["channelGameId"] = pjChannelSdk.initData.channelGameId;
+            payParam["appVersion"] = pjChannelSdk.initData.appVersion;
+            payParam["channel"] = pjChannelSdk.initData.channel;
+            payParam["sdkVersion"] = pjChannelSdk.sdkVersion;
+            //渠道需要签名时的参数
+            payParam["money"] = params["money"];
+            payParam["uid"] = params["uid"];
+            payParam["productName"] = params["goodsName"];
+            payParam["roleId"] = params["roleId"];
+            payParam["roleName"] = params["roleName"];
+            payParam["serverId"] = params["serverId"];
+            payParam["serverName"] = params["serverName"];
+            payParam["description"] = params["description"];
+            payParam["ext"] = params["ext"];
+            payParam["cpOrderNo"] = params["cpOrderNo"];
+
+            console.log("------------payParam--------------" + JSON.stringify(payParam));
+            //生成融合sdk订单
+            pjChannelSdk.getOrderNo(payParam, function (retData) {
+                if (retData.code == 1) {
+                    console.log("获取订单成功：" + JSON.stringify(retData));
+                    var time = pjapi.getTimestamp();
+                    var paydata = {
+                        uid: pjChannelSdk.channelUserId, // 用户在平台的唯一ID
+                        appid: '852', // 平台分配的appid
+                        money: retData.data.orderInfo.money, // 充值金额（单位：元）
+                        goodsName: retData.data.orderInfo.goodsName, // 商品名称
+                        payFlag: '1', // 充值界面选择，固定值1
+                        ext: retData.data.orderInfo.orderNumber, // 扩展参数，支付通知时原样返回
+                        time: time, // 时间戳（单位：秒）
+                        roleid: retData.data.orderInfo.roleId, // 角色ID
+                        rolename: retData.data.orderInfo.roleName, // 角色名称
+                        rolelevel: '', // 角色等级
+                        serverid: retData.data.orderInfo.serverId, // 服务器ID
+                        servername: retData.data.orderInfo.serverName, // 服务器名称，若无，用服务器ID代替
+                        cpOrderId: retData.data.orderInfo.orderNumber, // CP订单号，支付通知时原样返回
+                        goodsId: '', // 商品ID
+                        desc: retData.data.orderInfo.goodsName, // 商品描述
+                        count: '1', // 购买商品个数
+                        quantifier: '个' // 商品单位，如“个”
+                    }
+                    console.info("8Ugame pay params----:" + JSON.stringify(paydata));
+                    game8u_pay(paydata)
+                } else {
+                    pjapi.confirmDialog(retData.msg);
+                }
+
+            });
+        } else if (event.data.method == 'PJ_reportRoleInfo') { //上报角色信息
+
+            sdk.reportRoleInfo(params);
+
+            var roleType = params["roleType"];
+            var roleState = 0;
+            if (roleType == 1) {
+                roleState = 3;
+            } else if (roleType == 2) {
+                roleState = 2;
+            } else if (roleType == 3) {
+                roleState = 4;
+            } else {
+                roleState = 3;
+            }
+            var roledata = {
+                datatype: roleState, // 必填 2:创建角色3:登录游戏4:等级提升
+                roleid: params["roleid"], // 必填 角色ID
+                rolename: params["roleName"], // 必填 角色名称
+                rolelevel: params["roleLever"], // 必填 角色等级
+                serverid: params["serverid"], // 必填 服务器ID
+                servername: params["servername"], // 必填 服务器名称，若无，用服务器ID代替
+                fightvalue: params['fightvalue'], // 必填 战力
+                moneynum: params["roleMoney"], // 必填 游戏币数量
+                vip: params["vip"], // 必填 VIP等级
+                rolecreatetime: '', // 选填 角色创建时间，单位：秒
+                rolelevelmtime: '', // 选填 角色升级时间，单位：秒
+                partyid: '', // 选填 帮派ID
+                partyname: '', // 选填 帮派名称
+                partyroleid: '', // 选填 帮派称号ID
+                partyrolename: '', // 选填 帮派称号名称
+                gender: '', // 选填 角色性别：1:男 2:女
+                professionid: '', // 选填 职业ID
+                profession: '', // 选填 职业名称
+                friendlist: '', // 选填 人物关系列表，格式[{"roleid":"关系角色id","intimacy":"亲密度","nexusid":"关系id,可填数字1:夫妻2:结拜3:情侣4:师徒5:仇人6:其它"},...]
+                attach: '' // 选填 原始数据，如果可以提供，用json字符串
+            }
+            console.info("-------8U调用渠道角色上报接口--------:" + JSON.stringify(roledata));
+            game8u_reportrole(roledata)
+
+        }
+    }
+
+    //随屏幕自定义适配
+    function resize() {
+        var gameFrameDiv = document.getElementById("gameFrameDiv");
+        var gameFrame = document.getElementById("gameFrame")
+
+        gameFrameDiv.style.width = window.innerWidth + "px";
+        gameFrameDiv.style.height = window.innerHeight + "px";
+        gameFrame.style.width = window.innerWidth + "px";
+        gameFrame.style.height = window.innerHeight + "px";
+    }
+</script>
+</body>
+
+</html>

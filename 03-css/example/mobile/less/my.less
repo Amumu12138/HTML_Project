@@ -1,0 +1,40 @@
+@font14: 14px;
+@white: #ffffff;
+@base-font: 50px;
+
+html {
+    font-size: @base-font;
+}
+
+div {
+    font-size: @font14;
+}
+
+// less嵌套
+.header {
+    background-color: pink;
+    .logo {
+    background-color: red;
+    }
+    &:hover {
+        color: green;
+    }
+
+    &::before {
+        content: "";
+        color: purple;
+    }
+}
+
+// less 运算
+.new-img {
+    height: 100rem / @base-font;
+    width: 100rem / @base-font;
+    background-color: @white - 1;
+    a {
+        color: #000000  + 5px;
+    }
+    &:hover {
+        color: #fff - #222;
+    }
+}

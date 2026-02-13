@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #app {
+            padding: 20px;
+            border-radius: 25px;
+            background-color: skyblue;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="./euv.js"></script>
+    <div id="app">
+        <p id="first">姓: </p>
+        <p id="last">名: </p>
+        <p id="age">年龄:</p>
+    </div>
+    输入姓名: <input type="text" oninput="user.name = this.value">
+    <br />
+    输入日期: <input type="date" onchange="user.birth = this.value">
+    <script>
+        const user = {
+            name: 'firstName lastName',
+            birth: '2002-5-7'
+        }
+
+        function showFirstName() {
+            document.querySelector("#first").textContent = '姓: ' + user.name.split(' ')[0]
+        }
+
+        function showLastName() {
+            document.querySelector("#last").textContent = '名: ' + user.name.split(' ')[1]
+        }
+
+        function showAge() {
+            const ageDom = document.querySelector("#age")
+            console.log(new Date().getFullYear(), 'getFullYear');
+
+            ageDom.textContent = `年龄: ${new Date().getFullYear() - user.birth.split('-')[0]}`
+        }
+
+        observe(user)
+
+        // let internalName = user.name;
+        // Object.defineProperty(user, 'name', {
+        //     get() {
+        //         console.log('user name get called');
+
+        //         return internalName
+        //     },
+        //     set(val) {
+        //         console.log('user name set called');
+
+        //         internalName = val
+        //         showFirstName()
+        //         showLastName()
+        //     }
+        // })
+
+        user.name = "Amumu 12138"
+        // window.__func = showFirstName
+        // showFirstName()
+        autorun(showFirstName)
+
+        // window.__func = showLastName
+        // showLastName()
+        autorun(showLastName)
+
+        // window.__func = showAge
+        // showAge()
+        autorun(showAge)
+
+        user.birth = '2022-05-05'
+        // showAge()
+
+        function autorun(fn) {
+            window.__func = fn
+            fn()
+            window.__func = null;
+        }
+    </script>
+</body>
+
+</html>

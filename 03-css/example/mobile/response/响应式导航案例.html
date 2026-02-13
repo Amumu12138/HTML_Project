@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>响应式导航案例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 750px;
+            margin: 0 auto;
+            background-color: pink;
+        }
+
+        .container::before,
+        .container::after {
+            display: table;
+            content: "";
+        }
+
+        .container::after {
+            clear: both;
+        }
+
+        .container ul li {
+            float: left;
+            list-style: none;
+            width: 100px;
+            height: 30px;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container ul li {
+                width: 33%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+            <li>导航栏</li>
+        </ul>
+    </div>
+</body>
+
+</html>

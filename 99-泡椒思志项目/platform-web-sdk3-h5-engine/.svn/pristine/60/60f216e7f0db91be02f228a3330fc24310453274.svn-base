@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+
+    <title>游戏</title>
+
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
+    <script type="text/javascript" src="/js/pj_api.js"></script>
+    <script type="text/javascript" src="/js/pj_channel_sdk.js"></script>
+    <script type="text/javascript" defer="defer"
+            src="https://static.g.mi.com/game/h5sdk/h5-wy-sdk-v.1.0.2.min.js"></script>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%
+        }
+
+        body {
+            /*
+                        background: url(https://h5.infoxgame.com/images/duojiao_loading.png) no-repeat center top;
+            */
+            background-size: auto 100%;
+        }
+    </style>
+    <script src="../../../js/jquery/jquery.md5.js"></script>
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+    $(function () {
+
+        //初始化渠道sdk
+        pjChannelSdk.init(10924, "smxnh5_hnmht_sm_002", "1.0.0");
+        console.info("初始化sdk成功......");
+        //获取游戏信息
+        pjChannelSdk.getGameInfo(function (retData) {
+            console.info("getGameInfo return params +++" + JSON.stringify(retData));
+            if (retData.code == 1) {
+                var gameName = retData.data.gameName;
+                $(document).attr("title", gameName);
+                var gameUrl = retData.data.gameUrl;
+                var orientation = retData.data.orientation;
+
+                //模拟渠道登录成功/ 真实的渠道，这里是初始化渠道sdk、获取渠道登录回调信息登录
+                //初始化渠道sdk
+                var config = {
+                    "zIndex": 9999,
+                    "pin": 0,
+                }
+
+                window.hy_wy_sdk.ready(config, function () {
+                    var initParmas = hy_wy_sdk.getBaseData();
+                    pjChannelSdk["session"] = initParmas.session;
+                    pjChannelSdk["appAccountId"] = initParmas.appAccountId;
+                    //var _params = pjapi.getURLParams();
+                    //不同的渠道使用不同的拼接方式
+                    var extension = JSON.stringify({
+                        "userName": initParmas.userName,
+                        "userImage": initParmas.userImage,
+                        "appAccountId": initParmas.appAccountId,
+                        "session": initParmas.session
+                    });
+                    console.info("--------request params--------:" + extension);
+
+                    //校验渠道token
+                    pjChannelSdk.getToken(extension, function (retData) {
+                        if (retData.code == 1) {
+                            var gameParam = {};
+                            gameParam["uid"] = retData.data.userInfo.uid;
+                            gameParam["sdkToken"] = retData.data.userInfo.token;
+
+                            gameUrl = pjapi.buildURL(gameUrl, gameParam);
+
+                            console.log("===进入游戏===>>" + gameUrl);
+                            if (orientation == 0) {//横屏游戏
+                                $("body").append('<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+                                window.onorientationchange = function () {
+                                    if (window.orientation == 90 || window.orientation == -90) {
+                                        $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});
+                                    }
+                                }
+                            } else {//竖屏游戏
+                                $("body").append('<div id="gameFrameDiv" style="width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+                            }
+
+                        } else {
+                            pjapi.confirmDialog(retData.msg);
+                        }
+                    });
+                });
+                //开启监听事件
+                pjChannelSdk.startEventListener();
+
+            } else {
+                pjapi.confirmDialog(retData.msg);
+                return;
+            }
+
+        });
+
+    });
+
+    function receiveMessage(event) {
+        console.log(event.data);
+        var params = event.data.param;
+
+        if (event.data.method == 'PJ_loadPayBox') {//拉起支付
+            console.log("调用订单获取接口");
+            var payParam = {};
+
+            payParam["channelGameId"] = pjChannelSdk.initData.channelGameId;
+            payParam["appVersion"] = pjChannelSdk.initData.appVersion;
+            payParam["channel"] = pjChannelSdk.initData.channel;
+            payParam["sdkVersion"] = pjChannelSdk.sdkVersion;
+
+
+            payParam["appAccountId"] = pjChannelSdk.appAccountId;
+            payParam["session"] = pjChannelSdk.session;
+            payParam["sdkVersion"] = pjChannelSdk.sdkVersion;
+
+            payParam["money"] = params["money"];
+            payParam["uid"] = params["uid"];
+            payParam["productName"] = params["goodsName"];
+            payParam["roleId"] = params["roleId"];
+            payParam["roleName"] = params["roleName"];
+            payParam["serverId"] = params["serverId"];
+            payParam["serverName"] = params["serverName"];
+            payParam["description"] = params["description"];
+            payParam["ext"] = params["ext"];
+            payParam["cpOrderNo"] = params["cpOrderNo"];
+            //生成融合sdk订单
+            pjChannelSdk.getOrderNo(payParam, function (retData) {
+                if (retData.code == 1) {
+                    console.log("------获取订单成功-----:" + JSON.stringify(retData));
+					var _d = retData.data.extension.split("_");
+                    var money = retData.data.orderInfo.money * 100;
+                        var data = {
+							appId:_d[1],
+							appAccountId:pjChannelSdk.appAccountId,
+							session:pjChannelSdk.session,
+							cpOrderId: retData.data.orderInfo.orderNumber,
+							cpUserInfo:retData.data.orderInfo.orderNumber,
+							displayName:retData.data.orderInfo.goodsName,
+							feeValue:money,
+							sign:_d[0],
+                        };
+                        console.info("this pay params----:" + JSON.stringify(data));
+						hy_wy_sdk.pay(data);
+                } else {
+                    pjapi.confirmDialog(retData.msg);
+                }
+
+            });
+        } else if (event.data.method == 'PJ_reportRoleInfo') {//上报角色信息
+            console.info("------------params----------" + JSON.stringify(params));
+        }
+    }
+
+</script>
+</body>
+</html>

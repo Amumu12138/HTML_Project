@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生命周期_getSnapshotBeforeUpdate使用场景</title>
+    <!-- 引入react核心库 -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+    <!-- 引入babel, 用于将jsx转换成js -->
+    <script src="../../js/babel.min.js"></script>
+
+    <style>
+        .list {
+            width: 200px;
+            height: 150px;
+            background-color: red;
+            overflow: hidden auto;
+        }
+
+        .news {
+            width: 200px;
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>生命周期_getSnapshotBeforeUpdate使用场景</h1>
+    <div id="app"></div>
+    <script type="text/babel">
+
+        // 实现新闻下拉停留在当前窗口,不再实时下拉滚动
+        class NewsList extends React.Component {
+            state = {
+                newsArr: []
+            }
+            constructor(props) {
+                super(props);
+
+            }
+
+            // 在组件更新之前获取快照
+            // prevProps: 更新前的props属性 
+            // prevState: 更新前的state数据
+            getSnapshotBeforeUpdate(prevProps, prevState) {
+                console.log(this.listRef.current);
+
+                console.log('getSnapshotBeforeUpdate called', prevProps, prevState);
+                return this.listRef.current.scrollHeight;
+            }
+            // 组件已更新
+            // prevProps: 更新前的props属性 
+            // prevState: 更新前的state数据
+            // snapshotValue: 快照传递的值
+            componentDidUpdate(prevProps, prevState, snapshotValue) {
+                // componentDidUpdate called {name: 'parent'} {count: 0} {a: 1, b: 2}
+                console.log('componentDidUpdate called', prevProps, prevState, snapshotValue);
+                this.listRef.current.scrollTop += this.listRef.current.scrollHeight - snapshotValue;
+            }
+
+            // 组件已挂载 生命周期钩子
+            componentDidMount() {
+                console.log('componentDidMount called');
+                setInterval(() => {
+                    const { newsArr } = this.state;
+                    const news = `新闻${newsArr.length + 1}`
+
+                    this.setState({ newsArr: [news, ...newsArr] })
+                }, 1000)
+            }
+
+            // 组件将要卸载 生命周期钩子
+            componentWillUnmount() {
+                console.log('componentWillUnmount called');
+            }
+
+
+            listRef = React.createRef();
+            // render调用时机: 初始化渲染、状态更新之后
+            render() {
+
+                const { newsArr } = this.state;
+                return (
+                    <div ref={this.listRef} className="list">
+                        {
+                            newsArr.map(item => {
+                                return <div className="news">{item}</div>
+                            })
+                        }
+                    </div>
+                )
+            }
+        }
+
+
+        // 渲染虚拟DOM
+        ReactDOM.render(<NewsList />, document.getElementById('app'))
+    </script>
+</body>
+
+</html>

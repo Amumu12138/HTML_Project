@@ -1,0 +1,49 @@
+{
+  "name": "monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "commit": "cz-git",
+    "lint:prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "lint:eslint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
+    "lint:spellcheck": "cspell lint \"**/*.{js,jsx,ts,tsx,md,vue}\"",
+    "prepare": "husky",
+    "precommit": "lint-staged"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0",
+  "engines": {
+    "node": "24.12.0",
+    "npm": "11.7.0",
+    "pnpm": "10.27.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
+    "@cspell/dict-lorem-ipsum": "^4.0.5",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^25.0.3",
+    "commitizen": "^4.3.1",
+    "cspell": "^9.4.0",
+    "cz-git": "^1.12.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-vue": "^10.6.2",
+    "globals": "^17.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0"
+  }
+}

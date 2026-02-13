@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>refs与事件处理</title>
+
+    <!-- 引入react核心库 -->
+    <script src="../../js/react.development.js"></script>
+    <!-- 引入react-dom, 用于支持react操作DOM -->
+    <script src="../../js/react-dom.development.js"></script>
+    <!-- 引入babel, 用于将jsx转换成js -->
+    <script src="../../js/babel.min.js"></script>
+    <style>
+        button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>refs与事件处理</h1>
+    <div id="app"></div>
+    <script type="text/babel">
+        // 创建类式组件 
+        class MyComponent extends React.Component {
+            handleClick() {
+                // 将inputRef输入框中内容传入input2Ref中
+                console.log(typeof this.myRef.current, this.myRef.current); // object <input type="text" placeholder="input">
+
+                // console.log(this.inputRef);
+                // const inputValue = this.refs.inputRef.value;
+                // this.refs.input2Ref.value = inputValue;
+            }
+            // render在MyComponent原型对象上,供实例使用
+            // render() {
+            //     // 字符串形式(官方不推荐使用) ref="inputRef"
+            //     return (
+            //         <div>
+            //             <input ref="inputRef" type="text" placeholder="input" />
+            //             <button onClick={() => this.handleClick()}>点击</button>
+            //             <input ref="input2Ref" type="text" placeholder="input2" />
+            //         </div>
+            //     )
+            // }
+
+            // 回调函数形式定义ref属性 ref={(c) => { this.inputRef = c; }} 重新渲染页面会存在回调执行多次问题
+            // render() {
+            //     return (
+            //         <div>
+            //             <input ref={(c) => { this.inputRef = c; }} type="text" placeholder="input" />
+            //             <button onClick={() => this.handleClick()}>点击</button>
+            //         </div>
+            //     )
+            // }
+
+            // createRef创建ref容器 React.createRef(); ref={this.myRef} -》官方推荐
+            myRef = React.createRef();
+            render() {
+                return (
+                    <div>
+                        <input ref={this.myRef} type="text" placeholder="input" />
+                        <button onClick={() => this.handleClick()}>点击</button>
+                        {/* JSX注释 */}
+                        {/* <input type="text"/>*/}
+                    </div>
+                )
+            }
+        }
+
+        // 渲染类组件
+        ReactDOM.render(<MyComponent />, document.getElementById('app'));
+    </script>
+</body>
+
+</html>

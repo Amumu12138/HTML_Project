@@ -1,0 +1,39 @@
+/**index.wxss**/
+.container {
+  padding: 0 20rpx;
+}
+.product-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30rpx;
+}
+.product {
+  width: 300rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.product .input {
+  border: 1px solid #000;
+}
+
+.product .input.nums {
+  width: 60rpx;
+}
+
+.num-box {
+  width: 120rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.num-box .btns {
+  font-size: 50rpx;
+}
+.num-box input {
+  width: 40rpx;
+}
+.total-price {
+  padding-top: 30rpx;
+}

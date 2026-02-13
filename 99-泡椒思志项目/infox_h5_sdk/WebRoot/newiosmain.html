@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">     
+	<meta content="yes" name="apple-mobile-web-app-capable">     
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">     
+	<meta content="telephone=no" name="format-detection">
+	<title></title>
+
+	<link href="css/common.css?201905081655" rel="stylesheet">
+	<link href="css/layout.css?201905081655" rel="stylesheet">
+
+	<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.md5.js"></script>
+	<script type="text/javascript" src="js/api.js?v=201905081655"></script>
+	<script type="text/javascript" src="js/rhsdk_ios.js?v=201905081655"></script>
+ 
+ <style type="text/css">
+		  .icon-pjpay:before{ 
+		  	width:20px;
+            height:30px;
+		  	content:"";
+		  	background:url('../images/paojiao.jpg') no-repeat;
+		  	background-size: 100% auto;
+		  	display:table-cell;
+			vertical-align: middle; 
+			position:relative;  
+			top:10px; 
+		  }
+        
+        html,body{
+    		width:100%;
+    		height:100%
+		}
+
+		body {
+			background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+			background-image:url(https://h5.infoxgame.com/images/loading_yh.png);
+		}
+		#gameFrameDiv{
+			background: transparent;
+		}
+		
+		
+ </style>
+
+</head>
+	 
+	<body style="overflow: hidden;" ondragstart="return false">
+	 	 
+		<script type="text/javascript">
+		document.body.addEventListener('touchmove', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		});
+		
+		//页面主方法
+		function start(){
+			
+			//获取游戏信息
+			sdkApi.getGameInfo("false",function(ret){
+				
+				if (ret.code == sdk.SUCCESS) {//成功
+					 sdk.gameInfo = ret.data;
+		        	 var gameName = sdk.gameInfo.gameName;
+		        	 $(document).attr("title",gameName);
+		        		loadGame(sdk.gameInfo);
+						startEventListener();  
+				} else {
+					sdkApi.confirmDialog("获取游戏信息失败");
+					return;
+				}
+ 
+			});	
+		}
+		
+		
+		
+		
+		//加载游戏
+		function loadGame(gameInfo){
+			
+			var gameUrl = gameInfo.mainUrl;
+			gameUrl =  sdkApi.setURLVar(gameUrl,"sdkToken",sdkApi.getItem("sdkToken")); 
+			gameUrl =  sdkApi.setURLVar(gameUrl,"uid",sdkApi.getItem("uid"));
+			
+			if(gameInfo.userId == 0){//横屏游戏    
+				
+                $("body").append('<div id="gameFrameDiv" style="width: 100%; height: 100%; position: absolute; display:none; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;" allowTransparency="true"></iframe></div>');
+                
+		     	window.onorientationchange = function () { 
+                    if (window.orientation == 90 || window.orientation == -90) {
+                        $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});  
+                    }    
+                }
+			
+			}else{//竖屏游戏 
+				$("body").append('<div id="gameFrameDiv" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px; position: relative; display:none; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" allowTransparency="true"  style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+			}
+			$("#gameFrameDiv").fadeIn(1000);
+			
+			if(gameInfo.cs == 1){
+				sdkApi.enableFloatBox();
+			}
+			
+		}
+
+		
+		//开始消息监听
+		function startEventListener(){
+			
+			
+			
+			 window.addEventListener("message", receiveMessage, false);
+			 
+				function  receiveMessage(event){
+					sdkApi.log("host receive data",event.data);
+					switch (event.data.method) {
+					
+					case "initLoading": {//加载loading页面
+						sdkApi.initLoading();
+						break;
+				    }
+					
+					case "loadLoginBox": {//登录
+						sdkApi.loadLoginBox(event.data.param);
+						break;
+				    }
+					
+					case "getToken": {//token验证
+						sdk.getToken(event.data.param); 
+						break;
+				    }
+					
+					case "loadPayBox": {//拉起支付框
+						var data = event.data.param;
+						sdk.loadPayBox(event.data.param);
+						break;
+					}
+					
+					case "reportRoleInfo": {//上报玩家信息
+						sdkApi.reportRoleInfo(event.data.param); 
+						break;
+					}
+					
+					case "logout": {//退出登录
+						sdkApi.logout();
+						break;
+					}
+
+				}
+			
+		    }
+		}
+		
+	    $(function(){
+	    	sdk.init2();
+	    	start();
+	    	 pushHistory();
+	    	 window.addEventListener("popstate",function(){
+	    	 	var url = document.referrer;
+	    	 	if(url.indexOf("https://h5.infoxgame.com/newioslogin.html") != -1){
+	    	 		if( $("#showUcBox").length > 0 ){
+	    	 			sdk.closeUcBox();
+	    	 			$("#gameFrame").focus();
+	    	 			window.history.pushState('forward', null, '#');
+	    	 		}else if($("#payBox").length > 0){
+	    	 			sdk.closePayBox();
+	    	 			$("#gameFrame").focus();
+	    	 			window.history.pushState('forward', null, '#');
+	    	 		}else{
+	    	 			window.history.forward(1);
+	    	 			
+	    	 		}
+	    	 	}
+	    	 	
+	    	 	
+	    	 }, false);
+
+
+	    });
+	   
+	    function pushHistory(){
+	    	  var state = {
+	    	       title: "title",
+	    	       url: "#"     
+	    	    }
+	    	  window.history.pushState(state, "title", "#");   
+	    }
+	    
+ 		function closeIframe(){
+	    	if( $("#showUcBox").length > 0 ){
+	    		sdkApi.closeUcBox();
+	 			$("#gameFrame").focus();
+	    	}
+	    	
+	    	if($("#payBox").length > 0){
+	    		sdkApi.closePayBox();
+	    		$("#gameFrame").focus();
+	    	}
+	    }
+	   
+	    	
+
+ 		
+	  </script>
+	</body>
+</html>

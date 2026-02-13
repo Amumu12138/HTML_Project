@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寄生组合继承</title>
+</head>
+
+<body>
+    <h1>寄生组合继承</h1>
+    <script>
+        const food = {
+            name: 'food',
+            eat: function () {
+                console.log('food -> eat called')
+            }
+        }
+
+        const createFood = Object.create(food, {
+            eat: {
+                value() {
+                    console.log('createFood -> eate called')
+                }
+            }
+        })
+
+        food.eat()
+        createFood.eat()
+
+        function Person(name) {
+            this.name = name
+        }
+
+        Person.prototype.sayHello = function () {
+            console.log('Person -> sayHello called')
+        }
+
+        function Student(name) {
+            Person.call(this, name)
+        }
+
+        const property = Object.create(Person.prototype, {
+            constructor: {
+                value: Person
+            }
+        })
+
+        Student.prototype = property
+
+        const s = new Student('test')
+        console.log('s -> ', s)
+    </script>
+</body>
+
+</html>

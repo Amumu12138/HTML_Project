@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11、列表渲染2</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <style>
+        li {
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p v-for="(value,key, index) in userProfile">{{index + 1}} - {{key}} - {{value}}</p>
+        <hr>
+        <p>取出数组[1, 2, 3, 4, 5]中的偶数项</p>
+        <li v-for="n in evenNumbers">{{ n }}</li>
+        <p>利用methods属性求出[[ 1, 2, 3, 4, 5 ], [6, 7, 8, 9, 10]]中的偶数项</p>
+        <ul v-for="set in sets">
+            <li v-for="n in even(set)">{{ n }}</li>
+        </ul>
+        <p>取出10以内的整数</p>
+        <span v-for="n in 10">{{n}}</span>s
+        <p>在templates上使用v-for</p>
+        <ul>
+            <template v-for="item in items">
+                <li>{{ item.msg }}</li>
+                <li class="divider" role="presentation"></li>
+            </template>
+        </ul>
+
+        <p>在组件中使用v-for</p>
+        <form v-on:submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input v-model="newTodoText" id="new-todo" placeholder="请输入新的选项">
+            <button>Add</button>
+        </form>
+        <ul>
+            <!-- -->
+            <li is="todo-item" v-for="(todo, index) in todos" v-bind:key="todo.id" v-bind:title="todo.title"
+                v-on:remove="todos.splice(index, 1)"></li>
+        </ul>
+
+    </div>
+    <script>
+        Vue.component('todo-item', {
+            template: '\
+                    <li>\
+                    {{ title }}\
+                    <button v-on:click="$emit(\'remove\')">Remove</button>\
+                    </li>\
+                ',
+            props: ['title']
+        })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                userProfile: {
+                    name: "Amumu"
+                },
+                numbers: [1, 2, 3, 4, 5],
+                sets: [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]],
+                items: [
+                    { msg: 'abc' },
+                    { msg: 'efg' }
+                ],
+                newTodoText: '',
+                todos: [
+                    {
+                        id: 1,
+                        title: 'Do the dishes',
+                    },
+                    {
+                        id: 2,
+                        title: 'Take out the trash',
+                    },
+                    {
+                        id: 3,
+                        title: 'Mow the lawn'
+                    }
+                ],
+                nextTodoId: 4
+            },
+            computed: {
+                evenNumbers() {
+                    return this.numbers.filter((number) => {
+                        return number % 2 === 0
+                    })
+                }
+            },
+            methods: {
+                even: function (numbers) {
+                    return numbers.filter(function (number) {
+                        return number % 2 === 0
+                    })
+                },
+                addNewTodo: function () {
+                    this.todos.push({
+                        id: this.nextTodoId++,
+                        title: this.newTodoText
+                    })
+                    this.newTodoText = ''
+                }
+            }
+        })
+        // 添加属性
+        Vue.set(vm.userProfile, 'age', '24')
+        vm.$set(vm.userProfile, 'sex', 'man')
+        // 添加多个属性
+        vm.userProfile = Object.assign({}, vm.userProfile, {
+            'a': 'A',
+            'b': 'B'
+        })
+    </script>
+</body>
+
+</html>

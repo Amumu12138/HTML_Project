@@ -1,0 +1,93 @@
+@font-face {
+  font-family: "iconfont"; /* Project id  */
+  src: url('iconfont.ttf?t=1637848359051') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-3column:before {
+  content: "\e663";
+}
+
+.icon-column-4:before {
+  content: "\e664";
+}
+
+.icon-add:before {
+  content: "\e665";
+}
+
+.icon-add-circle:before {
+  content: "\e666";
+}
+
+.icon-adjust:before {
+  content: "\e667";
+}
+
+.icon-arrow-up-circle:before {
+  content: "\e668";
+}
+
+.icon-arrow-right-circle:before {
+  content: "\e669";
+}
+
+.icon-arrow-down:before {
+  content: "\e66a";
+}
+
+.icon-ashbin:before {
+  content: "\e66b";
+}
+
+.icon-arrow-right:before {
+  content: "\e66c";
+}
+
+.icon-browse:before {
+  content: "\e66d";
+}
+
+.icon-bottom:before {
+  content: "\e66e";
+}
+
+.icon-back:before {
+  content: "\e66f";
+}
+
+.icon-bad:before {
+  content: "\e670";
+}
+
+.icon-arrow-left-circle:before {
+  content: "\e671";
+}
+
+.icon-caps-lock:before {
+  content: "\e672";
+}
+
+.icon-camera:before {
+  content: "\e673";
+}
+
+.icon-attachment:before {
+  content: "\e674";
+}
+
+.icon-code:before {
+  content: "\e675";
+}
+
+.icon-close:before {
+  content: "\e676";
+}
+

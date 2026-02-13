@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotate实现三角</title>
+    <style>
+        .box {
+            position: relative;
+            width: 200px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid black;
+        }
+
+        .box::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            border-top: 1px solid black;
+            border-right: 1px solid black;
+            transform: rotate(135deg);
+            transition: all 0.3s;
+        }
+
+        .box:hover::after {
+            top: 15px;
+            transform: rotate(-45deg);
+        }
+
+        .transform-origin {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+
+        .transform-origin::before {
+            content: '修改中心点';
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 100px;
+            background-color: pink;
+            transform-origin: left bottom;
+            transform: rotate(90deg);
+            transition: all 0.5s;
+        }
+
+        .transform-origin:hover::before {
+            transform: rotate(0deg);
+        }
+    </style>
+</head>
+
+<body>
+    <p>Css3实现三角,并通过过渡实现三角旋转</p>
+    <div class="box"></div>
+    <p>Css3实现旋转中心点</p>
+    <div class="transform-origin"></div>
+</body>
+
+</html>

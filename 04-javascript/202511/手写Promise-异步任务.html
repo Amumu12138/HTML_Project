@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写Promise-异步任务</title>
+</head>
+
+<body>
+    <h1>手写Promise-异步任务</h1>
+    <script>
+        // queueMicrtotask
+        console.log('111');
+
+        setTimeout(() => {
+            console.log('setTimeout called');
+
+        })
+        // 微任务是 JavaScript 异步编程中的一种机制，优先级高于宏任务（如 setTimeout）
+        queueMicrotask(() => {
+            console.log('queueMicrotask called');
+        })
+        console.log('222');
+        // 输出顺序：111-> 222 -> queueMicrotask called -> setTimeout called
+
+        // MutationObserver 监听浏览器元素变化
+        // console.log('123');
+
+        // const divNode = document.createElement('div')
+        // document.body.append(divNode)
+        // const obs = new MutationObserver(() => {
+        //     console.log('MutationObserver called');
+
+        // })
+        // obs.observe(divNode, { childList: true })
+        // divNode.innerText = 'update'
+        // console.log('456');
+        // 输出顺序: 123 -》 456 -》MutationObserver called
+    </script>
+</body>
+
+</html>

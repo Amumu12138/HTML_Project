@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="mobile-web-app-capable" content="yes"/>
+	<meta name="full-screen" content="true"/>
+	<meta name="screen-orientation" content="portrait"/>
+
+	<title>游戏</title>
+
+	<link href="/css/common.css" rel="stylesheet">
+	<link href="/css/layout.css" rel="stylesheet">
+
+	<script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
+	<script type="text/javascript" src="/js/pj_api.js"></script>
+	<script type="text/javascript" src="/js/pj_channel_sdk.js"></script>
+	<script type="text/javascript" src="//pulsdk.7724.com/channelsdk/sbpulsdk.js?v=1209"></script>
+
+	<style type="text/css">
+		html,body{
+			width:100%;
+			height:100%
+		}
+		body {
+/*
+			background: url(https://h5.infoxgame.com/images/duojiao_loading.png) no-repeat center top;
+*/
+			background-size: auto 100%;
+		}
+
+		#qqy_loading_img {
+			position: fixed;
+			z-index: 9999;
+			width: 100%;
+			height: 100%;
+			left: 0;
+			top: 0;
+			/* background: rgba(0, 0, 0, .8); */
+			background: url(https://h5.paojiao.cn/images/qqy_loading_splash.png) 0 0/100% 100% no-repeat;
+		}
+		</style>
+	<script src="../../js/jquery/jquery.md5.js"></script>
+
+</head>
+
+<body>
+<img id="qqy_loading_img">
+
+<script type="text/javascript">
+    $(function(){
+
+    	//初始化渠道sdk
+		pjChannelSdk.init(10871,"smxnh5_qqy_sm_001","1.0.0");
+		console.info("初始化sdk成功......");
+        setTimeout(function(){//定时器版
+                console.info("四秒后关闭----");
+                $("#qqy_loading_img").css("display","none");//将图片的display属性设置为none
+            },
+            4000);//设置四千毫秒权即4秒
+		//获取游戏信息
+		pjChannelSdk.getGameInfo(function (retData) {
+            console.info("getGameInfo return params +++"+JSON.stringify(retData));
+			if(retData.code ==1){
+				var gameName = retData.data.gameName;
+				$(document).attr("title",gameName);
+				var gameUrl = retData.data.gameUrl;
+                var orientation = retData.data.orientation;
+
+				//模拟渠道登录成功/ 真实的渠道，这里是初始化渠道sdk、获取渠道登录回调信息登录
+				//初始化渠道sdk{
+                var _params = pjapi.getURLParams();
+                console.info("--------_params--------:"+JSON.stringify(_params));
+
+					//不同的渠道使用不同的拼接方式,示例使用泡椒h5sdk
+					var extension = JSON.stringify({"qqesuid":_params.qqesuid,
+						"channelid":_params.channelid,"channeluid":_params.channeluid,
+                        "qqesnickname":_params.qqesnickname,"qqesavatar":_params.qqesavatar,
+                        "cpgameid":_params.cpgameid,"ext":_params.ext,
+						"qqestimestamp":_params.qqestimestamp,"sign":_params.sign});
+
+					SbPulSdk.init(_params, function(channelSdk) {
+                        //cp放置一些渠道的特殊逻辑， 比如初始化渠道的分享配置等等
+					});
+					console.info("--------reuqest params--------:"+extension);
+                	pjChannelSdk["extStr"]=_params.ext;
+                	pjChannelSdk["qqesuid"]=_params.qqesuid;
+                	pjChannelSdk["channelid"]=_params.channelid;
+                	pjChannelSdk["channeluid"]=_params.channeluid;
+					//校验渠道token
+					pjChannelSdk.getToken(extension,function (retData) {
+                        console.info("getToken return params-------："+JSON.stringify(retData));
+						if(retData.code == 1){
+							var gameParam = {};
+							gameParam["uid"] = retData.data.userInfo.uid;
+							gameParam["sdkToken"] = retData.data.userInfo.token;
+
+							gameUrl = pjapi.buildURL(gameUrl,gameParam);
+
+							console.log("===进入游戏===>>"+gameUrl);
+							 if(orientation == 0){//横屏游戏
+                                  $("body").append('<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+                                  window.onorientationchange = function () {
+                                      if (window.orientation == 90 || window.orientation == -90) {
+                                          $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});
+                                      }
+                                  }
+                              }else{//竖屏游戏
+                                  $("body").append('<div id="gameFrameDiv" style="width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+                              }
+
+						}else{
+							pjapi.confirmDialog(retData.msg);
+						}
+					});
+
+				//开启监听事件
+				pjChannelSdk.startEventListener();
+
+			}else{
+				pjapi.confirmDialog(retData.msg);
+                return;
+			}
+
+		});
+
+    });
+
+    function  receiveMessage(event){
+		console.log(event.data);
+		var params = event.data.param;
+
+		if(event.data.method == 'PJ_loadPayBox'){//拉起支付
+			console.log("调用订单获取接口");
+			var payParam ={};
+
+			payParam["channelGameId"]= pjChannelSdk.initData.channelGameId;
+			payParam["appVersion"]= pjChannelSdk.initData.appVersion;
+			payParam["channel"]=pjChannelSdk.initData.channel;
+			payParam["sdkVersion"]=pjChannelSdk.sdkVersion;
+			//渠道需要签名时的参数
+			payParam["extStr"]=pjChannelSdk.extStr;
+			payParam["channelid"]=pjChannelSdk.channelid;
+			payParam["channeluid"]=pjChannelSdk.channeluid;
+			payParam["qqesuid"]=pjChannelSdk.qqesuid;
+
+			payParam["money"]=params["money"];
+			payParam["uid"]=params["uid"];
+			payParam["productName"]=params["goodsName"];
+			payParam["roleId"]=params["roleId"];
+			payParam["roleName"]=params["roleName"];
+			payParam["serverId"]=params["serverId"];
+			payParam["serverName"]=params["serverName"];
+			payParam["description"]=params["description"];
+			payParam["ext"]=params["ext"];
+			payParam["cpOrderNo"]=params["cpOrderNo"];
+
+            console.log("------------payParam--------------"+JSON.stringify(payParam));
+			//生成融合sdk订单
+			pjChannelSdk.getOrderNo(payParam,function (retData) {
+                 if(retData.code == 1){
+					 console.log("获取订单成功："+JSON.stringify(retData));
+                     var _d = retData.data.extension.split("_");
+                      	var extStr = decodeURIComponent(pjChannelSdk.extStr);
+                         var cpPayParams = {
+                             order: retData.data.orderInfo.orderNumber,			//cp生成的订单号
+                             cpgameid: "495",			// cp的游戏id
+                             qqesuid: _d[1],							// 平台用户id
+                             channelid: _d[4],	// 渠道id
+                             channeluid: _d[5],		// 渠道用户id
+                             cpguid:  _d[2],							// cp在我们平台的唯一ID
+                             goodsname: retData.data.orderInfo.goodsName,		// 商品名称
+                             fee: retData.data.orderInfo.money, 	 			// 商品价格(元),(最多两位小数点)
+                             ext: extStr,								// 登录时获取的透传字段， 这里需要原样回传。
+                             timestamp: _d[3],								// 请求时间戳
+                             sign: _d[0],	 						// sign 加密串
+                         };
+                         console.info("request lequ pay params----:"+JSON.stringify(cpPayParams));
+                     	 SbPulSdk.pay(cpPayParams);
+				 }else{
+					 pjapi.confirmDialog(retData.msg);
+				 }
+
+			});
+        }else if(event.data.method == 'PJ_reportRoleInfo'){//上报角色信息
+			console.info("-------调用渠道角色上报接口--------");
+        }
+    }
+
+</script>
+</body>
+</html>

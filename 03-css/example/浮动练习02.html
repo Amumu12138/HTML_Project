@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浮动练习02</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .top,
+        .body,
+        .footer {
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .top {
+            width: 100%;
+            height: 100px;
+            background-color: red;
+            line-height: 100px;
+        }
+
+        .body {
+            width: 800px;
+            background-color: white;
+        }
+
+        .banner {
+            height: 100px;
+            background-color: gray;
+            line-height: 100px;
+        }
+
+        /* 清除浮动 */
+        .clearfix:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .flex-01 ul li {
+            float: left;
+            height: 160px;
+            width: 160px;
+            background-color: green;
+            margin: 20px;
+            line-height: 160px;
+        }
+
+
+        .flex-02 ul li {
+            float: left;
+            height: 200px;
+            width: 160px;
+            background-color: yellow;
+            margin: 20px;
+            line-height: 200px;
+        }
+
+        .footer {
+            width: 100%;
+            height: 50px;
+            background-color: red;
+            line-height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top">top</div>
+    <div class="body">
+        <div class="banner">banner</div>
+        <div class="flex-01 clearfix">
+            <ul>
+                <li>1我是盒子01</li>
+                <li>2我是盒子01</li>
+                <li>3我是盒子01</li>
+                <li>4我是盒子01</li>
+            </ul>
+        </div>
+        <div class="flex-02 clearfix">
+            <ul>
+                <li>1我是盒子02</li>
+                <li>2我是盒子02</li>
+                <li>3我是盒子02</li>
+                <li>4我是盒子02</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        footer
+    </div>
+</body>
+
+</html>

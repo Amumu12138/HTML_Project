@@ -1,0 +1,13 @@
+<!--components/my-component.wxml-->
+<view>
+   <view class="text-color">
+    我创建的一个自定义组件
+   </view>
+   <!-- slot:插槽 -->
+    <view>
+      <slot name="before"></slot>
+    </view>
+    <view>
+      <slot name="after"></slot>
+    </view>
+</view>

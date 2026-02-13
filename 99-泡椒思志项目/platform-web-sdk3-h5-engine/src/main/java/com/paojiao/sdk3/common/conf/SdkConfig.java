@@ -1,0 +1,149 @@
+package com.paojiao.sdk3.common.conf;
+
+
+
+public class SdkConfig {
+
+	private String sdkHost;
+
+	private String userCenterHost;
+	private String sendUserInfoToMobileUrl;
+	private String findpwdFirstUrl;
+
+	private String ngSdkHost;
+	private String ngTokenUrl;
+	private String ngLoginUrl;
+	private String ngOpenGameUrl;
+
+
+	private String ngReportRoleInfoUrl;
+
+
+	private String ngRandomUserUrl;
+	private String ngRegUrl;
+
+
+	private String payUrl;
+	private String ucUrl;
+
+
+	private String ngPhoneCodeUrl;
+	private String ngBindMobileUrl;
+
+	private String ngMobileLoginUrl;
+	private String ngSelectLoginUrl;
+
+	public String getSdkHost() {
+	    return sdkHost;
+	}
+	public void setSdkHost(String sdkHost) {
+	    this.sdkHost = sdkHost;
+	}
+	public String getUserCenterHost() {
+	    return userCenterHost;
+	}
+	public void setUserCenterHost(String userCenterHost) {
+	    this.userCenterHost = userCenterHost;
+	}
+	public String getNgSdkHost() {
+	    return ngSdkHost;
+	}
+	public void setNgSdkHost(String ngSdkHost) {
+	    this.ngSdkHost = ngSdkHost;
+	}
+	public String getNgTokenUrl() {
+	    return ngTokenUrl;
+	}
+	public void setNgTokenUrl(String ngTokenUrl) {
+	    this.ngTokenUrl = ngTokenUrl;
+	}
+
+	public String getNgReportRoleInfoUrl() {
+	    return ngReportRoleInfoUrl;
+	}
+	public void setNgReportRoleInfoUrl(String ngReportRoleInfoUrl) {
+	    this.ngReportRoleInfoUrl = ngReportRoleInfoUrl;
+	}
+	public String getNgLoginUrl() {
+	    return ngLoginUrl;
+	}
+	public void setNgLoginUrl(String ngLoginUrl) {
+	    this.ngLoginUrl = ngLoginUrl;
+	}
+	public String getNgRandomUserUrl() {
+	    return ngRandomUserUrl;
+	}
+	public void setNgRandomUserUrl(String ngRandomUserUrl) {
+	    this.ngRandomUserUrl = ngRandomUserUrl;
+	}
+	public String getNgRegUrl() {
+	    return ngRegUrl;
+	}
+	public void setNgRegUrl(String ngRegUrl) {
+	    this.ngRegUrl = ngRegUrl;
+	}
+	public String getSendUserInfoToMobileUrl() {
+	    return sendUserInfoToMobileUrl;
+	}
+	public void setSendUserInfoToMobileUrl(String sendUserInfoToMobileUrl) {
+	    this.sendUserInfoToMobileUrl = sendUserInfoToMobileUrl;
+	}
+	public String getFindpwdFirstUrl() {
+	    return findpwdFirstUrl;
+	}
+	public void setFindpwdFirstUrl(String findpwdFirstUrl) {
+	    this.findpwdFirstUrl = findpwdFirstUrl;
+	}
+	public String getNgOpenGameUrl() {
+	    return ngOpenGameUrl;
+	}
+	public void setNgOpenGameUrl(String ngOpenGameUrl) {
+	    this.ngOpenGameUrl = ngOpenGameUrl;
+	}
+    public String getPayUrl() {
+        return payUrl;
+    }
+    public void setPayUrl(String payUrl) {
+        this.payUrl = payUrl;
+    }
+
+	public String getUcUrl() {
+		return ucUrl;
+	}
+
+	public void setUcUrl(String ucUrl) {
+		this.ucUrl = ucUrl;
+	}
+
+	public String getNgPhoneCodeUrl() {
+		return ngPhoneCodeUrl;
+	}
+
+	public void setNgPhoneCodeUrl(String ngPhoneCodeUrl) {
+		this.ngPhoneCodeUrl = ngPhoneCodeUrl;
+	}
+
+	public String getNgBindMobileUrl() {
+		return ngBindMobileUrl;
+	}
+
+	public void setNgBindMobileUrl(String ngBindMobileUrl) {
+		this.ngBindMobileUrl = ngBindMobileUrl;
+	}
+
+	public String getNgMobileLoginUrl() {
+		return ngMobileLoginUrl;
+	}
+
+	public void setNgMobileLoginUrl(String ngMobileLoginUrl) {
+		this.ngMobileLoginUrl = ngMobileLoginUrl;
+	}
+
+	public String getNgSelectLoginUrl() {
+		return ngSelectLoginUrl;
+	}
+
+	public void setNgSelectLoginUrl(String ngSelectLoginUrl) {
+		this.ngSelectLoginUrl = ngSelectLoginUrl;
+	}
+}

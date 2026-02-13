@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise的基础应用</title>
+</head>
+
+<body>
+    <script>
+        // Promise的基础应用
+        new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // let data = 'success';
+                // resolve(data);
+                let errData = 'error';
+                reject(errData);
+            }, 2000);
+        }).then(function (response) {
+            console.log(`then called ${response}`);
+        }, function (err) {
+            console.error(`then called ${err}`);
+        }).catch(function (reason) {
+            console.log('catch called');
+        });
+
+        // Promise封装Ajax
+        const p = new Promise((resolve, reject) => {
+            // 1、创建对象
+            const xhr = new XMLHttpRequest();
+            // 2、初始化
+            xhr.open('GET', 'https://api.apiopen.top/getJoke');
+            // 3、发送
+            xhr.send();
+            // 4、绑定事件,处理响应结果
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        resolve(xhr.response);
+                    } else {
+                        reject(xhr.status)
+                    }
+                }
+            }
+        });
+
+        p.then((value) => {
+            console.log(`p then called value is ${value}`);
+        }, (error) => {
+            console.log(`p then called erorr ${error}`);
+        });
+    </script>
+</body>
+
+</html>

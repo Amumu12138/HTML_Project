@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1136,640" designImageForTest="true">
+  <displayList>
+    <component id="n4_qpb6" name="btnTest" src="qpb6n" fileName="Btn.xml" xy="212,152">
+      <Button title="Test"/>
+    </component>
+    <text id="n5_ffpy" name="n1" xy="511,261" size="191,66" fontSize="50" color="#ffffff" text="Amumu">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+</component>

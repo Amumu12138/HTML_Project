@@ -1,0 +1,52 @@
+package com.paojiao.sdk3.controller.thirdsdk.aiqiyi;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+public class AiQiYiSign {
+    private static final String SECRET_KEY = "sign_key";
+    private static final String EXCLUDE_PARAM_SIGN = "sign";
+    private static final String KEY_VAL_LINK = "=";
+    private static final String KEYS_LINK = "&";
+    private static final String VAL_EMPTY_DEFAULT = "";
+
+    /**
+     * 排查空值的签名
+     * @param params 签名参数
+     * @param secretKey 签名的KEY，默认加到sign_key里面
+     * @return
+     */
+    public static String sign(Map params, String secretKey){
+        return sign(params,secretKey,Boolean.TRUE);
+    }
+
+    /**
+     * 签名
+     * @param params 签名参数
+     * @param secretKey 签名的KEY，默认加到sign_key里面
+     * @param excludeEmpty 是否排查空值
+     * @return
+     */
+    public static String sign(Map params, String secretKey, boolean excludeEmpty){
+        SortedMap sortedParams = new TreeMap(params);
+        sortedParams.put(SECRET_KEY, secretKey);
+
+        StringBuilder sb = new StringBuilder();
+        String val = null;
+        for(Object key : sortedParams.keySet()){
+            if(EXCLUDE_PARAM_SIGN.equals(key)){
+                continue;
+            }
+            val = (String) sortedParams.get(key);
+            if(excludeEmpty && !StringUtils.isNotBlank(val)){//排查空
+                continue;
+            }
+            sb.append(key).append(KEY_VAL_LINK).append(StringUtils.defaultIfEmpty(val, VAL_EMPTY_DEFAULT)).append(KEYS_LINK);
+        }
+        return DigestUtils.md5Hex(sb.substring(0, sb.length() - 1).toString());
+    }
+}

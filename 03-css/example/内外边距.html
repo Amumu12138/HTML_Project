@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内外边距</title>
+    <style>
+        .demo {
+            width: 200px;
+            height: 200px;
+            text-align: center;
+            line-height: 200px;
+            background-color: rebeccapurple;
+        }
+
+        .image-center {
+            display: block;
+            margin: 0 auto;
+            width: 400px;
+        }
+
+        .image-center02 {
+            text-align: center;
+        }
+
+        .image-center02 img {
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo">
+        我是块级元素DIV
+    </div>
+
+    <div>
+        <h4 style="text-align: center;">图片居中方法一：将img标签转换为块级元素，在设置外边距margin: 0 auto;</h4>
+        <img src="../res/images/bg.jpg" alt="图片居中" class="image-center">
+    </div>
+
+    <div class="image-center02">
+        <h4>图片居中方法二：将img标签的父元素对对齐样式设置成居中对齐：text-algin: center;</h4>
+        <img src="../res/images/bg.jpg" alt="图片居中">
+    </div>
+</body>
+
+</html>

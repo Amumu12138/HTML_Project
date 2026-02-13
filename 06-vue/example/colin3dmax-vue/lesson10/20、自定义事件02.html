@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20、自定义事件02</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>以 update:myPropName 的模式触发事件</p>
+        <text-document :title="doc.title" v-on:update:title="doc.title = $event"></text-document>
+        <p>.sync 修饰符</p>
+        <text-document-02 v-bind:title.sync="title02"></text-document-02>
+        <p>用一个对象同时设置多个 prop </p>
+        <text-document-03 v-bind.sync="doc03"></text-document-03>
+    </div>
+    <script>
+        Vue.component("text-document", {
+            template: `
+                <div>
+                    {{title}}
+                    <input type="text" v-on:input="inputChange">
+                </div>
+            `,
+            props: ['title'],
+            methods: {
+                inputChange(event) {
+                    console.log('Amumu onChange value = ', event.target.value)
+                    var newValue = event.target.value
+                    this.$emit('update:title', newValue)
+                }
+            }
+        })
+
+        Vue.component("text-document-02", {
+            template: `
+                <div>
+                    {{title}}
+                    <input type="text" v-on:input="inputChange">
+                </div>
+            `,
+            props: ['title'],
+            methods: {
+                inputChange(event) {
+                    var newValue = event.target.value
+                    this.$emit('update:title', newValue)
+                }
+            }
+
+        })
+
+        Vue.component("text-document-03", {
+            template: `
+                <div>
+                    {{title}}
+                    <input type="text" v-on:input="inputChange">
+                    {{content}}
+                    <input type="text" v-on:input="inputChangeContent">
+                </div>
+            `,
+            props: ['title', 'content'],
+            methods: {
+                inputChange(event) {
+                    var newValue = event.target.value
+                    this.$emit('update:title', newValue)
+                },
+                inputChangeContent(event) {
+                    var newValue = event.target.value
+                    this.$emit('update:content', newValue)
+                }
+            }
+
+        })
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                doc: {
+                    title: "name"
+                },
+                title02: "name-02",
+                doc03: {
+                    title: "name-03",
+                    content: "hello Amumu 03"
+                }
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

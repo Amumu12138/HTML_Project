@@ -1,0 +1,202 @@
+package com.paojiao.sdk3.controller.thirdsdk.huanjuyou;
+
+import com.alibaba.fastjson.JSONObject;
+import com.jfinal.aop.Aop;
+import com.jfinal.kit.JsonKit;
+import com.jfinal.kit.StrKit;
+import com.paojiao.sdk3.common.util.DateUtil;
+import com.paojiao.sdk3.common.util.PjMap;
+import com.paojiao.sdk3.common.util.SignUtil;
+import com.paojiao.sdk3.common.util.SignUtil2;
+import com.paojiao.sdk3.controller.pay.PayStatus;
+import com.paojiao.sdk3.controller.thirdsdk.ISDKVerifyListener;
+import com.paojiao.sdk3.controller.thirdsdk.ItfSdk;
+import com.paojiao.sdk3.controller.thirdsdk.SDKVerifyResult;
+import com.paojiao.sdk3.model.PjCpGame;
+import com.paojiao.sdk3.model.PjThirdSdkChannel;
+import com.paojiao.sdk3.model.PjThirdSdkChannelGame;
+import com.paojiao.sdk3.model.PjThirdSdkOrder;
+import com.paojiao.sdk3.service.PjThirdSdkChannelGameService;
+import com.paojiao.sdk3.service.PjThirdSdkChannelService;
+import com.paojiao.sdk3.service.PjThirdSdkOrderService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
+import java.util.*;
+
+/**
+ * 类描述：趣乐网SDK
+ *
+ * @Author: jiangkun
+ * @Date: 2020/4/26 10:21
+ */
+public class HuanJuYouSDK implements ItfSdk {
+    private static final Logger log = Logger.getLogger(HuanJuYouSDK.class);
+    private PjThirdSdkOrderService orderService = Aop.get(PjThirdSdkOrderService.class);
+    private PjThirdSdkChannelGameService channelGameService = Aop.get(PjThirdSdkChannelGameService.class);
+    private PjThirdSdkChannelService channelService = Aop.get(PjThirdSdkChannelService.class);
+
+    @Override
+    public void verify(PjThirdSdkChannel sdkChannel, PjThirdSdkChannelGame channelGame, PjCpGame game, String sdkToken, ISDKVerifyListener callback) {
+        try {
+            log.info("HuanJuYouSDK-verify  客户端登录返回:" + sdkToken);
+            if (StringUtils.isEmpty(sdkToken)) {
+                log.info("HuanJuYouSDK-verify 客户端登录返回为空");
+                callback.onFailed(" verify failed. " + "HuanJuYouSDK 客户端登录返回为空");
+                return;
+            }
+            JSONObject json = JSONObject.parseObject(sdkToken);
+            final String gameId = json.getString("gameId");
+            final String uid = json.getString("uid");
+            final String userName = URLEncoder.encode(json.getString("userName"));
+            final String time = json.getString("time");
+            final String isAdult = json.getString("isAdult");
+            final String signType = json.getString("signType");
+            final String sign = json.getString("sign");
+            Integer newIsAdult = 0;
+            if (StringUtils.isEmpty(gameId)) {
+                log.info("HuanJuYouSDK-verify gameId为空");
+                callback.onFailed(" verify failed：HuanJuYouSDK:gameId为空");
+                return;
+            }
+            if (StringUtils.isEmpty(uid)) {
+                log.info("HuanJuYouSDK-verify uid为空");
+                callback.onFailed(" verify failed：HuanJuYouSDK:uid为空");
+                return;
+            }
+            if (isAdult.equals("yes")) {
+                newIsAdult = 1;
+            }
+            Map<String, String> params = new HashMap<>();
+            params.put("gameId", gameId);
+            params.put("uid", uid);
+            params.put("userName", userName);
+            params.put("time", time);
+            String signStr = SignUtil.sortParam2(params) + "&key=" + channelGame.getSignKey();
+            log.info("HuanJuYouSDK-verify 加密参数： " + signStr);
+            String againSign = SignUtil2.md5(signStr);
+            if (!againSign.equals(sign)) {
+                callback.onFailed(sdkChannel.getSdkCode()
+                        + "HuanJuYouSDK-verify,签名失败：签名结果为：" + againSign + ",原签名sign为：" + sign);
+                return;
+            } else {
+                log.info("HuanJuYouSDK-verify:验证sign成功");
+                callback.onSuccess(new SDKVerifyResult(true, uid, null, null, newIsAdult));
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.onFailed(sdkChannel.getSdkCode()
+                    + " verify execute failed. the exception is "
+                    + e.getMessage());
+        }
+    }
+
+    @Override
+    public void orderCallBack(PjMap<String, String> params, HttpServletRequest request, ISDKVerifyListener callback) {
+        log.info("HuanJuYouSDK orderCallBack:" + JsonKit.toJson(params));
+        SDKVerifyResult vs = new SDKVerifyResult();
+        try {
+            PjThirdSdkChannelGame channelGame = channelGameService.findGameById(params.getToInt("channelGameId"));
+
+            PjThirdSdkChannel channel = channelService.findChannelById(channelGame.getSdkChannelId());
+            String sign = params.get("sign");
+            String status = params.get("status");
+            if (!status.equals("success")) {
+                log.error("HuanJuYouSDK 订单状态错误，订单status为：" + status);
+                vs.setReturnMsg("fail");
+                callback.onSuccess(vs);
+                return;
+            }
+            try {
+                Map<String, String> callBackMap = new HashMap<>();
+                callBackMap.put("status", status);
+                callBackMap.put("cpOrderId", params.get("cpOrderId"));
+                callBackMap.put("orderId", params.get("orderId"));
+                callBackMap.put("uid", params.get("uid"));
+                callBackMap.put("userName", params.get("userName"));
+                callBackMap.put("money", params.get("money"));
+                callBackMap.put("gameId", params.get("gameId"));
+                callBackMap.put("goodsId", params.get("goodsId"));
+                callBackMap.put("goodsName", params.get("goodsName"));
+                callBackMap.put("server", params.get("server"));
+                callBackMap.put("role", params.get("role"));
+                callBackMap.put("time", params.get("time"));
+                String signParas = SignUtil2.sortParam2(callBackMap) + "&key=" + channelGame.getPayKey();
+                log.info("HuanJuYouSDK orderCallBack 待加密参数:" + signParas);
+                String againSign = SignUtil2.md5(signParas);
+                if (!sign.equals(againSign)) {
+                    log.error("HuanJuYouSDK orderCallBack 验签失败，原sign:" + sign + " ,加密的sign:" + againSign);
+                    vs.setReturnMsg("fail");
+                    callback.onSuccess(vs);
+                    return;
+                }
+                String cporder = params.get("cpOrderId");
+                PjThirdSdkOrder iod = orderService.findOrderByOrderNo(cporder);
+                if (iod == null) {
+                    log.error("ERROR:orer not found,orderNo:[" + cporder + "]");
+                } else if (iod.getStatus() == PayStatus.PAY_SUCCESS.id) {// 已完成支付
+                    log.error("重复回调,orderNo:[" + cporder + "]");
+                    vs.setReturnMsg("success");
+                    callback.onSuccess(vs);
+                    return;
+                }
+
+                // 真实收款
+                Double amount = Double.valueOf(params.get("money"));
+                // 实际收款金额不一致
+                if (iod.getMoney() != amount.floatValue()) {
+                    log.error("HuanJuYouSDK收款金额与订单金额不符,orderNo:[" + cporder + "],订单金额："
+                            + iod.getMoney() + ",实际收款金额：" + amount);
+                    // 更新订单金额
+                    iod.setMoney(amount.floatValue());
+                    orderService.updateOrder(iod);
+                }
+                log.info("+++++++++HuanJuYou，完成支付....");
+                orderService.finishOrderAndCallbackCp(cporder,
+                        params.get("orderId"));
+
+            } catch (Exception e) {
+                log.error("HuanJuYou orderCallBack error:" + e.getMessage());
+                vs.setReturnMsg("fail");
+                callback.onSuccess(vs);
+                return;
+            }
+            vs.setReturnMsg("success");
+            callback.onSuccess(vs);
+        } catch (Exception e) {
+            vs.setReturnMsg("fail");
+            callback.onSuccess(vs);
+            log.error("HuanJuYouSDK充值回调请求异常！params:[" + JsonKit.toJson(params) + "]");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getOrderNo(PjThirdSdkChannel sdkChannel, PjThirdSdkChannelGame channelGame, PjThirdSdkOrder order, PjMap<String, String> params, ISDKVerifyListener callback) {
+        String time = String.valueOf(DateUtil.dateToUnixTimestamp());
+        try {
+            Map<String, String> orderMap = new HashMap<>();
+            orderMap.put("gameId", channelGame.getSdkAppId());
+            orderMap.put("uid", order.getSdkUserId());
+            orderMap.put("time", time);
+            orderMap.put("server", order.getServerId());
+            orderMap.put("role", order.getRoleId());
+            orderMap.put("goodsId", "10001");
+            orderMap.put("goodsName", order.getGoodsName());
+            orderMap.put("money", order.getMoney() + "0");
+            orderMap.put("cpOrderId", order.getOrderNumber());
+            String signParam = SignUtil2.sortParam2(orderMap) + "&key=" + channelGame.getPayKey();
+            log.info("HuanJuYouSDK-getOrderNo: 加密参数：" + signParam);
+            String sign = SignUtil2.md5(signParam);
+            log.info("HuanJuYouSDK-getOrderNo: 返回客户端参数：" + sign);
+            SDKVerifyResult result = new SDKVerifyResult();
+            result.setExtension(sign+"_"+time);
+            callback.onSuccess(result);
+        } catch (Exception e) {
+            log.info("HuanJuYouSDK-getOrderNo: ERROR：" + e.getMessage());
+        }
+    }
+}

@@ -1,0 +1,29 @@
+<view class="page-body">
+    <view class="page-section">
+      <view class="page-section-title first">movable-view区域小于movable-area</view>
+      <movable-area>
+        <movable-view 
+        x="{{x}}" y="{{y}}" 
+        direction="all" inertia
+        bindchange="onChange" 
+        bindscale="onScale" 
+        scale 
+        scale-min="0.5" 
+        scale-max="4" 
+        scale-value="{{scale}}"
+        >
+        text
+        </movable-view>
+      </movable-area>
+    </view>
+    <view class="btn-area">
+      <button 
+       bindtap="tap"
+       class="page-body-button" 
+       type="primary">
+       点击移动到 (30px, 30px)
+      </button>
+      <button bindtap="tap2" class="page-body-button" type="primary">点击放大3倍</button>
+      <button bindtap="tapMin" class="page-body-button" type="primary">点击缩小至0.5倍</button>
+    </view>
+  </view>
