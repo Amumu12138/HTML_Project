@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.4Map</title>
+</head>
+
+<body>
+    <script>
+        // 基本API
+        const m1 = new Map([
+            ['kye1', 'val1'],
+            ['kye2', 'val2'],
+            ['kye3', 'val3']
+        ]);
+
+        console.log(m1.size); // 3
+
+        const m2 = new Map([[]]);
+        console.log(m2); // Map(1) {undefined => undefined}
+        console.log(m2.has(undefined)); // true
+        console.log(m2.get(undefined)); // undefined
+
+        const m3 = new Map().set('key1', 'val1');
+        m3.set('key2', 'val2').set('key3', 'val3');
+        console.log(m3.size, m3); // 3 Map(3) {'key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3'}
+
+        const m4 = new Map();
+        const functionKey = function () { };
+        const symbolKey = Symbol();
+        const objectKey = new Object();
+
+        m4.set(functionKey, 'functionValue');
+        m4.set(symbolKey, 'symbolValue');
+        m4.set(objectKey, 'objectValue');
+        // functionValue symbolValue objectValue
+        console.log(m4.get(functionKey), m4.get(symbolKey), m4.get(objectKey), m4);
+        console.log(m4.get(function () { })); // undefined
+
+        const m5 = new Map();
+        const objKey = {}, objVal = {}, arrKey = [], arrVal = [];
+        m5.set(objKey, objVal);
+        m5.set(arrKey, arrVal);
+        console.log('before m5 -->', m5);
+
+        objKey.foo = "foo";
+        objVal.bar = "bar";
+        arrKey.push('foo');
+        arrVal.push('bar');
+        console.log('after m5 -->', m5);
+
+        const m6 = new Map();
+        const a = 0 / '', b = 0 / '', pz = +0; nz = -0;
+        console.log(a === b, pz === nz); // false true
+
+        m6.set(a, 'foo');
+        m6.set(pz, 'bar');
+        console.log(m6.get(b), m6.get(nz)); // foo bar
+    </script>
+</body>
+
+</html>

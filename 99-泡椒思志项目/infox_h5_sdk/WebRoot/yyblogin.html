@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="full-screen" content="true" />
+<meta name="screen-orientation" content="portrait" />
+<meta http-equiv="pragma" content="no-cache"/>
+<meta http-equiv="cache-control" content="no-cache"/>
+<meta http-equiv="cache" content="no-cache"/>
+<meta http-equiv="expires" content="0"/>
+
+<title>游戏登录</title> 
+
+<link href="css/common.css?201905081655" rel="stylesheet">
+<link href="css/layout.css?201905081655" rel="stylesheet">
+
+<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/jquery/jquery.md5.js"></script>
+<script type="text/javascript" src="js/rhsdk_host.js?v=201905081655"></script>
+<style>
+
+	html,body{
+    	width:100%;
+    	height:100%
+	}
+
+	body {
+		background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;
+	}
+</style>
+
+</head>
+
+<body> 
+
+<div id="flash"></div> 
+
+
+	<script type="text/javascript">
+	
+	$(function(){
+		var image = sdk.getURLVar("image");
+		if(sdk.isNotNull(image)){
+			$("body").css({"background-image":"url("+image+")"});
+		}
+		window.Javascript.login1go();
+		sdk.init();	
+	
+		$("body").click(function(){
+			if(!b){
+				self.setInterval("clock()",4000);
+				window.Javascript.login1go();
+				b = true;
+			}
+			
+		})
+		
+	});
+	
+		var b = false;
+		function clock(){
+		  b = false;	
+		}
+		
+		function login2go(sdkToken,uid){
+			sdk.setItem("sdkToken",sdkToken);
+			sdk.setItem("uid",uid);
+			window.location.href= "https://h5.infoxgame.com/yybmain.html";
+		}
+		
+		function getImei(imei){
+			sdk.setItem("imei",imei);
+		}
+		
+	
+		
+	</script>
+
+
+</body>
+
+</html>

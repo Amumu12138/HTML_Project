@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>toRef和toRefs</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <h1>toRef和toRefs</h1>
+    <div id="app">
+        <div>{{ count }}</div>
+        <button @click="changeCount">count自增</button>
+    </div>
+    <script>
+        const { createApp, ref, toRef, reactive, toRefs } = Vue
+
+        createApp({
+            setup() {
+                const data = {
+                    count: 1
+                }
+                const o = reactive(data)
+
+                // const count = toRef(o, 'count');
+                // console.log(count, typeof count); // 1 object
+
+                // const { count } = toRefs(o)
+                // console.log(count); // ObjectRefImpl{value: 1}
+
+                // const testObj = toRefs(o);
+                // console.log(typeof testObj); // object
+
+                const changeCount = () => {
+                    count++;
+                }
+
+                return {
+                    count,
+                    changeCount
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利用正则隐藏手机号</title>
+</head>
+
+<body>
+    <h3>利用正则隐藏手机号</h3>
+    <p id="tel"></p>
+    <script>
+        const tel = "15112345867";
+        const str = tel.replace(/^(\d{3})\d{4}(\d{4})$/, "$1****$2");
+        console.log(str);
+        document.getElementById('tel').innerHTML = str;
+    </script>
+</body>
+
+</html>

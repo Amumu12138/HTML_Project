@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+
+    <!-- 渠道商:5144玩 -->
+    <title>雄志三国</title>
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
+    <script type="text/javascript" src="/js/pj_api.js"></script>
+    <script type="text/javascript" src="/js/pj_channel_sdk.js"></script>
+    <script type="text/javascript" src="/js/pj_sdk_host.js"></script>
+    <!-- 引入sdk -->
+    <script src="https://play.5144wan.com/xykj/resource/sdk.min.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%
+        }
+
+        body {
+            /* background: url(https://h5.infoxgame.com/images/duojiao_loading.png) no-repeat center top; */
+            background-size: auto 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        var requestParam = {};
+        $(function () {
+            //初始化
+            pjChannelSdk.init(11043, "yxzbqh_5144_xh_001", "1.0.0");
+            sdk.init3("11043", "yxzbqh_5144_xh_001");
+            console.info("初始化sdk成功......");
+            //获取游戏信息
+            pjChannelSdk.getGameInfo(function (retData) {
+                console.info("getGameInfo return params +++" + JSON.stringify(retData));
+                if (retData.code == 1) {
+                    var gameName = retData.data.gameName;
+                    $(document).attr("title", gameName);
+                    var gameUrl = retData.data.gameUrl;
+                    var orientation = retData.data.orientation;
+                    //初始化渠道sdk{
+                    var _params = pjapi.getURLParams();
+
+                    //游戏加载时调用
+                    var time = pjapi.getTimestamp();
+                    //签名
+                    var sign = $.md5("10351#ds584gh32a4f56h41s65djh8ukiu#" + time);
+                    var initdata = {
+                        pid: "10351",
+                        time: time,
+                        sign: sign
+                    };
+                    //5144玩渠道初始化
+                    play.sdk.init(initdata, function (func) {
+                        console.info("5144 wan  init1 params------:" + JSON.stringify(func));
+                        var newFunc = JSON.parse(func);
+                        //不同的渠道使用不同的拼接方式
+                        var extension = JSON.stringify({
+                            "pid": _params.pid,
+                            "gid": _params.gid,
+                            "sid": _params.sid,
+                            "uid": _params.uid,
+                            "time": _params.time,
+                            "uname": newFunc.data.uname,
+                            "sign": _params.sign
+                        });
+                        pjChannelSdk["uid"] = newFunc.data.uid;
+                        pjChannelSdk["gid"] = newFunc.data.gid;
+                        pjChannelSdk["sid"] = newFunc.data.sid;
+                        pjChannelSdk["uname"] = newFunc.data.uname;
+                        //校验渠道token
+                        pjChannelSdk.getToken(extension, function (retData) {
+                            console.info("-------getToken return params------:" + JSON
+                                .stringify(retData));
+                            if (retData.code == 1) {
+                                var gameParam = {};
+                                gameParam["uid"] = retData.data.userInfo.uid;
+                                gameParam["sdkToken"] = retData.data.userInfo.token;
+                                gameUrl = pjapi.buildURL(gameUrl, gameParam);
+                                console.log("===进入游戏===>>" + gameUrl);
+                                if (orientation == 0) { //横屏游戏
+                                    $("body").append(
+                                        '<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
+                                        gameUrl +
+                                        '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>'
+                                    );
+                                    window.onorientationchange = function () {
+                                        if (window.orientation == 90 || window
+                                            .orientation == -90) {
+                                            $("#gameFrameDiv").css({
+                                                "left": $(window).width() -
+                                                    20,
+                                                "top": "30%"
+                                            });
+                                        }
+                                    }
+                                } else { //竖屏游戏
+                                    $("body").append(
+                                        '<div id="gameFrameDiv" style="width: ' + $(
+                                            window).width() + 'px;  height: ' + $(
+                                            window).height() +
+                                        'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +
+                                        gameUrl +
+                                        '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' +
+                                        $(window).width() + 'px; height: ' + $(
+                                            window).height() +
+                                        'px;"></iframe></div>');
+                                }
+
+                            } else {
+                                pjapi.confirmDialog(retData.msg);
+                            }
+                        });
+                    });
+                    //开启监听事件
+                    pjChannelSdk.startEventListener();
+
+                } else {
+                    pjapi.confirmDialog(retData.msg);
+                    return;
+                }
+
+            });
+
+        });
+
+
+        function receiveMessage(event) {
+            console.log(event.data);
+            var params = event.data.param;
+
+            if (event.data.method == 'PJ_loadPayBox') { //拉起支付
+                console.log("调用订单获取接口");
+                var payParam = {};
+
+                payParam["channelGameId"] = pjChannelSdk.initData.channelGameId;
+                payParam["appVersion"] = pjChannelSdk.initData.appVersion;
+                payParam["channel"] = pjChannelSdk.initData.channel;
+                payParam["sdkVersion"] = pjChannelSdk.sdkVersion;
+
+                payParam["token"] = pjChannelSdk.sdkToken;
+                payParam["money"] = params["money"];
+                payParam["uid"] = params["uid"];
+                payParam["productName"] = params["goodsName"];
+                payParam["roleId"] = params["roleId"];
+                payParam["roleName"] = params["roleName"];
+                payParam["serverId"] = params["serverId"];
+                payParam["serverName"] = params["serverName"];
+                payParam["description"] = params["description"];
+                payParam["ext"] = params["ext"];
+                payParam["cpOrderNo"] = params["cpOrderNo"];
+                //生成融合sdk订单
+                pjChannelSdk.getOrderNo(payParam, function (retData) {
+                    if (retData.code == 1) {
+                        console.log("获取订单成功：" + JSON.stringify(retData));
+                        //var _d = retData.data.extension.split("_");
+                        //var time = pjapi.getTimestamp();
+                        var paydata = {
+                            pid: "10351",
+                            gid: pjChannelSdk.gid, //我方游戏唯一标示
+                            sid: pjChannelSdk.sid, //我方游戏服唯一标示
+                            uid: pjChannelSdk.uid,
+                            uname: pjChannelSdk.uname,
+                            money: retData.data.orderInfo.money,
+                            other: retData.data.orderInfo.orderNumber
+                        }
+                        console.info("------this pay parmas:" + JSON.stringify(paydata));
+                        play.sdk.pay(paydata);
+                    } else {
+                        pjapi.confirmDialog(retData.msg);
+                    }
+
+                });
+
+            } else if (event.data.method == 'PJ_reportRoleInfo') { //上报角色信息
+                sdk.reportRoleInfo(params);
+                var time = params["time"];
+                var sign = $.md5("10351#ds584gh32a4f56h41s65djh8ukiu#" + time);
+                var roledata = {
+                    pid: "10351",
+                    gid: pjChannelSdk.gid,
+                    sid: pjChannelSdk.sid,
+                    rolename: params["roleName"],
+                    level: params["roleLever"],
+                    professional: "",
+                    conversion: "",
+                    rolenumber: params["roleid"],
+                    gsid: params["serverid"],
+                    fighting: params["fightvalue"],
+                    experience: "",
+                    sex: "",
+                    coins: params["roleMoney"],
+                    roledata: "",
+                    createtime: time,
+                    sign: sign,
+                    time: time,
+                };
+                console.info("------this role report:" + JSON.stringify(roledata));
+                play.sdk.role(roledata);
+            }
+        }
+
+      
+    </script>
+</body>
+
+</html>

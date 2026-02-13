@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>天气查询</title>
+    <script src="../../libs/vue.js"></script>
+    <script src="../../libs/axios/axios.min.js"></script>
+    <link href="../../css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app" class="weather-frame">
+        <p>天气查询</p>
+        <input type="text" placeholder="请输入查询城市" v-model="city" @keyup.enter="reachWeather"> 
+        <div class="flex">
+            <h5 @click="getCity('北京')">北京</h5>
+            <h5 @click="getCity('上海')">上海</h5>
+            <h5 @click="getCity('广州')">广州</h5>
+            <h5 @click="getCity('深圳')">深圳</h5>
+        </div>
+        <div class="flex" style="width: 100%;">
+            <div v-for="item in weatherList">
+                <h1>{{ item.date }}</h1>
+                <h5>{{ item.high }}</h5>
+                <h5>{{ item.low }}</h5>
+                <h5>{{ item.fengli }}</h5>
+                <h5>{{ item.fengxiang}}</h5>
+                <h5>{{ item.type }}</h5>
+            </div>
+          
+        </div>
+    </div>
+    <script src="./main.js"></script>
+</body>
+
+</html>

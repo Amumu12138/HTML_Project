@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽API</title>
+    <style>
+        .item {
+            height: 20px;
+            width: 50px;
+            background-color: red;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            padding: 5px;
+            line-height: 20px;
+        }
+
+        .content {
+            display: flex;
+            width: 200px;
+            height: 200px;
+            background-color: gray;
+            border-radius: 8px;
+        }
+
+        .content .item {
+            margin: auto;
+        }
+
+        .drop-over {
+            background-color: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 将标签变为可拖拽 draggable="true" -->
+        <div data-effect="copy" draggable="true" class="item">ITEM</div>
+        <br>
+        <div data-drop="copy" data-effect="move" class="content"></div>
+    </div>
+
+    <script>
+        const container = document.querySelector('.container')
+        let source = null;
+        container.ondragstart = function (e) {
+            console.log(e.target, 'dragstart');
+            console.log(e.target.dataset, 'dragstart');
+
+            e.dataTransfer.effectAllowed = e.target.dataset.effect
+            source = e.target
+        }
+
+        container.ondragover = function (e) {
+            e.preventDefault();
+            console.log(e.target, 'ondragover');
+        }
+
+        function clearDropStyle() {
+            document.querySelectorAll('.drop-over').forEach(node => {
+                node.classList.remove('drop-over')
+            })
+        }
+
+        container.ondragenter = function (e) {
+            clearDropStyle()
+            console.log(e.target, e.dataTransfer.effectAllowed, 'ondragenter');
+            if (e.target.dataset.drop === e.dataTransfer.effectAllowed) {
+                e.target.classList.add('drop-over')
+            }
+        }
+
+        function getDropNode(node) {
+            while (node) {
+                if (node.dataset.drop) {
+                    return node
+                }
+            }
+            node = node.parentNode
+        }
+
+        container.ondrop = function (e) {
+            clearDropStyle()
+            console.log(e.target, 'ondrop');
+            const dropNode = e.target;
+            if (e.target.dataset.drop === 'copy') {
+                dropNode.innerHTML = ''
+                const cloned = source.cloneNode(true)
+                cloned.dataset.effect = 'move'
+                dropNode.appendChild(cloned)
+            } else {
+                source.remove()
+            }
+        }
+    </script>
+</body>
+
+</html>

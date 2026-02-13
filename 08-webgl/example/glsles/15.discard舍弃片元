@@ -1,0 +1,21 @@
+//discard舍弃片元
+
+discard关键字通常出现在片元着色器的if语句或for语句中，
+discard的使用语法就像for语句中的continue和break关键字一样，
+直接编写discard;即可,但是discard的功能比较特殊，专门用于着色器片元处理。
+
+如果想理解discard，你首先应该建立逐片元的概念。GPU的片元着色器在逐个处理片元的过程中，会把不符合程序条件的代码舍弃掉
+
+//示例
+precision lowp float;// 所有float类型数据的精度是lowp
+void main() {
+    // 计算方形区域每个片元距离方形几何中心的距离
+    // gl.POINTS模式点渲染的方形区域,方形中心是0.5,0.5,左上角是坐标原点,右下角是1.0,1.0，
+    float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+    //根据距离设置片元
+    if(r > 0.5){
+        // 距离方形中心距离大于0.5的片元剪裁舍弃掉
+        discard;
+    }
+    gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+}

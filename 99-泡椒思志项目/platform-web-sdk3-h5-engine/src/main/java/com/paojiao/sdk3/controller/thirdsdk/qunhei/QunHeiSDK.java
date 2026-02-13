@@ -1,0 +1,184 @@
+package com.paojiao.sdk3.controller.thirdsdk.qunhei;
+
+import com.alibaba.fastjson.JSONObject;
+import com.jfinal.aop.Aop;
+import com.jfinal.kit.JsonKit;
+import com.paojiao.sdk3.common.util.PjMap;
+import com.paojiao.sdk3.common.util.SignUtil;
+import com.paojiao.sdk3.common.util.SignUtil2;
+import com.paojiao.sdk3.controller.pay.PayStatus;
+import com.paojiao.sdk3.controller.thirdsdk.*;
+import com.paojiao.sdk3.model.PjCpGame;
+import com.paojiao.sdk3.model.PjThirdSdkChannel;
+import com.paojiao.sdk3.model.PjThirdSdkChannelGame;
+import com.paojiao.sdk3.model.PjThirdSdkOrder;
+import com.paojiao.sdk3.service.PjThirdSdkChannelGameService;
+import com.paojiao.sdk3.service.PjThirdSdkChannelService;
+import com.paojiao.sdk3.service.PjThirdSdkOrderService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * 类描述：群黑 SDK
+ *
+ * @Author: jiangkun
+ * @Date: 2020/08/31 17:32
+ */
+public class QunHeiSDK implements ItfSdk {
+    private static final Logger log = Logger.getLogger(QunHeiSDK.class);
+    private PjThirdSdkOrderService orderService = Aop.get(PjThirdSdkOrderService.class);
+    private PjThirdSdkChannelGameService channelGameService = Aop.get(PjThirdSdkChannelGameService.class);
+    private PjThirdSdkChannelService channelService = Aop.get(PjThirdSdkChannelService.class);
+
+    @Override
+    public void verify(PjThirdSdkChannel sdkChannel, PjThirdSdkChannelGame channelGame, PjCpGame game, String sdkToken, ISDKVerifyListener callback) {
+        try {
+            log.info("QunHeiSDK  客户端登录返回:" + sdkToken);
+            if (StringUtils.isEmpty(sdkToken)) {
+                log.info("QunHeiSDK 客户端登录返回为空");
+                callback.onFailed(" verify failed. " + "QunHeiSDK 客户端登录返回为空");
+                return;
+            }
+            JSONObject json = JSONObject.parseObject(sdkToken);
+            final String userName = json.getString("username");
+            final String serverId = json.getString("serverid");
+            final String time = json.getString("time");
+            final String isAdult = json.getString("isadult");
+            final String flag = json.getString("flag");
+
+            if (StringUtils.isEmpty(userName)) {
+                log.info("QunHeiSDK-verify userName为空");
+                callback.onFailed(" verify failed：QunHeiSDK:userName为空");
+                return;
+            }
+            if (StringUtils.isEmpty(serverId)) {
+                log.info("QunHeiSDK-verify serverId为空");
+                callback.onFailed(" verify failed：QunHeiSDK:serverId为空");
+                return;
+            }
+            if (StringUtils.isEmpty(time)) {
+                log.info("QunHeiSDK-verify time为空");
+                callback.onFailed(" verify failed：QunHeiSDK:time为空");
+                return;
+            }
+            if (StringUtils.isEmpty(isAdult)) {
+                log.info("QunHeiSDK-verify isAdult为空");
+                callback.onFailed(" verify failed：QunHeiSDK:isAdult为空");
+                return;
+            }
+            if (StringUtils.isEmpty(flag)) {
+                log.info("QunHeiSDK-verify flag为空");
+                callback.onFailed(" verify failed：QunHeiSDK:flag为空");
+                return;
+            }
+            StringBuffer sf = new StringBuffer();
+            sf.append(userName).append(serverId).append(isAdult).append(time).append(channelGame.getSignKey());
+            log.info("QunHeiSDK-verify：登录加密参数：" + sf.toString());
+            String sign = SignUtil2.md5(sf.toString());
+            log.info("QunHeiSDK-verify：登录加密结果：" + sign + " ,原sign：" + flag);
+            if (flag.equals(sign)){
+                callback.onSuccess(new SDKVerifyResult(true, userName, null, null,Integer.parseInt(isAdult)));
+                return;
+            }else {
+                callback.onFailed("QunHeiSDK-verify:登录验证失败");
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.onFailed(sdkChannel.getSdkCode()
+                    + " verify execute failed. the exception is "
+                    + e.getMessage());
+        }
+    }
+
+    @Override
+    public void orderCallBack(PjMap<String, String> params, HttpServletRequest request, ISDKVerifyListener callback) {
+        log.info("QunHeiSDK orderCallBack:" + JsonKit.toJson(params));
+        SDKVerifyResult vs = new SDKVerifyResult();
+        try {
+            PjThirdSdkChannelGame channelGame = channelGameService.findGameById(params.getToInt("channelGameId"));
+
+            String sign = params.get("sign");
+            try {
+                StringBuffer sf = new StringBuffer();
+                sf.append(params.get("orderno"))
+                        .append(params.get("username"))
+                        .append(params.get("serverid"))
+                        .append(params.get("addgold"))
+                        .append(params.get("rmb"))
+                        .append(params.get("paytime"))
+                        .append(params.get("ext"))
+                        .append(channelGame.getPayKey());
+                log.info("QunHeiSDK.orderCallBack: 加密前字符串：" + sf.toString());
+               String newSign =  SignUtil2.md5(sf.toString());
+                log.info("QunHeiSDK.orderCallBack: 加密后签名：" + newSign + ", 传参签名：" + sign);
+                if (!sign.equals(newSign)) {
+                    log.error("QunHeiSDK ERROR Invalid sign original string:" + newSign + " your sign:" + sign);
+                    vs.setReturnMsg("-4");
+                    callback.onSuccess(vs);
+                    return;
+                }
+                String cporder = params.get("ext");
+                PjThirdSdkOrder iod = orderService.findOrderByOrderNo(cporder);
+                if (iod == null) {
+                    log.error("ERROR:orer not found,orderNo:[" + cporder + "]");
+                } else if (iod.getStatus() == PayStatus.PAY_SUCCESS.id) {// 已完成支付
+                    log.error("重复回调,orderNo:[" + cporder + "]");
+                    vs.setReturnMsg("-5");
+                    callback.onSuccess(vs);
+                    return;
+                }
+
+                // 真实收款
+                Double amount = Double.valueOf(params.get("rmb"));
+                // 实际收款金额不一致
+                if (iod.getMoney() != amount.floatValue()) {
+                    log.error("QunHeiSDK 收款金额与订单金额不符,orderNo:[" + cporder + "],订单金额："
+                            + iod.getMoney() + ",实际收款金额：" + amount);
+                    // 更新订单金额
+                    vs.setReturnMsg("-4");
+                    callback.onSuccess(vs);
+                    return;
+                   /* iod.setMoney(amount.floatValue());
+                    orderService.updateOrder(iod);*/
+                }
+                log.info("+++++++++QunHeiSDK，完成支付....");
+                orderService.finishOrderAndCallbackCp(cporder,
+                        params.get("orderno"));
+
+            } catch (Exception e) {
+                log.error("QunHeiSDK orderCallBack error:" + e.getMessage());
+                vs.setReturnMsg("-4");
+                callback.onSuccess(vs);
+                return;
+            }
+            vs.setReturnMsg("1");
+            callback.onSuccess(vs);
+        } catch (Exception e) {
+            vs.setReturnMsg("error");
+            callback.onSuccess(vs);
+            log.error("QunHeiSDK 充值回调请求异常！params:[" + JsonKit.toJson(params) + "]");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getOrderNo(PjThirdSdkChannel sdkChannel, PjThirdSdkChannelGame channelGame, PjThirdSdkOrder order, PjMap<String, String> params, ISDKVerifyListener callback) {
+        SDKVerifyResult result = new SDKVerifyResult();
+        StringBuffer sf = new StringBuffer();
+        sf.append(order.getMoney().intValue())
+                .append(order.getSdkUserId())
+                .append(order.getOrderNumber())
+                .append(channelGame.getPayKey());
+        log.error("QunHeiSDK-getOrderNo：创建订单加密参数" + sf.toString());
+        String sign = SignUtil2.md5(sf.toString());
+        log.error("QunHeiSDK-getOrderNo：加密结果" + sign);
+        result.setExtension(sign);
+        callback.onSuccess(result);
+    }
+}

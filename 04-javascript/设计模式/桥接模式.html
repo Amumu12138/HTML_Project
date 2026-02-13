@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 桥接模式 奥迪发动机
+        function Audo(engine) {
+            this.engine = engine;
+        }
+
+        Audo.prototype.loadEngine = function () {
+            console.log("Audo loadEngine run");
+            this.engine.run();
+        }
+
+        function AudoSUV(engine) {
+            this.engine = engine;
+        }
+
+        AudoSUV.prototype.loadEngine = function () {
+            console.log("AudoSUV loadEngine run");
+            this.engine.run();
+        }
+
+        function V6() {
+            this.run = function () {
+                console.log("V6 called");
+            }
+        }
+
+        function V8() {
+            this.run = function () {
+                console.log("V8 called");
+            }
+        }
+
+        let audo6 = new Audo(new V6());
+        audo6.loadEngine();
+        let audo8 = new Audo(new V8());
+        audo8.loadEngine();
+
+        let audosuv6 = new AudoSUV(new V6());
+        audosuv6.loadEngine();
+        let audosuv8 = new AudoSUV(new V8());
+        audosuv8.loadEngine();
+    </script>
+</body>
+
+</html>

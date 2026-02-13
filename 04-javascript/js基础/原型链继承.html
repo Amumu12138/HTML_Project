@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型链继承</title>
+</head>
+
+<body>
+    <h1>原型链继承</h1>
+    <script>
+        // 父类
+        function Parent() {
+            this.name = ['amumu'];
+        }
+
+        Parent.prototype.getName = function () {
+            return this.name;
+        }
+
+        // 子类
+        function Child() {
+        }
+
+        Child.prototype = new Parent();
+        Child.prototype.constructor = Child;
+
+        var child = new Child();
+        console.log(child, child.__proto__.__proto__.__proto__); // Child {} console.log() 主要用于简单地输出值或对象，对于对象，它通常以一种适合快速查看值的格式打印，可能会丢失对象结构的细节
+        console.dir(Child.__proto__);
+        console.dir(Child.constructor);
+        console.dir(child); // Child console.dir() 以类似文件目录树的结构展示对象，更便于查看对象的完整结构，包括对象的属性、方法以及原型链等信息
+        console.log(child.name, child.getName()); // ['amumu'] ['amumu']
+
+        var child2 = new Child();
+        child2.name[0] = '12138';
+        console.log(child.name, child2.name); // ['12138'] ['12138']
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选中图片效果</title>
+    <style>
+        canvas {
+            /* width: 500px;
+            height: 500px; */
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas></canvas>
+    <script>
+        const cvs = document.querySelector('canvas')
+        const ctx = cvs.getContext('2d', {
+            willReadFrequently: true
+        })
+
+        function init() {
+
+            const img = new Image()
+            img.onload = () => {
+                cvs.width = img.width
+                cvs.height = img.height
+
+                ctx.drawImage(img, 0, 0)
+            }
+            img.src = './获取绘制上下文.png'
+        }
+
+        init()
+
+        // 获取当前点坐标
+        function ponit2Index(x, y) {
+            return (y * cvs.width + x) * 4
+        }
+
+        // 获取当前数据颜色
+        function getColor(x, y, imgData) {
+            const i = ponit2Index(x, y)
+            return [
+                imgData.data[i],
+                imgData.data[i + 1],
+                imgData.data[i + 2],
+                imgData.data[i + 3],
+            ]
+        }
+
+        function diff(color1, color2) {
+            return Math.abs(color1[0] - color2[0])
+                + Math.abs(color1[1] - color2[1])
+                + Math.abs(color1[2] - color2[2])
+                + Math.abs(color1[3] - color2[3])
+        }
+
+        // 监听用户点击canvas画布坐标
+        cvs.addEventListener('click', e => {
+            const x = e.offsetX
+            const y = e.offsetY
+            console.log(x, y, e, 'x, y');
+
+            const imgData = ctx.getImageData(0, 0, cvs.width, cvs.height)
+            console.log(imgData, 'imgData');
+            const clickColor = getColor(x, y, imgData)
+            console.log(clickColor, 'clickColor');
+
+            // 修改点击像素点颜色
+            const changeColor = [0, 255, 0, 0]
+            function _changeColor(x, y) {
+                if (x < 0 || x >= cvs.width || y < 0 || y >= cvs.height) {
+                    return;
+                }
+                const color = getColor(x, y, imgData)
+                if (diff(color, clickColor) > 100) {
+                    return
+                }
+
+                if (diff(color, changeColor) === 0) {
+                    return
+                }
+                const i = ponit2Index(x, y)
+                imgData.data.set(changeColor, i)
+                // _changeColor(x + 1, y)
+                // _changeColor(x - 1, y)
+                // _changeColor(x, y + 1)
+                // _changeColor(x, y - 1)
+            }
+            _changeColor(x, y)
+            ctx.putImageData(imgData, 0, 0)
+        })
+    </script>
+</body>
+
+</html>

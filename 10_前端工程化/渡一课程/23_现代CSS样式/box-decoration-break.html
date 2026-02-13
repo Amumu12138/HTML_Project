@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>box-decoration-break</title>
+    <style>
+        .container {
+            white-space: normal;
+            line-height: 2em;
+        }
+
+        .lighlight {
+            background: linear-gradient(#d5e8b7, #bad6b3);
+            border: 1px solid #a1ad86;
+            padding: 0 0.5em;
+            border-radius: 5px;
+            box-decoration-break: clone;
+            /* webkit内核添加前缀 */
+            -webkit-box-directio-break: clone;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        qwqwqewqwqdsadqwdwq,qweqeqweqwe
+        qwqwqewqwqdsadqwdwq,qweqeqweqwe
+        qwqwqewqwqdsadqwdwq,qweqeqweqwe
+        <span class="lighlight">
+            qwqwqewqwqdsadqwdwq,qweqeqweqwe
+            qwqwqewqwqdsadqwdwq,qweqeqweqwe
+            qwqwqewqwqdsadqwdwq,qweqeqweqwe
+        </span>
+    </div>
+</body>
+
+</html>

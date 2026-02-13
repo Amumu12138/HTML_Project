@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7、Vuex中的Mutation</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- vuex -->
+    <script src="https://unpkg.com/vuex@2.0.0"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>count: {{count}}</p>
+        <input type="button" value="click" @click="exampleMethdos" />
+        <p>count02: {{count02}}</p>
+        <input type="button" value="click02" @click="exampleMethdos02" />
+    </div>
+    <script>
+        const store = new Vuex.Store({
+            state: {
+                count: 1,
+                count02: 0,
+                count03: -1
+            },
+            mutations: {
+                increment(state) {
+                    // 变更状态
+                    state.count++
+                },
+                increment02(state, n) {
+                    state.count02 += n;
+                },
+                increment03(state, payload) {
+                    state.count03 += payload.amount
+                }
+            }
+        })
+        const vm = new Vue({
+            el: "#app",
+            store,
+            data: {
+
+            },
+            computed: {
+                ...Vuex.mapState(['count', 'count02'])
+            },
+            methods: {
+                ...Vuex.mapMutations(['increment', 'increment02']),
+                exampleMethdos() {
+                    this.increment();
+                },
+                exampleMethdos02() {
+                    this.increment02(10);
+                }
+            }
+        })
+
+        // console.log('Amumu before state.count -->', store.state.count)
+        // store.commit('increment');
+        // console.log('Amumu after state.count -->', store.state.count)
+
+        // console.log('Amumu before state.count02 -->', store.state.count02)
+        // store.commit('increment02', 20);
+        // console.log('Amumu after state.count02 -->', store.state.count02)
+
+        // console.log('Amumu before state.count03 -->', store.state.count03)
+        // store.commit({ type: 'increment03', amount: 30 });
+        // console.log('Amumu after state.count03 -->', store.state.count03)
+    </script>
+</body>
+
+</html>

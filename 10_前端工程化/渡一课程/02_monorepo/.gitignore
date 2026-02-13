@@ -1,0 +1,10 @@
+    # 忽略目录/文件
+    dist/
+    node_modules/
+
+    # IDE
+    .vscode/
+    .idea/
+
+    # 其他
+    .DS_Store

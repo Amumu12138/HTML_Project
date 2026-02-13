@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13、过度动效</title>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <style>
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        /* .fade-leave-active below version 2.1.8 */
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0;
+        }
+
+        /* 移动-move*/
+        /* 定义进入过渡、离开过渡生效时的状态 */
+        .move-enter-active,
+        .move-leave-active {
+            transition: all 0.5s;
+        }
+
+        /* 定义进入过渡的开始状态 */
+        .move-enter {
+            transform: translateX(-100px);
+        }
+
+        /* 2.1.8 版及以上定义进入过渡的结束状态。 */
+        .move-enter-to {
+            transform: translateX(0px);
+        }
+
+        /* 2.1.8 版及以上定义离开过渡的结束状态 */
+        .move-leave-to {
+            transform: translateX(-100px);
+        }
+
+        .foo,
+        .bar {
+            position: absolute;
+            top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1>过度动效</h1>
+        <transition name="move" duration="5000">
+            <router-view></router-view>
+        </transition>
+    </div>
+    <script src="./index13.js"></script>
+</body>
+
+</html>

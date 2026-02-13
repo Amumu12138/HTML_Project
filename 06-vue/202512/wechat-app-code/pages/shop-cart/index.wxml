@@ -1,0 +1,8 @@
+<!--index.wxml-->
+<import src="../template-cart/template-cart.wxml" />
+
+<view class="container">
+  <!-- 类似于vue中<component :is="activeComponent" /> -->
+  <template is="{{shippingCarInfo.items.length > 0 ? 'cart-goods-list' : 'no-goods'}}"
+  data="{{...shippingCarInfo, shopCarType}}"></template>
+</view>

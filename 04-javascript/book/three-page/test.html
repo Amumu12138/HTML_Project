@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 最长的顺子
+        let allArr = ['3', '3', '3', '3', '4', '4', '4', '4', '5', '5', '5', '5', '6', '6', '6', '6', '7', '7', '7', '7', '8', '8', '8', '8', '9', '9', '9', '9',
+            '10', '10', '10', '10', 'J', 'J', 'J', 'J', 'Q', 'Q', 'Q', 'Q', 'K', 'K', 'K', 'K', 'A', 'A', 'A', 'A'];
+        let myStr = '3-3-3-3-4-4-5-5-6-7-8-9-10-J-Q-K-A';
+        let showStr = '4-5-6-7-8-8-8';
+        function getOtherStr(myStr, showStr) {
+            if (!myStr && !showStr) return '3-4-5-6-7-8-9-10-J-Q-K-A';
+            let result = 'NO-CHAIN';
+
+            let myArr = myStr.split('-');
+            let showArr = showStr.split('-');
+            for (let i = 0; i < myArr.length; i++) {
+                if (allArr.indexOf(myArr[i]) !== -1) {
+                    allArr.splice(allArr.indexOf(myArr[i]), 1, '@');
+                }
+            }
+
+            for (let i = 0; i < showArr.length; i++) {
+                if (allArr.indexOf(showArr[i]) !== -1) {
+                    allArr.splice(allArr.indexOf(showArr[i]), 1, '@');
+                }
+            }
+
+            let filterArr = [];
+            for (let k = 0; k < allArr.length; k++) {
+                allArr[k] = strToNum(allArr[k]);
+                if (filterArr.indexOf(allArr[k]) === -1) {
+                    filterArr.push(allArr[k]);
+                }
+            }
+
+            for (let l = 0; l < filterArr.length; l++) {
+                if (parseInt(filterArr[l + 1]) > (parseInt(filterArr[l]) + 1)) {
+                    filterArr[l] = '@';
+                }
+                filterArr[l] = numToStr(filterArr[l]);
+            }
+
+            let newArr = filterArr.join('-').split('@');
+
+            for (let a = 0; a < newArr.length; a++) {
+                if (newArr[a].length >= 5) {
+                    result = newArr[a].length >= result.length ? newArr[a].substring(1, newArr[a].length) : result;
+                }
+            }
+
+            return result;
+        }
+
+        function strToNum(str) {
+            if (!str) return '0';
+
+            let num = '0';
+            switch (str) {
+                case 'J':
+                    num = '11';
+                    break;
+                case 'Q':
+                    num = '12';
+                    break;
+                case 'K':
+                    num = '13';
+                    break;
+                case 'A':
+                    num = '14';
+                    break;
+                default:
+                    num = str;
+                    break;
+            }
+
+            return num;
+        }
+
+        function numToStr(num) {
+            if (!num) return '0';
+
+            let str = '0';
+            switch (num) {
+                case '11':
+                    str = 'J';
+                    break;
+                case '12':
+                    str = 'Q';
+                    break;
+                case '13':
+                    str = 'K';
+                    break;
+                case '14':
+                    str = 'A';
+                    break;
+                default:
+                    str = num;
+                    break;
+            }
+
+            return str;
+        }
+
+        getOtherStr(myStr, showStr);
+
+        // 路灯照明问题
+        let n = 4;
+        let str = '50 70 20 70';
+        function getLightDis(n, str) {
+            if (!str) return;
+
+            let newArr = str.split(' ');
+            console.log(JSON.parse(JSON.stringify(newArr)));
+            let maxDis = parseInt(JSON.parse(JSON.stringify(newArr)).sort().pop());
+            let dis = 0;
+            if (maxDis > Math.floor(n / 2) * 100) {
+                dis = 0;
+            } else {
+                for (let i = 0; i < newArr.length - 1; i++) {
+                    if (parseInt(newArr[i]) + parseInt(newArr[i + 1]) < 100) {
+                        dis += 100 - parseInt(newArr[i]) - parseInt(newArr[i + 1]);
+                    }
+                }
+            }
+
+            return dis;
+        }
+
+        console.log(getLightDis(n, str));
+
+        // 二叉树的广度优先遍历
+        function getOriginStr(firstStr) {
+            if (!firstStr) return ''
+
+            let originStr = '';
+            originStr = firstStr.split(' ')[0].split('').sort().join('');
+
+            return originStr;
+        }
+
+        let firstStr = 'CBEFDA CBAEDF';
+        console.log(getOriginStr(firstStr)); 
+    </script>
+</body>
+
+</html>

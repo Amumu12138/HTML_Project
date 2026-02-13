@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 测试axios网络通信</title>
+
+    <script src="../libs/vue.js"></script>
+    <script src="../libs/axios/axios.min.js"></script>
+    <!-- <script src="test2.json"></script> -->
+</head>
+<body>
+    <div id="app">
+        <div>{{info.name}}</div>
+        <a v-bind:href="info.url" target="_blank">点击</a>
+        <div v-for="item in info.array">
+            <li>{{item}}</li>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: function(){
+                return {
+                    info: ""
+                }
+            },
+            mounted: function() {
+                var _this = this;
+                axios.get("../data/test2.json").then(function(response) {
+                    console.log("response = ", response.data);
+                    _this.info = response.data;
+                }, function(error){
+                    console.log("error = ", error);
+                })
+            }
+        });
+    </script>
+</body>
+</html>

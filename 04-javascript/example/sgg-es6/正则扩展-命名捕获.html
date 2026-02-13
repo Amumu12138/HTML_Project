@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则扩展-命名捕获</title>
+</head>
+
+<body>
+    <script>
+        // 正则扩展-命名捕获
+        let str = '<a href="http://www.baidu.com">Amumu</a>';
+        const reg = /<a href="(?<url>.*)">(?<text>.*)<\/a>/;
+        const result = reg.exec(str);
+        console.log(result);
+
+        // 正向断言
+        let str02 = 'JS389238439你纸袋3423啦啦阿拉';
+        const reg02 = /\d+(?=啦)/;
+        const result02 = reg02.exec(str02);
+        console.log(result02);
+
+        // 反向断言
+        const reg03 = /(?<=纸袋)\d+/;
+        const result03 = reg03.exec(str02);
+        console.log(result03);
+
+        // dotAll模式
+        let str04 = `
+        <ul>
+            <li>
+                <a>休闲鞋01</a>
+                <p>价格: ¥0.01</p>
+            </li>
+            <li>
+                <a>休闲鞋02</a>
+                <p>价格: ¥0.1</p>
+            </li>
+        </ul>
+        `;
+
+        // 声明正则
+        const reg04 = /<li>.*?<a>(.*?)<\/a>.*?<p>(.*?)<\/p>/gs;
+        let result04, data = [];
+        // 执行匹配
+        while (result04 = reg04.exec(str04)) {
+            data.push({ name: result04[1], price: result04[2] });
+        }
+
+        console.log(data);
+    </script>
+</body>
+
+</html>

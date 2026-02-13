@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        // 指定ts编译时的js目标版本
+        // 可选值: “ES3”(默认)、“ES5”、“ES6” / "ES2015"、"ES2016"...
+        "target": "es2016",
+        // 指定使用的模块化规范
+        // 可选值: NONE、CommonJS、AMD、System、UMD、ES6、ES2015
+        // 只有AMD和System能和 --outFile一起使用
+        // ES6和ES2015可使用在目标输出为ES5或更低的情况下
+        "module": "AMD",
+        // 指定编译过程中需要引入的库文件列表
+        // 可选值: ES5、ES6、DOM....
+        // 注意: 如果--lib没有指定默认注入的库列表,默认注入库为: 
+        // 1、针对于target ES5: DOM、ES5、ScriptHost
+        // 2、针对于target ES6: DOM、ES6、DOM.Iterable、ScriptHost
+        "lib": [],
+        // 用来指定编译后文件所在的目录
+        "outDir": "./dist",
+        // 将编译的代码合并成一个文件
+        // --outFile 旁仅支持 "amd" 和 "system" 模块
+        // "outFile": "./dist/main.ts"
+        // 是否对js文件编译,默认为false
+        "allowJs": false,
+        // 是否检查js代码符合语法规范,默认为false
+        "checkJs": false,
+        // 在编译时是否移除注释,默认为false
+        "removeComments": false,
+        // 不生成编译后的文件,默认为false
+        "noEmit": false,
+        // 当存在语法错误时不生成编译后的文件,默认为false
+        "noEmitOnError": false,
+        // 设置编译后的文件是否使用严格模式,默认为false
+        // 当代码中有引入导出模块代码时,js会自动进入严格模式下
+        "alwaysStrict": false,
+        // 不允许隐式any类型,默认为false
+        "noImplicitAny": false,
+        // 严格的检查空值,默认为false
+        "strictNullChecks": false,
+        // 所有严格检查的总开关,默认为false
+        "strict": false
+    }
+}

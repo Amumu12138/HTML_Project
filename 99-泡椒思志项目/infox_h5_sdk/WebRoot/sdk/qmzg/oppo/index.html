@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport"  content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+
+
+   <!--  <meta name="full-screen" content="yes">
+	<meta name="x5-fullscreen" content="true"> -->
+	<title>全民主公</title>
+
+	<link href="../../../css/common.css?20171011" rel="stylesheet">
+	<link href="../../../css/layout.css?20171011" rel="stylesheet">
+
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../../../js/jquery/jquery.md5.js"></script>
+	<script type="text/javascript" src="../../../js/channel.js?v=20190320"></script>
+	<script type="text/javascript" src="../../../js/jquery/mobile-detect.js"></script>
+	<script type="text/javascript" src="https://cdofs.oppomobile.com/cdo-activity/static/201809/30/gamehall/sdk/oppo-sdk-1.7.0.js"></script>
+	<style type="text/css">
+		body {
+			/*background: url(https://h5.infoxgame.com/images/beijingtu.png) no-repeat center top;*/
+			background-size: auto 100%;
+		}
+	</style>
+
+</head>
+
+	<body>
+
+		<script type="text/javascript">
+
+
+		$(function(){
+				var cs = "http://localhost/infox_h5_sdk/api/";
+				var zs = "https://h5.infoxgame.com/api/";
+				channelSDK.init(false,zs,'10877210','76549963');
+            	var flage =  showMobileModel();
+            	var version = OPPO.getAppVersion();
+                // OPPO.setWebviewOrientation('portrait');
+				OPPO.login({
+					packageName:'com.fskj.qmzg..nearme.gamecenter',//需要修改成开发者在oppo开放平台填写的包名才能成功调用此方法
+					callback: function(res) {
+					    console.log("+++++oppo登录返回："+JSON.stringify(res));
+                        var extension = JSON.stringify({"pkgName":'com.fskj.qmzg..nearme.gamecenter',"token":res.token,"timeStamp":Date.parse(new Date())});
+                        channelSDK["channelUserID"] = res.userId;
+                        channelSDK.getCpToken(extension,function(data){
+                            var gameUrl = data.gameUrl + '?uid='+data.paojiaoId+'&sdkToken='+data.token;
+                            channelSDK["userID"] = data.userID;
+                             OPPO.setLoadingProgress(10);
+                            if(data.type == 0){//横屏游戏
+                                $("body").append('<div id="gameFrameDiv" style=" display:none;  width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+                                window.onorientationchange = function () {
+                                    if (window.orientation == 90 || window.orientation == -90) {
+                                        $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});
+                                    }
+                                }
+                            }else{//竖屏游戏
+                                if (flage == true) {
+                                    var heightSize =  $(window).height();
+                                    $("body").append('<div id="gameFrameDiv" style="display:none;' +
+                                        ' width: ' + $(window).width() + 'px;' +
+                                        '  height: ' + $(window).height() + 'px;' +
+                                        ' position: relative; top: 30px; left: 0px;">' +
+                                        '<iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px;' +
+                                        ' height: ' + (heightSize - 30 )  + 'px;"></iframe></div>');
+								}else{
+                                    $("body").append('<div id="gameFrameDiv" style="display:none; width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+                                }
+                            }
+                            OPPO.loadingComplete();
+                            setTimeout(function(){
+                                $("#gameFrameDiv").fadeIn(1000);
+                                $("#gameFrame").attr("src",gameUrl);
+                            },500);
+                        });
+					}
+				})
+				channelSDK.startEventListener();
+	    });
+
+		//支付
+		function  receiveMessage(event){
+			if(event.data.method == 'loadPayBox'){
+                OPPO.checkPay(function(res) {
+                    console.log("是否支持js调用支付功能："+res);
+                });
+				var params = event.data.param;
+				params["userID"] = channelSDK.userID;
+				params["appID"]= channelSDK.gameId;
+				params["isTest"]= channelSDK.isTest;
+                var extension =  params["extension"];
+                if (extension.indexOf("uid") != -1) {
+                    var newExtension= extension.split("?");
+                    params["extension"] = newExtension[0];
+                }
+				httpPost(channelSDK.host + "getOrderID",params,function(data,params){
+					if(data.state == channelSDK.SUCCESS){
+                        var _d = data.data.extension;
+                        var money  =params.money * 100;
+                        OPPO.pay({
+                            packageName: 'com.fskj.qmzg..nearme.gamecenter', //开发者在oppo开放平台填写的包名
+                            appName: '全民主公',
+                            appVersion: '1.0',
+                            appKey: 'D7BlOujaj9c0sgg08cgOco4OC', //在oppo开放平台得到的appKey
+                            orderId: data.data.orderID, //开发者在自己业务系统下的订单号
+                            price: money, //单位 分
+                            productName:params.productName,
+                            productDesc: params.productDesc,
+                            callbackUrl: 'https://third.sdk.paojiao.cn/pay/oppoh5/payCallback.html',
+                            //接收支付平台付款通知的地址，与oppo android SDK的支付通知处理一致
+                            callback: function(res) {
+                                console.info("+++++支付回调结果："+res);
+                            }
+                        });
+					}
+				});
+			}
+		}
+
+
+
+
+        // 查看手机型号
+        function showMobileModel() {
+            //判断数组中是否包含某字符串
+            Array.prototype.contains = function (needle) {
+                for (i in this) {
+                    if (this[i].indexOf(needle) > 0)
+                        return i;
+                }
+                return -1;
+            }
+            var deviceType = navigator.userAgent;//获取userAgent信息
+            var md = new MobileDetect(deviceType);//初始化mobile-detect
+            var os = md.os();//获取系统
+            //手机型号(厂商)
+            var model = "";
+            //系统的版本号
+            var version = "";
+            if (os == "iOS") {//ios系统的处理
+                version = md.version("iPhone");
+                os = md.os();
+                model = md.mobile();
+            } else if (os == "AndroidOS") {//Android系统的处理
+                os = md.os();
+                version = md.version("Android");
+                var sss = deviceType.split(";");
+                var i = sss.contains("Build/");
+                if (i > -1) {
+                    model = sss[i].substring(0, sss[i].indexOf("Build/"));
+                }
+            }
+            if (model.trim() === 'PACM00' || model.trim() === 'PBAM00' || model.trim() === 'PBBM00'  || model.trim() === 'PAAT00' || model.trim() === 'PAAM00' || model.trim() === 'PACT00' || model.trim() === 'PCDM10'
+				|| model.trim() === 'PCDT10'
+                || model.trim() === 'PCAM10'
+                || model.trim() === 'PCAT10'
+                || model.trim() === 'PCEM00'
+                || model.trim() === 'PCET00'
+                || model.trim() === 'PBFM00'
+                || model.trim() === 'PBFT00'
+                || model.trim() === 'PBCM10'
+                || model.trim() === 'PBCT10'
+                || model.trim() === 'PBCM30'
+                || model.trim() === 'PBDM00'
+                || model.trim() === 'PBDT00'
+                || model.trim() === 'PBEM00'
+                || model.trim() === 'PBET00'
+                || model.trim() === 'PBAT00'
+                || model.trim() === 'PBBM30'
+                || model.trim() === 'PBBT30'
+                || model.trim() === 'PADM00'
+                || model.trim() === 'PADT00') {
+                return true;
+            }else{
+                return false;
+            }
+        }
+	</script>
+	</body>
+
+</html>

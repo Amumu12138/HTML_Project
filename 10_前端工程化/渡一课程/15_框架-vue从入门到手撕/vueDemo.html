@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vueDemo</title>
+    <!-- 引入vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .computed {
+            cursor: pointer;
+            margin: 0 5px;
+            padding: 0 2px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>vueDemo</h1>
+    <div id="app">
+        <div>{{ title }}</div>
+        <div v-for="item in goods" :key="item.name">
+            name: {{item.name}} - price: {{item.price}}
+            <span class="computed" @click="item.choose++">+</span>
+            {{item.choose}}
+            <span class="computed" v-show="item.choose > 0" @click="item.choose--">-</span>
+        </div>
+        <div>总数量: {{count}}</div>
+    </div>
+    <script>
+        const App = {
+            data() {
+                return {
+                    title: "涛动手机",
+                    goods: [
+                        {
+                            name: 'xm',
+                            price: 1000,
+                            active: false,
+                            choose: 0,
+                        },
+                        {
+                            name: 'hw',
+                            price: 1200,
+                            active: false,
+                            choose: 2,
+                        },
+                        {
+                            name: 'iphone',
+                            price: 2000,
+                            active: true,
+                            choose: 5,
+                        }
+                    ]
+                };
+            },
+            computed: {
+                count() {
+                    console.log(this.goods, 'goods');
+
+                    return this.goods.reduce((prev, next) => {
+                        console.log(prev, next, 'prev, next');
+                        return prev + next.choose;
+                    }, 0)
+                }
+            }
+        };
+        const vm = Vue.createApp(App).mount('#app')
+    </script>
+</body>
+
+</html>

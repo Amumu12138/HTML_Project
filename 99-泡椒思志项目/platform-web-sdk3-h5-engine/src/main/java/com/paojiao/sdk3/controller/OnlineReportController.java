@@ -1,0 +1,74 @@
+package com.paojiao.sdk3.controller;
+
+import com.jfinal.kit.StrKit;
+import com.paojiao.sdk3.common.StatusType;
+import com.paojiao.sdk3.common.mongo.manager.IpInfoManager;
+import com.paojiao.sdk3.common.mongo.manager.SdkOnlineUserManager;
+import com.paojiao.sdk3.common.util.DateUtil;
+import com.paojiao.sdk3.model.pojo.IpInfoEntity;
+import com.paojiao.sdk3.model.pojo.SdkOnlineUserDataEntity;
+import com.paojiao.sdk3.service.StatOnlineUserService;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
+import java.util.Map;
+
+/**
+ * @Description 保存用户在线记录
+ * @Author zhouzhenyi
+ * @Date 2020/11/26
+ **/
+public class OnlineReportController extends BaseController{
+
+    private static Logger log = Logger.getLogger(OnlineReportController.class);
+
+
+    public void test2() {
+//        LoginEntity a = LoginSessionManager.inst().findByToken("vqxjqwTvlsq9DBc41nTL8hYV6m6ZxbOG");
+//        this.renderJson(a);
+
+        IpInfoEntity a  = IpInfoManager.inst().findByIp("116.24.64.244");
+      this.renderJson(a);
+
+    }
+
+
+        /**
+         * 保存在线数据
+         */
+    public void report() {
+        try{
+            Integer uid = getParaToInt("uid");
+            String channel = getPara("channel");
+            Integer gameId = getParaToInt("gameId");
+            if (StrKit.isBlank(channel) || gameId == null || uid == null) {
+                this.requestFailure(StatusType.PARAM_ERROR);
+                return;
+            }
+            SdkOnlineUserDataEntity session = new SdkOnlineUserDataEntity();
+            session.setAddTime(new Date());
+            String addDate = DateUtil.getFormatTime(session.getAddTime(),"yyyy-MM-dd");
+            session.setAddDate(DateUtil.parse(addDate,"yyyy-MM-dd"));
+            session.setCid(channel);
+            session.setGameId(gameId);
+            session.setUserId(uid);
+            SdkOnlineUserManager.inst().addSession(session);
+
+
+            //查询当前游戏/当前用户防沉迷状态
+            StatOnlineUserService statOnlineUserService = new StatOnlineUserService();
+            Map<String, Object> data = statOnlineUserService.checkGameStatus(gameId,uid,channel);
+            if(data != null){
+                super.requestSuccess("记录成功",data);
+                return;
+            }
+            super.requestSuccess("记录成功","");
+        }catch (Exception e){
+            log.error("保存在线数据异常",e);
+            this.requestFailure("exception");
+        }
+    }
+
+
+
+}

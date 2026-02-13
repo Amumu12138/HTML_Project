@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.5操作符</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>3.5操作符</h1>
+    <script>
+        // 一元操作符
+        let num1 = 2, num2 = 20;
+        let num3 = --num1 + num2;
+        let num4 = num1 + num2;
+        console.log(num3, num4); // 21 21
+
+        let num11 = 2, num21 = 20;
+        let num31 = num11-- + num21;
+        let num41 = num11 + num21;
+        console.log(num31, num41); // 22 21
+
+        let s1 = "2", s2 = "x", b = false, f = 1.1, o = { valueOf() { return -1; } };
+        s1++, b++, f--, o--;
+        console.log(s1, s2++, b, f--, o--)// 3 NaN 1 0.10000000000000009 -2
+
+        // 位操作符
+        let num01 = 25;
+        let num02 = ~num01; // 按位非
+        console.log(num02); //-26
+
+        let result = 25 & 3; // 按位与
+        console.log(result); // 1
+
+        let result02 = 25 | 3; // 按位或
+        console.log(result02); // 27
+
+        let result03 = 25 ^ 3; // 按位异或
+        console.log(result03); // 26
+
+        let oldVal = 2;
+        console.log(oldVal << 5, 128 >> 5); // 2左移5位: 64  128右移5位: 4
+        console.log(64 >>> 5, -64 >>> 5); // 64无符号右移5位: 2 -64无符号右移5位: 134217726
+
+        // 布尔操作符
+        let found = false;
+        let result04 = (found && asa); // asa 未定义为undefined
+        console.log(result04); // false
+
+        let found02 = true;
+        let result05 = (found02 || asa02); // asa02 未定义为undefined
+        console.log(result05); // true
+
+        console.log(Infinity * Infinity, '12' * '13', '12' / '13', '13' % '12'); //Infinity 156 0.9230769230769231 1
+        // 指数操作符
+        console.log(3 ** 2); // 3的平方: 9
+        let squared = 3;
+        squared **= 3;
+        console.log(squared);  // 27
+
+        console.log('12' + 13, '12' + '14', '12' - 13, '12' - 14); // 1213 1214 -1 -2
+
+        // 关系操作符
+        console.log("Brick" < 'alplada', 'Brick'.toLowerCase() < 'alplada'.toLowerCase()); // true false
+        console.log("23" < "3", "23" < 3); // true false
+        console.log("a" < 3, NaN < 3, NaN >= 3); // false false false 需警惕: 在比较NaN时,无论是小于还是大于,比较结果都是false
+
+        // 相等操作符和全等操作符
+        console.log(null == undefined, NaN == NaN, '5' == 5, null == 0, undefined == 0); // true false true false false
+        console.log(5 === '5', null === undefined); // false false
+    </script>
+</body>
+
+</html>

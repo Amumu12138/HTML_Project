@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+    <!-- 渠道商: 海南趣乐 -->
+    <title>斗剑仙</title>
+
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/layout.css" rel="stylesheet">
+
+    <script type="text/javascript" src="/js/jquery/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery/jquery.md5.js"></script>
+    <script type="text/javascript" src="/js/pj_api.js"></script>
+    <script type="text/javascript" src="/js/pj_channel_sdk.js"></script>
+    <script type="text/javascript" src="/js/pj_sdk_host.js"></script>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%
+        }
+
+        body {
+            background: url(https://h5.paojiao.cn/images/qutoutiao/qtt_login_page.png) no-repeat center top;
+            background-size: auto 100%;
+        }
+
+        #qtt_loading_img {
+            position: fixed;
+            z-index: 9999;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+      }
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript">
+        $(function () {
+            //初始化渠道sdk
+            pjChannelSdk.init(11144, "smxnh5_hnql_xh_001", "1.0.0");
+            sdk.init3("11144", "smxnh5_hnql_xh_001");
+            console.info("Amumu init success......");
+         
+            //获取游戏信息
+            pjChannelSdk.getGameInfo(function (retData) {
+                console.info("Amumu getGameInfo return params +++" + JSON.stringify(retData));
+                if (retData.code == 1) {
+                    var gameName = retData.data.gameName;
+                    $(document).attr("title", gameName);
+                    var gameUrl = retData.data.gameUrl;
+                    var orientation = retData.data.orientation;
+
+                    //初始化渠道sdk{
+                    var _params = pjapi.getURLParams();
+                    console.info("--------Amumu _params--------:" + JSON.stringify(_params));
+
+                    var extension = JSON.stringify({
+                        "user_id": _params.user_id, //用户ID,用户登录平台ID
+                        "time": _params.time,   //发送请求的时间
+                        "sign": _params.sign  //验证签名
+                    });
+                    //保存渠道用户信息
+                    pjChannelSdk["sdkUserId"] = _params.user_id;
+                    console.log("--------Amumu request params--------:" + extension);
+                    //校验渠道token
+                    pjChannelSdk.getToken(extension, function (retData) {
+                        console.log("Amumu getToken return params-------：" + JSON.stringify(retData));
+                        if (retData.code == 1) {
+                            var gameParam = {};
+                            gameParam["uid"] = retData.data.userInfo.uid;
+                            gameParam["sdkToken"] = retData.data.userInfo.token;
+                            gameUrl = pjapi.buildURL(gameUrl, gameParam);
+
+                            console.log("===Amumu join Game ===>>" + gameUrl);
+                            if (orientation == 0) { //横屏游戏
+                                $("body").append(
+                                    '<div id="gameFrameDiv" style="width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl +
+                                    '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>'
+                                );
+                                window.onorientationchange = function () {
+                                    if (window.orientation == 90 || window.orientation == -90) {
+                                        $("#gameFrameDiv").css({
+                                            "left": $(window).width() - 20,
+                                            "top": "30%"
+                                        });
+                                    }
+                                }
+                            } else { //竖屏游戏
+                                $("body").append('<div id="gameFrameDiv" style="width: ' + $(window).width() + 'px;  height: ' + $(window).height() +
+                                    'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' +gameUrl +
+                                    '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' +
+                                    $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+                            }
+                        } else {
+                            pjapi.confirmDialog(retData.msg);
+                        }
+                    });
+                    //开启监听事件
+                    pjChannelSdk.startEventListener();
+                } else {
+                    pjapi.confirmDialog(retData.msg);
+                }
+            });
+        });
+
+        function receiveMessage(event) {
+            console.log(event.data);
+            var params = event.data.param;
+
+            if (event.data.method == 'PJ_loadPayBox') { //拉起支付
+                console.log("调用订单获取接口");
+                var payParam = {};
+
+                payParam["channelGameId"] = pjChannelSdk.initData.channelGameId;
+                payParam["appVersion"] = pjChannelSdk.initData.appVersion;
+                payParam["channel"] = pjChannelSdk.initData.channel;
+                payParam["sdkVersion"] = pjChannelSdk.sdkVersion;
+                //渠道需要签名时的参数
+                 payParam["sdkUserId"] = pjChannelSdk.sdkUserId;
+               // payParam["sdkUserName"] = pjChannelSdk.sdkUserName;
+
+                payParam["money"] = params["money"];
+                payParam["uid"] = params["uid"];
+                payParam["productName"] = params["goodsName"];
+                payParam["roleId"] = params["roleId"];
+                payParam["roleName"] = params["roleName"];
+                payParam["serverId"] = params["serverId"];
+                payParam["serverName"] = params["serverName"];
+                payParam["description"] = params["description"];
+                payParam["ext"] = params["ext"];
+                payParam["cpOrderNo"] = params["cpOrderNo"];
+
+                console.log("------------Amumu payParam--------------" + JSON.stringify(payParam));
+                //生成融合sdk订单
+                pjChannelSdk.getOrderNo(payParam, function (retData) {
+                    if (retData.code == 1) {
+                        console.log("Amumu getOrderNo reData = " + JSON.stringify(retData));
+
+                        window.parent.postMessage({ 
+                            game_id: "123",      //分配的游戏ID
+                            trade_id: retData.data.orderInfo.orderNumber,  //游戏自己的订单号
+                            user_id: pjChannelSdk.sdkUserId,    //订单所属的玩家ID
+                            role: retData.data.orderInfo.roleName,  //玩家在游戏里的角色名称,玩家在游戏平台的唯一标识
+                            props_name: retData.data.orderInfo.goodsName,  //对本次支付的商品或道具名称
+                            total_fee: retData.data.orderInfo.money,    //订单总金额,单位以元为单位  
+                            res_code: "1",     //支付状态
+                            nonce_str: retData.data.orderInfo.orderNumber,   //随机字符串,用于游戏请求校验
+                            sign: retData.data.extension   //签名
+                            }, "*");
+                     
+                    } else {
+                        pjapi.confirmDialog(retData.msg);
+                    }
+                });
+            } else if (event.data.method == 'PJ_reportRoleInfo') { //上报角色信息
+                sdK.reportRoleInfo(params);
+            }
+        }
+    </script>
+</body>
+
+</html>

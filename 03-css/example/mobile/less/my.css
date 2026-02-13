@@ -1,0 +1,30 @@
+html {
+  font-size: 50px;
+}
+div {
+  font-size: 14px;
+}
+.header {
+  background-color: pink;
+}
+.header .logo {
+  background-color: red;
+}
+.header:hover {
+  color: green;
+}
+.header::before {
+  content: "";
+  color: purple;
+}
+.new-img {
+  height: 100rem / 50px;
+  width: 100rem / 50px;
+  background-color: #fefefe;
+}
+.new-img a {
+  color: #050505;
+}
+.new-img:hover {
+  color: #dddddd;
+}

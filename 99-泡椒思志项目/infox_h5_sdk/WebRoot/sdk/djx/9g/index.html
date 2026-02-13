@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   	<meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="true"/>
+    <meta name="screen-orientation" content="portrait"/>
+	
+
+   <!--  <meta name="full-screen" content="yes">
+	<meta name="x5-fullscreen" content="true"> -->
+	<title>游戏</title>
+
+	<link href="../../../css/common.css?20171011" rel="stylesheet">
+	<link href="../../../css/layout.css?20171011" rel="stylesheet">
+
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../../../js/jquery/jquery.md5.js"></script>
+	<script type="text/javascript" src="../../../js/channel.js"></script>
+	<script src="https://game.9g.com/js/lib.v2.js"></script>
+
+	
+	<style type="text/css">
+		body {
+		
+			background: url(https://res.yh.zyqgame.com/loadPage/loginres/Bm_Back2.jpg) no-repeat center top;
+			background-size: auto 100%;
+		}
+	</style>
+	
+</head>
+	 
+	<body>
+	 	 
+		<script type="text/javascript">
+		var game9g = null;
+		$(function(){
+				var cs = "http://localhost/infox_h5_sdk/api/";
+				var zs = "https://h5.infoxgame.com/api/";
+				channelSDK.init(false,zs,'10876909','76251788');
+				var _params = channelSDK.getURLParams();
+				game9g = new Game9G({
+					gameid: _params.gameid,	
+					channel: _params.channel,	
+					token: _params.token	
+				});
+				game9g.getUserInfo(function(data){
+					channelSDK["channelUserID"] = data.uid;
+				});
+				var extension = JSON.stringify({"token":_params.token});
+				
+				channelSDK.getCpToken(extension,function(data){
+					var gameUrl = data.gameUrl + '?uid='+data.userID+'&sdkToken='+data.token; 
+					channelSDK["userID"] = data.userID;
+					if(data.type == 0){//横屏游戏    
+			             $("body").append('<div id="gameFrameDiv" style=" display:none;  width: 100%; height: 100%; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: 100%; height: 100%;"></iframe></div>');
+					     	window.onorientationchange = function () { 
+			                   if (window.orientation == 90 || window.orientation == -90) {
+			                       $("#gameFrameDiv").css({"left": $(window).width() - 20, "top": "30%"});  
+			                   }    
+			               }
+						}else{//竖屏游戏 
+							$("body").append('<div id="gameFrameDiv" style="display:none; width: ' + $(window).width() + 'px;  height: ' + $(window).height() + 'px; position: relative; top: 0px; left: 0px;"><iframe id="gameFrame" name="gameFrame" src="' + gameUrl + '" frameborder="no" border="0px" marginwidth="0px" marginheight="0px" scrolling="auto" style="width: ' + $(window).width() + 'px; height: ' + $(window).height() + 'px;"></iframe></div>');
+						}
+					setTimeout(function(){
+						$("#gameFrameDiv").fadeIn(1000);
+						$("#gameFrame").attr("src",gameUrl);
+					},500);
+				});
+				channelSDK.startEventListener(); 
+	    });
+		
+		//支付
+		function  receiveMessage(event){
+			if(event.data.method == 'loadPayBox'){
+				
+				var params = event.data.param;
+				params["userID"] = channelSDK.userID;
+				params["appID"] = channelSDK.gameId;
+				params["isTest"] = channelSDK.isTest;
+				httpPost(channelSDK.host + "getOrderID",params,function(data,params){
+					if(data.state == channelSDK.SUCCESS){
+						var _d = data.data.extension;
+						var paydata = { 
+								   "orderid":data.data.orderID,
+								   "money":_d.split("_")[1],
+								   "product":params.productName,
+								   "spid":"mxqy",
+								   "role_id":params.roleID,
+								   "server_id":params.serverID,
+								   "attach":data.data.orderID,
+								   "sign":_d.split("_")[0]
+						};
+						game9g.pay(paydata);
+					}	
+				});
+			}
+		}
+		 
+	</script> 
+	 
+</html>
