@@ -1,41 +1,41 @@
 # HTMLProject
 
-这是一个用于前端学习、代码练习和项目实践的综合仓库，覆盖了前端开发中常见的基础知识、进阶技术和实际项目实践。仓库中的内容主要用于个人学习、案例演示、实验记录以及面试准备。
+前端学习、代码练习与项目实践仓库，覆盖 HTML、CSS、JavaScript、TypeScript、Vue、React、WebGL、Three.js、Vite 和 Node.js 等内容。
 
-## 一、项目定位
+仓库中的代码主要用于：
 
-该仓库按前端学习阶段进行整理，内容包含：
+- 记录学习过程和实验结果
+- 保存可独立查看的基础示例
+- 演示前端工程化与服务端开发
+- 整理面试题、复习资料和项目实践
 
-- HTML / CSS 基础与布局
-- JavaScript 基础与高级特性
-- TypeScript 语法与工程化应用
-- Vue 与 React 前端框架学习
-- WebGL 与 Three.js 3D 图形开发
-- Vite、Node.js 等工程化与后端基础
-- 面试题与简历资料整理
+## 目录导航
 
-整体结构清晰，适合从入门到进阶逐步学习，也便于后续扩展新项目与技术点。
+| 目录 | 内容 |
+| --- | --- |
+| [01-WebStudy-master](./01-WebStudy-master/) | 综合课程归档，包含基础布局、JavaScript、Vue、React、Node.js 等案例 |
+| [02-html](./02-html/) | HTML 语义化、页面结构和基础标签 |
+| [03-css](./03-css/) | CSS 选择器、布局、动画和页面样式 |
+| [04-javascript](./04-javascript/) | JavaScript、ES6、DOM、算法和设计模式 |
+| [05-typeScript](./05-typeScript/) | TypeScript 语法、类型和模块示例 |
+| [06-vue](./06-vue/) | Vue 学习示例和项目实践 |
+| [07-react](./07-react/) | React 学习示例和项目实践 |
+| [08-webgl](./08-webgl/) | WebGL、着色器和图形渲染示例 |
+| [09-threeJs](./09-threeJs/) | Three.js 场景、模型和 3D 交互示例 |
+| [10_前端工程化](./10_前端工程化/) | 前端工程化、构建和开发流程相关内容 |
+| [11-vite](./11-vite/) | Vite 项目和现代前端构建工具实践 |
+| [12-nodejs](./12-nodejs/) | Node.js、HTTP、文件操作、Express 和中间件示例 |
+| [99-泡椒思志项目](./99-泡椒思志项目/) | SDK、H5 引擎和业务项目实践 |
+| [100_前端面试](./100_前端面试/) | 面试题、复习资料和简历相关内容 |
 
-## 二、目录导航
-
-根目录按学习主题拆分；编号目录便于按顺序浏览。课程归档、面试资料和业务项目保留为独立模块，不与个人练习混放。
-
-| 分类 | 目录 | 内容 |
-| --- | --- | --- |
-| 课程归档 | [01-WebStudy-master](01-WebStudy-master/) | 综合课程案例，包含 HTML、CSS、JavaScript、Vue、React、Node.js 等主题 |
-| 基础 | [02-html](02-html/)、[03-css](03-css/)、[04-javascript](04-javascript/)、[05-typeScript](05-typeScript/) | HTML、CSS、JavaScript 与 TypeScript 学习和练习 |
-| 框架 | [06-vue](06-vue/)、[07-react](07-react/) | Vue、React 示例及项目实践 |
-| 图形 | [08-webgl](08-webgl/)、[09-threeJs](09-threeJs/) | WebGL 与 Three.js 示例、资源和代码 |
-| 工程与服务端 | [10_前端工程化](10_前端工程化/)、[11-vite](11-vite/)、[12-nodejs](12-nodejs/) | 工程化课程、Vite 项目与 Node.js 资料 |
-| 面试 | [100_前端面试](100_前端面试/) | 面试题与简历模板 |
-| 项目实践 | [99-泡椒思志项目](99-泡椒思志项目/) | SDK、引擎及业务项目 |
+## 项目结构
 
 ```text
 HTMLProject/
 ├── 01-WebStudy-master/      # 综合课程归档
 ├── 02-html/                 # HTML
 ├── 03-css/                  # CSS
-├── 04-javascript/           # JavaScript、算法与设计模式
+├── 04-javascript/           # JavaScript
 ├── 05-typeScript/           # TypeScript
 ├── 06-vue/                  # Vue
 ├── 07-react/                # React
@@ -44,47 +44,85 @@ HTMLProject/
 ├── 10_前端工程化/           # 前端工程化
 ├── 11-vite/                 # Vite
 ├── 12-nodejs/               # Node.js
-├── 99-泡椒思志项目/         # 业务项目
+├── 99-泡椒思志项目/         # 项目实践
 ├── 100_前端面试/            # 面试资料
 ├── .vscode/                 # VS Code 配置
-├── .gitignore               # Git 忽略规则
-└── README.md                # 项目说明与目录导航
+├── .gitignore
+└── README.md
 ```
 
-## 三、模块说明
+## 快速开始
 
-- **01-WebStudy-master**：综合课程归档，包含基础布局、移动端、JavaScript、Vue、React、构建工具等学习案例。
-- **02-html / 03-css**：HTML 结构与 CSS 布局、动画等基础示例。
-- **04-javascript**：基础语法、ES6、算法、设计模式及练习项目。
-- **05-typeScript**：TypeScript 语法、模块与示例。
-- **06-vue / 07-react**：框架示例、课程练习和独立项目。
-- **08-webgl / 09-threeJs**：图形渲染、着色器、3D 场景及配套资源。
-- **10_前端工程化 / 11-vite / 12-nodejs**：工程化课程、Vite 项目和 Node.js 资料。
-- **99-泡椒思志项目**：SDK、H5 引擎等业务项目。
-- **100_前端面试**：面试题及简历模板。
+本仓库不是单一应用，根目录没有统一的安装和启动命令。请进入具体项目目录后，再根据该目录中的 `package.json` 安装依赖。
 
-## 四、推荐学习路线
+### Vite 项目
 
-建议按下面顺序学习：
+```bash
+cd 11-vite/vite-project-20260131
+npm install
+npm run dev
+```
 
-1. HTML + CSS：先打牢基础，重点看 01-WebStudy-master、02-html、03-css
-2. JavaScript：掌握语法与 DOM 操作，重点看 04-javascript
-3. TypeScript：学习强类型开发思维，进入 05-typeScript
-4. 前端框架：Vue / React 学习，重点看 06-vue、07-react
-5. 高级能力：WebGL / Three.js，重点看 08-webgl、09-threeJs
-6. 工程化与服务端：10_前端工程化、11-vite、12-nodejs
-7. 面试准备：100_前端面试
-8. 项目实践：99-泡椒思志项目
+生产构建：
 
-## 五、使用建议
+```bash
+npm run build
+npm run preview
+```
 
-- 先从基础目录开始，避免跳过基础语法
-- 代码文件可直接本地打开浏览器预览，部分案例需依赖本地环境
-- 结合目录中的 example、demo、resources 等文件夹理解实际应用
-- 对重点案例及时做笔记，方便后期复盘和回顾
+### Node.js / Express 示例
 
-## 六、总结
+```bash
+cd 12-nodejs/202611
+npm install
+node index.js
+```
 
-这个仓库覆盖了前端学习中的大部分常见路径，适合构建系统性学习资料库。无论是基础知识巩固，还是框架学习、3D 图形、工程化实践、面试复习，都可以在这里找到相应内容。
+部分示例也可以直接运行，例如：
 
-如果需要进一步整理，可以继续把各个目录补充成更细的 README、学习笔记和任务清单，使其更适合作为正式学习文档使用。
+```bash
+node router.js
+npm run recordMiddleware
+```
+
+启动后请根据终端输出访问对应的本地地址。不同示例可能使用不同端口，运行前请查看源文件中的 `listen` 配置。
+
+### 静态 HTML 示例
+
+不依赖构建工具的 HTML、CSS 和 JavaScript 示例可以直接用浏览器打开。涉及模块加载、Fetch、ES Module 或跨域请求的示例，建议使用本地静态服务器运行。
+
+例如使用 VS Code 的 Live Server，或在示例目录执行：
+
+```bash
+python3 -m http.server 8080
+```
+
+## 推荐学习路线
+
+1. **HTML + CSS**：先掌握页面结构、语义化、布局和响应式基础。
+2. **JavaScript**：学习语法、DOM、异步编程、模块化和常见设计模式。
+3. **TypeScript**：在 JavaScript 基础上学习类型系统和工程化开发。
+4. **Vue / React**：选择一个框架深入组件、状态管理和路由，再对比另一个框架。
+5. **工程化**：学习 Vite、依赖管理、构建、调试和发布流程。
+6. **Node.js**：了解 HTTP、文件系统、Express、中间件和接口开发。
+7. **WebGL / Three.js**：在具备 JavaScript 基础后学习图形渲染和 3D 交互。
+8. **面试与项目**：结合 [100_前端面试](./100_前端面试/) 和 [99-泡椒思志项目](./99-泡椒思志项目/) 进行复习和实践。
+
+## 使用约定
+
+- 每个子目录可能是独立示例或独立项目，优先阅读该目录内的说明文件和入口文件。
+- 依赖安装应在包含 `package.json` 的目录执行，不要在仓库根目录盲目安装。
+- `node_modules`、构建产物和临时文件不应提交到 Git。
+- 示例代码以学习和演示为主，运行前请根据本地 Node.js、浏览器和依赖版本适当调整。
+- 新增模块时，建议同步补充目录说明、运行命令和入口文件。
+
+## 环境建议
+
+- Node.js：建议使用当前维护中的 LTS 版本
+- npm：与 Node.js 一起安装，或使用项目已有的锁文件对应的包管理器
+- 浏览器：建议使用最新版 Chrome、Edge 或 Firefox
+- 编辑器：推荐使用 VS Code
+
+## 说明
+
+这是一个持续更新的学习型仓库。目录中的部分内容可能存在不同阶段的写法或实验性代码，请以对应示例的实际实现为准。
