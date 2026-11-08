@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+</head>
+
+<body>
+    <ul>
+        <% accounts.forEach(function(account) { %>
+            <li>Name: <%= account.name %>, Money: <%= account.money %>, Date: <%= account.date %>
+                            <a href="/account/delete/<%= account.id %>">Delete</a>
+            </li>
+            <% }); %>
+    </ul>
+    <% if (!accounts || accounts.length===0) { %>
+        <li>No accounts found.</li>
+        <a href="/account/create">Create Account</a>
+        <% } %>
+</body>
+
+</html>
