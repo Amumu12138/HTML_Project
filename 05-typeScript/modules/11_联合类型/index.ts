@@ -42,6 +42,7 @@ let admin: Admin = {
     role: 'admin'
 }
 
-// 类型断言：as 运算符
-let adminName: string = admin.name as string;
+// 类型断言：as 运算符（把更宽的类型断言成更具体的类型）
+let value: string | number = admin.name;
+let adminName: string = value as string;
 console.log(adminName); // 'amumu'

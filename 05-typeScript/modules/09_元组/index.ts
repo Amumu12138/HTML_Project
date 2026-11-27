@@ -9,3 +9,11 @@ let area: [number, number]
 area = [5, 5]
 area = [0] // 提示不能将类型“[number]”分配给类型“[number, number]”。源具有 1 个元素，但目标需要 2 个
 area = ['1', '2'] // 提示不能将类型“string”分配给类型“number”
+
+// 元组的使用场景
+// 1. 数组数量固定的情况
+// 2. 数组元素类型不固定的情况
+// 3. 数组元素类型固定的情况
+let arr0: [number, string, boolean]
+arr0 = [1, '2', Boolean(true)]
+arr0 = [1, '2', Boolean(false)]

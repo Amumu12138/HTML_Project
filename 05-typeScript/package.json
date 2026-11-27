@@ -1,0 +1,8 @@
+{
+  "name": "typescript-study",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "enum": "node --experimental-transform-types ./modules/10_枚举/index.ts"
+  }
+}
