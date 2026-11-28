@@ -1,4 +1,4 @@
-// never 类型
+// never 类型 
 /**
  * 定义: never 类型表示 never 类型的值, never 类型的值是 never 类型的唯一值
  * 原理: never 类型的值是 never 类型的唯一值, never 类型的值是 never 类型的唯一值

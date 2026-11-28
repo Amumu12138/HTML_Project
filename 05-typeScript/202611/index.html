@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小游戏作品集</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 48px 24px;
+    display: flex;
+    justify-content: center;
+    background: radial-gradient(circle at 50% -10%, #1d2438 0%, #0b0c14 55%, #05060a 100%);
+    color: #e8ecf6;
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .page { width: min(100%, 1080px); }
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    letter-spacing: 3px;
+    font-weight: 600;
+  }
+  header p {
+    margin: 0 0 32px;
+    font-size: 14px;
+    color: #8f9cb8;
+    letter-spacing: 1px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(110, 231, 255, 0.45);
+    box-shadow: 0 18px 42px rgba(60, 120, 255, 0.25);
+  }
+  .cover {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.22);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 120%, rgba(79, 140, 255, 0.22), transparent 65%);
+    pointer-events: none;
+  }
+
+  /* 俄罗斯方块封面 */
+  .tetris-art {
+    display: grid;
+    grid-template-columns: repeat(5, 22px);
+    grid-auto-rows: 22px;
+    gap: 6px;
+  }
+  .tetris-art i {
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+  .c-i { background: #22d3ee; }
+  .c-j { background: #4f7cff; }
+  .c-l { background: #ff9f43; }
+  .c-o { background: #ffd93d; }
+  .c-s { background: #3ddc84; }
+  .c-t { background: #b06bff; }
+  .c-z { background: #ff5c7c; }
+
+  /* 2048 封面 */
+  .n2048-art {
+    display: grid;
+    grid-template-columns: repeat(2, 46px);
+    gap: 8px;
+  }
+  .n2048-art span {
+    height: 46px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+  .n2 { background: linear-gradient(160deg, #3a476b, #2b3552); color: #dfe9ff; }
+  .n4 { background: linear-gradient(160deg, #41528a, #313e69); color: #e6eeff; }
+  .n8 { background: linear-gradient(160deg, #3f7fc9, #2f63a8); color: #eaf3ff; }
+  .n16 { background: linear-gradient(160deg, #35a3d6, #2277b8); color: #eaf7ff; }
+
+  /* 代码雨封面 */
+  .rain-art {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: 4px 14px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(0, 255, 65, 0.7);
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.55);
+    mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent);
+  }
+  .rain-art b { font-weight: 600; }
+  .rain-art b:nth-child(3n) { color: rgba(214, 255, 214, 0.92); }
+  .rain-art b:nth-child(2n) { opacity: 0.55; }
+
+  /* 扫雷封面 */
+  .mine-art {
+    display: grid;
+    grid-template-columns: repeat(4, 32px);
+    gap: 5px;
+  }
+  .mine-art i {
+    height: 32px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .mine-art .mh {
+    background: linear-gradient(160deg, #2f3d5c, #232c44);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .mine-art .mr { background: rgba(255, 255, 255, 0.07); }
+  .mine-art .n1 { color: #6ea8ff; }
+  .mine-art .n2 { color: #3ddc84; }
+  .mine-art .n3 { color: #ff5c7c; }
+  .mine-art .f {
+    position: relative;
+    background: linear-gradient(160deg, #43314f, #33263d);
+  }
+  .mine-art .f::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 6px;
+    width: 2px;
+    height: 19px;
+    background: #d7e1f5;
+  }
+  .mine-art .f::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 6px;
+    border-left: 10px solid #ff5c7c;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    filter: drop-shadow(0 0 4px rgba(255, 92, 124, 0.6));
+  }
+
+  .card-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .card-body h2 { margin: 0; font-size: 17px; letter-spacing: 1px; }
+  .card-body p { margin: 0; font-size: 13px; line-height: 1.6; color: #8f9cb8; }
+  .card-body .go {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6ee7ff;
+    letter-spacing: 1px;
+  }
+  footer {
+    margin-top: 36px;
+    font-size: 12px;
+    color: #6b7793;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>小游戏作品集</h1>
+      <p>纯 HTML + CSS + JavaScript 实现，双击即可离线运行</p>
+    </header>
+
+    <div class="grid">
+      <a class="card" href="俄罗斯方块.html">
+        <div class="cover">
+          <div class="tetris-art">
+            <i class="c-i"></i><i class="c-i"></i><i class="c-i"></i><i class="c-i"></i><i></i>
+            <i></i><i class="c-t"></i><i></i><i class="c-j"></i><i></i>
+            <i></i><i class="c-t"></i><i class="c-t"></i><i class="c-j"></i><i></i>
+            <i class="c-z"></i><i class="c-z"></i><i class="c-l"></i><i class="c-l"></i><i class="c-l"></i>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2>俄罗斯方块</h2>
+          <p>10×20 棋盘，旋转、消行、等级加速，带落点预览。</p>
+          <span class="go">开始游戏 →</span>
+        </div>
+      </a>
+
+      <a class="card" href="2048.html">
+        <div class="cover">
+          <div class="n2048-art">
+            <span class="n2">2</span>
+            <span class="n4">4</span>
+            <span class="n8">8</span>
+            <span class="n16">16</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2>2048 · 5×5</h2>
+          <p>5 行 5 列版 2048，同数合并翻倍，记录最高分。</p>
+          <span class="go">开始游戏 →</span>
+        </div>
+      </a>
+
+      <a class="card" href="扫雷.html">
+        <div class="cover">
+          <div class="mine-art">
+            <i class="mr n1">1</i><i class="mr n2">2</i><i class="mh"></i><i class="mh f"></i>
+            <i class="mh"></i><i class="mr n3">3</i><i class="mh"></i><i class="mh"></i>
+            <i class="mh"></i><i class="mh"></i><i class="mr n1">1</i><i class="mh"></i>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2>扫雷</h2>
+          <p>初 / 中 / 高三档难度，首击必安全，右键插旗计时挑战。</p>
+          <span class="go">开始游戏 →</span>
+        </div>
+      </a>
+
+      <a class="card" href="全屏代码雨.html">
+        <div class="cover">
+          <div class="rain-art" aria-hidden="true">
+            <b>01</b><b>10</b><b>11</b><b>00</b><b>10</b>
+            <b>10</b><b>01</b><b>00</b><b>11</b><b>01</b>
+            <b>00</b><b>11</b><b>01</b><b>10</b><b>00</b>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2>全屏代码雨</h2>
+          <p>Canvas 实现的矩阵代码雨，半透明拖尾与自适应窗口。</p>
+          <span class="go">查看效果 →</span>
+        </div>
+      </a>
+    </div>
+
+    <footer>202611 · 前端练习作品</footer>
+  </div>
+</body>
+</html>
